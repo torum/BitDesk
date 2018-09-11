@@ -4,6 +4,8 @@
   
 ![alt text](https://github.com/torum/BitDesk/blob/master/docs/Images/BitDesk-screenshot.png?raw=true)
 
+![alt text](https://github.com/torum/BitDesk/blob/master/docs/Images/BitDesk-Wallpaper.jpg?raw=true)
+
 ### 機能：
 - ビットコインの取引
 - その他、アルトコインの取引は開発中です  
