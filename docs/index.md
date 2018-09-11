@@ -1,18 +1,18 @@
 
 ---------------------------------------
 
-
-## 仮想通貨取引のデスクトップアプリ  
+## ビットバンク向け仮想通貨トレーディングアプリ 
+#### - Cryptocurrency trading app made for Bitbank.cc
 取引を行うには、ビットバンクのアカウントが必要です。  
+
+![alt text](https://github.com/torum/BitDesk/blob/master/docs/Images/BitDesk-screenshot.png?raw=true)
+
+![alt text](https://github.com/torum/BitDesk/blob/master/docs/Images/BitDesk-Wallpaper.jpg?raw=true)
   
 ### 機能：
 - ビットコインの取引
 - その他、アルトコインの取引は開発中です  
   
-### スクリーンショット：
-
-![alt text](https://github.com/torum/BitDesk/blob/master/docs/Images/BitDesk-screenshot.png?raw=true)
-
 ### 必要構成：
 - Windows 10
 
