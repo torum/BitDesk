@@ -4971,7 +4971,7 @@
                                 </Border>
 
                                 <TextBlock Padding="6" TextWrapping="Wrap" Style="{DynamicResource DefaultTextBlockStyle}">
-                                このアプリケーションは、ビットバンク（https://bitbank.cc/） が公開しているAPIとデータを利用しています。開発者はビットバンク株式会社とは無関係の一ビットバンク利用者です。
+                                このアプリケーションは、ビットバンク（https://bitbank.cc/） が公開しているAPIとデータを利用しています。取引をするには、Bitbankでアカウントを作成し、APIキーの設定をする必要があります。開発者はビットバンク株式会社とは無関係の一ビットバンク利用者です。
                                 </TextBlock>
 
                                 <TextBlock Padding="6" Style="{DynamicResource DefaultTextBlockStyle}">
@@ -4979,11 +4979,16 @@
                                 <Hyperlink NavigateUri="https://bitbank.cc/" RequestNavigate="Hyperlink_RequestNavigate">https://bitbank.cc/</Hyperlink>
                                 </TextBlock>
 
+                                <TextBlock Padding="6" Style="{DynamicResource DefaultTextBlockStyle}">
+                                <Run Text="Bitbank API発行ページ:"></Run>
+                                <Hyperlink NavigateUri="https://bitbank.cc/app/account/api" RequestNavigate="Hyperlink_RequestNavigate">https://bitbank.cc/app/account/api</Hyperlink>
+                                </TextBlock>
+
                                 <Border BorderBrush="DimGray" BorderThickness="0 0 0 0.5" Margin="3" Padding="3">
                                     <Label Padding="0" Content="プライバシーについて" Style="{DynamicResource SectionTitle}"/>
                                 </Border>
                                 <TextBlock Padding="6" TextWrapping="Wrap" Style="{DynamicResource DefaultTextBlockStyle}">
-                                本アプリケーションは、アプリケーション状態を保存しチャート関係のデータを取得する以外、個人情報を含む一切の情報を収集・保存及び送信することはありません。
+                                本アプリケーションは、アプリケーション状態を保存しチャート関係のデータを取得する以外、個人情報を含む一切の情報を収集・保存及び送信することはありません。登録したBitbankのAPIキー等の情報は、暗号化してBitbankのサーバーへのみ送信され、それ以外へは一切送信されません。
                                 </TextBlock>
 
                                 <Border BorderBrush="DimGray" BorderThickness="0 0 0 0.5" Margin="3" Padding="3">
@@ -4998,7 +5003,7 @@
                                 </Border>
                                 <TextBlock Padding="6" Style="{DynamicResource DefaultTextBlockStyle}">
                                 <Run Text=""></Run>
-                                <Hyperlink NavigateUri="https://torum.github.io/BitWallpaper/" RequestNavigate="Hyperlink_RequestNavigate">https://torum.github.io/BitWallpaper/</Hyperlink>
+                                <Hyperlink NavigateUri="https://torum.github.io/BitDesk/" RequestNavigate="Hyperlink_RequestNavigate">https://torum.github.io/BitDesk/</Hyperlink>
                                 </TextBlock>
 
                                 <Border BorderBrush="DimGray" BorderThickness="0 0 0 0.5" Margin="3" Padding="3">
