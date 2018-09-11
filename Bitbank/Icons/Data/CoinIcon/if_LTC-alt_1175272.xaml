@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--This file is compatible with Silverlight-->
+<Canvas xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Name="Layer_1" Width="226.777" Height="226.777">
+  <Canvas.RenderTransform>
+    <TranslateTransform X="0" Y="0"/>
+  </Canvas.RenderTransform>
+  <Canvas.Resources/>
+  <!--Unknown tag: metadata-->
+  <!--Unknown tag: sodipodi:namedview-->
+  <Polygon xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Points="94.718,184.145 107.496,123.31 172.074,79.039 179.644,42.883 115.053,87.335 133.398,0 83.788,0   57.142,127.189 29.975,145.887 23.667,180.781 49.639,162.975 36.281,226.743 195.198,226.743 204.027,184.145 " Name="LTC_alt_2_" FillRule="NonZero" Fill="#000000"/>
+</Canvas>
