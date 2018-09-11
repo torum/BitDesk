@@ -3799,17 +3799,34 @@ namespace BitDesk.ViewModels
                 _activePairIndex = value;
                 this.NotifyPropertyChanged("ActivePairIndex");
 
+
                 if (_activePairIndex == 0)
                 {
                     CurrentPair = Pairs.btc_jpy;
                     ActivePair = PairBtc;
                     ActivePair.Ltp = PairBtc.Ltp;
+
+                    IsBtcVisible = true;
+                    IsXrpVisible = false;
+                    IsEthVisible = false;
+                    IsLtcVisible = false;
+                    IsMonaJpyVisible = false;
+                    IsBchJpyVisible = false;
+
                 }
                 else if (_activePairIndex == 1)
                 {
                     CurrentPair = Pairs.xrp_jpy;
                     ActivePair = PairXrp;
                     ActivePair.Ltp = PairXrp.Ltp;
+
+                    IsBtcVisible = false;
+                    IsXrpVisible = true;
+                    IsEthVisible = false;
+                    IsLtcVisible = false;
+                    IsMonaJpyVisible = false;
+                    IsBchJpyVisible = false;
+
                 }
                 else if (_activePairIndex == 2)
                 {
@@ -3817,26 +3834,56 @@ namespace BitDesk.ViewModels
                     ActivePair = PairLtcBtc;
                     ActivePair.Ltp = PairLtcBtc.Ltp;
 
+                    IsBtcVisible = false;
+                    IsXrpVisible = false;
+                    IsEthVisible = false;
+                    IsLtcVisible = true;
+                    IsMonaJpyVisible = false;
+                    IsBchJpyVisible = false;
                 }
                 else if (_activePairIndex == 3)
                 {
                     CurrentPair = Pairs.eth_btc;
                     ActivePair = PairEthBtc;
                     ActivePair.Ltp = PairEthBtc.Ltp;
+
+                    IsBtcVisible = false;
+                    IsXrpVisible = false;
+                    IsEthVisible = true;
+                    IsLtcVisible = false;
+                    IsMonaJpyVisible = false;
+                    IsBchJpyVisible = false;
                 }
                 else if (_activePairIndex == 4)
                 {
                     CurrentPair = Pairs.mona_jpy;
                     ActivePair = PairMonaJpy;
                     ActivePair.Ltp = PairMonaJpy.Ltp;
+
+                    IsBtcVisible = false;
+                    IsXrpVisible = false;
+                    IsEthVisible = false;
+                    IsLtcVisible = false;
+                    IsMonaJpyVisible = true;
+                    IsBchJpyVisible = false;
                 }
                 else if (_activePairIndex == 5)
                 {
                     CurrentPair = Pairs.bcc_jpy;
                     ActivePair = PairBchJpy;
                     ActivePair.Ltp = PairBchJpy.Ltp;
+
+                    IsBtcVisible = false;
+                    IsXrpVisible = false;
+                    IsEthVisible = false;
+                    IsLtcVisible = false;
+                    IsMonaJpyVisible = false;
+                    IsBchJpyVisible = true;
                 }
                 // btc_jpy, xrp_jpy, ltc_btc, eth_btc, mona_jpy, mona_btc, bcc_jpy, bcc_btc
+
+                // (_activePairIndex == 0)でerrorる
+                DisplayChart(CurrentPair);
             }
         }
 
@@ -3950,6 +3997,23 @@ namespace BitDesk.ViewModels
             }
         }
 
+        private bool _isBtcVisible;
+        public bool IsBtcVisible
+        {
+            get
+            {
+                return _isBtcVisible;
+            }
+            set
+            {
+                if (_isBtcVisible == value)
+                    return;
+
+                _isBtcVisible = value;
+                this.NotifyPropertyChanged("IsBtcVisible");
+            }
+        }
+
         private Pair _pairXrp = new Pair(Pairs.xrp_jpy, 45, "{0:#,0.000}");
         public Pair PairXrp
         {
@@ -3957,6 +4021,23 @@ namespace BitDesk.ViewModels
             {
                 //return Ltps[Pairs.xrp_jpy];
                 return _pairXrp;
+            }
+        }
+
+        private bool _isXrpVisible;
+        public bool IsXrpVisible
+        {
+            get
+            {
+                return _isXrpVisible;
+            }
+            set
+            {
+                if (_isXrpVisible == value)
+                    return;
+
+                _isXrpVisible = value;
+                this.NotifyPropertyChanged("IsXrpVisible");
             }
         }
 
@@ -3970,6 +4051,23 @@ namespace BitDesk.ViewModels
             }
         }
 
+        private bool _isEthVisible;
+        public bool IsEthVisible
+        {
+            get
+            {
+                return _isEthVisible;
+            }
+            set
+            {
+                if (_isEthVisible == value)
+                    return;
+
+                _isEthVisible = value;
+                this.NotifyPropertyChanged("IsEthVisible");
+            }
+        }
+
         private Pair _pairLtcBtc = new Pair(Pairs.ltc_btc ,30, "{0:#,0.00000000}");
         public Pair PairLtcBtc
         {
@@ -3977,6 +4075,23 @@ namespace BitDesk.ViewModels
             {
                 //return Ltps[Pairs.ltc_btc];
                 return _pairLtcBtc;
+            }
+        }
+
+        private bool _isLtcVisible;
+        public bool IsLtcVisible
+        {
+            get
+            {
+                return _isLtcVisible;
+            }
+            set
+            {
+                if (_isLtcVisible == value)
+                    return;
+
+                _isLtcVisible = value;
+                this.NotifyPropertyChanged("IsLtcVisible");
             }
         }
 
@@ -3990,6 +4105,23 @@ namespace BitDesk.ViewModels
             }
         }
 
+        private bool _isMonaJpyVisible;
+        public bool IsMonaJpyVisible
+        {
+            get
+            {
+                return _isMonaJpyVisible;
+            }
+            set
+            {
+                if (_isMonaJpyVisible == value)
+                    return;
+
+                _isMonaJpyVisible = value;
+                this.NotifyPropertyChanged("IsMonaJpyVisible");
+            }
+        }
+
         private Pair _pairBchJpy = new Pair(Pairs.bcc_jpy ,45, "{0:#,0}");
         public Pair PairBchJpy
         {
@@ -3997,6 +4129,23 @@ namespace BitDesk.ViewModels
             {
                 //return Ltps[Pairs.bcc_jpy];
                 return _pairBchJpy;
+            }
+        }
+
+        private bool _isBchJpyVisible;
+        public bool IsBchJpyVisible
+        {
+            get
+            {
+                return _isBchJpyVisible;
+            }
+            set
+            {
+                if (_isBchJpyVisible == value)
+                    return;
+
+                _isBchJpyVisible = value;
+                this.NotifyPropertyChanged("IsBchJpyVisible");
             }
         }
 
@@ -4337,6 +4486,8 @@ namespace BitDesk.ViewModels
                 _selectedCandleType = value;
                 this.NotifyPropertyChanged("SelectedCandleType");
 
+                Debug.WriteLine("SelectedCandleType " + _selectedCandleType.ToString());
+
                 // 
                 if (_selectedCandleType == CandleTypes.OneMin)
                 {
@@ -4346,7 +4497,9 @@ namespace BitDesk.ViewModels
                     {
                         // デフォルト 一時間の期間で表示
                         SelectedChartSpan = ChartSpans.OneHour;
-                        //return;
+
+                        //コンボボックスとダブルアップデートにならないようにするためここでreturn.
+                        return;
                     }
 
                     // または、3時間
@@ -4366,7 +4519,9 @@ namespace BitDesk.ViewModels
                     {
                         // デフォルト 3日の期間で表示
                         SelectedChartSpan = ChartSpans.ThreeDay;
-                        //return;
+
+                        //コンボボックスとダブルアップデートにならないようにするためここでreturn.
+                        return;
                     }
 
 
@@ -4386,7 +4541,9 @@ namespace BitDesk.ViewModels
                     {
                         // デフォルト 1ヵ月の期間で表示
                         SelectedChartSpan = ChartSpans.TwoMonth;
-                        //return;
+
+                        //コンボボックスとダブルアップデートにならないようにするためここでreturn.
+                        return;
                     }
 
                     //
@@ -4412,13 +4569,15 @@ namespace BitDesk.ViewModels
 
                 }
 
-                //Debug.WriteLine(_selectedCandleType.ToString() + " チャート表示");
-
                 // チャート表示
                 if (ShowAllCharts)
+                {
                     DisplayCharts();
+                }
                 else
+                {
                     DisplayChart(CurrentPair);
+                }
 
             }
         }
@@ -4501,7 +4660,9 @@ namespace BitDesk.ViewModels
 
         #region == チャートデータ用のプロパティ ==
 
-        // デフォルトの
+        #region == 単一メインのデフォルトチャートデータ用のプロパティ ==
+        // なし。LiveChartがおかしくなる。
+        /*
         private SeriesCollection _chartSeries = new SeriesCollection();
         public SeriesCollection ChartSeries
         {
@@ -4553,7 +4714,6 @@ namespace BitDesk.ViewModels
             }
         }
 
-        /*
         // チャートデータ保持
         // 一日単位 今年、去年、２年前、３年前、４年前、５年前の1hourデータを取得する必要あり。
         private List<Ohlcv> _ohlcvsOneDay = new List<Ohlcv>();
@@ -4590,11 +4750,14 @@ namespace BitDesk.ViewModels
                 this.NotifyPropertyChanged("OhlcvsOneMin");
             }
         }
-
         */
 
+        #endregion
+
+        #region == BTCチャートデータ用のプロパティ ==
+
         // === BTC === 
-        private SeriesCollection _chartSeriesBtc;
+        private SeriesCollection _chartSeriesBtc = new SeriesCollection();
         public SeriesCollection ChartSeriesBtc
         {
             get
@@ -4611,7 +4774,7 @@ namespace BitDesk.ViewModels
             }
         }
 
-        private AxesCollection _chartAxisXBtc;
+        private AxesCollection _chartAxisXBtc = new AxesCollection();
         public AxesCollection ChartAxisXBtc
         {
             get
@@ -4628,7 +4791,7 @@ namespace BitDesk.ViewModels
             }
         }
 
-        private AxesCollection _chartAxisYBtc;
+        private AxesCollection _chartAxisYBtc = new AxesCollection();
         public AxesCollection ChartAxisYBtc
         {
             get
@@ -4681,8 +4844,12 @@ namespace BitDesk.ViewModels
             }
         }
 
+        #endregion
+
+        #region == LTCャートデータ用のプロパティ ==
+
         // === LTC === 
-        private SeriesCollection _chartSeriesLtc;
+        private SeriesCollection _chartSeriesLtc = new SeriesCollection();
         public SeriesCollection ChartSeriesLtc
         {
             get
@@ -4699,7 +4866,7 @@ namespace BitDesk.ViewModels
             }
         }
 
-        private AxesCollection _chartAxisXLtc;
+        private AxesCollection _chartAxisXLtc = new AxesCollection();
         public AxesCollection ChartAxisXLtc
         {
             get
@@ -4716,7 +4883,7 @@ namespace BitDesk.ViewModels
             }
         }
 
-        private AxesCollection _chartAxisYLtc;
+        private AxesCollection _chartAxisYLtc = new AxesCollection();
         public AxesCollection ChartAxisYLtc
         {
             get
@@ -4768,6 +4935,10 @@ namespace BitDesk.ViewModels
                 this.NotifyPropertyChanged("OhlcvsOneDayLtc");
             }
         }
+
+        #endregion
+
+        #region == XRPャートデータ用のプロパティ ==
 
         // === XRP === 
         private SeriesCollection _chartSeriesXrp;
@@ -4857,6 +5028,10 @@ namespace BitDesk.ViewModels
             }
         }
 
+        #endregion
+
+        #region == Ethャートデータ用のプロパティ ==
+
         // === Eth === 
         private SeriesCollection _chartSeriesEth;
         public SeriesCollection ChartSeriesEth
@@ -4945,6 +5120,10 @@ namespace BitDesk.ViewModels
             }
         }
 
+        #endregion
+
+        #region == Monaャートデータ用のプロパティ ==
+
         // === Mona === 
         private SeriesCollection _chartSeriesMona;
         public SeriesCollection ChartSeriesMona
@@ -5032,6 +5211,10 @@ namespace BitDesk.ViewModels
                 this.NotifyPropertyChanged("OhlcvsOneDayMona");
             }
         }
+
+        #endregion
+
+        #region == Bchャートデータ用のプロパティ ==
 
         // === Bch === 
         private SeriesCollection _chartSeriesBch;
@@ -5125,9 +5308,11 @@ namespace BitDesk.ViewModels
 
         #endregion
 
+        #endregion
+
         #region == タイマー 変数宣言 ==
 
-        System.Windows.Threading.DispatcherTimer dispatcherTimerTickOtherPairs = new System.Windows.Threading.DispatcherTimer();
+        System.Windows.Threading.DispatcherTimer dispatcherTimerTickAllPairs = new System.Windows.Threading.DispatcherTimer();
         System.Windows.Threading.DispatcherTimer dispatcherChartTimer = new System.Windows.Threading.DispatcherTimer();
 
         #endregion
@@ -5530,7 +5715,7 @@ namespace BitDesk.ViewModels
 
                 // 日時 X
                 Axis caX = new Axis();
-                caX.Name = "AxisX";
+                caX.Name = "日時";
                 caX.Title = "";
                 caX.MaxValue = 60;
                 caX.MinValue = 0;
@@ -5551,7 +5736,7 @@ namespace BitDesk.ViewModels
 
                 // 価格 Y
                 Axis caY = new Axis();
-                caY.Name = "Price";
+                caY.Name = "価格";
                 caY.Title = "";
                 caY.MaxValue = double.NaN;
                 caY.MinValue = double.NaN;
@@ -5693,9 +5878,9 @@ namespace BitDesk.ViewModels
             #endregion
 
             // Tickerのタイマー起動
-            dispatcherTimerTickOtherPairs.Tick += new EventHandler(TickerTimerAllPairs);
-            dispatcherTimerTickOtherPairs.Interval = new TimeSpan(0, 0, 1);
-            dispatcherTimerTickOtherPairs.Start();
+            dispatcherTimerTickAllPairs.Tick += new EventHandler(TickerTimerAllPairs);
+            dispatcherTimerTickAllPairs.Interval = new TimeSpan(0, 0, 1);
+            dispatcherTimerTickAllPairs.Start();
             
             // Chart更新のタイマー
             dispatcherChartTimer.Tick += new EventHandler(ChartTimer);
@@ -5711,14 +5896,22 @@ namespace BitDesk.ViewModels
             dispatcherTimerRss.Interval = new TimeSpan(0, 15, 0);
             dispatcherTimerRss.Start();
 
-            // TODO
+            // ループ再生開始　
+            StartLoop();
+
+            // TODO TEMP
             ActivePairIndex = 0;
             CurrentPair = Pairs.btc_jpy;
             ActivePair = PairBtc;
             ActivePair.Ltp = PairBtc.Ltp;
 
-            // ループ再生開始　
-            StartLoop();
+            IsBtcVisible = true;
+            IsXrpVisible = false;
+            IsEthVisible = false;
+            IsLtcVisible = false;
+            IsMonaJpyVisible = false;
+            IsBchJpyVisible = false;
+
         }
 
         #region == イベント・タイマー系 ==
@@ -5728,7 +5921,6 @@ namespace BitDesk.ViewModels
         {
             try
             {
-
                 // 各通貨ペアをループ
                 //foreach (string pair in Enum.GetNames(typeof(Pairs)))
                 foreach (Pairs pair in Enum.GetValues(typeof(Pairs)))
@@ -6007,9 +6199,51 @@ namespace BitDesk.ViewModels
                                 if ((MinMode == false) && (pair == CurrentPair))
                                 {
                                     // 最新取引価格のラインを更新
-                                    if (ChartAxisYBtc[0].Sections.Count > 0)
+                                    if (ChartAxisYBtc != null)
                                     {
-                                        ChartAxisYBtc[0].Sections[0].Value = (double)tick.LTP;
+                                        if (ChartAxisYBtc[0].Sections.Count > 0)
+                                        {
+                                            ChartAxisYBtc[0].Sections[0].Value = (double)tick.LTP;
+                                        }
+
+                                        // 最新のロウソク足を更新する。
+                                        //＞＞＞重すぎ。負荷掛かり過ぎなので止め。
+                                        /*
+                                        if (ChartSeriesBtc != null)
+                                        {
+                                            if (ChartSeriesBtc[0].Values != null)
+                                            {
+                                                int cb = ChartSeriesBtc[0].Values.Count;
+
+                                                if (cb > 0)
+                                                {
+                                                    double l = ((OhlcPoint)ChartSeriesBtc[0].Values[cb - 1]).Low;
+                                                    double h = ((OhlcPoint)ChartSeriesBtc[0].Values[cb - 1]).High;
+
+                                                    if (Application.Current == null) return;
+                                                    Application.Current.Dispatcher.Invoke(() =>
+                                                    {
+
+                                                        ((OhlcPoint)ChartSeriesBtc[0].Values[cb - 1]).Close = (double)tick.LTP;
+
+                                                        if (l > (double)tick.LTP)
+                                                        {
+                                                            ((OhlcPoint)ChartSeriesBtc[0].Values[cb - 1]).Low = (double)tick.LTP;
+                                                        }
+
+                                                        if (h < (double)tick.LTP)
+                                                        {
+                                                            ((OhlcPoint)ChartSeriesBtc[0].Values[cb - 1]).High = (double)tick.LTP;
+                                                        }
+
+                                                    });
+
+                                                }
+                                            }
+
+                                        }
+                                        */
+
                                     }
 
                                     /*
@@ -6034,38 +6268,7 @@ namespace BitDesk.ViewModels
                                     */
 
 
-                                    // 最新のロウソク足を更新する。＞＞＞重すぎ。負荷掛かり過ぎなので止め。
-                                    /*
-                                    if (ChartSeriesBtc[0].Values != null)
-                                    {
-                                        int c = ChartSeriesBtc[0].Values.Count;
 
-                                        if (c > 0)
-                                        {
-                                            double l = ((OhlcPoint)ChartSeriesBtc[0].Values[c - 1]).Low;
-                                            double h = ((OhlcPoint)ChartSeriesBtc[0].Values[c - 1]).High;
-
-                                            if (Application.Current == null) return;
-                                            Application.Current.Dispatcher.Invoke(() =>
-                                            {
-
-                                                ((OhlcPoint)ChartSeriesBtc[0].Values[c - 1]).Close = (double)tick.LTP;
-
-                                                if (l > (double)tick.LTP)
-                                                {
-                                                    ((OhlcPoint)ChartSeriesBtc[0].Values[c - 1]).Low = (double)tick.LTP;
-                                                }
-
-                                                if (h < (double)tick.LTP)
-                                                {
-                                                    ((OhlcPoint)ChartSeriesBtc[0].Values[c - 1]).High = (double)tick.LTP;
-                                                }
-
-                                            });
-
-                                        }
-                                    }
-                                    */
                                 }
 
                             }
@@ -6312,9 +6515,12 @@ namespace BitDesk.ViewModels
                                 if ((MinMode == false) && (pair == CurrentPair))
                                 {
                                     // 最新取引価格のラインを更新
-                                    if (ChartAxisYXrp[0].Sections.Count > 0)
+                                    if (ChartAxisYXrp != null)
                                     {
-                                        ChartAxisYXrp[0].Sections[0].Value = (double)tick.LTP;
+                                        if (ChartAxisYXrp[0].Sections.Count > 0)
+                                        {
+                                            ChartAxisYXrp[0].Sections[0].Value = (double)tick.LTP;
+                                        }
                                     }
 
                                     /*
@@ -6617,9 +6823,12 @@ namespace BitDesk.ViewModels
                                 if ((MinMode == false) && (pair == CurrentPair))
                                 {
                                     // 最新取引価格のラインを更新
-                                    if (ChartAxisYEth[0].Sections.Count > 0)
+                                    if (ChartAxisYEth != null)
                                     {
-                                        ChartAxisYEth[0].Sections[0].Value = (double)tick.LTP;
+                                        if (ChartAxisYEth[0].Sections.Count > 0)
+                                        {
+                                            ChartAxisYEth[0].Sections[0].Value = (double)tick.LTP;
+                                        }
                                     }
 
                                     /*
@@ -6922,9 +7131,12 @@ namespace BitDesk.ViewModels
                                 if ((MinMode == false) && (pair == CurrentPair))
                                 {
                                     // 最新取引価格のラインを更新
-                                    if (ChartAxisYMona[0].Sections.Count > 0)
+                                    if (ChartAxisYMona != null)
                                     {
-                                        ChartAxisYMona[0].Sections[0].Value = (double)tick.LTP;
+                                        if (ChartAxisYMona[0].Sections.Count > 0)
+                                        {
+                                            ChartAxisYMona[0].Sections[0].Value = (double)tick.LTP;
+                                        }
                                     }
 
                                     /*
@@ -7231,9 +7443,12 @@ namespace BitDesk.ViewModels
                                 if ((MinMode == false) && (pair == CurrentPair))
                                 {
                                     // 最新取引価格のラインを更新
-                                    if (ChartAxisYLtc[0].Sections.Count > 0)
+                                    if (ChartAxisYLtc != null)
                                     {
-                                        ChartAxisYLtc[0].Sections[0].Value = (double)tick.LTP;
+                                        if (ChartAxisYLtc[0].Sections.Count > 0)
+                                        {
+                                            ChartAxisYLtc[0].Sections[0].Value = (double)tick.LTP;
+                                        }
                                     }
 
                                     /*
@@ -7540,9 +7755,12 @@ namespace BitDesk.ViewModels
                                 if ((MinMode == false) && (pair == CurrentPair))
                                 {
                                     // 最新取引価格のラインを更新
-                                    if (ChartAxisYBch[0].Sections.Count > 0)
+                                    if (ChartAxisYBch != null)
                                     {
-                                        ChartAxisYBch[0].Sections[0].Value = (double)tick.LTP;
+                                        if (ChartAxisYBch[0].Sections.Count > 0)
+                                        {
+                                            ChartAxisYBch[0].Sections[0].Value = (double)tick.LTP;
+                                        }
                                     }
 
                                     /*
@@ -7627,29 +7845,42 @@ namespace BitDesk.ViewModels
         // チャート表示 タイマー
         private void ChartTimer(object source, EventArgs e)
         {
-            // 非表示の場合はスキップ
-            if (_showAllCharts == false)
-            {
-                return;
-            }
+            Debug.WriteLine("ChartTimer");
 
-            try
+            if (_showAllCharts)
             {
-                // 各通貨ペアをループ
-                foreach (Pairs pair in Enum.GetValues(typeof(Pairs)))
+                try
                 {
-                    if ((pair == Pairs.mona_btc) || pair == Pairs.bcc_btc)
+                    // 各通貨ペアをループ
+                    foreach (Pairs pair in Enum.GetValues(typeof(Pairs)))
                     {
-                        continue;
+                        if ((pair == Pairs.mona_btc) || pair == Pairs.bcc_btc)
+                        {
+                            continue;
+                        }
+
+                        UpdateCandlestick(pair, SelectedCandleType);
+
                     }
-
-                    UpdateCandlestick(pair, SelectedCandleType);
-
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine("■■■■■ ChartTimer _showAllCharts Exception: " + ex);
                 }
             }
-            catch (Exception ex)
+            else
             {
-                System.Diagnostics.Debug.WriteLine("■■■■■ ChartTimer Exception: " + ex);
+
+                try
+                {
+                    
+                    UpdateCandlestick(CurrentPair, SelectedCandleType);
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine("■■■■■ ChartTimer Exception: " + ex);
+                }
+
             }
 
         }
@@ -8027,6 +8258,7 @@ namespace BitDesk.ViewModels
                 }
 
                 #endregion
+
             }
             else
             {
@@ -8036,27 +8268,27 @@ namespace BitDesk.ViewModels
 
             #endregion
 
-            // TODO
-            ChartSeries = ChartSeriesBtc;
-            ChartAxisX = ChartAxisXBtc;
-            ChartAxisY = ChartAxisYBtc;
-
             //SelectedCandleType = で表示できるので、これは不要だが、デフォと同じ場合のみ、手動で表示させる。
             if (SelectedCandleType == CandleTypes.OneHour) // デフォと揃えること。
             {
+                Debug.WriteLine("OnWindowLoaded DisplayChart");
+
                 Task.Run(async () =>
                 {
                     if (ShowAllCharts)
+                    {
                         await Task.Run(() => DisplayCharts());
+                    }
                     else
+                    {
                         await Task.Run(() => DisplayChart(CurrentPair));
+                    }
 
                 });
             }
 
             // チャート更新のタイマー起動
             dispatcherChartTimer.Start();
-
 
         }
 
@@ -8951,185 +9183,37 @@ namespace BitDesk.ViewModels
         private async Task<bool> GetCandlesticks(Pairs pair, CandleTypes ct)
         {
             ChartLoadingInfo = "チャートデータを取得中....";
-
+            
             // 今日の日付セット。UTCで。
             DateTime dtToday = DateTime.Now.ToUniversalTime();
 
-            // データは、ローカルタイムで、朝9:00 から翌8:59分まで。8:59分までしか取れないので、 9:00過ぎていたら 最新のデータとるには日付を１日追加する
-
-            #region == OhlcvsOneHour 1hour毎のデータ ==
-
-            List<Ohlcv> ListOhlcvsOneHour = new List<Ohlcv>();
-
-            if (ct == CandleTypes.OneHour)
+            try
             {
-                // TODO 取得中フラグセット。
+                // データは、ローカルタイムで、朝9:00 から翌8:59分まで。8:59分までしか取れないので、 9:00過ぎていたら 最新のデータとるには日付を１日追加する
 
-                Debug.WriteLine("今日の1hour取得開始 " + pair.ToString());
+                #region == OhlcvsOneHour 1hour毎のデータ ==
 
-                // 一時間のロウソク足タイプなら今日、昨日、一昨日、その前の１週間分の1hourデータを取得する必要あり。
-                ListOhlcvsOneHour = await GetCandlestick(pair, CandleTypes.OneHour, dtToday);
-                if (ListOhlcvsOneHour != null)
+                List<Ohlcv> ListOhlcvsOneHour = new List<Ohlcv>();
+
+                if (ct == CandleTypes.OneHour)
                 {
-                    // 逆順にする
-                    ListOhlcvsOneHour.Reverse();
+                    // TODO 取得中フラグセット。
 
-                    Debug.WriteLine("昨日の1hour取得開始 " + pair.ToString());
-                    await Task.Delay(200);
-                    // 昨日
-                    DateTime dtTarget = dtToday.AddDays(-1);
+                    Debug.WriteLine("今日の1hour取得開始 " + pair.ToString());
 
-                    List<Ohlcv> res = await GetCandlestick(pair, CandleTypes.OneHour, dtTarget);
-                    if (res != null)
+                    // 一時間のロウソク足タイプなら今日、昨日、一昨日、その前の１週間分の1hourデータを取得する必要あり。
+                    ListOhlcvsOneHour = await GetCandlestick(pair, CandleTypes.OneHour, dtToday);
+                    if (ListOhlcvsOneHour != null)
                     {
                         // 逆順にする
-                        res.Reverse();
+                        ListOhlcvsOneHour.Reverse();
 
-                        foreach (var r in res)
-                        {
-                            ListOhlcvsOneHour.Add(r);
-                        }
-
-                        Debug.WriteLine("一昨日の1hour取得開始 " + pair.ToString());
+                        Debug.WriteLine("昨日の1hour取得開始 " + pair.ToString());
                         await Task.Delay(200);
-                        // 一昨日
-                        dtTarget = dtTarget.AddDays(-1);
-                        List<Ohlcv> last2 = await GetCandlestick(pair, CandleTypes.OneHour, dtTarget);
-                        if (last2 != null)
-                        {
-                            // 逆順にする
-                            last2.Reverse();
-
-                            foreach (var l in last2)
-                            {
-                                ListOhlcvsOneHour.Add(l);
-                            }
-
-                            Debug.WriteLine("３日前の1hour取得開始 " + pair.ToString());
-                            await Task.Delay(200);
-                            // ３日前
-                            dtTarget = dtTarget.AddDays(-1);
-                            List<Ohlcv> last3 = await GetCandlestick(pair, CandleTypes.OneHour, dtTarget);
-                            if (last3 != null)
-                            {
-                                // 逆順にする
-                                last3.Reverse();
-
-                                foreach (var l in last3)
-                                {
-                                    ListOhlcvsOneHour.Add(l);
-                                }
-
-
-                                Debug.WriteLine("４日前の1hour取得開始 " + pair.ToString());
-                                await Task.Delay(300);
-                                // 4日前
-                                dtTarget = dtTarget.AddDays(-1);
-                                List<Ohlcv> last4 = await GetCandlestick(pair, CandleTypes.OneHour, dtTarget);
-                                if (last4 != null)
-                                {
-                                    // 逆順にする
-                                    last4.Reverse();
-
-                                    foreach (var l in last4)
-                                    {
-                                        ListOhlcvsOneHour.Add(l);
-                                    }
-
-                                    await Task.Delay(300);
-                                    // 5日前
-                                    dtTarget = dtTarget.AddDays(-1);
-                                    List<Ohlcv> last5 = await GetCandlestick(pair, CandleTypes.OneHour, dtTarget);
-                                    if (last5 != null)
-                                    {
-                                        // 逆順にする
-                                        last5.Reverse();
-
-                                        foreach (var l in last5)
-                                        {
-                                            ListOhlcvsOneHour.Add(l);
-                                        }
-
-                                        await Task.Delay(300);
-                                        // 6日前
-                                        dtTarget = dtTarget.AddDays(-1);
-                                        List<Ohlcv> last6 = await GetCandlestick(pair, CandleTypes.OneHour, dtTarget);
-                                        if (last6 != null)
-                                        {
-                                            // 逆順にする
-                                            last6.Reverse();
-
-                                            foreach (var l in last6)
-                                            {
-                                                ListOhlcvsOneHour.Add(l);
-                                            }
-
-                                            await Task.Delay(300);
-                                            // 7日前
-                                            dtTarget = dtTarget.AddDays(-1);
-                                            List<Ohlcv> last7 = await GetCandlestick(pair, CandleTypes.OneHour, dtTarget);
-                                            if (last7 != null)
-                                            {
-                                                // 逆順にする
-                                                last7.Reverse();
-
-                                                foreach (var l in last7)
-                                                {
-                                                    ListOhlcvsOneHour.Add(l);
-                                                }
-                                            }
-
-
-                                        }
-
-                                    }
-
-                                }
-                            }
-
-                        }
-
-
-                    }
-                }
-
-                // TODO 取得中フラグ解除。
-
-            }
-
-            #endregion
-
-            //await Task.Delay(200);
-
-            #region == OhlcvsOneMin 1min毎のデータ ==
-
-            List<Ohlcv> ListOhlcvsOneMin = new List<Ohlcv>();
-
-            if (ct == CandleTypes.OneMin)
-            {
-                // TODO 取得中フラグセット。
-
-                Debug.WriteLine("今日の1min取得開始 " + pair.ToString());
-
-                // 一分毎のロウソク足タイプなら今日と昨日の1minデータを取得する必要あり。
-                ListOhlcvsOneMin = await GetCandlestick(pair, CandleTypes.OneMin, dtToday);
-                if (ListOhlcvsOneMin != null)
-                {
-                    // 逆順にする
-                    ListOhlcvsOneMin.Reverse();
-
-
-                    // 00:00:00から23:59:59分までしか取れないので、 3時間分取るには、00:00:00から3:00までは 最新のデータとるには日付を１日マイナスする
-                    if (dtToday.Hour <= 1) // BitWallpaper は一時間で良いので。// < 3
-                    {
-                        Debug.WriteLine("昨日の1min取得開始");
-
-                        await Task.Delay(200);
-                        
                         // 昨日
                         DateTime dtTarget = dtToday.AddDays(-1);
 
-                        List<Ohlcv> res = await GetCandlestick(pair, CandleTypes.OneMin, dtTarget);
+                        List<Ohlcv> res = await GetCandlestick(pair, CandleTypes.OneHour, dtTarget);
                         if (res != null)
                         {
                             // 逆順にする
@@ -9137,44 +9221,202 @@ namespace BitDesk.ViewModels
 
                             foreach (var r in res)
                             {
-                                ListOhlcvsOneMin.Add(r);
+                                ListOhlcvsOneHour.Add(r);
                             }
+
+                            Debug.WriteLine("一昨日の1hour取得開始 " + pair.ToString());
+                            await Task.Delay(200);
+                            // 一昨日
+                            dtTarget = dtTarget.AddDays(-1);
+                            List<Ohlcv> last2 = await GetCandlestick(pair, CandleTypes.OneHour, dtTarget);
+                            if (last2 != null)
+                            {
+                                // 逆順にする
+                                last2.Reverse();
+
+                                foreach (var l in last2)
+                                {
+                                    ListOhlcvsOneHour.Add(l);
+                                }
+
+                                Debug.WriteLine("３日前の1hour取得開始 " + pair.ToString());
+                                await Task.Delay(200);
+                                // ３日前
+                                dtTarget = dtTarget.AddDays(-1);
+                                List<Ohlcv> last3 = await GetCandlestick(pair, CandleTypes.OneHour, dtTarget);
+                                if (last3 != null)
+                                {
+                                    // 逆順にする
+                                    last3.Reverse();
+
+                                    foreach (var l in last3)
+                                    {
+                                        ListOhlcvsOneHour.Add(l);
+                                    }
+
+
+                                    Debug.WriteLine("４日前の1hour取得開始 " + pair.ToString());
+                                    await Task.Delay(300);
+                                    // 4日前
+                                    dtTarget = dtTarget.AddDays(-1);
+                                    List<Ohlcv> last4 = await GetCandlestick(pair, CandleTypes.OneHour, dtTarget);
+                                    if (last4 != null)
+                                    {
+                                        // 逆順にする
+                                        last4.Reverse();
+
+                                        foreach (var l in last4)
+                                        {
+                                            ListOhlcvsOneHour.Add(l);
+                                        }
+
+                                        await Task.Delay(300);
+                                        // 5日前
+                                        dtTarget = dtTarget.AddDays(-1);
+                                        List<Ohlcv> last5 = await GetCandlestick(pair, CandleTypes.OneHour, dtTarget);
+                                        if (last5 != null)
+                                        {
+                                            // 逆順にする
+                                            last5.Reverse();
+
+                                            foreach (var l in last5)
+                                            {
+                                                ListOhlcvsOneHour.Add(l);
+                                            }
+
+                                            await Task.Delay(300);
+                                            // 6日前
+                                            dtTarget = dtTarget.AddDays(-1);
+                                            List<Ohlcv> last6 = await GetCandlestick(pair, CandleTypes.OneHour, dtTarget);
+                                            if (last6 != null)
+                                            {
+                                                // 逆順にする
+                                                last6.Reverse();
+
+                                                foreach (var l in last6)
+                                                {
+                                                    ListOhlcvsOneHour.Add(l);
+                                                }
+
+                                                await Task.Delay(300);
+                                                // 7日前
+                                                dtTarget = dtTarget.AddDays(-1);
+                                                List<Ohlcv> last7 = await GetCandlestick(pair, CandleTypes.OneHour, dtTarget);
+                                                if (last7 != null)
+                                                {
+                                                    // 逆順にする
+                                                    last7.Reverse();
+
+                                                    foreach (var l in last7)
+                                                    {
+                                                        ListOhlcvsOneHour.Add(l);
+                                                    }
+                                                }
+
+
+                                            }
+
+                                        }
+
+                                    }
+                                }
+
+                            }
+
+
+                        }
+                    }
+
+                    // TODO 取得中フラグ解除。
+
+                }
+
+                #endregion
+
+                //await Task.Delay(200);
+
+                #region == OhlcvsOneMin 1min毎のデータ ==
+
+                List<Ohlcv> ListOhlcvsOneMin = new List<Ohlcv>();
+
+                if (ct == CandleTypes.OneMin)
+                {
+                    // TODO 取得中フラグセット。
+
+                    Debug.WriteLine("今日の1min取得開始 " + pair.ToString());
+
+                    // 一分毎のロウソク足タイプなら今日と昨日の1minデータを取得する必要あり。
+                    ListOhlcvsOneMin = await GetCandlestick(pair, CandleTypes.OneMin, dtToday);
+                    if (ListOhlcvsOneMin != null)
+                    {
+                        // 逆順にする
+                        ListOhlcvsOneMin.Reverse();
+
+
+                        // 00:00:00から23:59:59分までしか取れないので、 3時間分取るには、00:00:00から3:00までは 最新のデータとるには日付を１日マイナスする
+                        if (dtToday.Hour <= 1) // BitWallpaper は一時間で良いので。// < 3
+                        {
+                            Debug.WriteLine("昨日の1min取得開始");
+
+                            await Task.Delay(200);
+
+                            // 昨日
+                            DateTime dtTarget = dtToday.AddDays(-1);
+
+                            List<Ohlcv> res = await GetCandlestick(pair, CandleTypes.OneMin, dtTarget);
+                            if (res != null)
+                            {
+                                // 逆順にする
+                                res.Reverse();
+
+                                foreach (var r in res)
+                                {
+                                    ListOhlcvsOneMin.Add(r);
+                                }
+                            }
+                            else
+                            {
+                                Debug.WriteLine("■■■■■ " + pair.ToString() + " GetCandlesticks error: 昨日の1min取得 null");
+                            }
+                        }
+                        else
+                        {
+                            Debug.WriteLine("昨日の1min取得スキップ " + dtToday.Hour.ToString());
                         }
                     }
                     else
                     {
-                        Debug.WriteLine("昨日の1min取得スキップ " + dtToday.Hour.ToString());
+                        Debug.WriteLine("■■■■■ " + pair.ToString() + " GetCandlesticks error: 今日の1min取得 null");
                     }
+
+                    // TODO 取得中フラグ解除。
                 }
 
-                // TODO 取得中フラグ解除。
-            }
+                #endregion
 
-            #endregion
+                //await Task.Delay(200);
 
-            //await Task.Delay(200);
+                #region == OhlcvsOneDay 1day毎のデータ ==
 
-            #region == OhlcvsOneDay 1day毎のデータ ==
+                List<Ohlcv> ListOhlcvsOneDay = new List<Ohlcv>();
 
-            List<Ohlcv> ListOhlcvsOneDay = new List<Ohlcv>();
-
-            if (ct == CandleTypes.OneDay)
-            {
-                // TODO 取得中フラグセット。
-
-                // 1日のロウソク足タイプなら今年、去年、２年前、３年前、４年前、５年前の1hourデータを取得する必要あり。(５年前は止めた)
-
-                Debug.WriteLine("今年のOneDay取得開始 " + pair.ToString());
-
-                ListOhlcvsOneDay = await GetCandlestick(pair, CandleTypes.OneDay, dtToday);
-                if (ListOhlcvsOneDay != null)
+                if (ct == CandleTypes.OneDay)
                 {
-                    // 逆順にする
-                    ListOhlcvsOneDay.Reverse();
+                    // TODO 取得中フラグセット。
 
-                    // 
-                    //if (dtToday.Month <= 3)
-                    //{
+                    // 1日のロウソク足タイプなら今年、去年、２年前、３年前、４年前、５年前の1hourデータを取得する必要あり。(５年前は止めた)
+
+                    Debug.WriteLine("今年のOneDay取得開始 " + pair.ToString());
+
+                    ListOhlcvsOneDay = await GetCandlestick(pair, CandleTypes.OneDay, dtToday);
+                    if (ListOhlcvsOneDay != null)
+                    {
+                        // 逆順にする
+                        ListOhlcvsOneDay.Reverse();
+
+                        // 
+                        //if (dtToday.Month <= 3)
+                        //{
                         Debug.WriteLine("去年のOneDay取得開始 " + pair.ToString());
 
                         await Task.Delay(300);
@@ -9216,80 +9458,89 @@ namespace BitDesk.ViewModels
 
                         }
 
-                    //}
+                        //}
 
 
+                    }
+
+                    // TODO 取得中フラグ解除。
                 }
 
-                // TODO 取得中フラグ解除。
-            }
-
-            #endregion
+                #endregion
 
 
-            ChartLoadingInfo = "";
+                ChartLoadingInfo = "";
 
-            if (pair == Pairs.btc_jpy)
-            {
-                if (ListOhlcvsOneHour != null)
-                    OhlcvsOneHourBtc = ListOhlcvsOneHour;
-                if (ListOhlcvsOneMin != null)
-                    OhlcvsOneMinBtc = ListOhlcvsOneMin;
-                if (ListOhlcvsOneDay != null)
-                    OhlcvsOneDayBtc = ListOhlcvsOneDay;
+                if (pair == Pairs.btc_jpy)
+                {
+                    if (ListOhlcvsOneHour != null)
+                        OhlcvsOneHourBtc = ListOhlcvsOneHour;
+                    if (ListOhlcvsOneMin != null)
+                        OhlcvsOneMinBtc = ListOhlcvsOneMin;
+                    if (ListOhlcvsOneDay != null)
+                        OhlcvsOneDayBtc = ListOhlcvsOneDay;
+                }
+                else if (pair == Pairs.xrp_jpy)
+                {
+                    if (ListOhlcvsOneHour != null)
+                        OhlcvsOneHourXrp = ListOhlcvsOneHour;
+                    if (ListOhlcvsOneMin != null)
+                        OhlcvsOneMinXrp = ListOhlcvsOneMin;
+                    if (ListOhlcvsOneDay != null)
+                        OhlcvsOneDayXrp = ListOhlcvsOneDay;
+                }
+                else if (pair == Pairs.eth_btc)
+                {
+                    if (ListOhlcvsOneHour != null)
+                        OhlcvsOneHourEth = ListOhlcvsOneHour;
+                    if (ListOhlcvsOneMin != null)
+                        OhlcvsOneMinEth = ListOhlcvsOneMin;
+                    if (ListOhlcvsOneDay != null)
+                        OhlcvsOneDayEth = ListOhlcvsOneDay;
+                }
+                else if (pair == Pairs.mona_jpy)
+                {
+                    if (ListOhlcvsOneHour != null)
+                        OhlcvsOneHourMona = ListOhlcvsOneHour;
+                    if (ListOhlcvsOneMin != null)
+                        OhlcvsOneMinMona = ListOhlcvsOneMin;
+                    if (ListOhlcvsOneDay != null)
+                        OhlcvsOneDayMona = ListOhlcvsOneDay;
+                }
+                else if (pair == Pairs.mona_btc)
+                {
+                    //
+                }
+                else if (pair == Pairs.ltc_btc)
+                {
+                    if (ListOhlcvsOneHour != null)
+                        OhlcvsOneHourLtc = ListOhlcvsOneHour;
+                    if (ListOhlcvsOneMin != null)
+                        OhlcvsOneMinLtc = ListOhlcvsOneMin;
+                    if (ListOhlcvsOneDay != null)
+                        OhlcvsOneDayLtc = ListOhlcvsOneDay;
+                }
+                else if (pair == Pairs.bcc_btc)
+                {
+                    //
+                }
+                else if (pair == Pairs.bcc_jpy)
+                {
+                    if (ListOhlcvsOneHour != null)
+                        OhlcvsOneHourBch = ListOhlcvsOneHour;
+                    if (ListOhlcvsOneMin != null)
+                        OhlcvsOneMinBch = ListOhlcvsOneMin;
+                    if (ListOhlcvsOneDay != null)
+                        OhlcvsOneDayBch = ListOhlcvsOneDay;
+                }
+
             }
-            else if (pair == Pairs.xrp_jpy)
+            catch (Exception ex)
             {
-                if (ListOhlcvsOneHour != null)
-                    OhlcvsOneHourXrp = ListOhlcvsOneHour;
-                if (ListOhlcvsOneMin != null)
-                    OhlcvsOneMinXrp = ListOhlcvsOneMin;
-                if (ListOhlcvsOneDay != null)
-                    OhlcvsOneDayXrp = ListOhlcvsOneDay;
-            }
-            else if (pair == Pairs.eth_btc)
-            {
-                if (ListOhlcvsOneHour != null)
-                    OhlcvsOneHourEth = ListOhlcvsOneHour;
-                if (ListOhlcvsOneMin != null)
-                    OhlcvsOneMinEth = ListOhlcvsOneMin;
-                if (ListOhlcvsOneDay != null)
-                    OhlcvsOneDayEth = ListOhlcvsOneDay;
-            }
-            else if (pair == Pairs.mona_jpy)
-            {
-                if (ListOhlcvsOneHour != null)
-                    OhlcvsOneHourMona = ListOhlcvsOneHour;
-                if (ListOhlcvsOneMin != null)
-                    OhlcvsOneMinMona = ListOhlcvsOneMin;
-                if (ListOhlcvsOneDay != null)
-                    OhlcvsOneDayMona = ListOhlcvsOneDay;
-            }
-            else if (pair == Pairs.mona_btc)
-            {
-                //
-            }
-            else if (pair == Pairs.ltc_btc)
-            {
-                if (ListOhlcvsOneHour != null)
-                    OhlcvsOneHourLtc = ListOhlcvsOneHour;
-                if (ListOhlcvsOneMin != null)
-                    OhlcvsOneMinLtc = ListOhlcvsOneMin;
-                if (ListOhlcvsOneDay != null)
-                    OhlcvsOneDayLtc = ListOhlcvsOneDay;
-            }
-            else if (pair == Pairs.bcc_btc)
-            {
-                //
-            }
-            else if (pair == Pairs.bcc_jpy)
-            {
-                if (ListOhlcvsOneHour != null)
-                    OhlcvsOneHourBch = ListOhlcvsOneHour;
-                if (ListOhlcvsOneMin != null)
-                    OhlcvsOneMinBch = ListOhlcvsOneMin;
-                if (ListOhlcvsOneDay != null)
-                    OhlcvsOneDayBch = ListOhlcvsOneDay;
+
+                ChartLoadingInfo = pair.ToString() + " チャートの追加中にエラーが発生しました 1 ";
+
+                Debug.WriteLine("■■■■■ " + pair.ToString() + " GetCandlesticks error: " + ex.ToString());
             }
 
             return true;
@@ -9302,441 +9553,453 @@ namespace BitDesk.ViewModels
             ChartLoadingInfo = "チャートをロード中....";
             Debug.WriteLine("LoadChart... " + pair.ToString());
 
-            //CandleTypes ct = SelectedCandleType;
-
-            List<Ohlcv> lst = null;
-            int span = 0;
-
-            if (ct == CandleTypes.OneMin)
-            {
-                // 一分毎のロウソク足タイプなら
-                //lst = OhlcvsOneMin;
-                if (pair == Pairs.btc_jpy)
-                {
-                    lst = OhlcvsOneMinBtc;
-                }
-                else if (pair == Pairs.xrp_jpy)
-                {
-                    lst = OhlcvsOneMinXrp;
-                }
-                else if (pair == Pairs.eth_btc)
-                {
-                    lst = OhlcvsOneMinEth;
-                }
-                else if (pair == Pairs.mona_jpy)
-                {
-                    lst = OhlcvsOneMinMona;
-                }
-                else if (pair == Pairs.mona_btc)
-                {
-                    //
-                }
-                else if (pair == Pairs.ltc_btc)
-                {
-                    lst = OhlcvsOneMinLtc;
-                }
-                else if (pair == Pairs.bcc_btc)
-                {
-                    //
-                }
-                else if (pair == Pairs.bcc_jpy)
-                {
-                    lst = OhlcvsOneMinBch;
-                }
-
-                // 一時間の期間か１日の期間
-                if (_chartSpan == ChartSpans.OneHour)
-                {
-                    span = 60+1;
-                }
-                else if (_chartSpan == ChartSpans.ThreeHour)
-                {
-                    span = 60 * 3;
-                }
-                else
-                {
-                    throw new System.InvalidOperationException("一分毎のロウソク足タイプなら、負荷掛かり過ぎなので、１日以上は無し");
-                }
-
-                // 負荷掛かり過ぎなので、１日は無し
-                /*
-                else if (_chartSpan == ChartSpans.OneDay)
-                {
-                    span = 60*24;
-                }
-                */
-
-                //Debug.WriteLine("OneMin数" + test.Count.ToString());
-            }
-            else if (ct == CandleTypes.OneHour)
-            {
-                // 一時間のロウソク足タイプなら
-                //lst = OhlcvsOneHour;
-                if (pair == Pairs.btc_jpy)
-                {
-                    lst = OhlcvsOneHourBtc;
-                }
-                else if (pair == Pairs.xrp_jpy)
-                {
-                    lst = OhlcvsOneHourXrp;
-                }
-                else if (pair == Pairs.eth_btc)
-                {
-                    lst = OhlcvsOneHourEth;
-                }
-                else if (pair == Pairs.mona_jpy)
-                {
-                    lst = OhlcvsOneHourMona;
-                }
-                else if (pair == Pairs.mona_btc)
-                {
-                    //
-                }
-                else if (pair == Pairs.ltc_btc)
-                {
-                    lst = OhlcvsOneHourLtc;
-                }
-                else if (pair == Pairs.bcc_btc)
-                {
-                    //
-                }
-                else if (pair == Pairs.bcc_jpy)
-                {
-                    lst = OhlcvsOneHourBch;
-                }
-
-                // １日の期間か3日か１週間の期間
-                if (_chartSpan == ChartSpans.OneDay)
-                {
-                    span = 24;
-                }
-                else if (_chartSpan == ChartSpans.ThreeDay)
-                {
-                    span = (24 * 3);
-                }
-                else if (_chartSpan == ChartSpans.OneWeek)
-                {
-                    span = 24 * 7;
-                }
-                else
-                {
-                    throw new System.InvalidOperationException("時間毎のロウソク足タイプなら、負荷掛かり過ぎなので、1週間以上は無し。一日未満もなし");
-                }
-
-                // Debug.WriteLine("OneHour数" + test.Count.ToString());
-            }
-            else if (ct == CandleTypes.OneDay)
-            {
-                // 1日のロウソク足タイプなら
-                //lst = OhlcvsOneDay;
-                if (pair == Pairs.btc_jpy)
-                {
-                    lst = OhlcvsOneDayBtc;
-                }
-                else if (pair == Pairs.xrp_jpy)
-                {
-                    lst = OhlcvsOneDayXrp;
-                }
-                else if (pair == Pairs.eth_btc)
-                {
-                    lst = OhlcvsOneDayEth;
-                }
-                else if (pair == Pairs.mona_jpy)
-                {
-                    lst = OhlcvsOneDayMona;
-                }
-                else if (pair == Pairs.mona_btc)
-                {
-                    //
-                }
-                else if (pair == Pairs.ltc_btc)
-                {
-                    lst = OhlcvsOneDayLtc;
-                }
-                else if (pair == Pairs.bcc_btc)
-                {
-                    //
-                }
-                else if (pair == Pairs.bcc_jpy)
-                {
-                    lst = OhlcvsOneDayBch;
-                }
-
-                // 1ヵ月、2ヵ月、１年、５年の期間
-                if (_chartSpan == ChartSpans.OneMonth)
-                {
-                    span = 30;//.44
-                }
-                else if (_chartSpan == ChartSpans.TwoMonth)
-                {
-                    span = 30 * 2;
-                }
-                else if (_chartSpan == ChartSpans.OneYear)
-                {
-                    span = 365;//.2425
-                }
-                else if (_chartSpan == ChartSpans.FiveYear)
-                {
-                    span = 365 * 5;
-                }
-                else
-                {
-                    throw new System.InvalidOperationException("1日のロウソク足タイプなら、一月以上");
-                }
-
-                //Debug.WriteLine("OneDay数" + test.Count.ToString());
-            }
-            else
-            {
-                throw new System.InvalidOperationException("Not impl...");
-                //return;
-            }
-
-            //Debug.WriteLine("スパン：" + span.ToString());
-
-            if (span == 0)
-            {
-                Debug.WriteLine("スパン 0");
-                return;
-            }
-
-            if (lst == null)
-            {
-                Debug.WriteLine("リスト Null " + pair.ToString());
-                return;
-            }
-
-            if (lst.Count < span - 1)
-            {
-                Debug.WriteLine("ロード中？ " + pair.ToString() + " " + lst.Count.ToString() + " " + span.ToString());
-                return;
-            }
-
-            Debug.WriteLine("ロード中  " + pair.ToString() + " " + lst.Count.ToString() + " " + span.ToString());
-
             try
             {
 
-                SeriesCollection chartSeries = null;
-                AxesCollection chartAxisX = null;
-                AxesCollection chartAxisY = null;
+                List<Ohlcv> lst = null;
+                int span = 0;
 
-                if (pair == Pairs.btc_jpy)
+                if (ct == CandleTypes.OneMin)
                 {
-                    chartSeries = ChartSeriesBtc;
-                    chartAxisX = ChartAxisXBtc;
-                    chartAxisY = ChartAxisYBtc;
-                }
-                else if (pair == Pairs.xrp_jpy)
-                {
-                    chartSeries = ChartSeriesXrp;
-                    chartAxisX = ChartAxisXXrp;
-                    chartAxisY = ChartAxisYXrp;
-
-                }
-                else if (pair == Pairs.eth_btc)
-                {
-                    chartSeries = ChartSeriesEth;
-                    chartAxisX = ChartAxisXEth;
-                    chartAxisY = ChartAxisYEth;
-                }
-                else if (pair == Pairs.mona_jpy)
-                {
-                    chartSeries = ChartSeriesMona;
-                    chartAxisX = ChartAxisXMona;
-                    chartAxisY = ChartAxisYMona;
-                }
-                else if (pair == Pairs.mona_btc)
-                {
-                    //
-                }
-                else if (pair == Pairs.ltc_btc)
-                {
-                    chartSeries = ChartSeriesLtc;
-                    chartAxisX = ChartAxisXLtc;
-                    chartAxisY = ChartAxisYLtc;
-                }
-                else if (pair == Pairs.bcc_btc)
-                {
-                    //
-                }
-                else if (pair == Pairs.bcc_jpy)
-                {
-                    chartSeries = ChartSeriesBch;
-                    chartAxisX = ChartAxisXBch;
-                    chartAxisY = ChartAxisYBch;
-                }
-
-
-                if (Application.Current == null) return;
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    try
+                    // 一分毎のロウソク足タイプなら
+                    //lst = OhlcvsOneMin;
+                    if (pair == Pairs.btc_jpy)
                     {
-                        // チャート OHLCVのロード
-                        if (lst.Count > 0)
+                        lst = OhlcvsOneMinBtc;
+                    }
+                    else if (pair == Pairs.xrp_jpy)
+                    {
+                        lst = OhlcvsOneMinXrp;
+                    }
+                    else if (pair == Pairs.eth_btc)
+                    {
+                        lst = OhlcvsOneMinEth;
+                    }
+                    else if (pair == Pairs.mona_jpy)
+                    {
+                        lst = OhlcvsOneMinMona;
+                    }
+                    else if (pair == Pairs.mona_btc)
+                    {
+                        //
+                    }
+                    else if (pair == Pairs.ltc_btc)
+                    {
+                        lst = OhlcvsOneMinLtc;
+                    }
+                    else if (pair == Pairs.bcc_btc)
+                    {
+                        //
+                    }
+                    else if (pair == Pairs.bcc_jpy)
+                    {
+                        lst = OhlcvsOneMinBch;
+                    }
+
+                    // 一時間の期間か１日の期間
+                    if (_chartSpan == ChartSpans.OneHour)
+                    {
+                        span = 60 + 1;
+                    }
+                    else if (_chartSpan == ChartSpans.ThreeHour)
+                    {
+                        span = 60 * 3;
+                    }
+                    else
+                    {
+                        throw new System.InvalidOperationException("一分毎のロウソク足タイプなら、負荷掛かり過ぎなので、１日以上は無し");
+                    }
+
+                    // 負荷掛かり過ぎなので、１日は無し
+                    /*
+                    else if (_chartSpan == ChartSpans.OneDay)
+                    {
+                        span = 60*24;
+                    }
+                    */
+
+                    //Debug.WriteLine("OneMin数" + test.Count.ToString());
+                }
+                else if (ct == CandleTypes.OneHour)
+                {
+                    // 一時間のロウソク足タイプなら
+                    //lst = OhlcvsOneHour;
+                    if (pair == Pairs.btc_jpy)
+                    {
+                        lst = OhlcvsOneHourBtc;
+                    }
+                    else if (pair == Pairs.xrp_jpy)
+                    {
+                        lst = OhlcvsOneHourXrp;
+                    }
+                    else if (pair == Pairs.eth_btc)
+                    {
+                        lst = OhlcvsOneHourEth;
+                    }
+                    else if (pair == Pairs.mona_jpy)
+                    {
+                        lst = OhlcvsOneHourMona;
+                    }
+                    else if (pair == Pairs.mona_btc)
+                    {
+                        //
+                    }
+                    else if (pair == Pairs.ltc_btc)
+                    {
+                        lst = OhlcvsOneHourLtc;
+                    }
+                    else if (pair == Pairs.bcc_btc)
+                    {
+                        //
+                    }
+                    else if (pair == Pairs.bcc_jpy)
+                    {
+                        lst = OhlcvsOneHourBch;
+                    }
+
+                    // １日の期間か3日か１週間の期間
+                    if (_chartSpan == ChartSpans.OneDay)
+                    {
+                        span = 24;
+                    }
+                    else if (_chartSpan == ChartSpans.ThreeDay)
+                    {
+                        span = (24 * 3);
+                    }
+                    else if (_chartSpan == ChartSpans.OneWeek)
+                    {
+                        span = 24 * 7;
+                    }
+                    else
+                    {
+                        throw new System.InvalidOperationException("時間毎のロウソク足タイプなら、負荷掛かり過ぎなので、1週間以上は無し。一日未満もなし");
+                    }
+
+                    // Debug.WriteLine("OneHour数" + test.Count.ToString());
+                }
+                else if (ct == CandleTypes.OneDay)
+                {
+                    // 1日のロウソク足タイプなら
+                    //lst = OhlcvsOneDay;
+                    if (pair == Pairs.btc_jpy)
+                    {
+                        lst = OhlcvsOneDayBtc;
+                    }
+                    else if (pair == Pairs.xrp_jpy)
+                    {
+                        lst = OhlcvsOneDayXrp;
+                    }
+                    else if (pair == Pairs.eth_btc)
+                    {
+                        lst = OhlcvsOneDayEth;
+                    }
+                    else if (pair == Pairs.mona_jpy)
+                    {
+                        lst = OhlcvsOneDayMona;
+                    }
+                    else if (pair == Pairs.mona_btc)
+                    {
+                        //
+                    }
+                    else if (pair == Pairs.ltc_btc)
+                    {
+                        lst = OhlcvsOneDayLtc;
+                    }
+                    else if (pair == Pairs.bcc_btc)
+                    {
+                        //
+                    }
+                    else if (pair == Pairs.bcc_jpy)
+                    {
+                        lst = OhlcvsOneDayBch;
+                    }
+
+                    // 1ヵ月、2ヵ月、１年、５年の期間
+                    if (_chartSpan == ChartSpans.OneMonth)
+                    {
+                        span = 30;//.44
+                    }
+                    else if (_chartSpan == ChartSpans.TwoMonth)
+                    {
+                        span = 30 * 2;
+                    }
+                    else if (_chartSpan == ChartSpans.OneYear)
+                    {
+                        span = 365;//.2425
+                    }
+                    else if (_chartSpan == ChartSpans.FiveYear)
+                    {
+                        span = 365 * 5;
+                    }
+                    else
+                    {
+                        throw new System.InvalidOperationException("1日のロウソク足タイプなら、一月以上");
+                    }
+
+                    //Debug.WriteLine("OneDay数" + test.Count.ToString());
+                }
+                else
+                {
+                    throw new System.InvalidOperationException("Not impl...");
+                    //return;
+                }
+
+                //Debug.WriteLine("スパン：" + span.ToString());
+
+                if (span == 0)
+                {
+                    Debug.WriteLine("スパン 0");
+                    return;
+                }
+
+                if (lst == null)
+                {
+                    Debug.WriteLine("リスト Null " + pair.ToString());
+                    return;
+                }
+
+                if (lst.Count < span - 1)
+                {
+                    Debug.WriteLine("ロード中？ " + pair.ToString() + " " + lst.Count.ToString() + " " + span.ToString());
+                    return;
+                }
+
+                Debug.WriteLine("ロード中  " + pair.ToString() + " " + lst.Count.ToString() + " " + span.ToString());
+
+                try
+                {
+
+                    SeriesCollection chartSeries = null;
+                    AxesCollection chartAxisX = null;
+                    AxesCollection chartAxisY = null;
+
+                    if (pair == Pairs.btc_jpy)
+                    {
+                        chartSeries = ChartSeriesBtc;
+                        chartAxisX = ChartAxisXBtc;
+                        chartAxisY = ChartAxisYBtc;
+                    }
+                    else if (pair == Pairs.xrp_jpy)
+                    {
+                        chartSeries = ChartSeriesXrp;
+                        chartAxisX = ChartAxisXXrp;
+                        chartAxisY = ChartAxisYXrp;
+
+                    }
+                    else if (pair == Pairs.eth_btc)
+                    {
+                        chartSeries = ChartSeriesEth;
+                        chartAxisX = ChartAxisXEth;
+                        chartAxisY = ChartAxisYEth;
+                    }
+                    else if (pair == Pairs.mona_jpy)
+                    {
+                        chartSeries = ChartSeriesMona;
+                        chartAxisX = ChartAxisXMona;
+                        chartAxisY = ChartAxisYMona;
+                    }
+                    else if (pair == Pairs.mona_btc)
+                    {
+                        //
+                    }
+                    else if (pair == Pairs.ltc_btc)
+                    {
+                        chartSeries = ChartSeriesLtc;
+                        chartAxisX = ChartAxisXLtc;
+                        chartAxisY = ChartAxisYLtc;
+                    }
+                    else if (pair == Pairs.bcc_btc)
+                    {
+                        //
+                    }
+                    else if (pair == Pairs.bcc_jpy)
+                    {
+                        chartSeries = ChartSeriesBch;
+                        chartAxisX = ChartAxisXBch;
+                        chartAxisY = ChartAxisYBch;
+                    }
+
+                    if (chartSeries == null)
+                    {
+                        Debug.WriteLine("■■■■■ Chart loading (chartSeries == null)  ");
+                        return;
+                    }
+                    if (chartAxisX == null)
+                        return;
+                    if (chartAxisY == null)
+                        return;
+
+                    if (Application.Current == null) return;
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+
+                        try
                         {
-                            // Candlestickクリア
-                            chartSeries[0].Values.Clear();
-
-                            // 出来高クリア
-                            //ChartSeries[1].Values.Clear();
-                            // https://github.com/Live-Charts/Live-Charts/issues/76
-                            for (int v = 0; v < chartSeries[1].Values.Count - 1; v++)
+                            // チャート OHLCVのロード
+                            if (lst.Count > 0)
                             {
-                                chartSeries[1].Values[v] = (double)0;
-                            }
+                                // Candlestickクリア
+                                chartSeries[0].Values.Clear();
 
-                            // ラベル表示クリア
-                            chartAxisX[0].Labels.Clear();
-
-                            
-                            // 期間設定
-                            chartAxisX[0].MaxValue = span - 1;
-                            chartAxisX[0].MinValue = 0;
-                            
-
-                            // Temp を作って、後でまとめて追加する。
-                            // https://lvcharts.net/App/examples/v1/wpf/Performance%20Tips
-
-                            //var temporalCv = new OhlcPoint[test.Count];
-                            var temporalCv = new OhlcPoint[span - 1];
-                            //var temporalOV = new ObservableValue[span - 1];
-
-                            var tempVol = new double[span - 1];
-
-                            /*
-                            // チャート最低値、最高値の設定
-                            double HighMax = 0;
-                            double LowMax = 999999999;
-                            */
-
-                            int i = 0;
-                            int c = span;
-                            foreach (var oh in lst)
-                            {
-                                // 全てのポイントが同じ場合、スキップする。変なデータ？ 本家もスキップしている。
-                                if ((oh.Open == oh.High) && (oh.Open == oh.Low) && (oh.Open == oh.Close) && (oh.Volume == 0))
+                                // 出来高クリア
+                                //ChartSeries[1].Values.Clear();
+                                // https://github.com/Live-Charts/Live-Charts/issues/76
+                                for (int v = 0; v < chartSeries[1].Values.Count - 1; v++)
                                 {
-                                    //continue;
+                                    chartSeries[1].Values[v] = (double)0;
                                 }
 
-                                // 表示数を限る 直近のspan本
-                                //if (i < (span - 1))
-                                if (i < (span - 1))
-                                {
-                                    /*
-                                    // 最高値と最低値を探る
-                                    if ((double)oh.High > HighMax)
-                                    {
-                                        HighMax = (double)oh.High;
-                                    }
-
-                                    if ((double)oh.Low < LowMax)
-                                    {
-                                        LowMax = (double)oh.Low;
-                                    }
-                                    */
-                                    //Debug.WriteLine(oh.TimeStamp.ToString("dd日 hh時mm分"));
-
-                                    // ラベル
-                                    if (ct == CandleTypes.OneMin)
-                                    {
-                                        chartAxisX[0].Labels.Insert(0, oh.TimeStamp.ToString("H:mm"));
-                                    }
-                                    else if (ct == CandleTypes.OneHour)
-                                    {
-                                        chartAxisX[0].Labels.Insert(0, oh.TimeStamp.ToString("d日 H:mm"));
-
-                                    }
-                                    else if (ct == CandleTypes.OneDay)
-                                    {
-                                        chartAxisX[0].Labels.Insert(0, oh.TimeStamp.ToString("M月d日"));
-                                    }
-                                    else
-                                    {
-                                        throw new System.InvalidOperationException("LoadChart: 不正な CandleType");
-                                    }
-                                    //ChartAxisX[0].Labels.Add(oh.TimeStamp.ToShortTimeString());
+                                // ラベル表示クリア
+                                chartAxisX[0].Labels.Clear();
 
 
-                                    // ポイント作成
-                                    OhlcPoint p = new OhlcPoint((double)oh.Open, (double)oh.High, (double)oh.Low, (double)oh.Close);
+                                // 期間設定
+                                chartAxisX[0].MaxValue = span - 1;
+                                chartAxisX[0].MinValue = 0;
 
 
-                                    // 直接追加しないで、
-                                    //ChartSeries[0].Values.Add(p);
-                                    // 一旦、Tempに追加して、あとでまとめてAddRange
-                                    temporalCv[c - 2] = p;
+                                // Temp を作って、後でまとめて追加する。
+                                // https://lvcharts.net/App/examples/v1/wpf/Performance%20Tips
 
+                                //var temporalCv = new OhlcPoint[test.Count];
+                                var temporalCv = new OhlcPoint[span - 1];
+                                //var temporalOV = new ObservableValue[span - 1];
 
-                                    tempVol[c - 2] = (double)oh.Volume;
-                                    //ChartSeries[3].Values.Add((double)oh.Volume);
+                                var tempVol = new double[span - 1];
 
-                                    c = c - 1;
-
-                                }
-
-                                i = i + 1;
-                            }
-
-                            try
-                            {
                                 /*
-                                // チャート最低値、最高値のセット
-                                chartAxisY[0].MaxValue = HighMax;
-                                chartAxisY[0].MinValue = LowMax;
+                                // チャート最低値、最高値の設定
+                                double HighMax = 0;
+                                double LowMax = 999999999;
                                 */
 
-                                // まとめて追加
-
-                                // OHLCV
-                                chartSeries[0].Values.AddRange(temporalCv);
-
-                                // volume
-                                var cv = new ChartValues<double>();
-                                cv.AddRange(tempVol);
-                                chartSeries[1].Values = cv;
-
-
-                                // TODO what is this? not working.
-                                if (chartAxisY[0].Sections.Count > 0)
+                                int i = 0;
+                                int c = span;
+                                foreach (var oh in lst)
                                 {
-                                    //ChartAxisY[0].Sections[0].Width = span;
-                                    //ChartAxisY[0].Sections[0].SectionWidth = span;
+                                    // 全てのポイントが同じ場合、スキップする。変なデータ？ 本家もスキップしている。
+                                    if ((oh.Open == oh.High) && (oh.Open == oh.Low) && (oh.Open == oh.Close) && (oh.Volume == 0))
+                                    {
+                                        //continue;
+                                    }
+
+                                    // 表示数を限る 直近のspan本
+                                    //if (i < (span - 1))
+                                    if (i < (span - 1))
+                                    {
+                                        /*
+                                        // 最高値と最低値を探る
+                                        if ((double)oh.High > HighMax)
+                                        {
+                                            HighMax = (double)oh.High;
+                                        }
+
+                                        if ((double)oh.Low < LowMax)
+                                        {
+                                            LowMax = (double)oh.Low;
+                                        }
+                                        */
+                                        //Debug.WriteLine(oh.TimeStamp.ToString("dd日 hh時mm分"));
+
+                                        // ラベル
+                                        if (ct == CandleTypes.OneMin)
+                                        {
+                                            chartAxisX[0].Labels.Insert(0, oh.TimeStamp.ToString("H:mm"));
+                                        }
+                                        else if (ct == CandleTypes.OneHour)
+                                        {
+                                            chartAxisX[0].Labels.Insert(0, oh.TimeStamp.ToString("d日 H:mm"));
+
+                                        }
+                                        else if (ct == CandleTypes.OneDay)
+                                        {
+                                            chartAxisX[0].Labels.Insert(0, oh.TimeStamp.ToString("M月d日"));
+                                        }
+                                        else
+                                        {
+                                            throw new System.InvalidOperationException("LoadChart: 不正な CandleType");
+                                        }
+                                        //ChartAxisX[0].Labels.Add(oh.TimeStamp.ToShortTimeString());
+
+
+                                        // ポイント作成
+                                        OhlcPoint p = new OhlcPoint((double)oh.Open, (double)oh.High, (double)oh.Low, (double)oh.Close);
+
+
+                                        // 直接追加しないで、
+                                        //ChartSeries[0].Values.Add(p);
+                                        // 一旦、Tempに追加して、あとでまとめてAddRange
+                                        temporalCv[c - 2] = p;
+
+
+                                        tempVol[c - 2] = (double)oh.Volume;
+                                        //ChartSeries[3].Values.Add((double)oh.Volume);
+
+                                        c = c - 1;
+
+                                    }
+
+                                    i = i + 1;
                                 }
-                            }
-                            catch (Exception ex)
-                            {
 
-                                ChartLoadingInfo = pair.ToString() + " チャートのロード中にエラーが発生しました 1 ";
+                                try
+                                {
+                                    /*
+                                    // チャート最低値、最高値のセット
+                                    chartAxisY[0].MaxValue = HighMax;
+                                    chartAxisY[0].MinValue = LowMax;
+                                    */
 
-                                Debug.WriteLine("■■■■■ " + pair.ToString() + " Chart loading error: " + ex.ToString());
+                                    // まとめて追加
+
+                                    // OHLCV
+                                    chartSeries[0].Values.AddRange(temporalCv);
+
+                                    // volume
+                                    var cv = new ChartValues<double>();
+                                    cv.AddRange(tempVol);
+                                    chartSeries[1].Values = cv;
+
+                                }
+                                catch (Exception ex)
+                                {
+
+                                    ChartLoadingInfo = pair.ToString() + " チャートのロード中にエラーが発生しました 1 ";
+
+                                    Debug.WriteLine("■■■■■ " + pair.ToString() + " Chart loading error: " + ex.ToString());
+                                }
+                                                            
                             }
 
                         }
+                        catch (Exception ex)
+                        {
+                            ChartLoadingInfo = "チャートのロード中にエラーが発生しました 2 ";
 
-                    }
-                    catch (Exception ex)
-                    {
-                        ChartLoadingInfo = "チャートのロード中にエラーが発生しました 2 ";
+                            Debug.WriteLine("■■■■■ Chart loading error: " + ex.ToString());
+                        }
 
-                        Debug.WriteLine("■■■■■ Chart loading error: " + ex.ToString());
-                    }
+                    });
+                    
+                }
+                catch (Exception ex)
+                {
+                    ChartLoadingInfo = "チャートのロード中にエラーが発生しました 3";
 
-                });
+                    Debug.WriteLine("■■■■■ Chart loading error: " + ex.ToString());
+                }
+
+                Debug.WriteLine("ロード終わり  " + pair.ToString() + " " + lst.Count.ToString() + " " + span.ToString());
+                ChartLoadingInfo = "";
 
             }
             catch (Exception ex)
             {
-                ChartLoadingInfo = "チャートのロード中にエラーが発生しました 3";
 
-                Debug.WriteLine("■■■■■ Chart loading error: " + ex.ToString());
+                ChartLoadingInfo = pair.ToString() + " チャートのロードにエラーが発生しました 1 ";
+
+                Debug.WriteLine("■■■■■ " + pair.ToString() + " GetCandleLoadChartsticks error: " + ex.ToString());
             }
-
-
-            Debug.WriteLine("ロード終わり  " + pair.ToString() + " " + lst.Count.ToString() + " " + span.ToString());
-            ChartLoadingInfo = "";
 
         }
 
@@ -9781,7 +10044,9 @@ namespace BitDesk.ViewModels
         // チャート表示期間を変えた時に
         private void ChangeChartSpan(Pairs pair)
         {
-            // enum の期間選択からチャートを更新させる。コンボボックスとダブルアップデートにならないようにするため。
+
+            // enum の期間選択からチャートを更新させる。
+            // コンボボックスとダブルアップデートにならないようにするためコンボボックスでreturnしている。
 
             if (_chartSpan == ChartSpans.OneHour)
             {
@@ -9791,8 +10056,7 @@ namespace BitDesk.ViewModels
                 }
                 else
                 {
-                    LoadChart(pair, SelectedCandleType);
-                    //DisplayChart(pair);
+                    DisplayChart(pair);
                 }
             }
             else if (_chartSpan == ChartSpans.ThreeHour)
@@ -9803,8 +10067,7 @@ namespace BitDesk.ViewModels
                 }
                 else
                 {
-                    LoadChart(pair, SelectedCandleType);
-                    //DisplayChart(pair);
+                    DisplayChart(pair);
                 }
             }
             else if (_chartSpan == ChartSpans.OneDay)
@@ -9815,8 +10078,7 @@ namespace BitDesk.ViewModels
                 }
                 else
                 {
-                    LoadChart(pair, SelectedCandleType);
-                    //DisplayChart(pair);
+                    DisplayChart(pair);
                 }
             }
             else if (_chartSpan == ChartSpans.ThreeDay)
@@ -9827,8 +10089,7 @@ namespace BitDesk.ViewModels
                 }
                 else
                 {
-                    LoadChart(pair, SelectedCandleType);
-                    //DisplayChart(pair);
+                    DisplayChart(pair);
                 }
             }
             else if (_chartSpan == ChartSpans.OneWeek)
@@ -9839,8 +10100,7 @@ namespace BitDesk.ViewModels
                 }
                 else
                 {
-                    LoadChart(pair, SelectedCandleType);
-                    //DisplayChart(pair);
+                    DisplayChart(pair);
                 }
             }
             else if (_chartSpan == ChartSpans.OneMonth)
@@ -9851,8 +10111,7 @@ namespace BitDesk.ViewModels
                 }
                 else
                 {
-                    LoadChart(pair, SelectedCandleType);
-                    //DisplayChart(pair);
+                    DisplayChart(pair);
                 }
             }
             else if (_chartSpan == ChartSpans.TwoMonth)
@@ -9863,8 +10122,7 @@ namespace BitDesk.ViewModels
                 }
                 else
                 {
-                    LoadChart(pair, SelectedCandleType);
-                    //DisplayChart(pair);
+                    DisplayChart(pair);
                 }
             }
             else if (_chartSpan == ChartSpans.OneYear)
@@ -9875,8 +10133,7 @@ namespace BitDesk.ViewModels
                 }
                 else
                 {
-                    LoadChart(pair, SelectedCandleType);
-                    //DisplayChart(pair);
+                    DisplayChart(pair);
                 }
             }
             else if (_chartSpan == ChartSpans.FiveYear)
@@ -9887,10 +10144,12 @@ namespace BitDesk.ViewModels
                 }
                 else
                 {
-                    LoadChart(pair, SelectedCandleType);
-                    //DisplayChart(pair);
+                    DisplayChart(pair);
                 }
             }
+
+
+            Debug.WriteLine("ChangeChartSpan");
 
         }
 
@@ -9973,6 +10232,13 @@ namespace BitDesk.ViewModels
                 ListOhlcvsOneMin = OhlcvsOneMinBch;
                 ListOhlcvsOneDay = OhlcvsOneDayBch;
             }
+
+            if (ListOhlcvsOneHour == null)
+                return;
+            if (ListOhlcvsOneMin == null)
+                return;
+            if (ListOhlcvsOneDay == null)
+                return;
 
             #region == １分毎のデータ ==
 
@@ -10223,7 +10489,10 @@ namespace BitDesk.ViewModels
             }
 
             #endregion
-            
+
+
+            ChartLoadingInfo = "";
+
         }
 
         // チャートの最後に最新ポイントを追加して更新表示する。

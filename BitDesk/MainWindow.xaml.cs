@@ -88,7 +88,6 @@ namespace BitDesk
             e.Handled = true;
         }
 
-
         #region == UI変更のViewコードビハインド ==
 
         private void DepthListBox_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -270,8 +269,8 @@ namespace BitDesk
             www = this.Width;
             hhh = this.Height;
 
-            this.Height = 456;
-            this.Width = 423;
+            this.Height = 478;
+            this.Width = 436;
 
             ResizeMode = ResizeMode.NoResize;
 

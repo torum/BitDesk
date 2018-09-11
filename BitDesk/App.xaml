@@ -1585,19 +1585,19 @@
                                 <ControlTemplate TargetType="{x:Type TabItem}">
                                     <Grid>
                                         <Grid.RowDefinitions>
-                                            <RowDefinition Height="60" />
+                                            <RowDefinition Height="48" />
                                         </Grid.RowDefinitions>
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="{TemplateBinding Width}"/>
                                         </Grid.ColumnDefinitions>
 
                                         <!-- ぼかし背景を合わせる -->
                                         <Rectangle x:Name="AcrylicBackground2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Fill="{DynamicResource WindowBackgroundBaseColorBrush}" Opacity="0.5" Margin="0"></Rectangle>
 
-                                        <Border Name="HeaderBorder" Grid.Row="0" Width="120" Height="80" Margin="0 0 -2 0" BorderThickness="2 0 0 0" HorizontalAlignment="Left" VerticalAlignment="Top" CornerRadius="1 1 1 1">
-                                            <ContentPresenter x:Name="ContentSite" HorizontalAlignment="Left" VerticalAlignment="Top" ContentSource="Header" RecognizesAccessKey="True" Margin="6 6 0 0"/>
+                                        <Border Name="HeaderBorder" Grid.Row="0" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Margin="0 0 -2 0" BorderThickness="2 0 0 0" HorizontalAlignment="Center" VerticalAlignment="Center" CornerRadius="1 1 1 1">
+                                            <ContentPresenter x:Name="ContentSite" HorizontalAlignment="Center" VerticalAlignment="Center" ContentSource="Header" RecognizesAccessKey="True" Margin="0 0 0 0"/>
                                         </Border>
-                                        <Border Name="SubContent" Grid.Row="0" Width="120" Height="80" Padding="0" Background="Transparent" BorderThickness="0" CornerRadius="1 1 1 1" Visibility="Visible">
+                                        <Border Name="SubContent" Grid.Row="0" Width="120" Height="80" Padding="0" Background="Transparent" BorderThickness="0" CornerRadius="1 1 1 1">
                                             <ContentPresenter Name="Content" Margin="0" ContentSource="Content" KeyboardNavigation.DirectionalNavigation="Contained" KeyboardNavigation.TabNavigation="Local" />
                                         </Border>
                                     </Grid>
