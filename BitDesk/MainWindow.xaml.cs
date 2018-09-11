@@ -318,9 +318,18 @@ namespace BitDesk
                 Transaction.Visibility = Visibility.Visible;
                 Middle.Visibility = Visibility.Visible;
 
-
-                RestoreButton.Visibility = Visibility.Visible;
-                MaxButton.Visibility = Visibility.Collapsed;
+                if (this.WindowState == WindowState.Normal)
+                {
+                    RestoreButton.Visibility = Visibility.Collapsed;
+                    MaxButton.Visibility = Visibility.Visible;
+                }
+                else if (this.WindowState == WindowState.Maximized)
+                {
+                    RestoreButton.Visibility = Visibility.Visible;
+                    MaxButton.Visibility = Visibility.Collapsed;
+                }
+                
+                
             }
         }
 
