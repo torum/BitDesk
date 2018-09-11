@@ -20,7 +20,6 @@ using BitDesk.Common;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Security.Cryptography;
-using System.Windows.Media;
 using System.Media;
 
 namespace BitDesk.ViewModels
@@ -2885,7 +2884,6 @@ namespace BitDesk.ViewModels
             }
         }
 
-
         #endregion
 
         #region == 設定画面関係 ==
@@ -4414,11 +4412,13 @@ namespace BitDesk.ViewModels
 
                 }
 
-                Debug.WriteLine(_selectedCandleType.ToString() + " チャート表示");
+                //Debug.WriteLine(_selectedCandleType.ToString() + " チャート表示");
 
                 // チャート表示
                 if (ShowAllCharts)
                     DisplayCharts();
+                else
+                    DisplayChart(CurrentPair);
 
             }
         }
@@ -4474,8 +4474,16 @@ namespace BitDesk.ViewModels
                 // チャート表示アップデート
                 //ChangeChartSpan();
 
-                ChangeChartSpans();
-                //DisplayCharts();
+                if (ShowAllCharts)
+                {
+                    ChangeChartSpans();
+                    //DisplayCharts();
+                }
+                else
+                {
+                    ChangeChartSpan(CurrentPair);
+                    //DisplayChart(CurrentPair);
+                }
 
             }
         }
@@ -4491,48 +4499,10 @@ namespace BitDesk.ViewModels
             }
         }
 
-
         #region == チャートデータ用のプロパティ ==
 
-        /*
-        // チャートデータ保持
-        // 一日単位 今年、去年、２年前、３年前、４年前、５年前の1hourデータを取得する必要あり。
-        private List<Ohlcv> _ohlcvsOneDay = new List<Ohlcv>();
-        public List<Ohlcv> OhlcvsOneDay
-        {
-            get { return _ohlcvsOneDay; }
-            set
-            {
-                _ohlcvsOneDay = value;
-                this.NotifyPropertyChanged("Ohlcvs");
-            }
-        }
-
-        // 一時間単位 今日、昨日、一昨日、その前の1hourデータを取得する必要あり。
-        private List<Ohlcv> _ohlcvsOneHour = new List<Ohlcv>();
-        public List<Ohlcv> OhlcvsOneHour
-        {
-            get { return _ohlcvsOneHour; }
-            set
-            {
-                _ohlcvsOneHour = value;
-                this.NotifyPropertyChanged("OhlcvsOneHour");
-            }
-        }
-
-        // 一分単位 今日と昨日の1minデータを取得する必要あり。
-        private List<Ohlcv> _ohlcvsOneMin = new List<Ohlcv>();
-        public List<Ohlcv> OhlcvsOneMin
-        {
-            get { return _ohlcvsOneMin; }
-            set
-            {
-                _ohlcvsOneMin = value;
-                this.NotifyPropertyChanged("OhlcvsOneMin");
-            }
-        }
-
-        private SeriesCollection _chartSeries;
+        // デフォルトの
+        private SeriesCollection _chartSeries = new SeriesCollection();
         public SeriesCollection ChartSeries
         {
             get
@@ -4582,6 +4552,45 @@ namespace BitDesk.ViewModels
                 this.NotifyPropertyChanged("ChartAxisY");
             }
         }
+
+        /*
+        // チャートデータ保持
+        // 一日単位 今年、去年、２年前、３年前、４年前、５年前の1hourデータを取得する必要あり。
+        private List<Ohlcv> _ohlcvsOneDay = new List<Ohlcv>();
+        public List<Ohlcv> OhlcvsOneDay
+        {
+            get { return _ohlcvsOneDay; }
+            set
+            {
+                _ohlcvsOneDay = value;
+                this.NotifyPropertyChanged("Ohlcvs");
+            }
+        }
+
+        // 一時間単位 今日、昨日、一昨日、その前の1hourデータを取得する必要あり。
+        private List<Ohlcv> _ohlcvsOneHour = new List<Ohlcv>();
+        public List<Ohlcv> OhlcvsOneHour
+        {
+            get { return _ohlcvsOneHour; }
+            set
+            {
+                _ohlcvsOneHour = value;
+                this.NotifyPropertyChanged("OhlcvsOneHour");
+            }
+        }
+
+        // 一分単位 今日と昨日の1minデータを取得する必要あり。
+        private List<Ohlcv> _ohlcvsOneMin = new List<Ohlcv>();
+        public List<Ohlcv> OhlcvsOneMin
+        {
+            get { return _ohlcvsOneMin; }
+            set
+            {
+                _ohlcvsOneMin = value;
+                this.NotifyPropertyChanged("OhlcvsOneMin");
+            }
+        }
+
         */
 
         // === BTC === 
@@ -8027,6 +8036,11 @@ namespace BitDesk.ViewModels
 
             #endregion
 
+            // TODO
+            ChartSeries = ChartSeriesBtc;
+            ChartAxisX = ChartAxisXBtc;
+            ChartAxisY = ChartAxisYBtc;
+
             //SelectedCandleType = で表示できるので、これは不要だが、デフォと同じ場合のみ、手動で表示させる。
             if (SelectedCandleType == CandleTypes.OneHour) // デフォと揃えること。
             {
@@ -8034,6 +8048,8 @@ namespace BitDesk.ViewModels
                 {
                     if (ShowAllCharts)
                         await Task.Run(() => DisplayCharts());
+                    else
+                        await Task.Run(() => DisplayChart(CurrentPair));
 
                 });
             }
@@ -8934,7 +8950,7 @@ namespace BitDesk.ViewModels
         // 初回に各種Candlestickをまとめて取得
         private async Task<bool> GetCandlesticks(Pairs pair, CandleTypes ct)
         {
-            //ChartLoadingInfo = "チャートデータを取得中....";
+            ChartLoadingInfo = "チャートデータを取得中....";
 
             // 今日の日付セット。UTCで。
             DateTime dtToday = DateTime.Now.ToUniversalTime();
@@ -9019,7 +9035,7 @@ namespace BitDesk.ViewModels
                                     {
                                         ListOhlcvsOneHour.Add(l);
                                     }
-                                    /*
+
                                     await Task.Delay(300);
                                     // 5日前
                                     dtTarget = dtTarget.AddDays(-1);
@@ -9067,7 +9083,6 @@ namespace BitDesk.ViewModels
                                         }
 
                                     }
-                                    */
 
                                 }
                             }
@@ -9158,8 +9173,8 @@ namespace BitDesk.ViewModels
                     ListOhlcvsOneDay.Reverse();
 
                     // 
-                    if (dtToday.Month <= 3)
-                    {
+                    //if (dtToday.Month <= 3)
+                    //{
                         Debug.WriteLine("去年のOneDay取得開始 " + pair.ToString());
 
                         await Task.Delay(300);
@@ -9201,7 +9216,7 @@ namespace BitDesk.ViewModels
 
                         }
 
-                    }
+                    //}
 
 
                 }
@@ -9284,8 +9299,8 @@ namespace BitDesk.ViewModels
         // チャートを読み込み表示する。
         private void LoadChart(Pairs pair, CandleTypes ct)
         {
-            //ChartLoadingInfo = "チャートをロード中....";
-            //Debug.WriteLine("LoadChart... " + pair.ToString());
+            ChartLoadingInfo = "チャートをロード中....";
+            Debug.WriteLine("LoadChart... " + pair.ToString());
 
             //CandleTypes ct = SelectedCandleType;
 
@@ -9719,6 +9734,8 @@ namespace BitDesk.ViewModels
                 Debug.WriteLine("■■■■■ Chart loading error: " + ex.ToString());
             }
 
+
+            Debug.WriteLine("ロード終わり  " + pair.ToString() + " " + lst.Count.ToString() + " " + span.ToString());
             ChartLoadingInfo = "";
 
         }
@@ -9774,7 +9791,7 @@ namespace BitDesk.ViewModels
                 }
                 else
                 {
-                    //LoadChart(pair, SelectedCandleType);
+                    LoadChart(pair, SelectedCandleType);
                     //DisplayChart(pair);
                 }
             }
@@ -9786,7 +9803,7 @@ namespace BitDesk.ViewModels
                 }
                 else
                 {
-                    //LoadChart(pair, SelectedCandleType);
+                    LoadChart(pair, SelectedCandleType);
                     //DisplayChart(pair);
                 }
             }
@@ -9798,7 +9815,7 @@ namespace BitDesk.ViewModels
                 }
                 else
                 {
-                    //LoadChart(pair, SelectedCandleType);
+                    LoadChart(pair, SelectedCandleType);
                     //DisplayChart(pair);
                 }
             }
@@ -9810,7 +9827,7 @@ namespace BitDesk.ViewModels
                 }
                 else
                 {
-                    //LoadChart(pair, SelectedCandleType);
+                    LoadChart(pair, SelectedCandleType);
                     //DisplayChart(pair);
                 }
             }
@@ -9822,7 +9839,7 @@ namespace BitDesk.ViewModels
                 }
                 else
                 {
-                    //LoadChart(pair, SelectedCandleType);
+                    LoadChart(pair, SelectedCandleType);
                     //DisplayChart(pair);
                 }
             }
@@ -9834,7 +9851,7 @@ namespace BitDesk.ViewModels
                 }
                 else
                 {
-                    //LoadChart(pair, SelectedCandleType);
+                    LoadChart(pair, SelectedCandleType);
                     //DisplayChart(pair);
                 }
             }
@@ -9846,7 +9863,7 @@ namespace BitDesk.ViewModels
                 }
                 else
                 {
-                    //LoadChart(pair, SelectedCandleType);
+                    LoadChart(pair, SelectedCandleType);
                     //DisplayChart(pair);
                 }
             }
@@ -9854,11 +9871,11 @@ namespace BitDesk.ViewModels
             {
                 if (SelectedCandleType != CandleTypes.OneDay)
                 {
-                    //SelectedCandleType = CandleTypes.OneDay;
+                    SelectedCandleType = CandleTypes.OneDay;
                 }
                 else
                 {
-                    //LoadChart(pair, SelectedCandleType);
+                    LoadChart(pair, SelectedCandleType);
                     //DisplayChart(pair);
                 }
             }
@@ -9870,7 +9887,7 @@ namespace BitDesk.ViewModels
                 }
                 else
                 {
-                    //LoadChart(pair, SelectedCandleType);
+                    LoadChart(pair, SelectedCandleType);
                     //DisplayChart(pair);
                 }
             }
@@ -9899,7 +9916,7 @@ namespace BitDesk.ViewModels
         // タイマーで、最新のロウソク足データを取得して追加する。
         private async void UpdateCandlestick(Pairs pair, CandleTypes ct)
         {
-            //ChartLoadingInfo = "チャートデータの更新中....";
+            ChartLoadingInfo = "チャートデータの更新中....";
             await Task.Delay(600);
 
             // 今日の日付セット。UTCで。

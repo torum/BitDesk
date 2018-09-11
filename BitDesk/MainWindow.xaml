@@ -1080,12 +1080,11 @@
                                                     </StackPanel>
                                                 </Border>
 
-                                                <!-- チャート
+                                                <!-- チャート -->
                                                 <lvc:CartesianChart x:Name="Chart" Grid.Row="1" Height="300" Series="{Binding ChartSeries}" AxisY="{Binding ChartAxisY}" AxisX="{Binding ChartAxisX}" Hoverable="False" Zoom="{Binding ZoomingMode}" BorderBrush="Gainsboro" BorderThickness="0 0.1 0 0.1" Padding="3 0 0 0" Margin="6 0 12 0">
-
                                                 </lvc:CartesianChart>
-                                                -->
-                                                <lvc:CartesianChart x:Name="Chart" Grid.Row="1" Height="300" Hoverable="False" Zoom="{Binding ZoomingMode}" BorderBrush="Gainsboro" BorderThickness="0 0.1 0 0.1" Padding="3 0 0 0" Margin="6 0 12 0">
+                                                
+                                                <lvc:CartesianChart x:Name="Chart2" Grid.Row="1" Height="300" Hoverable="False" BorderBrush="Gainsboro" BorderThickness="0 0.1 0 0.1" Padding="3 0 0 0" Margin="6 0 12 0" Visibility="Collapsed">
 
                                                     <!-- X軸 -->
                                                     <lvc:CartesianChart.AxisX>
