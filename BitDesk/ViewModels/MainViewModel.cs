@@ -3969,12 +3969,22 @@ namespace BitDesk.ViewModels
 
                     DepthGroupingChanged = true;
 
-                    IsBtcVisible = true;
-                    IsXrpVisible = false;
-                    IsEthVisible = false;
-                    IsLtcVisible = false;
+                    // 主にチャートの切替
+                    IsBtcJpyVisible = true;
+                    IsXrpJpyVisible = false;
+                    IsEthBtcVisible = false;
+                    IsLtcBtcVisible = false;
                     IsMonaJpyVisible = false;
                     IsBchJpyVisible = false;
+
+                    // 資産情報の切替
+                    IsJpyAssetVisible = true;
+                    IsBtcJpyAssetVisible = true;
+                    IsXrpJpyAssetVisible = false;
+                    IsEthBtcAssetVisible = false;
+                    IsLtcBtcAssetVisible = false;
+                    IsMonaJpyAssetVisible = false;
+                    IsBchJpyAssetVisible = false;
 
                 }
                 else if (_activePairIndex == 1)
@@ -3985,12 +3995,20 @@ namespace BitDesk.ViewModels
 
                     DepthGroupingChanged = true;
 
-                    IsBtcVisible = false;
-                    IsXrpVisible = true;
-                    IsEthVisible = false;
-                    IsLtcVisible = false;
+                    IsBtcJpyVisible = false;
+                    IsXrpJpyVisible = true;
+                    IsEthBtcVisible = false;
+                    IsLtcBtcVisible = false;
                     IsMonaJpyVisible = false;
                     IsBchJpyVisible = false;
+
+                    IsJpyAssetVisible = true;
+                    IsBtcJpyAssetVisible = false;
+                    IsXrpJpyAssetVisible = true;
+                    IsEthBtcAssetVisible = false;
+                    IsLtcBtcAssetVisible = false;
+                    IsMonaJpyAssetVisible = false;
+                    IsBchJpyAssetVisible = false;
 
                 }
                 else if (_activePairIndex == 2)
@@ -4001,12 +4019,20 @@ namespace BitDesk.ViewModels
 
                     DepthGroupingChanged = true;
 
-                    IsBtcVisible = false;
-                    IsXrpVisible = false;
-                    IsEthVisible = false;
-                    IsLtcVisible = true;
+                    IsBtcJpyVisible = false;
+                    IsXrpJpyVisible = false;
+                    IsEthBtcVisible = false;
+                    IsLtcBtcVisible = true;
                     IsMonaJpyVisible = false;
                     IsBchJpyVisible = false;
+
+                    IsJpyAssetVisible = false;
+                    IsBtcJpyAssetVisible = true;
+                    IsXrpJpyAssetVisible = false;
+                    IsEthBtcAssetVisible = false;
+                    IsLtcBtcAssetVisible = true;
+                    IsMonaJpyAssetVisible = false;
+                    IsBchJpyAssetVisible = false;
 
                 }
                 else if (_activePairIndex == 3)
@@ -4017,12 +4043,20 @@ namespace BitDesk.ViewModels
 
                     DepthGroupingChanged = true;
 
-                    IsBtcVisible = false;
-                    IsXrpVisible = false;
-                    IsEthVisible = true;
-                    IsLtcVisible = false;
+                    IsBtcJpyVisible = false;
+                    IsXrpJpyVisible = false;
+                    IsEthBtcVisible = true;
+                    IsLtcBtcVisible = false;
                     IsMonaJpyVisible = false;
                     IsBchJpyVisible = false;
+
+                    IsJpyAssetVisible = false;
+                    IsBtcJpyAssetVisible = true;
+                    IsXrpJpyAssetVisible = false;
+                    IsEthBtcAssetVisible = true;
+                    IsLtcBtcAssetVisible = false;
+                    IsMonaJpyAssetVisible = false;
+                    IsBchJpyAssetVisible = false;
 
                 }
                 else if (_activePairIndex == 4)
@@ -4033,12 +4067,20 @@ namespace BitDesk.ViewModels
 
                     DepthGroupingChanged = true;
 
-                    IsBtcVisible = false;
-                    IsXrpVisible = false;
-                    IsEthVisible = false;
-                    IsLtcVisible = false;
+                    IsBtcJpyVisible = false;
+                    IsXrpJpyVisible = false;
+                    IsEthBtcVisible = false;
+                    IsLtcBtcVisible = false;
                     IsMonaJpyVisible = true;
                     IsBchJpyVisible = false;
+
+                    IsJpyAssetVisible = true;
+                    IsBtcJpyAssetVisible = false;
+                    IsXrpJpyAssetVisible = false;
+                    IsEthBtcAssetVisible = false;
+                    IsLtcBtcAssetVisible = false;
+                    IsMonaJpyAssetVisible = true;
+                    IsBchJpyAssetVisible = false;
 
                 }
                 else if (_activePairIndex == 5)
@@ -4049,12 +4091,20 @@ namespace BitDesk.ViewModels
 
                     DepthGroupingChanged = true;
 
-                    IsBtcVisible = false;
-                    IsXrpVisible = false;
-                    IsEthVisible = false;
-                    IsLtcVisible = false;
+                    IsBtcJpyVisible = false;
+                    IsXrpJpyVisible = false;
+                    IsEthBtcVisible = false;
+                    IsLtcBtcVisible = false;
                     IsMonaJpyVisible = false;
                     IsBchJpyVisible = true;
+
+                    IsJpyAssetVisible = true;
+                    IsBtcJpyAssetVisible = false;
+                    IsXrpJpyAssetVisible = false;
+                    IsEthBtcAssetVisible = false;
+                    IsLtcBtcAssetVisible = false;
+                    IsMonaJpyAssetVisible = false;
+                    IsBchJpyAssetVisible = true;
 
                 }
 
@@ -4196,20 +4246,20 @@ namespace BitDesk.ViewModels
             }
         }
 
-        private bool _isBtcVisible;
-        public bool IsBtcVisible
+        private bool _isBtcJpyVisible;
+        public bool IsBtcJpyVisible
         {
             get
             {
-                return _isBtcVisible;
+                return _isBtcJpyVisible;
             }
             set
             {
-                if (_isBtcVisible == value)
+                if (_isBtcJpyVisible == value)
                     return;
 
-                _isBtcVisible = value;
-                this.NotifyPropertyChanged("IsBtcVisible");
+                _isBtcJpyVisible = value;
+                this.NotifyPropertyChanged("IsBtcJpyVisible");
             }
         }
 
@@ -4218,25 +4268,24 @@ namespace BitDesk.ViewModels
         {
             get
             {
-                //return Ltps[Pairs.xrp_jpy];
                 return _pairXrpJpy;
             }
         }
 
-        private bool _isXrpVisible;
-        public bool IsXrpVisible
+        private bool _isXrpJpyVisible;
+        public bool IsXrpJpyVisible
         {
             get
             {
-                return _isXrpVisible;
+                return _isXrpJpyVisible;
             }
             set
             {
-                if (_isXrpVisible == value)
+                if (_isXrpJpyVisible == value)
                     return;
 
-                _isXrpVisible = value;
-                this.NotifyPropertyChanged("IsXrpVisible");
+                _isXrpJpyVisible = value;
+                this.NotifyPropertyChanged("IsXrpJpyVisible");
             }
         }
 
@@ -4245,25 +4294,24 @@ namespace BitDesk.ViewModels
         {
             get
             {
-                //return Ltps[Pairs.eth_btc];
                 return _pairEthBtc;
             }
         }
 
-        private bool _isEthVisible;
-        public bool IsEthVisible
+        private bool _isEthBtcVisible;
+        public bool IsEthBtcVisible
         {
             get
             {
-                return _isEthVisible;
+                return _isEthBtcVisible;
             }
             set
             {
-                if (_isEthVisible == value)
+                if (_isEthBtcVisible == value)
                     return;
 
-                _isEthVisible = value;
-                this.NotifyPropertyChanged("IsEthVisible");
+                _isEthBtcVisible = value;
+                this.NotifyPropertyChanged("IsEthBtcVisible");
             }
         }
 
@@ -4272,25 +4320,24 @@ namespace BitDesk.ViewModels
         {
             get
             {
-                //return Ltps[Pairs.ltc_btc];
                 return _pairLtcBtc;
             }
         }
 
-        private bool _isLtcVisible;
-        public bool IsLtcVisible
+        private bool _isLtcBtcVisible;
+        public bool IsLtcBtcVisible
         {
             get
             {
-                return _isLtcVisible;
+                return _isLtcBtcVisible;
             }
             set
             {
-                if (_isLtcVisible == value)
+                if (_isLtcBtcVisible == value)
                     return;
 
-                _isLtcVisible = value;
-                this.NotifyPropertyChanged("IsLtcVisible");
+                _isLtcBtcVisible = value;
+                this.NotifyPropertyChanged("IsLtcBtcVisible");
             }
         }
 
@@ -4299,7 +4346,6 @@ namespace BitDesk.ViewModels
         {
             get
             {
-                //return Ltps[Pairs.mona_jpy];
                 return _pairMonaJpy;
             }
         }
@@ -4326,7 +4372,6 @@ namespace BitDesk.ViewModels
         {
             get
             {
-                //return Ltps[Pairs.bcc_jpy];
                 return _pairBchJpy;
             }
         }
@@ -4518,6 +4563,9 @@ namespace BitDesk.ViewModels
 
         // 公開API ロウソク足 クライアント
         PublicAPIClient _pubCandlestickApi = new PublicAPIClient();
+
+        // プライベートAPIクライアント 後でコンストラクタでイニシャライズ
+        PrivateAPIClient _priApi;
 
         // RSS フィード取得　クライアント
         RSSClient _rssCli = new RSSClient();
@@ -5791,6 +5839,689 @@ namespace BitDesk.ViewModels
 
         #endregion
 
+        #region == 資産用のプロパティ ==
+
+        // Assets 資産
+
+        // 円資産名
+        private string _assetJPYName;
+        public string AssetJPYName
+        {
+            get
+            {
+                return _assetJPYName;
+            }
+            set
+            {
+                if (_assetJPYName == value)
+                    return;
+
+                _assetJPYName = value;
+                this.NotifyPropertyChanged("AssetJPYName");
+            }
+        }
+
+        // 円総資産額
+        private decimal _assetJPYAmount;
+        public decimal AssetJPYAmount
+        {
+            get
+            {
+                //return Math.Round(_assetJPYAmount);
+                if (DemoMode)
+                {
+                    return _assetJPYAmount * 100;
+                }
+                else
+                {
+                    return _assetJPYAmount;
+                }
+            }
+            set
+            {
+                if (_assetJPYAmount == value)
+                    return;
+
+                _assetJPYAmount = value;
+                this.NotifyPropertyChanged("AssetJPYAmount");
+                this.NotifyPropertyChanged("AssetAllEstimateAmountString");
+            }
+        }
+
+        // 円利用可能資産額
+        private decimal _assetJPYFreeAmount;
+        public decimal AssetJPYFreeAmount
+        {
+            get
+            {
+                return _assetJPYFreeAmount;
+            }
+            set
+            {
+                if (_assetJPYFreeAmount == value)
+                    return;
+
+                _assetJPYFreeAmount = value;
+                this.NotifyPropertyChanged("AssetJPYFreeAmount");
+            }
+        }
+
+        // 資産情報の表示切替
+        private bool _isJpyAssetVisible;
+        public bool IsJpyAssetVisible
+        {
+            get
+            {
+                return _isJpyAssetVisible;
+            }
+            set
+            {
+                if (_isJpyAssetVisible == value)
+                    return;
+
+                _isJpyAssetVisible = value;
+                this.NotifyPropertyChanged("IsJpyAssetVisible");
+            }
+        }
+
+        // ビットコイン資産名
+        private string _assetBTCName;
+        public string AssetBTCName
+        {
+            get
+            {
+                return _assetBTCName;
+            }
+            set
+            {
+                if (_assetBTCName == value)
+                    return;
+
+                _assetBTCName = value;
+                this.NotifyPropertyChanged("AssetBTCName");
+            }
+        }
+
+        // ビットコイン総資産
+        private decimal _assetBTCAmount;
+        public decimal AssetBTCAmount
+        {
+            get
+            {
+                if (DemoMode)
+                {
+                    return _assetBTCAmount * 10000;
+                }
+                else
+                {
+                    return _assetBTCAmount;
+                }
+            }
+            set
+            {
+                if (_assetBTCAmount == value)
+                    return;
+
+                _assetBTCAmount = value;
+                this.NotifyPropertyChanged("AssetBTCAmount");
+            }
+        }
+
+        // ビットコイン利用可能資産額
+        private decimal _assetBTCFreeAmount;
+        public decimal AssetBTCFreeAmount
+        {
+            get
+            {
+                if (DemoMode)
+                {
+                    return _assetBTCFreeAmount * 100;
+                }
+                else
+                {
+                    return _assetBTCFreeAmount;
+                }
+            }
+            set
+            {
+                if (_assetBTCFreeAmount == value)
+                    return;
+
+                _assetBTCFreeAmount = value;
+                this.NotifyPropertyChanged("AssetBTCFreeAmount");
+            }
+        }
+
+        // ビットコイン時価評価額 (ティックから更新される)
+        private decimal _assetBTCEstimateAmount;
+        public decimal AssetBTCEstimateAmount
+        {
+            get
+            {
+                return _assetBTCEstimateAmount;
+            }
+            set
+            {
+                if (_assetBTCEstimateAmount == value)
+                    return;
+
+                _assetBTCEstimateAmount = value;
+                this.NotifyPropertyChanged("AssetBTCEstimateAmount");
+                this.NotifyPropertyChanged("AssetAllEstimateAmountString");
+                this.NotifyPropertyChanged("AssetAllShushi");
+
+            }
+        }
+
+        // 円建て総資産時価評価額合計文字列
+        public string AssetAllEstimateAmountString
+        {
+            get { return String.Format("{0:#,0}", _assetBTCEstimateAmount + _assetJPYAmount + AssetXRPEstimateAmount + AssetLtcEstimateAmount + AssetEthEstimateAmount + AssetMonaEstimateAmount + AssetBchEstimateAmount); }
+        }
+
+        private bool _isBtcJpyAssetVisible;
+        public bool IsBtcJpyAssetVisible
+        {
+            get
+            {
+                return _isBtcJpyAssetVisible;
+            }
+            set
+            {
+                if (_isBtcJpyAssetVisible == value)
+                    return;
+
+                _isBtcJpyAssetVisible = value;
+                this.NotifyPropertyChanged("IsBtcJpyAssetVisible");
+            }
+        }
+
+        // 収支概算
+        public string AssetAllShushi
+        {
+            get
+            {
+                if ((_assetBTCEstimateAmount + _assetJPYAmount) > _initPrice)
+                {
+                    return "+" + String.Format("{0:#,0}", (_assetBTCEstimateAmount + _assetJPYAmount + AssetXRPEstimateAmount + AssetLtcEstimateAmount + AssetEthEstimateAmount + AssetMonaEstimateAmount + AssetBchEstimateAmount) - _initPrice);
+                }
+                else if ((_assetBTCEstimateAmount + _assetJPYAmount) < _initPrice)
+                {
+                    return "-" + String.Format("{0:#,0}", _initPrice - (_assetBTCEstimateAmount + _assetJPYAmount + AssetXRPEstimateAmount + AssetLtcEstimateAmount + AssetEthEstimateAmount + AssetMonaEstimateAmount + AssetBchEstimateAmount));
+                }
+                else
+                {
+                    return "+-0";
+                }
+
+            }
+        }
+
+        // xrp リップル
+        private string _assetXRPName;
+        public string AssetXRPName
+        {
+            get
+            {
+                return _assetXRPName;
+            }
+            set
+            {
+                if (_assetXRPName == value)
+                    return;
+
+                _assetXRPName = value;
+                this.NotifyPropertyChanged("AssetXRPName");
+            }
+        }
+
+        // リップル総資産額
+        private decimal _assetXRPAmount;
+        public decimal AssetXRPAmount
+        {
+            get
+            {
+                return _assetXRPAmount;
+            }
+            set
+            {
+                if (_assetXRPAmount == value)
+                    return;
+
+                _assetXRPAmount = value;
+                this.NotifyPropertyChanged("AssetXRPAmount");
+            }
+        }
+
+        // リップル利用可能額
+        private decimal _assetXRPFreeAmount;
+        public decimal AssetXRPFreeAmount
+        {
+            get
+            {
+                return _assetXRPFreeAmount;
+            }
+            set
+            {
+                if (_assetXRPFreeAmount == value)
+                    return;
+
+                _assetXRPFreeAmount = value;
+                this.NotifyPropertyChanged("AssetXRPFreeAmount");
+            }
+        }
+
+        // リップル時価評価額
+        private decimal _assetXRPEstimateAmount;
+        public decimal AssetXRPEstimateAmount
+        {
+            get
+            {
+                return _assetXRPEstimateAmount;
+            }
+            set
+            {
+                if (_assetXRPEstimateAmount == value)
+                    return;
+
+                _assetXRPEstimateAmount = value;
+                this.NotifyPropertyChanged("AssetXRPEstimateAmount");
+
+                this.NotifyPropertyChanged("AssetAllEstimateAmountString");
+                this.NotifyPropertyChanged("AssetAllShushi");
+            }
+        }
+
+        private bool _isXrpJpyAssetVisible;
+        public bool IsXrpJpyAssetVisible
+        {
+            get
+            {
+                return _isXrpJpyAssetVisible;
+            }
+            set
+            {
+                if (_isXrpJpyAssetVisible == value)
+                    return;
+
+                _isXrpJpyAssetVisible = value;
+                this.NotifyPropertyChanged("IsXrpJpyAssetVisible");
+            }
+        }
+
+        //ltc ライトコイン
+        private string _assetLtcName;
+        public string AssetLtcName
+        {
+            get
+            {
+                return _assetLtcName;
+            }
+            set
+            {
+                if (_assetLtcName == value)
+                    return;
+
+                _assetLtcName = value;
+                this.NotifyPropertyChanged("AssetLtcName");
+            }
+        }
+
+        // ライトコイン総資産額
+        private decimal _assetLtcAmount;
+        public decimal AssetLtcAmount
+        {
+            get
+            {
+                return _assetLtcAmount;
+            }
+            set
+            {
+                if (_assetLtcAmount == value)
+                    return;
+
+                _assetLtcAmount = value;
+                this.NotifyPropertyChanged("AssetLtcAmount");
+            }
+        }
+
+        // ライトコイン利用可能額
+        private decimal _assetLtcFreeAmount;
+        public decimal AssetLtcFreeAmount
+        {
+            get
+            {
+                return _assetLtcFreeAmount;
+            }
+            set
+            {
+                if (_assetLtcFreeAmount == value)
+                    return;
+
+                _assetLtcFreeAmount = value;
+                this.NotifyPropertyChanged("AssetLtcFreeAmount");
+            }
+        }
+
+        // ライトコイン時価評価額
+        private decimal _assetLtcEstimateAmount;
+        public decimal AssetLtcEstimateAmount
+        {
+            get
+            {
+                return _assetLtcEstimateAmount;
+            }
+            set
+            {
+                if (_assetLtcEstimateAmount == value)
+                    return;
+
+                _assetLtcEstimateAmount = value;
+                this.NotifyPropertyChanged("AssetLtcEstimateAmount");
+                this.NotifyPropertyChanged("AssetAllEstimateAmountString");
+                this.NotifyPropertyChanged("AssetAllShushi");
+
+            }
+        }
+
+        private bool _isLtcBtcAssetVisible;
+        public bool IsLtcBtcAssetVisible
+        {
+            get
+            {
+                return _isLtcBtcAssetVisible;
+            }
+            set
+            {
+                if (_isLtcBtcAssetVisible == value)
+                    return;
+
+                _isLtcBtcAssetVisible = value;
+                this.NotifyPropertyChanged("IsLtcBtcAssetVisible");
+            }
+        }
+
+        // eth イーサリアム
+        private string _assetEthName;
+        public string AssetEthName
+        {
+            get
+            {
+                return _assetEthName;
+            }
+            set
+            {
+                if (_assetEthName == value)
+                    return;
+
+                _assetEthName = value;
+                this.NotifyPropertyChanged("AssetEthName");
+            }
+        }
+
+        // イーサリアム総資産額
+        private decimal _assetEthAmount;
+        public decimal AssetEthAmount
+        {
+            get
+            {
+                return _assetEthAmount;
+            }
+            set
+            {
+                if (_assetEthAmount == value)
+                    return;
+
+                _assetEthAmount = value;
+                this.NotifyPropertyChanged("AssetEthAmount");
+            }
+        }
+
+        // イーサリアム利用可能額
+        private decimal _assetEthFreeAmount;
+        public decimal AssetEthFreeAmount
+        {
+            get
+            {
+                return _assetEthFreeAmount;
+            }
+            set
+            {
+                if (_assetEthFreeAmount == value)
+                    return;
+
+                _assetEthFreeAmount = value;
+                this.NotifyPropertyChanged("AssetEthFreeAmount");
+            }
+        }
+
+        // イーサリアム時価評価額
+        private decimal _assetEthEstimateAmount;
+        public decimal AssetEthEstimateAmount
+        {
+            get
+            {
+                return _assetEthEstimateAmount;
+            }
+            set
+            {
+                if (_assetEthEstimateAmount == value)
+                    return;
+
+                _assetEthEstimateAmount = value;
+                this.NotifyPropertyChanged("AssetEthEstimateAmount");
+
+                this.NotifyPropertyChanged("AssetAllEstimateAmountString");
+                this.NotifyPropertyChanged("AssetAllShushi");
+
+            }
+        }
+
+        private bool _isEthBtcAssetVisible;
+        public bool IsEthBtcAssetVisible
+        {
+            get
+            {
+                return _isEthBtcAssetVisible;
+            }
+            set
+            {
+                if (_isEthBtcAssetVisible == value)
+                    return;
+
+                _isEthBtcAssetVisible = value;
+                this.NotifyPropertyChanged("IsEthBtcAssetVisible");
+            }
+        }
+
+        // mona モナーコイン
+        private string _assetMonaName;
+        public string AssetMonaName
+        {
+            get
+            {
+                return _assetMonaName;
+            }
+            set
+            {
+                if (_assetMonaName == value)
+                    return;
+
+                _assetMonaName = value;
+                this.NotifyPropertyChanged("AssetMonaName");
+            }
+        }
+
+        // モナーコイン総資産額
+        private decimal _assetMonaAmount;
+        public decimal AssetMonaAmount
+        {
+            get
+            {
+                return _assetMonaAmount;
+            }
+            set
+            {
+                if (_assetMonaAmount == value)
+                    return;
+
+                _assetMonaAmount = value;
+                this.NotifyPropertyChanged("AssetMonaAmount");
+            }
+        }
+
+        // モナーコイン利用可能額
+        private decimal _assetMonaFreeAmount;
+        public decimal AssetMonaFreeAmount
+        {
+            get
+            {
+                return _assetMonaFreeAmount;
+            }
+            set
+            {
+                if (_assetMonaFreeAmount == value)
+                    return;
+
+                _assetMonaFreeAmount = value;
+                this.NotifyPropertyChanged("AssetMonaFreeAmount");
+            }
+        }
+
+        // モナーコイン時価評価額
+        private decimal _assetMonaEstimateAmount;
+        public decimal AssetMonaEstimateAmount
+        {
+            get
+            {
+                return _assetMonaEstimateAmount;
+            }
+            set
+            {
+                if (_assetMonaEstimateAmount == value)
+                    return;
+
+                _assetMonaEstimateAmount = value;
+                this.NotifyPropertyChanged("AssetMonaEstimateAmount");
+                this.NotifyPropertyChanged("AssetAllEstimateAmountString");
+                this.NotifyPropertyChanged("AssetAllShushi");
+
+            }
+        }
+
+        private bool _isMonaJpyAssetVisible;
+        public bool IsMonaJpyAssetVisible
+        {
+            get
+            {
+                return _isMonaJpyAssetVisible;
+            }
+            set
+            {
+                if (_isMonaJpyAssetVisible == value)
+                    return;
+
+                _isMonaJpyAssetVisible = value;
+                this.NotifyPropertyChanged("IsMonaJpyAssetVisible");
+            }
+        }
+
+        // bch ビットコインキャッシュ
+        private string _assetBchName;
+        public string AssetBchName
+        {
+            get
+            {
+                return _assetBchName;
+            }
+            set
+            {
+                if (_assetBchName == value)
+                    return;
+
+                _assetBchName = value;
+                this.NotifyPropertyChanged("AssetBchName");
+            }
+        }
+
+        // ビットコインキャッシュ総資産額
+        private decimal _assetBchAmount;
+        public decimal AssetBchAmount
+        {
+            get
+            {
+                return _assetBchAmount;
+            }
+            set
+            {
+                if (_assetBchAmount == value)
+                    return;
+
+                _assetBchAmount = value;
+                this.NotifyPropertyChanged("AssetBchAmount");
+            }
+        }
+
+        // ビットコインキャッシュ利用可能額
+        private decimal _assetBchFreeAmount;
+        public decimal AssetBchFreeAmount
+        {
+            get
+            {
+                return _assetBchFreeAmount;
+            }
+            set
+            {
+                if (_assetBchFreeAmount == value)
+                    return;
+
+                _assetBchFreeAmount = value;
+                this.NotifyPropertyChanged("AssetBchFreeAmount");
+            }
+        }
+
+        // ビットコインキャッシュ時価評価額
+        private decimal _assetBchEstimateAmount;
+        public decimal AssetBchEstimateAmount
+        {
+            get
+            {
+                return _assetBchEstimateAmount;
+            }
+            set
+            {
+                if (_assetBchEstimateAmount == value)
+                    return;
+
+                _assetBchEstimateAmount = value;
+                this.NotifyPropertyChanged("AssetBchEstimateAmount");
+
+                this.NotifyPropertyChanged("AssetAllEstimateAmountString");
+                this.NotifyPropertyChanged("AssetAllShushi");
+
+            }
+        }
+
+        private bool _isBchJpyAssetVisible;
+        public bool IsBchJpyAssetVisible
+        {
+            get
+            {
+                return _isBchJpyAssetVisible;
+            }
+            set
+            {
+                if (_isBchJpyAssetVisible == value)
+                    return;
+
+                _isBchJpyAssetVisible = value;
+                this.NotifyPropertyChanged("IsBchJpyAssetVisible");
+            }
+        }
+
+
+        #endregion
+
         public MainViewModel()
         {
 
@@ -5866,10 +6597,10 @@ namespace BitDesk.ViewModels
             #region == APIクライアントのイニシャライズ ==
 
             // プライベートAPIクライアントのイニシャライズ
-            //_priApi = new PrivateAPIClient();
+            _priApi = new PrivateAPIClient();
 
             // エラーイベントにサブスクライブ
-            //this._priApi.ErrorOccured += new PrivateAPIClient.ClinetErrorEvent(OnError);
+            this._priApi.ErrorOccured += new PrivateAPIClient.ClinetErrorEvent(OnError);
 
             #endregion
 
@@ -6084,12 +6815,20 @@ namespace BitDesk.ViewModels
             ActivePair = PairBtcJpy;
             ActivePair.Ltp = PairBtcJpy.Ltp;
 
-            IsBtcVisible = true;
-            IsXrpVisible = false;
-            IsEthVisible = false;
-            IsLtcVisible = false;
+            IsBtcJpyVisible = true;
+            IsXrpJpyVisible = false;
+            IsEthBtcVisible = false;
+            IsLtcBtcVisible = false;
             IsMonaJpyVisible = false;
             IsBchJpyVisible = false;
+
+            IsJpyAssetVisible = true;
+            IsBtcJpyAssetVisible = true;
+            IsXrpJpyAssetVisible = false;
+            IsEthBtcAssetVisible = false;
+            IsLtcBtcAssetVisible = false;
+            IsMonaJpyAssetVisible = false;
+            IsBchJpyAssetVisible = false;
 
             ShowAllCharts = false;
             ShowMainContents = true;
@@ -6151,14 +6890,6 @@ namespace BitDesk.ViewModels
 
                                 // 起動時価格セット
                                 if (PairBtcJpy.BasePrice == 0) PairBtcJpy.BasePrice = tick.LTP;
-
-                                /*
-                                // ビットコイン時価評価額の計算
-                                if (AssetBTCAmount != 0)
-                                {
-                                    AssetBTCEstimateAmount = _ltp * AssetBTCAmount;
-                                }
-                                */
 
                                 // 最安値登録
                                 if (PairBtcJpy.LowestPrice == 0)
@@ -8005,6 +8736,45 @@ namespace BitDesk.ViewModels
 
                             }
 
+
+                            // TODO
+                            // 各通貨の時価評価額の更新
+                            if (pair == Pairs.btc_jpy)
+                            {
+                                if (AssetBTCAmount != 0)
+                                {
+                                    AssetBTCEstimateAmount = tick.LTP * AssetBTCAmount;
+                                }
+                            }
+                            else if (pair == Pairs.xrp_jpy)
+                            {
+                                AssetXRPEstimateAmount = AssetXRPAmount * tick.LTP;
+                            }
+                            else if (pair == Pairs.eth_btc)
+                            {
+                                AssetEthEstimateAmount = (AssetEthAmount * tick.LTP) * PairBtcJpy.Ltp;
+                            }
+                            else if (pair == Pairs.mona_jpy)
+                            {
+                                AssetMonaEstimateAmount = AssetMonaAmount * tick.LTP;
+                            }
+                            else if (pair == Pairs.mona_btc)
+                            {
+                                //
+                            }
+                            else if (pair == Pairs.ltc_btc)
+                            {
+                                AssetLtcEstimateAmount= (AssetLtcAmount * tick.LTP) * PairBtcJpy.Ltp;
+                            }
+                            else if (pair == Pairs.bcc_btc)
+                            {
+                                //
+                            }
+                            else if (pair == Pairs.bcc_jpy)
+                            {
+                                AssetBchEstimateAmount = AssetBchAmount * tick.LTP;
+                            }
+
                         }
                         catch (Exception ex)
                         {
@@ -9504,6 +10274,24 @@ namespace BitDesk.ViewModels
 
         }
 
+        // エラーイベント
+        private void OnError(PrivateAPIClient sender, ClientError err)
+        {
+            if (err == null) { return; }
+
+            // TODO
+            err.ErrPlaceParent = "";
+
+            _errors.Insert(0, err);
+
+            if (Application.Current == null) { return; }
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                // タブの「エラー（＊）」を更新
+                ErrorsCount = _errors.Count;
+            });
+        }
+
         #endregion
 
         #region == メソッド ==
@@ -9513,7 +10301,7 @@ namespace BitDesk.ViewModels
         {
 
             // 資産情報の更新ループ
-            //Task.Run(() => UpdateAssets());
+            Task.Run(() => UpdateAssets());
 
             // 特殊注文リストの更新ループ
             //Task.Run(() => UpdateIfdocos());
@@ -9917,6 +10705,165 @@ namespace BitDesk.ViewModels
             }
         }
 
+        // 資産取得
+        private async Task<bool> GetAssets()
+        {
+            if (AssetsApiKeyIsSet == false)
+            {
+                // TODO show message?
+
+                System.Diagnostics.Debug.WriteLine("■■■■■ GetAssets: (AssetsApiKeyIsSet == false)");
+                return false;
+            }
+
+            try
+            {
+                // TODO AssetsResult
+                Assets asts = await _priApi.GetAssetList(_getAssetsApiKey, _getAssetsSecret);
+
+                if (asts != null)
+                {
+                    try
+                    {
+
+                        foreach (var ast in asts.AssetList)
+                        {
+
+                            if (ast.Name == "jpy")
+                            {
+                                ast.NameText = "日本円";
+
+                                AssetJPYName = ast.Name;
+                                AssetJPYAmount = ast.Amount;
+                                AssetJPYFreeAmount = ast.FreeAmount;
+
+                                //Debug.WriteLine(AssetJPYAmount.ToString());
+                            }
+                            else if (ast.Name == "btc")
+                            {
+                                ast.NameText = "ビットコイン";
+
+                                AssetBTCName = ast.Name;
+                                AssetBTCAmount = ast.Amount;
+                                AssetBTCFreeAmount = ast.FreeAmount;
+
+                                //Debug.WriteLine("AssetBTCAmount :" + AssetBTCAmount.ToString());
+                            }
+                            else if (ast.Name == "ltc")
+                            {
+                                ast.NameText = "ライトコイン";
+
+                                AssetLtcName = ast.Name;
+                                AssetLtcAmount = ast.Amount;
+                                AssetLtcFreeAmount = ast.FreeAmount;
+                            }
+                            else if (ast.Name == "xrp")
+                            {
+                                ast.NameText = "リップル";
+
+                                AssetXRPName = ast.Name;
+                                AssetXRPAmount = ast.Amount;
+                                AssetXRPFreeAmount = ast.FreeAmount;
+                            }
+                            else if (ast.Name == "eth")
+                            {
+                                ast.NameText = "イーサリアム";
+
+                                AssetEthName = ast.Name;
+                                AssetEthAmount = ast.Amount;
+                                AssetEthFreeAmount = ast.FreeAmount;
+                            }
+                            else if (ast.Name == "mona")
+                            {
+                                ast.NameText = "モナーコイン";
+
+                                AssetMonaName = ast.Name;
+                                AssetMonaAmount = ast.Amount;
+                                AssetMonaFreeAmount = ast.FreeAmount;
+                            }
+                            else if (ast.Name == "bcc")
+                            {
+                                ast.NameText = "ビットコインキャッシュ";
+
+                                AssetBchName = ast.Name;
+                                AssetBchAmount = ast.Amount;
+                                AssetBchFreeAmount = ast.FreeAmount;
+                            }
+
+                        }
+
+
+                        APIResultAssets = "";
+
+                        await Task.Delay(1000);
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine("■■■■■ GetAssets: Exception - " + ex.Message);
+
+                        await Task.Delay(1000);
+                        return false;
+                    }
+                }
+                else
+                {
+                    APIResultAssets = "<<取得失敗>>";
+
+                    await Task.Delay(1000);
+                    return false;
+                }
+
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine("■■■■■ GetAssets Exception: " + e);
+
+                await Task.Delay(1000);
+                return false;
+            }
+
+        }
+
+        // 資産取得の更新ループ
+        private async void UpdateAssets()
+        {
+            while (true)
+            {
+                // ログインしていなかったらスルー。
+                if (LoggedInMode == false)
+                {
+                    await Task.Delay(2000);
+                    continue;
+                }
+
+                if (AssetsApiKeyIsSet == false)
+                {
+                    await Task.Delay(2000);
+                    continue;
+                }
+
+
+                // 間隔 1/2
+                await Task.Delay(1800);
+
+                try
+                {
+                    await GetAssets();
+                }
+                catch (Exception e)
+                {
+                    System.Diagnostics.Debug.WriteLine("■■■■■ UpdateAssets Exception: " + e);
+                }
+
+                // 間隔 1/2
+                await Task.Delay(1500);
+            }
+
+        }
+
+
+
         #region == 認証関連のメソッド ==
 
         // 暗号化
@@ -9974,16 +10921,6 @@ namespace BitDesk.ViewModels
         }
 
         #endregion
-
-        // テーマをセットするメソッド
-        private void SetCurrentTheme(string themeName)
-        {
-            Theme test = _themes.FirstOrDefault(x => x.Name == themeName);
-            if (test != null)
-            {
-                CurrentTheme = test;
-            }
-        }
 
         #region == チャート関係のメソッド ==
 
@@ -11525,6 +12462,16 @@ namespace BitDesk.ViewModels
         }
 
         #endregion
+
+        // テーマをセットするメソッド
+        private void SetCurrentTheme(string themeName)
+        {
+            Theme test = _themes.FirstOrDefault(x => x.Name == themeName);
+            if (test != null)
+            {
+                CurrentTheme = test;
+            }
+        }
 
         #endregion
 

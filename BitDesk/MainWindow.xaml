@@ -1118,6 +1118,7 @@
                                             <RowDefinition Height="Auto"/>
                                             <RowDefinition Height="Auto"/>
                                             <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto"/>
@@ -1134,39 +1135,131 @@
                                         </StackPanel>
 
                                         <!-- JPY -->
-                                        <Label Grid.Row="1" Grid.Column="0" Padding="6 0 3 3" Content="JPY：" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
+                                        <Label Grid.Row="1" Grid.Column="0" Padding="6 0 3 3" Content="JPY：" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}" Visibility="{Binding IsJpyAssetVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}"/>
 
-                                        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Margin="3 0 3 3" VerticalAlignment="Bottom" HorizontalAlignment="Right">
+                                        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Margin="3 0 3 3" VerticalAlignment="Bottom" HorizontalAlignment="Right" Visibility="{Binding IsJpyAssetVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
                                             <TextBlock Margin="0" Padding="0" Text="{Binding AssetJPYFreeAmount, Mode=OneWay, StringFormat={}{0:n4}}" VerticalAlignment="Bottom" Style="{DynamicResource DefaultTextBlockStyle}"/>
                                             <Label Padding="0" Content=" 円" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                             <Label Padding="0" Content=" 利用可 /" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                         </StackPanel>
 
-                                        <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Horizontal" Margin="3 0 3 3" VerticalAlignment="Bottom" HorizontalAlignment="Right">
+                                        <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Horizontal" Margin="3 0 3 3" VerticalAlignment="Bottom" HorizontalAlignment="Right" Visibility="{Binding IsJpyAssetVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
                                             <TextBlock Margin="0" Padding="0" Text="{Binding AssetJPYAmount, Mode=OneWay, StringFormat={}{0:N4}}" VerticalAlignment="Bottom" Style="{DynamicResource DefaultTextBlockStyle}"/>
                                             <Label Padding="0" Content=" 円" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                         </StackPanel>
 
-                                        <!-- BTC -->
-                                        <Label Grid.Row="2" Grid.Column="0" Padding="6 0 3 0" Content="BTC：" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
+                                        <!-- BTC/Jpy -->
+                                        <Label Grid.Row="2" Grid.Column="0" Padding="6 0 3 3" Content="BTC：" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}" Visibility="{Binding IsBtcJpyAssetVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}"/>
 
-                                        <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Margin="3 0 3 0" VerticalAlignment="Bottom" HorizontalAlignment="Right">
+                                        <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Margin="3 0 3 3" VerticalAlignment="Bottom" HorizontalAlignment="Right" Visibility="{Binding IsBtcJpyAssetVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
 
                                             <TextBlock Margin="0" Padding="0" Text="{Binding AssetBTCFreeAmount, Mode=OneWay, StringFormat={}{0:N5}}" VerticalAlignment="Bottom" Style="{DynamicResource DefaultTextBlockStyle}"/>
-                                            <Label Padding="0" Content=" BTC" VerticalAlignment="Bottom"/>
-                                            <Label Padding="0" Content=" 利用可 /" VerticalAlignment="Bottom"/>
+                                            <Label Padding="0" Content=" BTC" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
+                                            <Label Padding="0" Content=" 利用可 /" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                         </StackPanel>
 
-                                        <StackPanel Grid.Row="2" Grid.Column="2" Orientation="Horizontal" Margin="3 0 3 0" VerticalAlignment="Bottom" HorizontalAlignment="Right">
+                                        <StackPanel Grid.Row="2" Grid.Column="2" Orientation="Horizontal" Margin="3 0 3 3" VerticalAlignment="Bottom" HorizontalAlignment="Right" Visibility="{Binding IsBtcJpyAssetVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
                                             <Label Margin="0" Padding="0" Content="(" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"></Label>
                                             <TextBlock Margin="0" Padding="0" VerticalAlignment="Bottom" Text="{Binding AssetBTCEstimateAmount, Mode=OneWay, StringFormat={}{0:N0}}" Style="{StaticResource DefaultTextBlockStyle}"></TextBlock>
                                             <Label Margin="0" Padding="0" Content=" 円) " VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"></Label>
 
                                             <TextBlock Margin="0" Padding="0" Text="{Binding AssetBTCAmount, Mode=OneWay, StringFormat={}{0:N5}}" VerticalAlignment="Bottom" Style="{DynamicResource DefaultTextBlockStyle}"/>
                                             <Label Margin="0" Padding="0" Content=" BTC" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"></Label>
-                                            <!--
-                                            <TextBlock Margin="0" Padding="0" VerticalAlignment="Bottom"><Run Text="（"/><Run Text="{Binding AssetBTCEstimateAmount, Mode=OneWay, StringFormat={}{0:N0}}"></Run><Run Text=" 円）"/></TextBlock>
-                                            -->
+                                        </StackPanel>
+
+                                        <!-- Xrp/Jpy -->
+                                        <Label Grid.Row="2" Grid.Column="0" Padding="6 0 3 0" Content="XRP：" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}" Visibility="{Binding IsXrpJpyAssetVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}"/>
+
+                                        <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Margin="3 0 3 0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Visibility="{Binding IsXrpJpyAssetVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
+
+                                            <TextBlock Margin="0" Padding="0" Text="{Binding AssetXRPFreeAmount, Mode=OneWay, StringFormat={}{0:N5}}" VerticalAlignment="Bottom" Style="{DynamicResource DefaultTextBlockStyle}"/>
+                                            <Label Padding="0" Content=" XRP" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
+                                            <Label Padding="0" Content=" 利用可 /" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
+                                        </StackPanel>
+
+                                        <StackPanel Grid.Row="2" Grid.Column="2" Orientation="Horizontal" Margin="3 0 3 0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Visibility="{Binding IsXrpJpyAssetVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
+                                            <Label Margin="0" Padding="0" Content="(" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"></Label>
+                                            <TextBlock Margin="0" Padding="0" VerticalAlignment="Bottom" Text="{Binding AssetXRPEstimateAmount, Mode=OneWay, StringFormat={}{0:N0}}" Style="{StaticResource DefaultTextBlockStyle}"></TextBlock>
+                                            <Label Margin="0" Padding="0" Content=" 円) " VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"></Label>
+
+                                            <TextBlock Margin="0" Padding="0" Text="{Binding AssetXRPAmount, Mode=OneWay, StringFormat={}{0:N5}}" VerticalAlignment="Bottom" Style="{DynamicResource DefaultTextBlockStyle}"/>
+                                            <Label Margin="0" Padding="0" Content=" XRP" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"></Label>
+                                        </StackPanel>
+
+                                        <!-- Mona/Jpy -->
+                                        <Label Grid.Row="2" Grid.Column="0" Padding="6 0 3 0" Content="Mona：" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}" Visibility="{Binding IsMonaJpyAssetVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}"/>
+
+                                        <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Margin="3 0 3 0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Visibility="{Binding IsMonaJpyAssetVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
+
+                                            <TextBlock Margin="0" Padding="0" Text="{Binding AssetMonaFreeAmount, Mode=OneWay, StringFormat={}{0:N5}}" VerticalAlignment="Bottom" Style="{DynamicResource DefaultTextBlockStyle}"/>
+                                            <Label Padding="0" Content=" Mona" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
+                                            <Label Padding="0" Content=" 利用可 /" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
+                                        </StackPanel>
+
+                                        <StackPanel Grid.Row="2" Grid.Column="2" Orientation="Horizontal" Margin="3 0 3 0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Visibility="{Binding IsMonaJpyAssetVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
+                                            <Label Margin="0" Padding="0" Content="(" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"></Label>
+                                            <TextBlock Margin="0" Padding="0" VerticalAlignment="Bottom" Text="{Binding AssetMonaEstimateAmount, Mode=OneWay, StringFormat={}{0:N0}}" Style="{StaticResource DefaultTextBlockStyle}"></TextBlock>
+                                            <Label Margin="0" Padding="0" Content=" 円) " VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"></Label>
+
+                                            <TextBlock Margin="0" Padding="0" Text="{Binding AssetMonaAmount, Mode=OneWay, StringFormat={}{0:N5}}" VerticalAlignment="Bottom" Style="{DynamicResource DefaultTextBlockStyle}"/>
+                                            <Label Margin="0" Padding="0" Content=" Mona" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"></Label>
+                                        </StackPanel>
+
+                                        <!-- Bch/Jpy -->
+                                        <Label Grid.Row="2" Grid.Column="0" Padding="6 0 3 0" Content="BCH：" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}" Visibility="{Binding IsBchJpyAssetVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}"/>
+
+                                        <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Margin="3 0 3 0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Visibility="{Binding IsBchJpyAssetVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
+
+                                            <TextBlock Margin="0" Padding="0" Text="{Binding AssetBchFreeAmount, Mode=OneWay, StringFormat={}{0:N5}}" VerticalAlignment="Bottom" Style="{DynamicResource DefaultTextBlockStyle}"/>
+                                            <Label Padding="0" Content=" BCH" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
+                                            <Label Padding="0" Content=" 利用可 /" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
+                                        </StackPanel>
+
+                                        <StackPanel Grid.Row="2" Grid.Column="2" Orientation="Horizontal" Margin="3 0 3 0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Visibility="{Binding IsBchJpyAssetVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
+                                            <Label Margin="0" Padding="0" Content="(" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"></Label>
+                                            <TextBlock Margin="0" Padding="0" VerticalAlignment="Bottom" Text="{Binding AssetBchEstimateAmount, Mode=OneWay, StringFormat={}{0:N0}}" Style="{StaticResource DefaultTextBlockStyle}"></TextBlock>
+                                            <Label Margin="0" Padding="0" Content=" 円) " VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"></Label>
+
+                                            <TextBlock Margin="0" Padding="0" Text="{Binding AssetBchAmount, Mode=OneWay, StringFormat={}{0:N5}}" VerticalAlignment="Bottom" Style="{DynamicResource DefaultTextBlockStyle}"/>
+                                            <Label Margin="0" Padding="0" Content=" BCH" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"></Label>
+                                        </StackPanel>
+
+                                        <!-- Eth/Btc -->
+                                        <Label Grid.Row="3" Grid.Column="0" Padding="6 0 3 0" Content="ETH：" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}" Visibility="{Binding IsEthBtcAssetVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}"/>
+
+                                        <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" Margin="3 0 3 0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Visibility="{Binding IsEthBtcAssetVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
+
+                                            <TextBlock Margin="0" Padding="0" Text="{Binding AssetEthFreeAmount, Mode=OneWay, StringFormat={}{0:N5}}" VerticalAlignment="Bottom" Style="{DynamicResource DefaultTextBlockStyle}"/>
+                                            <Label Padding="0" Content=" ETH" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
+                                            <Label Padding="0" Content=" 利用可 /" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
+                                        </StackPanel>
+
+                                        <StackPanel Grid.Row="3" Grid.Column="2" Orientation="Horizontal" Margin="3 0 3 0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Visibility="{Binding IsEthBtcAssetVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
+                                            <Label Margin="0" Padding="0" Content="(" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"></Label>
+                                            <TextBlock Margin="0" Padding="0" VerticalAlignment="Bottom" Text="{Binding AssetEthEstimateAmount, Mode=OneWay, StringFormat={}{0:N0}}" Style="{StaticResource DefaultTextBlockStyle}"></TextBlock>
+                                            <Label Margin="0" Padding="0" Content=" 円) " VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"></Label>
+
+                                            <TextBlock Margin="0" Padding="0" Text="{Binding AssetEthAmount, Mode=OneWay, StringFormat={}{0:N5}}" VerticalAlignment="Bottom" Style="{DynamicResource DefaultTextBlockStyle}"/>
+                                            <Label Margin="0" Padding="0" Content=" ETH" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"></Label>
+                                        </StackPanel>
+
+                                        <!-- Ltc/Btc -->
+                                        <Label Grid.Row="3" Grid.Column="0" Padding="6 0 3 0" Content="LTC：" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}" Visibility="{Binding IsLtcBtcAssetVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}"/>
+
+                                        <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" Margin="3 0 3 0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Visibility="{Binding IsLtcBtcAssetVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
+
+                                            <TextBlock Margin="0" Padding="0" Text="{Binding AssetLtcFreeAmount, Mode=OneWay, StringFormat={}{0:N5}}" VerticalAlignment="Bottom" Style="{DynamicResource DefaultTextBlockStyle}"/>
+                                            <Label Padding="0" Content=" LTC" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
+                                            <Label Padding="0" Content=" 利用可 /" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
+                                        </StackPanel>
+
+                                        <StackPanel Grid.Row="3" Grid.Column="2" Orientation="Horizontal" Margin="3 0 3 0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Visibility="{Binding IsLtcBtcAssetVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
+                                            <Label Margin="0" Padding="0" Content="(" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"></Label>
+                                            <TextBlock Margin="0" Padding="0" VerticalAlignment="Bottom" Text="{Binding AssetLtcEstimateAmount, Mode=OneWay, StringFormat={}{0:N0}}" Style="{StaticResource DefaultTextBlockStyle}"></TextBlock>
+                                            <Label Margin="0" Padding="0" Content=" 円) " VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"></Label>
+
+                                            <TextBlock Margin="0" Padding="0" Text="{Binding AssetLtcAmount, Mode=OneWay, StringFormat={}{0:N5}}" VerticalAlignment="Bottom" Style="{DynamicResource DefaultTextBlockStyle}"/>
+                                            <Label Margin="0" Padding="0" Content=" LTC" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"></Label>
                                         </StackPanel>
 
                                     </Grid>
@@ -1315,10 +1408,10 @@
 
                                                 <Grid x:Name="Chart" Grid.Row="1" Grid.Column="0" Height="300">
 
-                                                    <lvc:CartesianChart x:Name="ChartBTC" Height="300" Series="{Binding ChartSeriesBtcJpy}" AxisY="{Binding ChartAxisYBtcJpy}" AxisX="{Binding ChartAxisXBtcJpy}" Hoverable="False" BorderBrush="Gainsboro" BorderThickness="0 0.1 0 0.1" Padding="3 0 0 0" Margin="6 0 12 0" Visibility="{Binding IsBtcVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}"/>
-                                                    <lvc:CartesianChart x:Name="ChartXRP" Height="300" Series="{Binding ChartSeriesXrpJpy}" AxisY="{Binding ChartAxisYXrpJpy}" AxisX="{Binding ChartAxisXXrpJpy}" Hoverable="False" Zoom="{Binding ZoomingMode}" BorderBrush="Gainsboro" BorderThickness="0 0.1 0 0.1" Padding="3 0 0 0" Margin="6 0 12 0" Visibility="{Binding IsXrpVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}"/>
-                                                    <lvc:CartesianChart x:Name="ChartLTC" Height="300" Series="{Binding ChartSeriesLtcBtc}" AxisY="{Binding ChartAxisYLtcBtc}" AxisX="{Binding ChartAxisXLtcBtc}" Hoverable="False" Zoom="{Binding ZoomingMode}" BorderBrush="Gainsboro" BorderThickness="0 0.1 0 0.1" Padding="3 0 0 0" Margin="6 0 12 0" Visibility="{Binding IsLtcVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}"/>
-                                                    <lvc:CartesianChart x:Name="ChartETH" Height="300" Series="{Binding ChartSeriesEthBtc}" AxisY="{Binding ChartAxisYEthBtc}" AxisX="{Binding ChartAxisXEthBtc}" Hoverable="False" Zoom="{Binding ZoomingMode}" BorderBrush="Gainsboro" BorderThickness="0 0.1 0 0.1" Padding="3 0 0 0" Margin="6 0 12 0" Visibility="{Binding IsEthVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}"/>
+                                                    <lvc:CartesianChart x:Name="ChartBTC" Height="300" Series="{Binding ChartSeriesBtcJpy}" AxisY="{Binding ChartAxisYBtcJpy}" AxisX="{Binding ChartAxisXBtcJpy}" Hoverable="False" BorderBrush="Gainsboro" BorderThickness="0 0.1 0 0.1" Padding="3 0 0 0" Margin="6 0 12 0" Visibility="{Binding IsBtcJpyVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}"/>
+                                                    <lvc:CartesianChart x:Name="ChartXRP" Height="300" Series="{Binding ChartSeriesXrpJpy}" AxisY="{Binding ChartAxisYXrpJpy}" AxisX="{Binding ChartAxisXXrpJpy}" Hoverable="False" Zoom="{Binding ZoomingMode}" BorderBrush="Gainsboro" BorderThickness="0 0.1 0 0.1" Padding="3 0 0 0" Margin="6 0 12 0" Visibility="{Binding IsXrpJpyVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}"/>
+                                                    <lvc:CartesianChart x:Name="ChartLTC" Height="300" Series="{Binding ChartSeriesLtcBtc}" AxisY="{Binding ChartAxisYLtcBtc}" AxisX="{Binding ChartAxisXLtcBtc}" Hoverable="False" Zoom="{Binding ZoomingMode}" BorderBrush="Gainsboro" BorderThickness="0 0.1 0 0.1" Padding="3 0 0 0" Margin="6 0 12 0" Visibility="{Binding IsLtcBtcVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}"/>
+                                                    <lvc:CartesianChart x:Name="ChartETH" Height="300" Series="{Binding ChartSeriesEthBtc}" AxisY="{Binding ChartAxisYEthBtc}" AxisX="{Binding ChartAxisXEthBtc}" Hoverable="False" Zoom="{Binding ZoomingMode}" BorderBrush="Gainsboro" BorderThickness="0 0.1 0 0.1" Padding="3 0 0 0" Margin="6 0 12 0" Visibility="{Binding IsEthBtcVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}"/>
                                                     <lvc:CartesianChart x:Name="ChartMona" Height="300" Series="{Binding ChartSeriesMonaJpy}" AxisY="{Binding ChartAxisYMonaJpy}" AxisX="{Binding ChartAxisXMonaJpy}" Hoverable="False" Zoom="{Binding ZoomingMode}" BorderBrush="Gainsboro" BorderThickness="0 0.1 0 0.1" Padding="3 0 0 0" Margin="6 0 12 0" Visibility="{Binding IsMonaJpyVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}"/>
                                                     <lvc:CartesianChart x:Name="ChartBCH" Height="300" Series="{Binding ChartSeriesBchJpy}" AxisY="{Binding ChartAxisYBchJpy}" AxisX="{Binding ChartAxisXBchJpy}" Hoverable="False" Zoom="{Binding ZoomingMode}" BorderBrush="Gainsboro" BorderThickness="0 0.1 0 0.1" Padding="3 0 0 0" Margin="6 0 12 0" Visibility="{Binding IsBchJpyVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}"/>
                                                 
@@ -2377,7 +2470,7 @@
                                                 </Grid.ColumnDefinitions>
                                                 <!-- 値は左寄せ。小数点以下がはみ出しても問題ないが、逆はまずい -->
                                                 <TextBlock Grid.Column="0" x:Name="DepthAskBest" Text="{Binding Path=DepthAsk, Mode=OneWay}" Margin="0" Padding="0 0 0 0" Foreground="{StaticResource PriceUpColorBrush}" HorizontalAlignment="Left"/>
-                                                <TextBlock Grid.Column="1" x:Name="DepthPrice" Text="{Binding Path=DepthPrice, Mode=OneWay}" Margin="0" Padding="0 0 0 0" Foreground="DarkGray" HorizontalAlignment="Center"/>
+                                                <TextBlock Grid.Column="1" x:Name="DepthPrice" Text="{Binding Path=DepthPrice, Mode=OneWay}" Margin="0" Padding="0 0 0 0" Foreground="DarkGray" HorizontalAlignment="Left"/>
                                                 <TextBlock Grid.Column="2" x:Name="DepthBidBest" Text="{Binding Path=DepthBid, Mode=OneWay}" Margin="0" Padding="0 0 0 0" Foreground="{StaticResource PriceDownColorBrush}"  HorizontalAlignment="Left"/>
                                             </Grid>
                                             <DataTemplate.Triggers>
@@ -2499,7 +2592,7 @@
                                             <ColumnDefinition Width="62" />
                                         </Grid.ColumnDefinitions>
                                         <TextBlock Grid.Column="0" x:Name="DepthAskBest" Text="{Binding Path=DepthAsk, Mode=OneWay}" Margin="0" Padding="0" Foreground="{StaticResource PriceUpColorBrush}" HorizontalAlignment="Left"/>
-                                        <TextBlock Grid.Column="1" x:Name="DepthPrice" Text="{Binding Path=DepthPrice, Mode=OneWay}" Margin="0" Padding="0" Foreground="DarkGray" HorizontalAlignment="Center"/>
+                                        <TextBlock Grid.Column="1" x:Name="DepthPrice" Text="{Binding Path=DepthPrice, Mode=OneWay}" Margin="0" Padding="0" Foreground="DarkGray" HorizontalAlignment="Left"/>
                                         <TextBlock Grid.Column="2" x:Name="DepthBidBest" Text="{Binding Path=DepthBid, Mode=OneWay}" Margin="0" Padding="0" Foreground="{StaticResource PriceDownColorBrush}"  HorizontalAlignment="Left"/>
                                     </Grid>
                                     <DataTemplate.Triggers>
