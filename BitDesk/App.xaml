@@ -1162,19 +1162,14 @@
 
                 <!-- Depth ListBox-->
                 <ResourceDictionary>
+                    
                     <!-- https://docs.microsoft.com/en-us/previous-versions/dotnet/netframework-3.0/ms754242(v%3dvs.85) -->
-
                     <!-- https://stackoverflow.com/questions/10487285/custom-listbox-scrollbar-style-issue -->
 
-                    <!--
-                    <SolidColorBrush x:Key="WindowBackgroundBrush" Color="#FFF" />
-                    <SolidColorBrush x:Key="SolidBorderBrush" Color="#888" />
-                    -->
                     <SolidColorBrush x:Key="DisabledBackgroundBrush" Color="#EEE" />
                     <SolidColorBrush x:Key="DisabledBorderBrush" Color="#AAA" />
 
                     <SolidColorBrush x:Key="ScrollBarDisabledBackground" Color="#F4F4F4"/>
-
 
                     <ControlTemplate x:Key="DepthListboxScrollViewerControlTemplate" TargetType="{x:Type ScrollViewer}">
                         <Grid x:Name="Grid" Background="Transparent">
@@ -1216,8 +1211,6 @@
                                     <Border Name="Border" Background="Transparent" BorderBrush="Gray" BorderThickness="0" CornerRadius="0" Padding="0">
                                         <ScrollViewer  Focusable="false" Background="Transparent" Template="{DynamicResource DepthListboxScrollViewerControlTemplate}">
 
-                                            <!-- <StackPanel Margin="2" IsItemsHost="True" /> -->
-
                                             <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
 
                                         </ScrollViewer>
@@ -1254,23 +1247,7 @@
                                         </Rectangle.Fill>
                                         <VisualStateManager.VisualStateGroups>
                                             <VisualStateGroup x:Name="CommonStates">
-                                                <VisualState x:Name="Normal">
-                                                    <Storyboard>
-                                                        <!--
-                                                        <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).
-                    (GradientBrush.GradientStops)[0].(GradientStop.Color)"
-                                                Storyboard.TargetName="Rect">
-                                                            <EasingColorKeyFrame KeyTime="0"
-                                         Value="#CCC" />
-                                                        </ColorAnimationUsingKeyFrames>
-                                                        -->
-                                                        <!--
-                                                        <DoubleAnimationUsingKeyFrames  Storyboard.TargetProperty="Opacity" Storyboard.TargetName="Rect" >
-                                                            <EasingDoubleKeyFrame KeyTime="0" Value="0.1"/>
-                                                        </DoubleAnimationUsingKeyFrames>
-                                                        -->
-                                                    </Storyboard>
-                                                </VisualState>
+                                                <VisualState x:Name="Normal"/>
                                                 <VisualState x:Name="MouseOver">
                                                     <Storyboard>
                                                         <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(GradientBrush.GradientStops)[0].(GradientStop.Color)" Storyboard.TargetName="Rect">
@@ -1295,12 +1272,6 @@
                                             </VisualStateGroup>
                                         </VisualStateManager.VisualStateGroups>
                                     </Rectangle>
-                                    <!-- <Border CornerRadius="0" 
-                                            Background="{TemplateBinding Background}" 
-                                            BorderBrush="{TemplateBinding BorderBrush}" 
-                                            BorderThickness="{TemplateBinding BorderThickness}" 
-                                            Height="8" />
-                                    -->
                                 </ControlTemplate>
                             </Setter.Value>
                         </Setter>

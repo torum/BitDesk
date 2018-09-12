@@ -47,7 +47,10 @@ namespace BitDesk
 
             Closing += (this.DataContext as MainViewModel).OnWindowClosing;
 
-            // デフォルトのシステムメニューアイコン
+            // 板情報の変更イベント
+            (this.DataContext as MainViewModel).DepthListChanged += (sender, arg) => { DepthListBox_Changed(sender, arg); };
+
+            // デフォルトのシステムメニューアイコン状態
             RestoreButton.Visibility = Visibility.Collapsed;
             MaxButton.Visibility = Visibility.Visible;
             TopMenuUnPinButton.Visibility = Visibility.Collapsed;
@@ -138,7 +141,7 @@ namespace BitDesk
                                         scrollProvider.SetScrollPercent(
                                             // 水平スクロールは今の位置
                                             scrollProvider.HorizontalScrollPercent,
-                                            // 垂直方向はどまんなか！50%
+                                            // 垂直方向50%
                                             50.0);
                                     }
                                     catch
@@ -218,6 +221,12 @@ namespace BitDesk
 
         }
 
+        private void DepthListBox_Changed(object sender, MainViewModel.DepthListChangedEventArgs e)
+        {
+            SetDepthListboxScrollPosition();
+            SetDepth2ListboxScrollPosition();
+        }
+
         private void Depth2AyumiTab_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (Depth2AyumiTab.SelectedIndex == 0)
@@ -256,83 +265,7 @@ namespace BitDesk
 
         #region == レイアウト変更 ==
 
-        // ミニマム表示
-        private void TopMenuMinimumButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (this.WindowState == WindowState.Maximized)
-            {
-                this.WindowState = WindowState.Normal;
-            }
-
-            ttt = this.Top;
-            lll = this.Left;
-            www = this.Width;
-            hhh = this.Height;
-
-            this.Height = 478;
-            this.Width = 436;
-
-            ResizeMode = ResizeMode.NoResize;
-
-            isMinimum = true;
-
-            // 更新されないコントロールを非表示にする
-            MinimumVisibility();
-
-        }
-
-        // ミニマム表示から復帰
-        private void TopMenuRestoreButton_Click(object sender, RoutedEventArgs e)
-        {
-            isMinimum = false;
-
-            ResizeMode = ResizeMode.CanResize;
-
-            this.Top = ttt;
-            this.Left = lll;
-            this.Width = www;
-            this.Height = hhh;
-
-            // 非表示にされているコントロールを表示する
-            MinimumVisibility();
-
-        }
-
-        private void MinimumVisibility()
-        {
-
-            if (isMinimum)
-            {
-                Transaction.Visibility = Visibility.Collapsed;
-                Middle.Visibility = Visibility.Collapsed;
-
-                MainContentsGrid.Height = 420;
-
-
-                RestoreButton.Visibility = Visibility.Collapsed;
-                MaxButton.Visibility = Visibility.Collapsed;
-            }
-            else
-            {
-                Transaction.Visibility = Visibility.Visible;
-                Middle.Visibility = Visibility.Visible;
-
-                if (this.WindowState == WindowState.Normal)
-                {
-                    RestoreButton.Visibility = Visibility.Collapsed;
-                    MaxButton.Visibility = Visibility.Visible;
-                }
-                else if (this.WindowState == WindowState.Maximized)
-                {
-                    RestoreButton.Visibility = Visibility.Visible;
-                    MaxButton.Visibility = Visibility.Collapsed;
-                }
-                
-                
-            }
-        }
-
-
+        // レイアウト変更 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             LayoutChange();
@@ -687,24 +620,8 @@ namespace BitDesk
             Main3Grid.Height = 420;
 
 
-
-
-            /////////////////////////////////////////////////
-
-            //Main2Grid.Width = 360;//
-            //Main3Grid.Width = 720;//
-
-            //MainContentsGrid.Width = 1293;
-            //Main1Grid.Width = 1080;
-
-            //Asset.Width = 507;
-            //Order.Width = 507;
-            //Ifdoco.Width = 507;
-            //Asset.Width = 487;
-            //Order.Width = 487;
-            //Ifdoco.Width = 487;
-            //Chart.Width = 487;
-            Middle.Width = 487;
+            // 中央のサイズ
+            Middle.Width = 477;//487;
 
             Main2Colum.Width = new GridLength(360, GridUnitType.Pixel);
             Main3Colum.Width = new GridLength(360, GridUnitType.Pixel);
@@ -779,7 +696,8 @@ namespace BitDesk
             Main2Grid.Height = 420;
             Main3Grid.Height = 420;
 
-            Middle.Width = 740;
+            //Middle.Width = 740;
+            Middle.Width = 730;
 
             //Main2Colum.Width = new GridLength(360, GridUnitType.Pixel);
             //Main3Colum.Width = new GridLength(360, GridUnitType.Pixel);
@@ -846,7 +764,8 @@ namespace BitDesk
             Main3Grid.Height = 420;
 
             // 720 だと左のラインが消える?
-            Middle.Width = 719;
+            //Middle.Width = 719;
+            Middle.Width = 709;
 
             Main2Colum.Width = new GridLength(380, GridUnitType.Pixel);
             Main3Colum.Width = new GridLength(380, GridUnitType.Pixel);
@@ -869,6 +788,7 @@ namespace BitDesk
 
         #region == システムメニュー ==
 
+        // ウィンドウ状態
         private void Window_StateChanged(object sender, EventArgs e)
         {
 
@@ -878,6 +798,14 @@ namespace BitDesk
                 MaxButton.Visibility = Visibility.Visible;
 
                 //_dispatcherMouseTimer.Stop();
+
+                // ミニマム表示の時はリストアボタンを隠す
+                if (isMinimum)
+                {
+                    RestoreButton.Visibility = Visibility.Collapsed;
+                    MaxButton.Visibility = Visibility.Collapsed;
+                }
+
             }
             else if (this.WindowState == WindowState.Maximized)
             {
@@ -925,6 +853,83 @@ namespace BitDesk
             TopMenuPinButton.Visibility = Visibility.Visible;
             TopMenuUnPinButton.Visibility = Visibility.Collapsed;
         }
+
+        // ミニマム表示
+        private void TopMenuMinimumButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.WindowState == WindowState.Maximized)
+            {
+                this.WindowState = WindowState.Normal;
+            }
+
+            ttt = this.Top;
+            lll = this.Left;
+            www = this.Width;
+            hhh = this.Height;
+
+            this.Height = this.MinHeight;//478
+            this.Width = this.MinWidth;
+
+            ResizeMode = ResizeMode.NoResize;
+
+            isMinimum = true;
+
+            // 更新されないコントロールを非表示にする
+            MinimumVisibility();
+
+        }
+
+        // ミニマム表示から復帰
+        private void TopMenuRestoreButton_Click(object sender, RoutedEventArgs e)
+        {
+            isMinimum = false;
+
+            ResizeMode = ResizeMode.CanResize;
+
+            this.Top = ttt;
+            this.Left = lll;
+            this.Width = www;
+            this.Height = hhh;
+
+            // 非表示にされているコントロールを表示する
+            MinimumVisibility();
+
+        }
+
+        private void MinimumVisibility()
+        {
+
+            if (isMinimum)
+            {
+                Transaction.Visibility = Visibility.Collapsed;
+                Middle.Visibility = Visibility.Collapsed;
+
+                MainContentsGrid.Height = 420;
+
+
+                RestoreButton.Visibility = Visibility.Collapsed;
+                MaxButton.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                Transaction.Visibility = Visibility.Visible;
+                Middle.Visibility = Visibility.Visible;
+
+                if (this.WindowState == WindowState.Normal)
+                {
+                    RestoreButton.Visibility = Visibility.Collapsed;
+                    MaxButton.Visibility = Visibility.Visible;
+                }
+                else if (this.WindowState == WindowState.Maximized)
+                {
+                    RestoreButton.Visibility = Visibility.Visible;
+                    MaxButton.Visibility = Visibility.Collapsed;
+                }
+
+
+            }
+        }
+
 
         #endregion
 

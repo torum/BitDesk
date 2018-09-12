@@ -14,7 +14,7 @@
         Title="{Binding AppTitle}" 
                   
         Height="450" Width="800"
-        MinWidth="436" MinHeight="478"
+        MinWidth="430" MinHeight="474"
         
         Background="Transparent"
         BorderThickness="0"
@@ -77,7 +77,7 @@
                                     <Path Name="BTC1" Fill="DimGray" Stretch="Uniform" Width="12" Height="12" Data="M182.981 112.854c-7.3-5.498-17.699-7.697-17.699-7.697s8.8-5.102 12.396-10.199  c3.6-5.099 5.399-12.999 5.7-17.098c0.299-4.101 1-21.296-12.399-31.193c-10.364-7.658-22.241-10.698-38.19-11.687V0.278h-21.396  V34.57c-4.774 0-10.353 0-16.297 0V0.278H73.702V34.57c-21.841 0-42.092 0-42.092 0v22.219c0 0 8.998 0 12.372 0  c3.373 0 9.372 0.375 11.921 3.228c2.55 2.848 3 4.349 3 9.895c0 5.548 0.001 86.435 0.001 88.535c0 2.099-0.4 4.697-2.201 6.398  c-1.798 1.701-3.597 2.098-7.898 2.098c-4.3 0-12.796 0-12.796 0l-4.399 25.698c0 0 20.918 0 42.092 0v34.195h21.395v-34.195  c6.574 0 12.298 0 16.297 0v34.195h21.396v-34.759c5.531-0.323 10.688-0.742 13.696-1.136c6.1-0.798 19.896-2.398 32.796-11.397  c12.896-9 15.793-23.098 16.094-37.294C195.68 128.053 190.274 118.353 182.981 112.854z M95.096 58.766  c0 0 6.798-0.599 13.497-0.501c6.701 0.099 12.597 0.3 21.398 3c8.797 2.701 13.992 9.3 14.196 17.099  c0.199 7.799-3.204 12.996-9.2 16.296c-5.998 3.299-14.292 5.099-22.094 5.396c-7.797 0.301-17.797 0-17.797 0V58.766z   M142.986 161.045c-4.899 2.701-14.698 5.1-24.194 5.798c-9.499 0.701-23.696 0.401-23.696 0.401v-45.893c0 0 13.598-0.698 24.197 0  c10.597 0.703 19.495 3.4 23.492 5.403c3.999 1.998 11 6.396 11 16.896C153.785 154.146 147.882 158.346 142.986 161.045z"/>
                                 </Canvas>
                             </Viewbox>
-                            <TextBlock Text="{Binding PairBtc.Ltp, Mode=OneWay, StringFormat={}{0:N0}}" Style="{DynamicResource LtpTextBlockStyle}" VerticalAlignment="Center" ToolTip="BTC/JPY"/>
+                            <TextBlock Text="{Binding PairBtcJpy.Ltp, Mode=OneWay, StringFormat={}{0:N0}}" Style="{DynamicResource LtpTextBlockStyle}" VerticalAlignment="Center" ToolTip="BTC/JPY"/>
                         </StackPanel>
 
                         <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Visibility="Visible">
@@ -88,7 +88,7 @@
 
                     </Grid>
 
-                    <lvc:CartesianChart x:Name="BtcChart" Grid.Row="1" Grid.Column="0" Series="{Binding ChartSeriesBtc}" AxisY="{Binding ChartAxisYBtc}" AxisX="{Binding ChartAxisXBtc}" Hoverable="False" BorderThickness="0" Padding="24 0 24 24" Margin="6 0 24 36"/>
+                    <lvc:CartesianChart x:Name="BtcChart" Grid.Row="1" Grid.Column="0" Series="{Binding ChartSeriesBtcJpy}" AxisY="{Binding ChartAxisYBtcJpy}" AxisX="{Binding ChartAxisXBtcJpy}" Hoverable="False" BorderThickness="0" Padding="24 0 24 24" Margin="6 0 24 36"/>
 
                 </Grid>
             </Border>
@@ -115,11 +115,11 @@
                             </Canvas>
                         </Viewbox>
 
-                        <TextBlock Text="{Binding PairXrp.Ltp, Mode=OneWay, StringFormat={}{0:N3}}" Style="{DynamicResource LtpTextBlockStyle}" VerticalAlignment="Center" ToolTip="XRP/JPY"/>
+                        <TextBlock Text="{Binding PairXrpJpy.Ltp, Mode=OneWay, StringFormat={}{0:N3}}" Style="{DynamicResource LtpTextBlockStyle}" VerticalAlignment="Center" ToolTip="XRP/JPY"/>
 
                     </StackPanel>
 
-                    <lvc:CartesianChart x:Name="XrpChart" Grid.Row="1" Grid.Column="0" Series="{Binding ChartSeriesXrp}" AxisY="{Binding ChartAxisYXrp}" AxisX="{Binding ChartAxisXXrp}" Hoverable="False" BorderThickness="0" Padding="24 0 24 24" Margin="6 0 24 36"/>
+                    <lvc:CartesianChart x:Name="XrpChart" Grid.Row="1" Grid.Column="0" Series="{Binding ChartSeriesXrpJpy}" AxisY="{Binding ChartAxisYXrpJpy}" AxisX="{Binding ChartAxisXXrpJpy}" Hoverable="False" BorderThickness="0" Padding="24 0 24 24" Margin="6 0 24 36"/>
 
                 </Grid>
             </Border>
@@ -149,7 +149,7 @@
 
                     </StackPanel>
 
-                    <lvc:CartesianChart x:Name="LtcChart" Grid.Row="1" Grid.Column="0" Series="{Binding ChartSeriesLtc}" AxisY="{Binding ChartAxisYLtc}" AxisX="{Binding ChartAxisXLtc}" Hoverable="False" BorderThickness="0" Padding="24 0 24 24" Margin="6 0 24 36"/>
+                    <lvc:CartesianChart x:Name="LtcChart" Grid.Row="1" Grid.Column="0" Series="{Binding ChartSeriesLtcBtc}" AxisY="{Binding ChartAxisYLtcBtc}" AxisX="{Binding ChartAxisXLtcBtc}" Hoverable="False" BorderThickness="0" Padding="24 0 24 24" Margin="6 0 24 36"/>
 
                 </Grid>
             </Border>
@@ -204,7 +204,7 @@
 
                     </StackPanel>
 
-                    <lvc:CartesianChart x:Name="EthChart" Grid.Row="1" Grid.Column="0" Series="{Binding ChartSeriesEth}" AxisY="{Binding ChartAxisYEth}" AxisX="{Binding ChartAxisXEth}" Hoverable="False" BorderThickness="0" Padding="24 0 24 24" Margin="6 0 24 36"/>
+                    <lvc:CartesianChart x:Name="EthChart" Grid.Row="1" Grid.Column="0" Series="{Binding ChartSeriesEthBtc}" AxisY="{Binding ChartAxisYEthBtc}" AxisX="{Binding ChartAxisXEthBtc}" Hoverable="False" BorderThickness="0" Padding="24 0 24 24" Margin="6 0 24 36"/>
 
                 </Grid>
             </Border>
@@ -230,7 +230,7 @@
 
                     </StackPanel>
 
-                    <lvc:CartesianChart x:Name="MonaChart" Grid.Row="1" Grid.Column="0" Series="{Binding ChartSeriesMona}" AxisY="{Binding ChartAxisYMona}" AxisX="{Binding ChartAxisXMona}" Hoverable="False" BorderThickness="0" Padding="24 0 24 24" Margin="6 0 24 36"/>
+                    <lvc:CartesianChart x:Name="MonaChart" Grid.Row="1" Grid.Column="0" Series="{Binding ChartSeriesMonaJpy}" AxisY="{Binding ChartAxisYMonaJpy}" AxisX="{Binding ChartAxisXMonaJpy}" Hoverable="False" BorderThickness="0" Padding="24 0 24 24" Margin="6 0 24 36"/>
 
                 </Grid>
             </Border>
@@ -266,7 +266,7 @@
 
                     </StackPanel>
 
-                    <lvc:CartesianChart x:Name="BchChart" Grid.Row="1" Grid.Column="0" Series="{Binding ChartSeriesBch}" AxisY="{Binding ChartAxisYBch}" AxisX="{Binding ChartAxisXBch}" Hoverable="False" BorderThickness="0" Padding="24 0 24 24" Margin="6 0 24 36"/>
+                    <lvc:CartesianChart x:Name="BchChart" Grid.Row="1" Grid.Column="0" Series="{Binding ChartSeriesBchJpy}" AxisY="{Binding ChartAxisYBchJpy}" AxisX="{Binding ChartAxisXBchJpy}" Hoverable="False" BorderThickness="0" Padding="24 0 24 24" Margin="6 0 24 36"/>
 
                 </Grid>
             </Border>
@@ -488,7 +488,8 @@
                         </Viewbox>
                     </TabItem.Header>
 
-                    <lvc:CartesianChart x:Name="BtcChartTab" Width="120" Height="80" Series="{Binding ChartSeriesBtc}" Hoverable="False" BorderThickness="0" Padding="0" Margin="0" Visibility="Collapsed">
+                    <!--
+                    <lvc:CartesianChart x:Name="BtcChartTab" Width="120" Height="80" Series="{Binding ChartSeriesBtcJpy}" Hoverable="False" BorderThickness="0" Padding="0" Margin="0" Visibility="Collapsed">
 
                         <lvc:CartesianChart.AxisX>
                             <lvc:Axis ShowLabels="False">
@@ -518,7 +519,8 @@
 
                         </lvc:CartesianChart.AxisY>
                     </lvc:CartesianChart>
-
+                    -->
+                    
                 </TabItem>
 
                 <TabItem x:Name="XRP_Tab" Width="30" Height="48" ToolTip="リップル" Style="{StaticResource SubNavTabItemStyle}" Visibility="Visible">
@@ -537,7 +539,8 @@
                         </Viewbox>
                     </TabItem.Header>
 
-                    <lvc:CartesianChart x:Name="XrpChartTab" Width="120" Height="80" Series="{Binding ChartSeriesXrp}" Hoverable="False" BorderThickness="0" Padding="0" Margin="0" Visibility="Collapsed">
+                    <!--
+                    <lvc:CartesianChart x:Name="XrpChartTab" Width="120" Height="80" Series="{Binding ChartSeriesXrpJpy}" Hoverable="False" BorderThickness="0" Padding="0" Margin="0" Visibility="Collapsed">
 
                         <lvc:CartesianChart.AxisX>
                             <lvc:Axis ShowLabels="False">
@@ -567,7 +570,8 @@
                         </lvc:CartesianChart.AxisY>
 
                     </lvc:CartesianChart>
-
+                    -->
+                    
                 </TabItem>
 
                 <TabItem x:Name="LTC_Tab" Width="30" Height="48" ToolTip="ライトコイン" Style="{StaticResource SubNavTabItemStyle}" Visibility="Visible">
@@ -580,8 +584,8 @@
 
                         </Viewbox>
                     </TabItem.Header>
-
-                    <lvc:CartesianChart x:Name="LtcChartTab" Width="120" Height="80" Series="{Binding ChartSeriesLtc}" Hoverable="False" BorderThickness="0" Padding="0" Margin="0" Visibility="Collapsed">
+                    <!--
+                    <lvc:CartesianChart x:Name="LtcChartTab" Width="120" Height="80" Series="{Binding ChartSeriesLtcBtc}" Hoverable="False" BorderThickness="0" Padding="0" Margin="0" Visibility="Collapsed">
 
                         <lvc:CartesianChart.AxisX>
                             <lvc:Axis ShowLabels="False">
@@ -611,7 +615,7 @@
                         </lvc:CartesianChart.AxisY>
 
                     </lvc:CartesianChart>
-
+                    -->
                 </TabItem>
 
                 <TabItem x:Name="ETH_Tab" Width="30" Height="48" ToolTip="イーサリアム" Style="{StaticResource SubNavTabItemStyle}" Visibility="Visible">
@@ -621,7 +625,7 @@
 
                             <Canvas Width="24" Height="24" HorizontalAlignment="Center" VerticalAlignment="Center">
                                 <Canvas.RenderTransform>
-                                    <TranslateTransform X="4" Y="0"/>
+                                    <TranslateTransform X="0" Y="-8"/>
                                 </Canvas.RenderTransform>
                                 <Canvas.Resources/>
                                 <Path Fill="{Binding ElementName=ETH_Tab,Path=Foreground}" Stroke="Black" StrokeThickness="1" Data="m 127.9611 0 -2.795 9.5 v 275.668 l 2.795 2.79 127.962 -75.638 z">
@@ -661,8 +665,8 @@
                         </Viewbox>
 
                     </TabItem.Header>
-
-                    <lvc:CartesianChart x:Name="EthChartTab" Width="120" Height="80" Series="{Binding ChartSeriesEth}" Hoverable="False" BorderThickness="0" Padding="0" Margin="0" Visibility="Collapsed">
+                    <!--
+                    <lvc:CartesianChart x:Name="EthChartTab" Width="120" Height="80" Series="{Binding ChartSeriesEthBtc}" Hoverable="False" BorderThickness="0" Padding="0" Margin="0" Visibility="Collapsed">
                         <lvc:CartesianChart.AxisX>
                             <lvc:Axis ShowLabels="False">
                                 <lvc:Axis.Separator>
@@ -690,7 +694,7 @@
                             </lvc:Axis>
                         </lvc:CartesianChart.AxisY>
                     </lvc:CartesianChart>
-
+                    -->
                 </TabItem>
 
                 <TabItem x:Name="Mona_Tab" Width="30" Height="48" ToolTip="モナーコイン" Style="{StaticResource SubNavTabItemStyle}" Visibility="Visible">
@@ -706,8 +710,8 @@
                         </Viewbox>
 
                     </TabItem.Header>
-
-                    <lvc:CartesianChart x:Name="MonaChartTab" Width="120" Height="80" Series="{Binding ChartSeriesMona}" Hoverable="False" BorderThickness="0" Padding="0" Margin="0" Visibility="Collapsed">
+                    <!--
+                    <lvc:CartesianChart x:Name="MonaChartTab" Width="120" Height="80" Series="{Binding ChartSeriesMonaJpy}" Hoverable="False" BorderThickness="0" Padding="0" Margin="0" Visibility="Collapsed">
                         <lvc:CartesianChart.AxisX>
                             <lvc:Axis ShowLabels="False">
                                 <lvc:Axis.Separator>
@@ -735,7 +739,7 @@
                             </lvc:Axis>
                         </lvc:CartesianChart.AxisY>
                     </lvc:CartesianChart>
-
+                    -->
                 </TabItem>
 
                 <TabItem x:Name="BCH_Tab" Width="30" Height="48" ToolTip="ビットコイン　キャッシュ" Style="{StaticResource SubNavTabItemStyle}" Visibility="Visible">
@@ -758,8 +762,8 @@
 
                         </Viewbox>
                     </TabItem.Header>
-
-                    <lvc:CartesianChart x:Name="BchChartTab" Width="120" Height="80" Series="{Binding ChartSeriesBch}" Hoverable="False" BorderThickness="0" Padding="0" Margin="0" Visibility="Collapsed">
+                    <!--
+                    <lvc:CartesianChart x:Name="BchChartTab" Width="120" Height="80" Series="{Binding ChartSeriesBchJpy}" Hoverable="False" BorderThickness="0" Padding="0" Margin="0" Visibility="Collapsed">
                         <lvc:CartesianChart.AxisX>
                             <lvc:Axis ShowLabels="False">
                                 <lvc:Axis.Separator>
@@ -787,7 +791,7 @@
                             </lvc:Axis>
                         </lvc:CartesianChart.AxisY>
                     </lvc:CartesianChart>
-
+                    -->
                 </TabItem>
 
             </TabControl>
@@ -805,8 +809,8 @@
                         <ColumnDefinition Width="383"/>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="233"/>
-                        <ColumnDefinition Width="237"/>
+                        <ColumnDefinition Width="243"/>
+                        <ColumnDefinition Width="247"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
@@ -899,7 +903,7 @@
                                                         </Style>
                                                     </TextBlock.Style>
                                                 </TextBlock>
-                                                <Label VerticalAlignment="Bottom" Margin="3 0 0 0" Padding="0" Content="円" Style="{DynamicResource DefaultLabelStyle}"></Label>
+                                                <Label VerticalAlignment="Bottom" Margin="3 0 0 0" Padding="0" Content="{Binding CurrentPairUnitString,Mode=OneWay}" Style="{DynamicResource DefaultLabelStyle}"></Label>
                                             </StackPanel>
                                         </Grid>
 
@@ -964,7 +968,9 @@
                                                 <Label Grid.Row="0" Grid.Column="0" Padding="3" VerticalAlignment="Bottom" Content="安値時：_L" ToolTip="(L)" Target="{Binding ElementName=TextBoxAlarmMinus}" Style="{DynamicResource DefaultLabelStyle}"></Label>
                                                 <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="2 3 0 3">
                                                     <TextBox x:Name="TextBoxAlarmMinus" Width="66" Text="{Binding ActivePair.AlarmMinus}" Style="{DynamicResource DefaultTextBoxStyle}"/>
-                                                    <Label Padding="0" VerticalAlignment="Bottom" Content=" 円以下" Style="{DynamicResource DefaultLabelStyle}"/>
+
+                                                    <Label Margin="3 0 0 0" VerticalAlignment="Bottom" Content="{Binding CurrentPairUnitString,Mode=OneWay}" Style="{DynamicResource DefaultLabelStyle}"/>
+                                                    <Label Padding="0" VerticalAlignment="Bottom" Content="以下" Style="{DynamicResource DefaultLabelStyle}"/>
                                                 </StackPanel>
 
                                                 <Label Grid.Row="1" Grid.Column="0" Padding="3" VerticalAlignment="Bottom" Content="最安値：_W" ToolTip="(W)" Target="{Binding ElementName=CheckLowest}" Style="{DynamicResource DefaultLabelStyle}"></Label>
@@ -990,7 +996,9 @@
                                                 <Label Grid.Row="0" Grid.Column="0" Padding="3 3 3 3" VerticalAlignment="Bottom" Content="高値時：_H" ToolTip="(H)" Target="{Binding ElementName=TextBoxAlarmPlus}" Style="{DynamicResource DefaultLabelStyle}"></Label>
                                                 <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Margin="0 3 0 3">
                                                     <TextBox x:Name="TextBoxAlarmPlus" Width="66" Text="{Binding ActivePair.AlarmPlus}" Style="{DynamicResource DefaultTextBoxStyle}"/>
-                                                    <Label Padding="0" VerticalAlignment="Bottom" Content=" 円以上" Style="{DynamicResource DefaultLabelStyle}"></Label>
+                                                    
+                                                    <Label Margin="3 0 0 0" VerticalAlignment="Bottom" Content="{Binding CurrentPairUnitString,Mode=OneWay}" Style="{DynamicResource DefaultLabelStyle}"></Label>
+                                                    <Label Padding="0" VerticalAlignment="Bottom" Content="以上" Style="{DynamicResource DefaultLabelStyle}"></Label>
                                                 </StackPanel>
 
                                                 <Label Grid.Row="1" Grid.Column="0" Padding="3 3 3 3" VerticalAlignment="Bottom" Content="最高値：_E" ToolTip="(E)" Target="{Binding ElementName=CheckHighest}" Style="{DynamicResource DefaultLabelStyle}"></Label>
@@ -1177,7 +1185,7 @@
                                         </Grid.RowDefinitions>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="50*"/>
-                                            <ColumnDefinition Width="8"/>
+                                            <ColumnDefinition Width="0"/>
                                             <ColumnDefinition Width="50*"/>
                                         </Grid.ColumnDefinitions>
 
@@ -1187,15 +1195,15 @@
                                                 <RowDefinition Height="Auto"/>
                                             </Grid.RowDefinitions>
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="55*"/>
-                                                <ColumnDefinition Width="45*"/>
+                                                <ColumnDefinition Width="50*"/>
+                                                <ColumnDefinition Width="50*"/>
                                             </Grid.ColumnDefinitions>
 
                                             <Label Grid.Row="0" Grid.Column="0" Padding="3" Content="24時間中央値：" Style="{DynamicResource DefaultLabelStyle}"></Label>
                                             <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Margin="0 3 0 3">
                                                 <TextBlock Text="{Binding Path=ActivePair.MiddleLast24PriceString, Mode=OneWay, StringFormat={}{0:N0}}" Style="{DynamicResource DefaultTextBlockStyle}"></TextBlock>
-                                                <Label Padding="0" Content=" 円 " Style="{DynamicResource DefaultLabelStyle}"/>
-                                                <TextBlock Text="{Binding Path=ActivePair.MiddleLast24PriceIcon, Mode=OneWay}">
+                                                <Label  Margin="3 0 3 0" Content="{Binding CurrentPairUnitString,Mode=OneWay}" Style="{DynamicResource DefaultLabelStyle}" Visibility="Collapsed"/>
+                                                <TextBlock Text="{Binding Path=ActivePair.MiddleLast24PriceIcon, Mode=OneWay}" Margin="3 0 0 0">
                                                     <TextBlock.Foreground>
                                                         <SolidColorBrush Color="{Binding Path=ActivePair.MiddleLast24PriceIconColor, Mode=OneWay}"/>
                                                     </TextBlock.Foreground>
@@ -1206,8 +1214,8 @@
                                             <Label Grid.Row="1" Grid.Column="0" Padding="3" Content="起動後中央値：" Style="{DynamicResource DefaultLabelStyle}"></Label>
                                             <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Margin="0 3 0 3">
                                                 <TextBlock Text="{Binding Path=ActivePair.MiddleInitPriceString, Mode=OneWay, StringFormat={}{0:N0}}" Style="{DynamicResource DefaultTextBlockStyle}"></TextBlock>
-                                                <Label Padding="0" Content=" 円 " Style="{DynamicResource DefaultLabelStyle}"/>
-                                                <TextBlock Text="{Binding Path=ActivePair.MiddleInitPriceIcon, Mode=OneWay}">
+                                                <Label  Margin="3 0 3 0" Content="{Binding CurrentPairUnitString,Mode=OneWay}" Style="{DynamicResource DefaultLabelStyle}" Visibility="Collapsed"/>
+                                                <TextBlock Text="{Binding Path=ActivePair.MiddleInitPriceIcon, Mode=OneWay}" Margin="3 0 0 0">
                                                     <TextBlock.Foreground>
                                                         <SolidColorBrush Color="{Binding Path=ActivePair.MiddleInitPriceIconColor, Mode=OneWay}"/>
                                                     </TextBlock.Foreground>
@@ -1215,8 +1223,7 @@
                                             </StackPanel>
                                         </Grid>
 
-
-                                        <Border Grid.Column="1" BorderBrush="Gainsboro" BorderThickness="0.1 0 0 0" Width="0.9" />
+                                        <Border Grid.Column="1" BorderBrush="Gainsboro" BorderThickness="0.1 0 0 0" Width="0" />
 
                                         <Grid Grid.Row="0" Grid.Column="2" Margin="0 0 3 0" HorizontalAlignment="Right">
                                             <Grid.RowDefinitions>
@@ -1224,16 +1231,16 @@
                                                 <RowDefinition Height="Auto"/>
                                             </Grid.RowDefinitions>
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="55*"/>
-                                                <ColumnDefinition Width="45*"/>
+                                                <ColumnDefinition Width="50*"/>
+                                                <ColumnDefinition Width="50*"/>
                                             </Grid.ColumnDefinitions>
 
 
                                             <Label Grid.Row="0" Grid.Column="0" Padding="6 3 3 3" Content="起動時の値：" Style="{DynamicResource DefaultLabelStyle}"></Label>
                                             <StackPanel Grid.Row="0"  Grid.Column="1" Orientation="Horizontal" Margin="0 3 0 3">
                                                 <TextBlock Text="{Binding Path=ActivePair.BasePriceString, Mode=OneWay, StringFormat={}{0:N0}}" Style="{DynamicResource DefaultTextBlockStyle}"></TextBlock>
-                                                <Label Padding="0" Content=" 円 " Style="{DynamicResource DefaultLabelStyle}"/>
-                                                <TextBlock Text="{Binding Path=ActivePair.BasePriceIcon, Mode=OneWay}">
+                                                <Label Margin="3 0 3 0" Content="{Binding CurrentPairUnitString,Mode=OneWay}" Style="{DynamicResource DefaultLabelStyle}" Visibility="Collapsed"/>
+                                                <TextBlock Text="{Binding Path=ActivePair.BasePriceIcon, Mode=OneWay}" Margin="3 0 0 0">
                                                     <TextBlock.Foreground>
                                                         <SolidColorBrush Color="{Binding Path=ActivePair.BasePriceIconColor, Mode=OneWay}"/>
                                                     </TextBlock.Foreground>
@@ -1243,8 +1250,8 @@
                                             <Label Grid.Row="1" Grid.Column="0" Padding="6 3 3 3" Content="1分の平均値：" Style="{DynamicResource DefaultLabelStyle}"></Label>
                                             <StackPanel Grid.Row="1"  Grid.Column="1" Orientation="Horizontal" Margin="0 3 0 3">
                                                 <TextBlock Text="{Binding Path=ActivePair.AveragePriceString, Mode=OneWay, StringFormat={}{0:N0}}" Style="{DynamicResource DefaultTextBlockStyle}"></TextBlock>
-                                                <Label Padding="0" Content=" 円 " Style="{DynamicResource DefaultLabelStyle}"/>
-                                                <TextBlock Text="{Binding Path=ActivePair.AveragePriceIcon, Mode=OneWay}">
+                                                <Label Margin="3 0 3 0" Content="{Binding CurrentPairUnitString,Mode=OneWay}" Style="{DynamicResource DefaultLabelStyle}" Visibility="Collapsed"/>
+                                                <TextBlock Text="{Binding Path=ActivePair.AveragePriceIcon, Mode=OneWay}" Margin="3 0 0 0">
                                                     <TextBlock.Foreground>
                                                         <SolidColorBrush Color="{Binding Path=ActivePair.AveragePriceIconColor, Mode=OneWay}"/>
                                                     </TextBlock.Foreground>
@@ -1299,7 +1306,6 @@
                                                             </ComboBox.ItemTemplate>
                                                         </ComboBox>
 
-
                                                         <Label Padding="0" VerticalAlignment="Center" Content="{Binding ChartLoadingInfo}" Margin="48 0 0 0" Style="{DynamicResource DefaultLabelStyle}"/>
 
                                                     </StackPanel>
@@ -1307,12 +1313,12 @@
 
                                                 <Grid x:Name="Chart" Grid.Row="1" Grid.Column="0" Height="300">
 
-                                                    <lvc:CartesianChart x:Name="ChartBTC" Height="300" Series="{Binding ChartSeriesBtc}" AxisY="{Binding ChartAxisYBtc}" AxisX="{Binding ChartAxisXBtc}" Hoverable="False" BorderBrush="Gainsboro" BorderThickness="0 0.1 0 0.1" Padding="3 0 0 0" Margin="6 0 12 0" Visibility="{Binding IsBtcVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}"/>
-                                                    <lvc:CartesianChart x:Name="ChartXRP" Height="300" Series="{Binding ChartSeriesXrp}" AxisY="{Binding ChartAxisYXrp}" AxisX="{Binding ChartAxisXXrp}" Hoverable="False" Zoom="{Binding ZoomingMode}" BorderBrush="Gainsboro" BorderThickness="0 0.1 0 0.1" Padding="3 0 0 0" Margin="6 0 12 0" Visibility="{Binding IsXrpVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}"/>
-                                                    <lvc:CartesianChart x:Name="ChartLTC" Height="300" Series="{Binding ChartSeriesLtc}" AxisY="{Binding ChartAxisYLtc}" AxisX="{Binding ChartAxisXLtc}" Hoverable="False" Zoom="{Binding ZoomingMode}" BorderBrush="Gainsboro" BorderThickness="0 0.1 0 0.1" Padding="3 0 0 0" Margin="6 0 12 0" Visibility="{Binding IsLtcVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}"/>
-                                                    <lvc:CartesianChart x:Name="ChartETH" Height="300" Series="{Binding ChartSeriesEth}" AxisY="{Binding ChartAxisYEth}" AxisX="{Binding ChartAxisXEth}" Hoverable="False" Zoom="{Binding ZoomingMode}" BorderBrush="Gainsboro" BorderThickness="0 0.1 0 0.1" Padding="3 0 0 0" Margin="6 0 12 0" Visibility="{Binding IsEthVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}"/>
-                                                    <lvc:CartesianChart x:Name="ChartMona" Height="300" Series="{Binding ChartSeriesMona}" AxisY="{Binding ChartAxisYMona}" AxisX="{Binding ChartAxisXMona}" Hoverable="False" Zoom="{Binding ZoomingMode}" BorderBrush="Gainsboro" BorderThickness="0 0.1 0 0.1" Padding="3 0 0 0" Margin="6 0 12 0" Visibility="{Binding IsMonaJpyVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}"/>
-                                                    <lvc:CartesianChart x:Name="ChartBCH" Height="300" Series="{Binding ChartSeriesBch}" AxisY="{Binding ChartAxisYBch}" AxisX="{Binding ChartAxisXBch}" Hoverable="False" Zoom="{Binding ZoomingMode}" BorderBrush="Gainsboro" BorderThickness="0 0.1 0 0.1" Padding="3 0 0 0" Margin="6 0 12 0" Visibility="{Binding IsBchJpyVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}"/>
+                                                    <lvc:CartesianChart x:Name="ChartBTC" Height="300" Series="{Binding ChartSeriesBtcJpy}" AxisY="{Binding ChartAxisYBtcJpy}" AxisX="{Binding ChartAxisXBtcJpy}" Hoverable="False" BorderBrush="Gainsboro" BorderThickness="0 0.1 0 0.1" Padding="3 0 0 0" Margin="6 0 12 0" Visibility="{Binding IsBtcVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}"/>
+                                                    <lvc:CartesianChart x:Name="ChartXRP" Height="300" Series="{Binding ChartSeriesXrpJpy}" AxisY="{Binding ChartAxisYXrpJpy}" AxisX="{Binding ChartAxisXXrpJpy}" Hoverable="False" Zoom="{Binding ZoomingMode}" BorderBrush="Gainsboro" BorderThickness="0 0.1 0 0.1" Padding="3 0 0 0" Margin="6 0 12 0" Visibility="{Binding IsXrpVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}"/>
+                                                    <lvc:CartesianChart x:Name="ChartLTC" Height="300" Series="{Binding ChartSeriesLtcBtc}" AxisY="{Binding ChartAxisYLtcBtc}" AxisX="{Binding ChartAxisXLtcBtc}" Hoverable="False" Zoom="{Binding ZoomingMode}" BorderBrush="Gainsboro" BorderThickness="0 0.1 0 0.1" Padding="3 0 0 0" Margin="6 0 12 0" Visibility="{Binding IsLtcVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}"/>
+                                                    <lvc:CartesianChart x:Name="ChartETH" Height="300" Series="{Binding ChartSeriesEthBtc}" AxisY="{Binding ChartAxisYEthBtc}" AxisX="{Binding ChartAxisXEthBtc}" Hoverable="False" Zoom="{Binding ZoomingMode}" BorderBrush="Gainsboro" BorderThickness="0 0.1 0 0.1" Padding="3 0 0 0" Margin="6 0 12 0" Visibility="{Binding IsEthVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}"/>
+                                                    <lvc:CartesianChart x:Name="ChartMona" Height="300" Series="{Binding ChartSeriesMonaJpy}" AxisY="{Binding ChartAxisYMonaJpy}" AxisX="{Binding ChartAxisXMonaJpy}" Hoverable="False" Zoom="{Binding ZoomingMode}" BorderBrush="Gainsboro" BorderThickness="0 0.1 0 0.1" Padding="3 0 0 0" Margin="6 0 12 0" Visibility="{Binding IsMonaJpyVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}"/>
+                                                    <lvc:CartesianChart x:Name="ChartBCH" Height="300" Series="{Binding ChartSeriesBchJpy}" AxisY="{Binding ChartAxisYBchJpy}" AxisX="{Binding ChartAxisXBchJpy}" Hoverable="False" Zoom="{Binding ZoomingMode}" BorderBrush="Gainsboro" BorderThickness="0 0.1 0 0.1" Padding="3 0 0 0" Margin="6 0 12 0" Visibility="{Binding IsBchJpyVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}"/>
                                                 
                                                 </Grid>
 
@@ -1492,11 +1498,11 @@
                                                                         <StackPanel Orientation="Horizontal" Margin="0 0 0 6" VerticalAlignment="Bottom">
                                                                             <Label Margin="0 0 0 0" Content="価格：" VerticalAlignment="Bottom"/>
                                                                             <TextBox x:Name="buyPriceTextbox" Width="100" Text="{Binding BuyPrice}" GotFocus="Textbox_GotFocus" IsEnabled="{Binding IsChecked, ElementName=buyLimitRadioButton}" />
-                                                                            <Label Margin="0 0 12 0" Content=" 円" VerticalAlignment="Bottom"/>
+                                                                            <Label Margin="3 0 12 0" Content="{Binding CurrentPairUnitString,Mode=OneWay}" VerticalAlignment="Bottom"/>
 
                                                                             <Label Margin="12 0 0 0" Content="予想金額：" VerticalAlignment="Bottom"/>
                                                                             <TextBlock Text="{Binding BuyEstimatePrice}" Style="{StaticResource DefaultTextBlockStyle}"/>
-                                                                            <Label Margin="0 0 12 0" Content=" 円" VerticalAlignment="Bottom"/>
+                                                                            <Label Margin="3 0 12 0" Content="{Binding CurrentPairUnitString,Mode=OneWay}" VerticalAlignment="Bottom"/>
 
                                                                         </StackPanel>
 
@@ -1557,11 +1563,11 @@
                                                                         <StackPanel Orientation="Horizontal" Margin="0 0 0 6" VerticalAlignment="Bottom">
                                                                             <Label Margin="0 0 0 0" Content="価格：" VerticalAlignment="Bottom"/>
                                                                             <TextBox x:Name="sellPriceTextbox" Width="100" Text="{Binding SellPrice}" IsEnabled="{Binding IsChecked, ElementName=sellLimitRadioButton}" GotFocus="Textbox_GotFocus"/>
-                                                                            <Label Margin="0 0 12 0" Content=" 円" VerticalAlignment="Bottom"/>
+                                                                            <Label Margin="3 0 12 0" Content="{Binding CurrentPairUnitString,Mode=OneWay}" VerticalAlignment="Bottom"/>
 
                                                                             <Label Margin="12 0 0 0" Content="予想金額：" VerticalAlignment="Bottom"/>
                                                                             <TextBlock Text="{Binding SellEstimatePrice}" Style="{StaticResource DefaultTextBlockStyle}"/>
-                                                                            <Label Margin="0 0 12 0" Content=" 円" VerticalAlignment="Bottom"/>
+                                                                            <Label Margin="3 0 12 0" Content="{Binding CurrentPairUnitString,Mode=OneWay}" VerticalAlignment="Bottom"/>
 
                                                                         </StackPanel>
 
@@ -1715,11 +1721,11 @@
                                                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3" VerticalAlignment="Bottom">
                                                                             <Label Content="価格：" Margin="0" Padding="0" VerticalAlignment="Bottom"/>
                                                                             <TextBox x:Name="IfdPriceTextbox" Width="80" VerticalAlignment="Bottom" IsEnabled="{Binding IsChecked, ElementName=IfdTypeLimitRadioButton}" Text="{Binding IFD_IfdPrice,UpdateSourceTrigger=PropertyChanged}" GotFocus="Textbox_GotFocus"/>
-                                                                            <Label Content=" 円" Margin="0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom"/>
 
                                                                             <Label Content="予想金額：" Margin="12 0 0 0" Padding="0" VerticalAlignment="Bottom"/>
                                                                             <TextBlock Text="{Binding IFD_IfdEstimatePrice, StringFormat={}{0:N0},Mode=OneWay}" Style="{StaticResource DefaultTextBlockStyle}" VerticalAlignment="Bottom"/>
-                                                                            <Label Content=" 円" Margin="0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom"/>
 
                                                                         </StackPanel>
 
@@ -1766,18 +1772,18 @@
                                                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3" VerticalAlignment="Bottom">
                                                                             <Label Content="価格：" Margin="0" Padding="0" VerticalAlignment="Bottom"/>
                                                                             <TextBox x:Name="IfdDonePriceTextbox" Width="80" VerticalAlignment="Bottom" IsEnabled="{Binding IsChecked, ElementName=IfdDoneTypeLimitRadioButton}" Text="{Binding IFD_DoPrice,UpdateSourceTrigger=PropertyChanged}" GotFocus="Textbox_GotFocus"/>
-                                                                            <Label Content=" 円" Margin="0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom"/>
 
                                                                             <Label Content="予想金額：" Margin="12 0 0 0" Padding="0" VerticalAlignment="Bottom"/>
                                                                             <TextBlock Text="{Binding IFD_DoEstimatePrice, StringFormat={}{0:N0},Mode=OneWay}" Style="{StaticResource DefaultTextBlockStyle}" VerticalAlignment="Bottom"/>
-                                                                            <Label Content=" 円" Margin="0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom"/>
                                                                         </StackPanel>
 
                                                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3" VerticalAlignment="Bottom">
                                                                             <Label Content="トリガー：" Margin="0" Padding="0" VerticalAlignment="Center"/>
                                                                             <TextBox Width="80" Text="{Binding IFD_DoTriggerPrice}" GotFocus="Textbox_GotFocus" VerticalAlignment="Center"/>
 
-                                                                            <Label Content=" 円" Margin="0" Padding="0" VerticalAlignment="Center"/>
+                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Center"/>
 
                                                                             <ComboBox SelectedIndex="{Binding IFD_DoTriggerUpDown}" VerticalAlignment="Center" Margin="0 0 0 0" Padding="0 0 0 0" Background="Transparent" Style="{StaticResource ComboBoxFlatStyle}">
                                                                                 <ComboBoxItem Content="以上" Foreground="White"></ComboBoxItem>
@@ -1856,18 +1862,18 @@
                                                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3" VerticalAlignment="Bottom">
                                                                             <Label Content="価格：" Margin="0" Padding="0" VerticalAlignment="Bottom"/>
                                                                             <TextBox x:Name="OcoPriceTextbox" Width="80" VerticalAlignment="Bottom" IsEnabled="{Binding IsChecked, ElementName=OcoTypeLimitRadioButton}" Text="{Binding OCO_OnePrice,UpdateSourceTrigger=PropertyChanged}" GotFocus="Textbox_GotFocus"/>
-                                                                            <Label Content=" 円" Margin="0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom"/>
 
                                                                             <Label Content="予想金額：" Margin="12 0 0 0" Padding="0" VerticalAlignment="Bottom"/>
                                                                             <TextBlock Text="{Binding OCO_OneEstimatePrice, StringFormat={}{0:N0},Mode=OneWay}" Style="{StaticResource DefaultTextBlockStyle}" VerticalAlignment="Bottom"/>
-                                                                            <Label Content=" 円" Margin="0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom"/>
                                                                         </StackPanel>
 
                                                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3" VerticalAlignment="Bottom">
                                                                             <Label Content="トリガー：" Margin="0" Padding="0" VerticalAlignment="Center"/>
                                                                             <TextBox Width="80" Text="{Binding OCO_OneTriggerPrice}" GotFocus="Textbox_GotFocus" VerticalAlignment="Center"/>
 
-                                                                            <Label Content=" 円" Margin="0" Padding="0" VerticalAlignment="Center"/>
+                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Center"/>
 
                                                                             <ComboBox SelectedIndex="{Binding OCO_OneTriggerUpDown}" VerticalAlignment="Center" Margin="0 0 0 0" Padding="0 0 0 0" Background="Transparent" Style="{StaticResource ComboBoxFlatStyle}">
                                                                                 <ComboBoxItem Content="以上" Foreground="White"></ComboBoxItem>
@@ -1919,18 +1925,18 @@
                                                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3" VerticalAlignment="Bottom">
                                                                             <Label Content="価格：" Margin="0" Padding="0" VerticalAlignment="Bottom"/>
                                                                             <TextBox x:Name="OcoDonePriceTextbox" Width="80" VerticalAlignment="Bottom" IsEnabled="{Binding IsChecked, ElementName=OcoDoneTypeLimitRadioButton}" Text="{Binding OCO_OtherPrice,UpdateSourceTrigger=PropertyChanged}" GotFocus="Textbox_GotFocus"/>
-                                                                            <Label Content=" 円" Margin="0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom"/>
 
                                                                             <Label Content="予想金額：" Margin="12 0 0 0" Padding="0" VerticalAlignment="Bottom"/>
                                                                             <TextBlock Text="{Binding OCO_OtherEstimatePrice, StringFormat={}{0:N0},Mode=OneWay}" Style="{StaticResource DefaultTextBlockStyle}" VerticalAlignment="Bottom"/>
-                                                                            <Label Content=" 円" Margin="0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="0 0 0 0" Padding="0" VerticalAlignment="Bottom"/>
                                                                         </StackPanel>
 
                                                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3" VerticalAlignment="Bottom">
                                                                             <Label Content="トリガー：" Margin="0" Padding="0" VerticalAlignment="Center"/>
                                                                             <TextBox Width="80" Text="{Binding OCO_OtherTriggerPrice}" GotFocus="Textbox_GotFocus" VerticalAlignment="Center"/>
 
-                                                                            <Label Content=" 円" Margin="0" Padding="0" VerticalAlignment="Center"/>
+                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="0 0 0 0" Padding="0" VerticalAlignment="Center"/>
 
                                                                             <ComboBox SelectedIndex="{Binding OCO_OtherTriggerUpDown}" VerticalAlignment="Center" Margin="0 0 0 0" Padding="0 0 0 0" Background="Transparent" Style="{StaticResource ComboBoxFlatStyle}">
                                                                                 <ComboBoxItem Content="以上" Foreground="White"></ComboBoxItem>
@@ -2009,12 +2015,12 @@
                                                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3" VerticalAlignment="Bottom">
                                                                             <Label Content="価格：" Margin="0" Padding="0" VerticalAlignment="Bottom"/>
                                                                             <TextBox x:Name="IFDOCOPriceTextbox" Width="80" VerticalAlignment="Bottom" IsEnabled="{Binding IsChecked, ElementName=IFDOCOTypeLimitRadioButton}" Text="{Binding IFDOCO_IfdPrice,UpdateSourceTrigger=PropertyChanged}" GotFocus="Textbox_GotFocus"/>
-                                                                            <Label Content=" 円" Margin="0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom"/>
 
                                                                             <Label Content="(" Margin="6 0 0 0" Padding="0" VerticalAlignment="Bottom"/>
                                                                             <TextBlock Text="{Binding IFDOCO_IfdEstimatePrice, StringFormat={}{0:N0},Mode=OneWay}" Style="{StaticResource DefaultTextBlockStyle}" VerticalAlignment="Bottom"/>
-                                                                            <Label Content=" 円)" Margin="0" Padding="0" VerticalAlignment="Bottom"/>
-
+                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content=")" Margin="0" Padding="0" VerticalAlignment="Bottom"/>
                                                                         </StackPanel>
                                                                     </StackPanel>
                                                                 </Border>
@@ -2059,18 +2065,18 @@
                                                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3" VerticalAlignment="Bottom">
                                                                             <Label Content="価格：" Margin="0" Padding="0" VerticalAlignment="Bottom"/>
                                                                             <TextBox x:Name="IFDOCOOcoPriceTextbox" Width="80" VerticalAlignment="Bottom" IsEnabled="{Binding IsChecked, ElementName=IFDOCOOcoTypeLimitRadioButton}" Text="{Binding IFDOCO_OnePrice,UpdateSourceTrigger=PropertyChanged}" GotFocus="Textbox_GotFocus"/>
-                                                                            <Label Content=" 円" Margin="0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom"/>
 
                                                                             <Label Content="(" Margin="6 0 0 0" Padding="0" VerticalAlignment="Bottom"/>
                                                                             <TextBlock Text="{Binding IFDOCO_OneEstimatePrice, StringFormat={}{0:N0},Mode=OneWay}" Style="{StaticResource DefaultTextBlockStyle}" VerticalAlignment="Bottom"/>
-                                                                            <Label Content=" 円)" Margin="0" Padding="0" VerticalAlignment="Bottom"/>
-
+                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content=")" Margin="0" Padding="0" VerticalAlignment="Bottom"/>
                                                                         </StackPanel>
 
                                                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3" VerticalAlignment="Bottom">
                                                                             <Label Content="トリガー：" Margin="0" Padding="0" VerticalAlignment="Center"/>
                                                                             <TextBox Width="80" Text="{Binding IFDOCO_OneTriggerPrice}" GotFocus="Textbox_GotFocus" VerticalAlignment="Center"/>
-                                                                            <Label Content=" 円" Margin="0" Padding="0" VerticalAlignment="Center"/>
+                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Center"/>
 
                                                                             <ComboBox SelectedIndex="{Binding IFDOCO_OneTriggerUpDown}" VerticalAlignment="Center" Margin="0 0 0 0" Padding="0 0 0 0" Background="Transparent" Style="{StaticResource ComboBoxFlatStyle}">
                                                                                 <ComboBoxItem Content="以上" Foreground="White"></ComboBoxItem>
@@ -2121,17 +2127,18 @@
                                                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3" VerticalAlignment="Bottom">
                                                                             <Label Content="価格：" Margin="0" Padding="0" VerticalAlignment="Bottom"/>
                                                                             <TextBox x:Name="IFDOCOOcoDonePriceTextbox" Width="80" VerticalAlignment="Bottom" IsEnabled="{Binding IsChecked, ElementName=IFDOCOOcoDoneTypeLimitRadioButton}" Text="{Binding IFDOCO_OtherPrice,UpdateSourceTrigger=PropertyChanged}" GotFocus="Textbox_GotFocus"/>
-                                                                            <Label Content=" 円" Margin="0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="0" Padding="0" VerticalAlignment="Bottom"/>
 
                                                                             <Label Content="(" Margin="6 0 0 0" Padding="0" VerticalAlignment="Bottom"/>
                                                                             <TextBlock Text="{Binding IFDOCO_OtherEstimatePrice, StringFormat={}{0:N0},Mode=OneWay}" Style="{StaticResource DefaultTextBlockStyle}" VerticalAlignment="Bottom"/>
-                                                                            <Label Content=" 円)" Margin="0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content=")" Margin="0" Padding="0" VerticalAlignment="Bottom"/>
                                                                         </StackPanel>
 
                                                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3" VerticalAlignment="Bottom">
                                                                             <Label Content="トリガー：" Margin="0" Padding="0" VerticalAlignment="Center"/>
                                                                             <TextBox Width="80" Text="{Binding IFDOCO_OtherTriggerPrice}" GotFocus="Textbox_GotFocus" VerticalAlignment="Center"/>
-                                                                            <Label Content=" 円" Margin="0" Padding="0" VerticalAlignment="Center"/>
+                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Center"/>
 
                                                                             <ComboBox SelectedIndex="{Binding IFDOCO_OtherTriggerUpDown}" VerticalAlignment="Center" Margin="0 0 0 0" Padding="0 0 0 0" Background="Transparent" Style="{StaticResource ComboBoxFlatStyle}">
                                                                                 <ComboBoxItem Content="以上" Foreground="White"></ComboBoxItem>
@@ -2331,16 +2338,15 @@
 
                             <TabItem Header="板情報(_D)" FontWeight="Normal" Style="{StaticResource NoChromeTabHeader}" Background="Transparent" BorderThickness="0" Width="100" Padding="4">
 
-                                <ListBox x:Name="DepthListBox" Margin="6 6 0 6" Padding="0 0 0 0" ItemsSource="{Binding Depths}" Style="{StaticResource DepthListBoxStyle}" AlternationCount="2" Background="Transparent" BorderBrush="Gray" BorderThickness="0 0 0 0" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Visible" SizeChanged="DepthListBox_SizeChanged" MouseDoubleClick="DepthListBox_MouseDoubleClick">
+                                <ListBox x:Name="DepthListBox" Margin="6 6 0 6" Padding="0 0 0 0" ItemsSource="{Binding Depths}" Style="{StaticResource DepthListBoxStyle}" AlternationCount="2" Background="Transparent" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Visible" SizeChanged="DepthListBox_SizeChanged" MouseDoubleClick="DepthListBox_MouseDoubleClick">
                                     <ListBox.ContextMenu>
                                         <ContextMenu>
                                             <MenuItem Header="グルーピング表示">
-                                                <MenuItem Header="OFF" Command="{Binding DepthGroupingCommand}" CommandParameter="0"/>
-                                                <MenuItem Header="100" Command="{Binding DepthGroupingCommand}" CommandParameter="100"/>
-                                                <MenuItem Header="1000" Command="{Binding DepthGroupingCommand}" CommandParameter="1000"/>
+                                                <MenuItem Header="OFF" Command="{Binding DepthGroupingCommand}" CommandParameter="0" IsChecked="{Binding ActivePair.IsDepthGroupingOff, Mode=OneWay}"/>
+                                                <MenuItem Header="{Binding ActivePair.DepthGrouping100, Mode=OneWay}" Command="{Binding DepthGroupingCommand}" CommandParameter="{Binding ActivePair.DepthGrouping100, Mode=OneWay}" IsChecked="{Binding ActivePair.IsDepthGrouping100, Mode=OneWay}"/>
+                                                <MenuItem Header="{Binding ActivePair.DepthGrouping1000, Mode=OneWay}" Command="{Binding DepthGroupingCommand}" CommandParameter="{Binding ActivePair.DepthGrouping1000, Mode=OneWay}" IsChecked="{Binding ActivePair.IsDepthGrouping1000, Mode=OneWay}"/>
                                             </MenuItem>
-
-                                            <MenuItem Header="真ん中に戻る" x:Name="DepthListBoxCenter" Click="DepthListBoxCenter_Click"></MenuItem>
+                                            <MenuItem Header="中央に戻る" x:Name="DepthListBoxCenter" Click="DepthListBoxCenter_Click"></MenuItem>
                                         </ContextMenu>
                                     </ListBox.ContextMenu>
                                     <ListBox.ItemContainerStyle>
@@ -2351,13 +2357,9 @@
                                             <Style.Triggers>
                                                 <Trigger Property="ItemsControl.AlternationIndex" Value="0">
                                                     <Setter Property="Background" Value="{DynamicResource ListviewAlt0ColorBrush}" />
-                                                    <Setter Property="BorderBrush" Value="Transparent" />
-                                                    <Setter Property="BorderThickness" Value="0,0,0,0.1" />
                                                 </Trigger>
                                                 <Trigger Property="ItemsControl.AlternationIndex" Value="1">
                                                     <Setter Property="Background" Value="{DynamicResource ListviewAlt1ColorBrush}" />
-                                                    <Setter Property="BorderBrush" Value="Transparent" />
-                                                    <Setter Property="BorderThickness" Value="0,0,0,0.1" />
                                                 </Trigger>
                                             </Style.Triggers>
 
@@ -2367,13 +2369,14 @@
                                         <DataTemplate>
                                             <Grid Margin="0" HorizontalAlignment="Center">
                                                 <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="53" />
-                                                    <ColumnDefinition Width="68" />
-                                                    <ColumnDefinition Width="53" />
+                                                    <ColumnDefinition Width="62" />
+                                                    <ColumnDefinition Width="66" />
+                                                    <ColumnDefinition Width="62" />
                                                 </Grid.ColumnDefinitions>
-                                                <TextBlock Grid.Column="0" x:Name="DepthAskBest" Text="{Binding Path=DepthAsk, Mode=OneWay}" Margin="0" Padding="3 0 3 0" Foreground="{StaticResource PriceUpColorBrush}" HorizontalAlignment="Right"/>
-                                                <TextBlock Grid.Column="1" x:Name="DepthPrice" Text="{Binding Path=DepthPrice, Mode=OneWay}" Margin="0" Padding="3 0 3 0" Foreground="DarkGray" HorizontalAlignment="Center"/>
-                                                <TextBlock Grid.Column="2" x:Name="DepthBidBest" Text="{Binding Path=DepthBid, Mode=OneWay}" Margin="0" Padding="3 0 3 0" Foreground="{StaticResource PriceDownColorBrush}"  HorizontalAlignment="Right"/>
+                                                <!-- 値は左寄せ。小数点以下がはみ出しても問題ないが、逆はまずい -->
+                                                <TextBlock Grid.Column="0" x:Name="DepthAskBest" Text="{Binding Path=DepthAsk, Mode=OneWay}" Margin="0" Padding="0 0 0 0" Foreground="{StaticResource PriceUpColorBrush}" HorizontalAlignment="Left"/>
+                                                <TextBlock Grid.Column="1" x:Name="DepthPrice" Text="{Binding Path=DepthPrice, Mode=OneWay}" Margin="0" Padding="0 0 0 0" Foreground="DarkGray" HorizontalAlignment="Center"/>
+                                                <TextBlock Grid.Column="2" x:Name="DepthBidBest" Text="{Binding Path=DepthBid, Mode=OneWay}" Margin="0" Padding="0 0 0 0" Foreground="{StaticResource PriceDownColorBrush}"  HorizontalAlignment="Left"/>
                                             </Grid>
                                             <DataTemplate.Triggers>
                                                 <DataTrigger Binding="{Binding IsLTP}" Value="true">
@@ -2462,11 +2465,11 @@
                             <ListBox.ContextMenu>
                                 <ContextMenu>
                                     <MenuItem Header="グルーピング表示">
-                                        <MenuItem Header="OFF" Command="{Binding DepthGroupingCommand}" CommandParameter="0"/>
-                                        <MenuItem Header="100" Command="{Binding DepthGroupingCommand}" CommandParameter="100"/>
-                                        <MenuItem Header="1000" Command="{Binding DepthGroupingCommand}" CommandParameter="1000"/>
+                                        <MenuItem Header="OFF" Command="{Binding DepthGroupingCommand}" CommandParameter="0" IsChecked="{Binding ActivePair.IsDepthGroupingOff, Mode=OneWay}"/>
+                                        <MenuItem Header="{Binding ActivePair.DepthGrouping100, Mode=OneWay}" Command="{Binding DepthGroupingCommand}" CommandParameter="{Binding ActivePair.DepthGrouping100, Mode=OneWay}" IsChecked="{Binding ActivePair.IsDepthGrouping100, Mode=OneWay}"/>
+                                        <MenuItem Header="{Binding ActivePair.DepthGrouping1000, Mode=OneWay}" Command="{Binding DepthGroupingCommand}" CommandParameter="{Binding ActivePair.DepthGrouping1000, Mode=OneWay}" IsChecked="{Binding ActivePair.IsDepthGrouping1000, Mode=OneWay}"/>
                                     </MenuItem>
-                                    <MenuItem Header="真ん中に戻る" x:Name="Depth2ListBoxCenter" Click="Depth2ListBoxCenter_Click"></MenuItem>
+                                    <MenuItem Header="中央に戻る" x:Name="Depth2ListBoxCenter" Click="Depth2ListBoxCenter_Click"></MenuItem>
                                 </ContextMenu>
                             </ListBox.ContextMenu>
                             <ListBox.ItemContainerStyle>
@@ -2477,13 +2480,9 @@
                                     <Style.Triggers>
                                         <Trigger Property="ItemsControl.AlternationIndex" Value="0">
                                             <Setter Property="Background" Value="{DynamicResource ListviewAlt0ColorBrush}" />
-                                            <Setter Property="BorderBrush" Value="Transparent" />
-                                            <Setter Property="BorderThickness" Value="0,0,0,0.1" />
                                         </Trigger>
                                         <Trigger Property="ItemsControl.AlternationIndex" Value="1">
                                             <Setter Property="Background" Value="{DynamicResource ListviewAlt1ColorBrush}" />
-                                            <Setter Property="BorderBrush" Value="Transparent" />
-                                            <Setter Property="BorderThickness" Value="0,0,0,0.1" />
                                         </Trigger>
                                     </Style.Triggers>
 
@@ -2493,13 +2492,13 @@
                                 <DataTemplate>
                                     <Grid Margin="0" HorizontalAlignment="Center">
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="53" />
-                                            <ColumnDefinition Width="68" />
-                                            <ColumnDefinition Width="53" />
+                                            <ColumnDefinition Width="62" />
+                                            <ColumnDefinition Width="66" />
+                                            <ColumnDefinition Width="62" />
                                         </Grid.ColumnDefinitions>
-                                        <TextBlock Grid.Column="0" x:Name="DepthAskBest" Text="{Binding Path=DepthAsk, Mode=OneWay}" Margin="0" Padding="3 0 3 0" Foreground="{StaticResource PriceUpColorBrush}" HorizontalAlignment="Right"/>
-                                        <TextBlock Grid.Column="1" x:Name="DepthPrice" Text="{Binding Path=DepthPrice, Mode=OneWay}" Margin="0" Padding="3 0 3 0" Foreground="DarkGray" HorizontalAlignment="Center"/>
-                                        <TextBlock Grid.Column="2" x:Name="DepthBidBest" Text="{Binding Path=DepthBid, Mode=OneWay}" Margin="0" Padding="3 0 3 0" Foreground="{StaticResource PriceDownColorBrush}"  HorizontalAlignment="Right"/>
+                                        <TextBlock Grid.Column="0" x:Name="DepthAskBest" Text="{Binding Path=DepthAsk, Mode=OneWay}" Margin="0" Padding="0" Foreground="{StaticResource PriceUpColorBrush}" HorizontalAlignment="Left"/>
+                                        <TextBlock Grid.Column="1" x:Name="DepthPrice" Text="{Binding Path=DepthPrice, Mode=OneWay}" Margin="0" Padding="0" Foreground="DarkGray" HorizontalAlignment="Center"/>
+                                        <TextBlock Grid.Column="2" x:Name="DepthBidBest" Text="{Binding Path=DepthBid, Mode=OneWay}" Margin="0" Padding="0" Foreground="{StaticResource PriceDownColorBrush}"  HorizontalAlignment="Left"/>
                                     </Grid>
                                     <DataTemplate.Triggers>
                                         <DataTrigger Binding="{Binding IsLTP}" Value="true">
