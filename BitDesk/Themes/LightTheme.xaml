@@ -11,24 +11,29 @@
     <Color x:Key="ControlForegroundColor">DimGray</Color>
     <Color x:Key="ControlLightColor">DarkGray</Color>
     <Color x:Key="ControlMediumColor">Gray</Color>
-    <Color x:Key="ControlDarkColor">#111111</Color>
+    <Color x:Key="ControlDarkColor">DimGray</Color>
+    
     <Color x:Key="ControlMouseOverColor">Black</Color>
     <Color x:Key="ControlPressedColor">#7d7d7d</Color>
     
     <Color x:Key="DisabledControlDarkColor">Gray</Color>
     <Color x:Key="DisabledForegroundColor">Black</Color>
 
-    <Color x:Key="BorderLightColor">#FFCCCCCC</Color>
-    <Color x:Key="BorderMediumColor">#FF888888</Color>
-    <Color x:Key="BorderDarkColor">#FF444444</Color>
+    <Color x:Key="BorderLightColor">#212121</Color>
+    <Color x:Key="BorderMediumColor">#6c6c6c</Color>
+    <Color x:Key="BorderDarkColor">#CCCCCC</Color>
 
     <Color x:Key="NormalTextColor">#333631</Color>
     <Color x:Key="TitleTextColor">#000000</Color>
+
+    <Color x:Key="NormalTextBoxBackgroundColor">whitesmoke</Color>
 
     <Color x:Key="BoardBackgroundColor">#f3f3f3</Color>
 
     <Color x:Key="ListviewAlt0Color">#e6e6e6</Color>
     <Color x:Key="ListviewAlt1Color">#efefef</Color>
+
+    <Color x:Key="ChartVolumeColor">#e0815e</Color>
 
     <!-- クール系のアクセントカラー 明るい -->
     <Color x:Key="AccentCoolLightColor">Green</Color>
@@ -76,6 +81,8 @@
     <SolidColorBrush x:Key="NormalTextColorBrush" Color="{DynamicResource NormalTextColor}"/>
     <SolidColorBrush x:Key="TitleTextColorBrush" Color="{DynamicResource TitleTextColor}"/>
 
+    <SolidColorBrush x:Key="NormalTextBoxBackgroundColorBrush" Color="{DynamicResource NormalTextBoxBackgroundColor}"/>
+
     <SolidColorBrush x:Key="BoardBackgroundColorBrush" Color="{DynamicResource BoardBackgroundColor}"/>
 
     <SolidColorBrush x:Key="AccentCoolLightColorBrush" Color="{DynamicResource AccentCoolLightColor}"/>
@@ -88,5 +95,7 @@
 
     <SolidColorBrush x:Key="ListviewAlt0ColorBrush" Color="{DynamicResource ListviewAlt0Color}"/>
     <SolidColorBrush x:Key="ListviewAlt1ColorBrush" Color="{DynamicResource ListviewAlt1Color}"/>
+    
+    <SolidColorBrush x:Key="ChartVolumeColorBrush" Color="{DynamicResource ChartVolumeColor}" Opacity="0.1"/>
 
 </ResourceDictionary>

@@ -47,9 +47,6 @@ namespace BitDesk
 
             Closing += (this.DataContext as MainViewModel).OnWindowClosing;
 
-            // 板情報の変更イベント
-            (this.DataContext as MainViewModel).DepthListChanged += (sender, arg) => { DepthListBox_Changed(sender, arg); };
-
             // デフォルトのシステムメニューアイコン状態
             RestoreButton.Visibility = Visibility.Collapsed;
             MaxButton.Visibility = Visibility.Visible;
@@ -219,12 +216,6 @@ namespace BitDesk
             }
 
 
-        }
-
-        private void DepthListBox_Changed(object sender, MainViewModel.DepthListChangedEventArgs e)
-        {
-            SetDepthListboxScrollPosition();
-            SetDepth2ListboxScrollPosition();
         }
 
         private void Depth2AyumiTab_SelectionChanged(object sender, SelectionChangedEventArgs e)

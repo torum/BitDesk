@@ -25,10 +25,14 @@
     <Color x:Key="NormalTextColor">#FFE8EDF9</Color>
     <Color x:Key="TitleTextColor">LightGray</Color>
 
+    <Color x:Key="NormalTextBoxBackgroundColor">DarkGray</Color>
+
     <Color x:Key="BoardBackgroundColor">#1c1c1c</Color><!-- 121212 or 111111 -->
 
     <Color x:Key="ListviewAlt0Color">#212121</Color>
     <Color x:Key="ListviewAlt1Color">#1a1a1a</Color>
+    
+    <Color x:Key="ChartVolumeColor">Yellow</Color>
 
     <!-- クール系のアクセントカラー 明るい -->
     <Color x:Key="AccentCoolLightColor">Green</Color>
@@ -75,6 +79,8 @@
 
     <SolidColorBrush x:Key="NormalTextColorBrush" Color="{DynamicResource NormalTextColor}"/>
     <SolidColorBrush x:Key="TitleTextColorBrush" Color="{DynamicResource TitleTextColor}"/>
+    
+    <SolidColorBrush x:Key="NormalTextBoxBackgroundColorBrush" Color="{DynamicResource NormalTextBoxBackgroundColor}"/>
 
     <SolidColorBrush x:Key="BoardBackgroundColorBrush" Color="{DynamicResource BoardBackgroundColor}"/>
 
@@ -88,5 +94,8 @@
 
     <SolidColorBrush x:Key="ListviewAlt0ColorBrush" Color="{DynamicResource ListviewAlt0Color}"/>
     <SolidColorBrush x:Key="ListviewAlt1ColorBrush" Color="{DynamicResource ListviewAlt1Color}"/>
+
+    <SolidColorBrush x:Key="ChartVolumeColorBrush" Color="{DynamicResource ChartVolumeColor}" Opacity="0.1"/>
+    
 
 </ResourceDictionary>

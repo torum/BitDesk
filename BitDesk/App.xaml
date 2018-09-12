@@ -76,11 +76,17 @@
                         <Setter Property="FontStyle" Value="Normal" />
                     </Style>
 
-                    <Style x:Key="DefaultCheckBoxStyle" TargetType="{x:Type CheckBox}">
-                        <Setter Property="Foreground" Value="{StaticResource ControlMediumColorBrush}" />
-                        <Setter Property="Background" Value="{DynamicResource ControlLightColorBrush}"/>
-                        <Setter Property="FontSize" Value="12" />
-                        <Setter Property="FontStyle" Value="Normal" />
+                    <Style x:Key="HyperlinkFocusVisual">
+                        <Setter Property="Control.Template">
+                            <Setter.Value>
+                                <ControlTemplate>
+                                    <Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource ControlLightColorBrush}" StrokeThickness="1" StrokeDashArray="1 2"/>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                    <Style TargetType="{x:Type Hyperlink}">
+                        <Setter Property="FocusVisualStyle" Value="{StaticResource HyperlinkFocusVisual}"/>
                     </Style>
 
                     <Style x:Key="DefaultRadioButtonStyle" TargetType="{x:Type RadioButton}">
@@ -91,7 +97,7 @@
                     </Style>
 
                     <Style x:Key="DefaultTextBoxStyle" TargetType="{x:Type TextBox}">
-                        <Setter Property="Background" Value="DarkGray" />
+                        <Setter Property="Background" Value="{DynamicResource NormalTextBoxBackgroundColorBrush}" />
                         <Style.Triggers>
                             <Trigger Property="IsKeyboardFocusWithin" Value="true">
                                 <Setter Property="Background" Value="WhiteSmoke" />
@@ -168,6 +174,10 @@
                         <Setter Property="Stroke" Value="{DynamicResource ControlMediumColorBrush}" />
                     </Style>
 
+                    <Style x:Key="ChartVolumeStyle" TargetType="lvc:ColumnSeries">
+                        <Setter Property="Fill" Value="{DynamicResource ChartVolumeColorBrush}" />
+                    </Style>
+                    
                     <Style x:Key="ChartSeparatorStyle" TargetType="lvc:Separator">
                         <Setter Property="Stroke" Value="{DynamicResource ControlDarkColorBrush}" />
                     </Style>
@@ -215,7 +225,7 @@
                         <Setter Property="Control.Template">
                             <Setter.Value>
                                 <ControlTemplate>
-                                    <Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
+                                    <Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource ControlLightColorBrush}" StrokeThickness="1" StrokeDashArray="1 2"/>
                                 </ControlTemplate>
                             </Setter.Value>
                         </Setter>
@@ -228,7 +238,7 @@
                         <Setter Property="Control.Template">
                             <Setter.Value>
                                 <ControlTemplate>
-                                    <Rectangle Margin="14,0,0,0" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
+                                    <Rectangle Margin="14,0,0,0" SnapsToDevicePixels="true" Stroke="{DynamicResource ControlLightColorBrush}" StrokeThickness="1" StrokeDashArray="1 2"/>
                                 </ControlTemplate>
                             </Setter.Value>
                         </Setter>
@@ -302,6 +312,14 @@
                                 </ControlTemplate>
                             </Setter.Value>
                         </Setter>
+                    </Style>
+
+
+                    <Style x:Key="DefaultCheckBoxStyle" TargetType="{x:Type CheckBox}" BasedOn="{StaticResource CustomCheckBoxStyle}">
+                        <Setter Property="Foreground" Value="{StaticResource ControlMediumColorBrush}" />
+                        <Setter Property="Background" Value="{DynamicResource NormalTextBoxBackgroundColorBrush}"/>
+                        <Setter Property="FontSize" Value="12" />
+                        <Setter Property="FontStyle" Value="Normal" />
                     </Style>
 
                 </ResourceDictionary>
@@ -1638,9 +1656,20 @@
                     <sys:Double x:Key="ScrollBarRepeatButtonSize">16</sys:Double>
                     <!-- スクロールバーのマージン -->
                     <sys:Double x:Key="ScrollBarMarginSize">0</sys:Double>
-                    
+
+                    <Style x:Key="ScrollViewerFocusVisualStyle">
+                        <Setter Property="Control.Template">
+                            <Setter.Value>
+                                <ControlTemplate>
+                                    <Rectangle Margin="1" StrokeThickness="1" StrokeDashArray="1 2" Stroke="{DynamicResource ControlMediumColorBrush}"/>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+
                     <!-- 終端の三角ボタンのスタイル -->
                     <Style x:Key="ScrollBarRepeatButtonStyle" TargetType="{x:Type RepeatButton}">
+                        <Setter Property="Focusable" Value="False"/>
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type RepeatButton}">
@@ -1661,6 +1690,7 @@
                     </Style>
                     <!-- トラック（レーン）のスタイル -->
                     <Style x:Key="ScrollBarTrackStyle" TargetType="{x:Type RepeatButton}">
+                        <Setter Property="Focusable" Value="False"/>
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type RepeatButton}">
@@ -1672,6 +1702,7 @@
 
                     <!-- つまみのスタイル -->
                     <Style x:Key="ScrollBarThumbStyle" TargetType="{x:Type Thumb}">
+                        <Setter Property="Focusable" Value="False"/>
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type Thumb}">
@@ -1683,6 +1714,8 @@
                     <!-- カスタムスクロールバーのスタイル -->
                     <Style x:Key="CustomScrollBarStyle" TargetType="{x:Type ScrollBar}">
                         <Setter Property="OverridesDefaultStyle" Value="true"/>
+                        <Setter Property="Focusable" Value="true"/>
+                        <Setter Property="FocusVisualStyle" Value="{StaticResource ScrollViewerFocusVisualStyle}"/>
                         <Style.Triggers>
                             <!-- 縦向きのスクロールバー -->
                             <Trigger Property="Orientation" Value="Vertical">
@@ -1762,6 +1795,7 @@
                     </Style>
 
                     <Style x:Key="CustomScrollViewerStyle" TargetType="{x:Type ScrollViewer}">
+                        <Setter Property="Focusable" Value="True"/>
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type ScrollViewer}">
@@ -1788,7 +1822,20 @@
 
                 <!-- Silder -->
                 <ResourceDictionary>
-
+                    
+                    <!-- FocusVisual -->
+                    <Style x:Key="SilderFocusVisual">
+                        <Setter Property="Control.Template">
+                            <Setter.Value>
+                                <ControlTemplate>
+                                    <Border>
+                                        <Rectangle Margin="2" StrokeThickness="1" Stroke="{DynamicResource ControlMediumColorBrush}" StrokeDashArray="1 2" />
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                    
                     <Style x:Key="SliderRepeatButtonInc" TargetType="RepeatButton">
                         <Setter Property="SnapsToDevicePixels" Value="true" />
                         <Setter Property="OverridesDefaultStyle" Value="true" />
@@ -1913,6 +1960,7 @@
                     <Style x:Key="CustomSliderStyle" TargetType="Slider">
                         <Setter Property="SnapsToDevicePixels" Value="true" />
                         <Setter Property="OverridesDefaultStyle" Value="true" />
+                        <Setter Property="FocusVisualStyle" Value="{DynamicResource SilderFocusVisual}" />
                         <Style.Triggers>
                             <Trigger Property="Orientation" Value="Horizontal">
                                 <Setter Property="Template" Value="{StaticResource CustomSlider}" />
@@ -1931,7 +1979,7 @@
                             <Setter.Value>
                                 <ControlTemplate>
                                     <Border>
-                                        <Rectangle Margin="2" StrokeThickness="1" Stroke="#CCCCCC" StrokeDashArray="1 2" />
+                                        <Rectangle Margin="2" StrokeThickness="1" Stroke="{DynamicResource ControlMediumColorBrush}" StrokeDashArray="1 2" />
                                     </Border>
                                 </ControlTemplate>
                             </Setter.Value>
@@ -2166,7 +2214,7 @@
                                             <Grid Name="DropDown" SnapsToDevicePixels="True"
                                                   MinWidth="{TemplateBinding FrameworkElement.ActualWidth}"
                                                   MaxHeight="{TemplateBinding ComboBox.MaxDropDownHeight}">
-                                                <Border Name="DropDownBorder" Background="{StaticResource ControlMediumColorBrush}" Margin="0, 0, 0, 0"
+                                                <Border Name="DropDownBorder" Background="{DynamicResource BorderDarkColorBrush}" Margin="0, 0, 0, 0"
                                                         CornerRadius="0" BorderThickness="0" 
                                                         BorderBrush="Gray"/>
                                                 <ScrollViewer Margin="4" SnapsToDevicePixels="True">
@@ -2205,8 +2253,6 @@
                     </Style>
                     <!-- End of Flat ComboBox -->
 
-
-
                 </ResourceDictionary>
 
                 <!-- Settings TabControl -->
@@ -2216,7 +2262,7 @@
                         <Setter Property="Control.Template">
                             <Setter.Value>
                                 <ControlTemplate>
-                                    <Rectangle Margin="1" StrokeThickness="1" StrokeDashArray="1 2" Stroke="DarkGray"/>
+                                    <Rectangle Margin="1" StrokeThickness="1" StrokeDashArray="1 2" Stroke="{DynamicResource ControlMediumColorBrush}"/>
                                 </ControlTemplate>
                             </Setter.Value>
                         </Setter>
@@ -2256,7 +2302,7 @@
                                             <Setter TargetName="HeaderBorder" Property="BorderThickness" Value="0 0 0 1" />
 
                                             <Setter Property="Background" Value="{DynamicResource ControlMediumColorBrush}" />
-                                            <Setter Property="Foreground" Value="{DynamicResource NormalTextColorBrush}" />
+                                            <Setter Property="Foreground" Value="{DynamicResource ControlDarkColor}" />
                                         </MultiTrigger>
 
                                         <MultiTrigger>
@@ -2313,7 +2359,7 @@
                                             <ColumnDefinition Width="*"/>
                                         </Grid.ColumnDefinitions>
 
-                                        <TabPanel Grid.Row="0" Grid.Column="0" x:Name="HeaderPanel" HorizontalAlignment="Left" IsItemsHost="True" Margin="0 0 0 0"/>
+                                        <TabPanel Grid.Row="0" Grid.Column="0" x:Name="HeaderPanel" HorizontalAlignment="Left" IsItemsHost="True" Margin="0 0 0 0"  Background="{DynamicResource WindowBackgroundColorBrush}"/>
                                         <Border Grid.Row="0" Grid.Column="1" x:Name="Border" BorderThickness="0 0 0 0" BorderBrush="DimGray" Margin="0" Background="{DynamicResource BoardBackgroundColorBrush}">
                                             <ContentPresenter x:Name="PART_SelectedContentHost" Margin="0" ContentSource="SelectedContent" RecognizesAccessKey="True"/>
                                         </Border>
@@ -2332,7 +2378,7 @@
                         <Setter Property="Control.Template">
                             <Setter.Value>
                                 <ControlTemplate>
-                                    <Rectangle Margin="1" StrokeThickness="1" StrokeDashArray="1 2" Stroke="DarkGray"/>
+                                    <Rectangle Margin="1" StrokeThickness="1" StrokeDashArray="1 2" Stroke="{DynamicResource ControlMediumColorBrush}"/>
                                 </ControlTemplate>
                             </Setter.Value>
                         </Setter>

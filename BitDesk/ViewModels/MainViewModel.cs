@@ -2114,7 +2114,7 @@ namespace BitDesk.ViewModels
     /// </summary>
     public class MainViewModel : ViewModelBase
     {
-        // 当初投資額
+        // テスト用
         private decimal _initPrice = 81800M;
 
         /// <summary>
@@ -2804,7 +2804,6 @@ namespace BitDesk.ViewModels
 
             #region == 板情報のプロパティ ==
 
-
             private decimal _depthGrouping = 0;
             public decimal DepthGrouping
             {
@@ -2953,14 +2952,6 @@ namespace BitDesk.ViewModels
 
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public class DepthListChangedEventArgs : EventArgs
-        {
-            //public EntryFull Entry;
-        }
-
         #region == 基本 ==
 
         // Application version
@@ -2981,21 +2972,9 @@ namespace BitDesk.ViewModels
             }
         }
 
-        private bool _showAllCharts = false;
-        public bool ShowAllCharts
-        {
-            get
-            {
-                return _showAllCharts;
-            }
-            set
-            {
-                if (_showAllCharts == value) return;
+        #endregion
 
-                _showAllCharts = value;
-                this.NotifyPropertyChanged("ShowAllCharts");
-            }
-        }
+        #region == 画面切替関係 ==
 
         // プライベートモード表示切替（自動取引表示）
         public bool ExperimentalMode
@@ -3024,10 +3003,6 @@ namespace BitDesk.ViewModels
             }
         }
 
-        #endregion
-
-        #region == 設定画面関係 ==
-
         // 設定画面表示フラグ
         private bool _showSettings = false;
         public bool ShowSettings
@@ -3044,9 +3019,28 @@ namespace BitDesk.ViewModels
                 this.NotifyPropertyChanged("ShowSettings");
 
                 if (_showSettings)
+                {
+                    if (_showAllCharts)
+                        _allChartMode = true;
+                    else
+                        _allChartMode = false;
+
                     ShowMainContents = false;
+                    ShowAllCharts = false;
+                }
                 else
-                    ShowMainContents = true;
+                {
+                    if (_allChartMode)
+                    {
+                        ShowMainContents = false;
+                        ShowAllCharts = true;
+                    }
+                    else
+                    {
+                        ShowMainContents = true;
+                        ShowAllCharts = false;
+                    }
+                }
 
                 if (LoggedInMode)
                     ShowApiKeyLock = true;
@@ -3055,7 +3049,6 @@ namespace BitDesk.ViewModels
             }
         }
 
-        // 設定画面表示中にメインの内容を隠すフラグ
         private bool _showMainContents = true;
         public bool ShowMainContents
         {
@@ -3071,6 +3064,35 @@ namespace BitDesk.ViewModels
                 this.NotifyPropertyChanged("ShowMainContents");
             }
         }
+
+        // チャートの一覧モードフラグ
+        private bool _allChartMode = false;
+
+        // LiveChartの不明なエクセプションが起きるので、ver1が出るまで使わない。
+        private bool _showAllCharts = false;
+        public bool ShowAllCharts
+        {
+            get
+            {
+                return _showAllCharts;
+            }
+            set
+            {
+                if (_showAllCharts == value) return;
+
+                _showAllCharts = value;
+                this.NotifyPropertyChanged("ShowAllCharts");
+
+                if (_showAllCharts)
+                    _allChartMode = true;
+                else
+                    _showAllCharts = false;
+            }
+        }
+
+        #endregion
+
+        #region == 設定画面関係 ==
 
         // グローバルアラーム音設定
         private bool _playSound = true;
@@ -4035,10 +4057,6 @@ namespace BitDesk.ViewModels
                     IsBchJpyVisible = true;
 
                 }
-
-                // 板情報リストボックスのスクロールを中央に
-                //DepthListChangedEventArgs ag = new DepthListChangedEventArgs();
-                //DepthListChanged?.Invoke(this, ag);
 
 
                 // チャートの表示
@@ -5773,13 +5791,6 @@ namespace BitDesk.ViewModels
 
         #endregion
 
-        #region == イベント ==
-
-        //板情報の変更イベント
-        public event EventHandler<DepthListChangedEventArgs> DepthListChanged;
-
-        #endregion
-
         public MainViewModel()
         {
 
@@ -5948,12 +5959,11 @@ namespace BitDesk.ViewModels
 
                 // 現在値セクション
                 AxisSection axs = new AxisSection();
-                axs.Value = double.NaN;//(double)_ltp;
+                axs.Value = 0;//double.NaN;//(double)_ltp;
                 axs.Width = 0;
                 //axs.SectionWidth = 0;
                 axs.StrokeThickness = 0.6;
                 axs.StrokeDashArray = new DoubleCollection { 4 };
-                
                 axs.Stroke = new SolidColorBrush(System.Windows.Media.Color.FromRgb(150, 172, 206));
                 Style styleSection = Application.Current.FindResource("ChartSectionStyle") as Style;
                 axs.Style = styleSection;
@@ -5966,8 +5976,8 @@ namespace BitDesk.ViewModels
                 chartAxisY[0].Sections.Add(axs);
 
                 // 出来高グラフ色
-                SolidColorBrush yellowBrush = new SolidColorBrush(System.Windows.Media.Color.FromRgb(255, 255, 0));
-                yellowBrush.Opacity = 0.1;
+                SolidColorBrush volumeColorBrush = new SolidColorBrush(System.Windows.Media.Color.FromRgb(255, 255, 0));
+                volumeColorBrush.Opacity = 0.1;
 
                 // Lines
                 SeriesCollection chartSeries = new SeriesCollection()
@@ -5991,8 +6001,8 @@ namespace BitDesk.ViewModels
                         Title = "出来高",
                         Values = new ChartValues<double> {},
                         ScalesYAt = 1,
-                        Fill = yellowBrush,
-
+                        //Fill = volumeColorBrush,
+                        Style = (Application.Current.FindResource("ChartVolumeStyle") as Style),
                     }
 
                 };
@@ -6081,6 +6091,8 @@ namespace BitDesk.ViewModels
             IsMonaJpyVisible = false;
             IsBchJpyVisible = false;
 
+            ShowAllCharts = false;
+            ShowMainContents = true;
         }
 
         #region == イベント・タイマー系 ==
@@ -6258,7 +6270,7 @@ namespace BitDesk.ViewModels
                                         if (tick.LTP >= PairBtcJpy.AlarmPlus)
                                         {
                                             PairBtcJpy.HighLowInfoTextColorFlag = true;
-                                            PairBtcJpy.HighLowInfoText = "⇑⇑⇑　高値アラーム";
+                                            PairBtcJpy.HighLowInfoText = "⇑⇑⇑　高値アラーム " + PairBtcJpy.CurrentPairString;
 
                                             if (PlaySound)
                                             {
@@ -6278,7 +6290,7 @@ namespace BitDesk.ViewModels
                                         if (tick.LTP <= PairBtcJpy.AlarmMinus)
                                         {
                                             PairBtcJpy.HighLowInfoTextColorFlag = false;
-                                            PairBtcJpy.HighLowInfoText = "⇓⇓⇓　安値アラーム";
+                                            PairBtcJpy.HighLowInfoText = "⇓⇓⇓　安値アラーム " + PairBtcJpy.CurrentPairString;
                                             if (PlaySound)
                                             {
                                                 SystemSounds.Beep.Play();
@@ -6298,7 +6310,7 @@ namespace BitDesk.ViewModels
                                         if ((PairBtcJpy.TickHistories.Count > 25) && ((PairBtcJpy.BasePrice + 2000M) < tick.LTP))
                                         {
                                             PairBtcJpy.HighLowInfoTextColorFlag = true;
-                                            PairBtcJpy.HighLowInfoText = "⇑⇑⇑　起動後最高値更新";
+                                            PairBtcJpy.HighLowInfoText = "⇑⇑⇑　起動後最高値更新 " + PairBtcJpy.CurrentPairString;
 
                                             if ((isPlayed == false) && (PairBtcJpy.PlaySoundHighest == true))
                                             {
@@ -6316,7 +6328,7 @@ namespace BitDesk.ViewModels
                                         if ((PairBtcJpy.TickHistories.Count > 25) && ((PairBtcJpy.BasePrice - 2000M) > tick.LTP))
                                         {
                                             PairBtcJpy.HighLowInfoTextColorFlag = false;
-                                            PairBtcJpy.HighLowInfoText = "⇓⇓⇓　起動後最安値更新";
+                                            PairBtcJpy.HighLowInfoText = "⇓⇓⇓　起動後最安値更新 " + PairBtcJpy.CurrentPairString;
 
                                             if ((isPlayed == false) && (PairBtcJpy.PlaySoundLowest == true))
                                             {
@@ -6333,7 +6345,7 @@ namespace BitDesk.ViewModels
                                     if (tick.LTP >= PairBtcJpy.HighestIn24Price)
                                     {
                                         PairBtcJpy.HighLowInfoTextColorFlag = true;
-                                        PairBtcJpy.HighLowInfoText = "⇑⇑⇑⇑⇑⇑　過去24時間最高値更新";
+                                        PairBtcJpy.HighLowInfoText = "⇑⇑⇑⇑⇑⇑　過去24時間最高値更新 " + PairBtcJpy.CurrentPairString;
 
                                         if ((isPlayed == false) && (PairBtcJpy.PlaySoundHighest24h == true))
                                         {
@@ -6348,7 +6360,7 @@ namespace BitDesk.ViewModels
                                     if (tick.LTP <= PairBtcJpy.LowestIn24Price)
                                     {
                                         PairBtcJpy.HighLowInfoTextColorFlag = false;
-                                        PairBtcJpy.HighLowInfoText = "⇓⇓⇓⇓⇓⇓　過去24時間最安値更新";
+                                        PairBtcJpy.HighLowInfoText = "⇓⇓⇓⇓⇓⇓　過去24時間最安値更新 " + PairBtcJpy.CurrentPairString;
 
                                         if ((isPlayed == false) && (PairBtcJpy.PlaySoundLowest24h == true))
                                         {
@@ -6370,9 +6382,12 @@ namespace BitDesk.ViewModels
                                     // 最新取引価格のラインを更新
                                     if (ChartAxisYBtcJpy != null)
                                     {
-                                        if (ChartAxisYBtcJpy[0].Sections.Count > 0)
+                                        if (ChartAxisYBtcJpy.Count > 0)
                                         {
-                                            ChartAxisYBtcJpy[0].Sections[0].Value = (double)tick.LTP;
+                                            if (ChartAxisYBtcJpy[0].Sections.Count > 0)
+                                            {
+                                                ChartAxisYBtcJpy[0].Sections[0].Value = (double)tick.LTP;
+                                            }
                                         }
 
                                         // 最新のロウソク足を更新する。
@@ -6574,7 +6589,7 @@ namespace BitDesk.ViewModels
                                         if (tick.LTP >= PairXrpJpy.AlarmPlus)
                                         {
                                             PairXrpJpy.HighLowInfoTextColorFlag = true;
-                                            PairXrpJpy.HighLowInfoText = "⇑⇑⇑　高値アラーム";
+                                            PairXrpJpy.HighLowInfoText = "⇑⇑⇑　高値アラーム " + PairXrpJpy.CurrentPairString;
 
                                             if (PlaySound)
                                             {
@@ -6594,7 +6609,7 @@ namespace BitDesk.ViewModels
                                         if (tick.LTP <= PairXrpJpy.AlarmMinus)
                                         {
                                             PairXrpJpy.HighLowInfoTextColorFlag = false;
-                                            PairXrpJpy.HighLowInfoText = "⇓⇓⇓　安値アラーム";
+                                            PairXrpJpy.HighLowInfoText = "⇓⇓⇓　安値アラーム " + PairXrpJpy.CurrentPairString;
                                             if (PlaySound)
                                             {
                                                 SystemSounds.Beep.Play();
@@ -6614,7 +6629,7 @@ namespace BitDesk.ViewModels
                                         if ((PairXrpJpy.TickHistories.Count > 25) && ((PairXrpJpy.BasePrice + 0.3M) < tick.LTP))
                                         {
                                             PairXrpJpy.HighLowInfoTextColorFlag = true;
-                                            PairXrpJpy.HighLowInfoText = "⇑⇑⇑　起動後最高値更新";
+                                            PairXrpJpy.HighLowInfoText = "⇑⇑⇑　起動後最高値更新 " + PairXrpJpy.CurrentPairString;
 
                                             if ((isPlayed == false) && (PairXrpJpy.PlaySoundHighest == true))
                                             {
@@ -6632,7 +6647,7 @@ namespace BitDesk.ViewModels
                                         if ((PairXrpJpy.TickHistories.Count > 25) && ((PairXrpJpy.BasePrice - 0.3M) > tick.LTP))
                                         {
                                             PairXrpJpy.HighLowInfoTextColorFlag = false;
-                                            PairXrpJpy.HighLowInfoText = "⇓⇓⇓　起動後最安値更新";
+                                            PairXrpJpy.HighLowInfoText = "⇓⇓⇓　起動後最安値更新 " + PairXrpJpy.CurrentPairString;
 
                                             if ((isPlayed == false) && (PairXrpJpy.PlaySoundLowest == true))
                                             {
@@ -6649,7 +6664,7 @@ namespace BitDesk.ViewModels
                                     if (tick.LTP >= PairXrpJpy.HighestIn24Price)
                                     {
                                         PairXrpJpy.HighLowInfoTextColorFlag = true;
-                                        PairXrpJpy.HighLowInfoText = "⇑⇑⇑⇑⇑⇑　過去24時間最高値更新";
+                                        PairXrpJpy.HighLowInfoText = "⇑⇑⇑⇑⇑⇑　過去24時間最高値更新 " + PairXrpJpy.CurrentPairString;
 
                                         if ((isPlayed == false) && (PairXrpJpy.PlaySoundHighest24h == true))
                                         {
@@ -6664,7 +6679,7 @@ namespace BitDesk.ViewModels
                                     if (tick.LTP <= PairXrpJpy.LowestIn24Price)
                                     {
                                         PairXrpJpy.HighLowInfoTextColorFlag = false;
-                                        PairXrpJpy.HighLowInfoText = "⇓⇓⇓⇓⇓⇓　過去24時間最安値更新";
+                                        PairXrpJpy.HighLowInfoText = "⇓⇓⇓⇓⇓⇓　過去24時間最安値更新 " + PairXrpJpy.CurrentPairString;
 
                                         if ((isPlayed == false) && (PairXrpJpy.PlaySoundLowest24h == true))
                                         {
@@ -6882,7 +6897,7 @@ namespace BitDesk.ViewModels
                                         if (tick.LTP >= PairEthBtc.AlarmPlus)
                                         {
                                             PairEthBtc.HighLowInfoTextColorFlag = true;
-                                            PairEthBtc.HighLowInfoText = "⇑⇑⇑　高値アラーム";
+                                            PairEthBtc.HighLowInfoText = "⇑⇑⇑　高値アラーム " + PairEthBtc.CurrentPairString;
 
                                             if (PlaySound)
                                             {
@@ -6902,7 +6917,7 @@ namespace BitDesk.ViewModels
                                         if (tick.LTP <= PairEthBtc.AlarmMinus)
                                         {
                                             PairEthBtc.HighLowInfoTextColorFlag = false;
-                                            PairEthBtc.HighLowInfoText = "⇓⇓⇓　安値アラーム";
+                                            PairEthBtc.HighLowInfoText = "⇓⇓⇓　安値アラーム " + PairEthBtc.CurrentPairString;
                                             if (PlaySound)
                                             {
                                                 SystemSounds.Beep.Play();
@@ -6922,7 +6937,7 @@ namespace BitDesk.ViewModels
                                         if ((PairEthBtc.TickHistories.Count > 25) && ((PairEthBtc.BasePrice + 2000M) < tick.LTP))
                                         {
                                             PairEthBtc.HighLowInfoTextColorFlag = true;
-                                            PairEthBtc.HighLowInfoText = "⇑⇑⇑　起動後最高値更新";
+                                            PairEthBtc.HighLowInfoText = "⇑⇑⇑　起動後最高値更新 " + PairEthBtc.CurrentPairString;
 
                                             if ((isPlayed == false) && (PairEthBtc.PlaySoundHighest == true))
                                             {
@@ -6940,7 +6955,7 @@ namespace BitDesk.ViewModels
                                         if ((PairEthBtc.TickHistories.Count > 25) && ((PairEthBtc.BasePrice - 2000M) > tick.LTP))
                                         {
                                             PairEthBtc.HighLowInfoTextColorFlag = false;
-                                            PairEthBtc.HighLowInfoText = "⇓⇓⇓　起動後最安値更新";
+                                            PairEthBtc.HighLowInfoText = "⇓⇓⇓　起動後最安値更新 " + PairEthBtc.CurrentPairString;
 
                                             if ((isPlayed == false) && (PairEthBtc.PlaySoundLowest == true))
                                             {
@@ -6957,7 +6972,7 @@ namespace BitDesk.ViewModels
                                     if (tick.LTP >= PairEthBtc.HighestIn24Price)
                                     {
                                         PairEthBtc.HighLowInfoTextColorFlag = true;
-                                        PairEthBtc.HighLowInfoText = "⇑⇑⇑⇑⇑⇑　過去24時間最高値更新";
+                                        PairEthBtc.HighLowInfoText = "⇑⇑⇑⇑⇑⇑　過去24時間最高値更新 " + PairEthBtc.CurrentPairString;
 
                                         if ((isPlayed == false) && (PairEthBtc.PlaySoundHighest24h == true))
                                         {
@@ -6972,7 +6987,7 @@ namespace BitDesk.ViewModels
                                     if (tick.LTP <= PairEthBtc.LowestIn24Price)
                                     {
                                         PairEthBtc.HighLowInfoTextColorFlag = false;
-                                        PairEthBtc.HighLowInfoText = "⇓⇓⇓⇓⇓⇓　過去24時間最安値更新";
+                                        PairEthBtc.HighLowInfoText = "⇓⇓⇓⇓⇓⇓　過去24時間最安値更新 " + PairEthBtc.CurrentPairString;
 
                                         if ((isPlayed == false) && (PairEthBtc.PlaySoundLowest24h == true))
                                         {
@@ -7190,7 +7205,7 @@ namespace BitDesk.ViewModels
                                         if (tick.LTP >= PairMonaJpy.AlarmPlus)
                                         {
                                             PairMonaJpy.HighLowInfoTextColorFlag = true;
-                                            PairMonaJpy.HighLowInfoText = "⇑⇑⇑　高値アラーム";
+                                            PairMonaJpy.HighLowInfoText = "⇑⇑⇑　高値アラーム " + PairMonaJpy.CurrentPairString;
 
                                             if (PlaySound)
                                             {
@@ -7210,7 +7225,7 @@ namespace BitDesk.ViewModels
                                         if (tick.LTP <= PairMonaJpy.AlarmMinus)
                                         {
                                             PairMonaJpy.HighLowInfoTextColorFlag = false;
-                                            PairMonaJpy.HighLowInfoText = "⇓⇓⇓　安値アラーム";
+                                            PairMonaJpy.HighLowInfoText = "⇓⇓⇓　安値アラーム " + PairMonaJpy.CurrentPairString;
                                             if (PlaySound)
                                             {
                                                 SystemSounds.Beep.Play();
@@ -7230,7 +7245,7 @@ namespace BitDesk.ViewModels
                                         if ((PairMonaJpy.TickHistories.Count > 25) && ((PairMonaJpy.BasePrice + 2M) < tick.LTP))
                                         {
                                             PairMonaJpy.HighLowInfoTextColorFlag = true;
-                                            PairMonaJpy.HighLowInfoText = "⇑⇑⇑　起動後最高値更新";
+                                            PairMonaJpy.HighLowInfoText = "⇑⇑⇑　起動後最高値更新 " + PairMonaJpy.CurrentPairString;
 
                                             if ((isPlayed == false) && (PairMonaJpy.PlaySoundHighest == true))
                                             {
@@ -7248,7 +7263,7 @@ namespace BitDesk.ViewModels
                                         if ((PairMonaJpy.TickHistories.Count > 25) && ((PairMonaJpy.BasePrice - 2M) > tick.LTP))
                                         {
                                             PairMonaJpy.HighLowInfoTextColorFlag = false;
-                                            PairMonaJpy.HighLowInfoText = "⇓⇓⇓　起動後最安値更新";
+                                            PairMonaJpy.HighLowInfoText = "⇓⇓⇓　起動後最安値更新 " + PairMonaJpy.CurrentPairString;
 
                                             if ((isPlayed == false) && (PairMonaJpy.PlaySoundLowest == true))
                                             {
@@ -7265,7 +7280,7 @@ namespace BitDesk.ViewModels
                                     if (tick.LTP >= PairMonaJpy.HighestIn24Price)
                                     {
                                         PairMonaJpy.HighLowInfoTextColorFlag = true;
-                                        PairMonaJpy.HighLowInfoText = "⇑⇑⇑⇑⇑⇑　過去24時間最高値更新";
+                                        PairMonaJpy.HighLowInfoText = "⇑⇑⇑⇑⇑⇑　過去24時間最高値更新 " + PairMonaJpy.CurrentPairString;
 
                                         if ((isPlayed == false) && (PairMonaJpy.PlaySoundHighest24h == true))
                                         {
@@ -7280,7 +7295,7 @@ namespace BitDesk.ViewModels
                                     if (tick.LTP <= PairMonaJpy.LowestIn24Price)
                                     {
                                         PairMonaJpy.HighLowInfoTextColorFlag = false;
-                                        PairMonaJpy.HighLowInfoText = "⇓⇓⇓⇓⇓⇓　過去24時間最安値更新";
+                                        PairMonaJpy.HighLowInfoText = "⇓⇓⇓⇓⇓⇓　過去24時間最安値更新 " + PairMonaJpy.CurrentPairString;
 
                                         if ((isPlayed == false) && (PairMonaJpy.PlaySoundLowest24h == true))
                                         {
@@ -7502,7 +7517,7 @@ namespace BitDesk.ViewModels
                                         if (tick.LTP >= PairLtcBtc.AlarmPlus)
                                         {
                                             PairLtcBtc.HighLowInfoTextColorFlag = true;
-                                            PairLtcBtc.HighLowInfoText = "⇑⇑⇑　高値アラーム";
+                                            PairLtcBtc.HighLowInfoText = "⇑⇑⇑　高値アラーム " + PairLtcBtc.CurrentPairString;
 
                                             if (PlaySound)
                                             {
@@ -7522,7 +7537,7 @@ namespace BitDesk.ViewModels
                                         if (tick.LTP <= PairLtcBtc.AlarmMinus)
                                         {
                                             PairLtcBtc.HighLowInfoTextColorFlag = false;
-                                            PairLtcBtc.HighLowInfoText = "⇓⇓⇓　安値アラーム";
+                                            PairLtcBtc.HighLowInfoText = "⇓⇓⇓　安値アラーム " + PairLtcBtc.CurrentPairString;
                                             if (PlaySound)
                                             {
                                                 SystemSounds.Beep.Play();
@@ -7542,7 +7557,7 @@ namespace BitDesk.ViewModels
                                         if ((PairLtcBtc.TickHistories.Count > 25) && ((PairLtcBtc.BasePrice + 0.0001M) < tick.LTP))
                                         {
                                             PairLtcBtc.HighLowInfoTextColorFlag = true;
-                                            PairLtcBtc.HighLowInfoText = "⇑⇑⇑　起動後最高値更新";
+                                            PairLtcBtc.HighLowInfoText = "⇑⇑⇑　起動後最高値更新 " + PairLtcBtc.CurrentPairString;
 
                                             if ((isPlayed == false) && (PairLtcBtc.PlaySoundHighest == true))
                                             {
@@ -7560,7 +7575,7 @@ namespace BitDesk.ViewModels
                                         if ((PairLtcBtc.TickHistories.Count > 25) && ((PairLtcBtc.BasePrice - 0.0001M) > tick.LTP))
                                         {
                                             PairLtcBtc.HighLowInfoTextColorFlag = false;
-                                            PairLtcBtc.HighLowInfoText = "⇓⇓⇓　起動後最安値更新";
+                                            PairLtcBtc.HighLowInfoText = "⇓⇓⇓　起動後最安値更新 " + PairLtcBtc.CurrentPairString;
 
                                             if ((isPlayed == false) && (PairLtcBtc.PlaySoundLowest == true))
                                             {
@@ -7577,7 +7592,7 @@ namespace BitDesk.ViewModels
                                     if (tick.LTP >= PairLtcBtc.HighestIn24Price)
                                     {
                                         PairLtcBtc.HighLowInfoTextColorFlag = true;
-                                        PairLtcBtc.HighLowInfoText = "⇑⇑⇑⇑⇑⇑　過去24時間最高値更新";
+                                        PairLtcBtc.HighLowInfoText = "⇑⇑⇑⇑⇑⇑　過去24時間最高値更新 " + PairLtcBtc.CurrentPairString;
 
                                         if ((isPlayed == false) && (PairLtcBtc.PlaySoundHighest24h == true))
                                         {
@@ -7592,7 +7607,7 @@ namespace BitDesk.ViewModels
                                     if (tick.LTP <= PairLtcBtc.LowestIn24Price)
                                     {
                                         PairLtcBtc.HighLowInfoTextColorFlag = false;
-                                        PairLtcBtc.HighLowInfoText = "⇓⇓⇓⇓⇓⇓　過去24時間最安値更新";
+                                        PairLtcBtc.HighLowInfoText = "⇓⇓⇓⇓⇓⇓　過去24時間最安値更新 " + PairLtcBtc.CurrentPairString;
 
                                         if ((isPlayed == false) && (PairLtcBtc.PlaySoundLowest24h == true))
                                         {
@@ -7814,7 +7829,7 @@ namespace BitDesk.ViewModels
                                         if (tick.LTP >= PairBchJpy.AlarmPlus)
                                         {
                                             PairBchJpy.HighLowInfoTextColorFlag = true;
-                                            PairBchJpy.HighLowInfoText = "⇑⇑⇑　高値アラーム";
+                                            PairBchJpy.HighLowInfoText = "⇑⇑⇑　高値アラーム " + PairBchJpy.CurrentPairString;
 
                                             if (PlaySound)
                                             {
@@ -7834,7 +7849,7 @@ namespace BitDesk.ViewModels
                                         if (tick.LTP <= PairBchJpy.AlarmMinus)
                                         {
                                             PairBchJpy.HighLowInfoTextColorFlag = false;
-                                            PairBchJpy.HighLowInfoText = "⇓⇓⇓　安値アラーム";
+                                            PairBchJpy.HighLowInfoText = "⇓⇓⇓　安値アラーム " + PairBchJpy.CurrentPairString;
                                             if (PlaySound)
                                             {
                                                 SystemSounds.Beep.Play();
@@ -7854,7 +7869,7 @@ namespace BitDesk.ViewModels
                                         if ((PairBchJpy.TickHistories.Count > 25) && ((PairBchJpy.BasePrice + 200M) < tick.LTP))
                                         {
                                             PairBchJpy.HighLowInfoTextColorFlag = true;
-                                            PairBchJpy.HighLowInfoText = "⇑⇑⇑　起動後最高値更新";
+                                            PairBchJpy.HighLowInfoText = "⇑⇑⇑　起動後最高値更新 " + PairBchJpy.CurrentPairString;
 
                                             if ((isPlayed == false) && (PairBchJpy.PlaySoundHighest == true))
                                             {
@@ -7872,7 +7887,7 @@ namespace BitDesk.ViewModels
                                         if ((PairBchJpy.TickHistories.Count > 25) && ((PairBchJpy.BasePrice - 200M) > tick.LTP))
                                         {
                                             PairBchJpy.HighLowInfoTextColorFlag = false;
-                                            PairBchJpy.HighLowInfoText = "⇓⇓⇓　起動後最安値更新";
+                                            PairBchJpy.HighLowInfoText = "⇓⇓⇓　起動後最安値更新 " + PairBchJpy.CurrentPairString;
 
                                             if ((isPlayed == false) && (PairBchJpy.PlaySoundLowest == true))
                                             {
@@ -7889,7 +7904,7 @@ namespace BitDesk.ViewModels
                                     if (tick.LTP >= PairBchJpy.HighestIn24Price)
                                     {
                                         PairBchJpy.HighLowInfoTextColorFlag = true;
-                                        PairBchJpy.HighLowInfoText = "⇑⇑⇑⇑⇑⇑　過去24時間最高値更新";
+                                        PairBchJpy.HighLowInfoText = "⇑⇑⇑⇑⇑⇑　過去24時間最高値更新 " + PairBchJpy.CurrentPairString;
 
                                         if ((isPlayed == false) && (PairBchJpy.PlaySoundHighest24h == true))
                                         {
@@ -7904,7 +7919,7 @@ namespace BitDesk.ViewModels
                                     if (tick.LTP <= PairBchJpy.LowestIn24Price)
                                     {
                                         PairBchJpy.HighLowInfoTextColorFlag = false;
-                                        PairBchJpy.HighLowInfoText = "⇓⇓⇓⇓⇓⇓　過去24時間最安値更新";
+                                        PairBchJpy.HighLowInfoText = "⇓⇓⇓⇓⇓⇓　過去24時間最安値更新 " + PairBchJpy.CurrentPairString;
 
                                         if ((isPlayed == false) && (PairBchJpy.PlaySoundLowest24h == true))
                                         {
@@ -8797,7 +8812,6 @@ namespace BitDesk.ViewModels
 
 
                 #endregion
-
 
                 #region == チャート関連 ==
 
@@ -11382,19 +11396,19 @@ namespace BitDesk.ViewModels
                     {
                         try
                         {
-
                             // ポイント作成
                             OhlcPoint p = new OhlcPoint((double)newData.Open, (double)newData.High, (double)newData.Low, (double)newData.Close);
-                            // 追加
-                            chartSeries[0].Values.Add(p);
                             // 一番古いの削除
                             chartSeries[0].Values.RemoveAt(0);
+                            // 追加
+                            chartSeries[0].Values.Add(p);
 
                             // 出来高
-                            chartSeries[1].Values.Add((double)newData.Volume);
                             chartSeries[1].Values.RemoveAt(0);
+                            chartSeries[1].Values.Add((double)newData.Volume);
 
                             // ラベル
+                            chartAxisX[0].Labels.RemoveAt(0);
                             if (ct == CandleTypes.OneMin)
                             {
                                 chartAxisX[0].Labels.Add(newData.TimeStamp.ToString("HH:mm"));
@@ -11412,20 +11426,6 @@ namespace BitDesk.ViewModels
                             {
                                 throw new System.InvalidOperationException("UpdateChart: 不正な CandleTypes");
                             }
-                            chartAxisX[0].Labels.RemoveAt(0);
-
-                            /*
-                            // チャート最低値、最高値のセット
-                            if (chartAxisY[0].MaxValue < (double)newData.High)
-                            {
-                                chartAxisY[0].MaxValue = (double)newData.High;
-                            }
-
-                            if (chartAxisY[0].MinValue > (double)newData.Low)
-                            {
-                                chartAxisY[0].MinValue = (double)newData.Low;
-                            }
-                            */
 
                         }
                         catch (Exception ex)
