@@ -4,7 +4,7 @@
 ## ビットバンク向け仮想通貨トレーディングアプリ 
 #### - Cryptocurrency trading app made for Bitbank.cc
 
-マイクロソフトストアで公開しようとしたら、「App Policies: 10.8.3 Collection of Banking and Financial Information - Apps that collect financial data must be Business account type」という事で、「ファインシャル情報を取得するアプリは法人でないとなりません」とあえなく却下。ビットバンクさん、公式アプリとして採用してくれませんか？
+マイクロソフトストアで公開しようとしたら、「Microsft Store App Policies: 10.8.3 Collection of Banking and Financial Information - Apps that collect financial data must be Business account type」という事で、「ファインシャル情報を取得するアプリは法人（ビジネスアカウント）でないとなりません」とあえなく却下。ビットバンクさん、公式アプリとして採用してくれませんか？^^
 
 ![alt text](https://github.com/torum/BitDesk/blob/master/docs/Images/BitDesk-screenshot.png?raw=true)
 
@@ -26,4 +26,4 @@
 - マイクロソフト ストアでダウンロード可能予定
  
 ### 更新情報（Twitter）： 
-https://twitter.com/torum_apps
+[https://twitter.com/torum_apps](https://twitter.com/torum_apps)
