@@ -26,4 +26,4 @@
 - マイクロソフト ストアでダウンロード可能予定
  
 ### 更新情報（Twitter）： 
-https://twitter.com/torum_apps
+[https://twitter.com/torum_apps](https://twitter.com/torum_apps)
