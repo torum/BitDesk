@@ -21,6 +21,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Media;
+using System.Text;
 
 namespace BitDesk.ViewModels
 {
@@ -1548,7 +1549,7 @@ namespace BitDesk.ViewModels
 
     #region == 自動取引 AutoTrade クラス ==
 
-    public class AutoTrade2 : ViewModelBase
+    public class AutoTrade : ViewModelBase
     {
         // 停滞カウンター
         private int _counter;
@@ -1887,8 +1888,6 @@ namespace BitDesk.ViewModels
             }
         }
 
-
-
         // 想定利幅
         private decimal _profitAmount;
         public decimal ProfitAmount
@@ -2066,11 +2065,7 @@ namespace BitDesk.ViewModels
             }
         }
 
-
-
-
-
-        public AutoTrade2()
+        public AutoTrade()
         {
 
         }
@@ -2147,7 +2142,7 @@ namespace BitDesk.ViewModels
             // 通貨ペア
             private Pairs _p;
 
-            public Pairs pair
+            public Pairs ThisPair
             {
                 get
                 {
@@ -2963,6 +2958,20 @@ namespace BitDesk.ViewModels
                 get { return this._trades; }
             }
 
+            // 特殊注文IFDOCO注文一覧 Ifdoco order list
+            private ObservableCollection<Ifdoco> _ifdocos = new ObservableCollection<Ifdoco>();
+            public ObservableCollection<Ifdoco> Ifdocos
+            {
+                get { return this._ifdocos; }
+            }
+
+            // 自動取引
+            private ObservableCollection<AutoTrade> _autoTrades = new ObservableCollection<AutoTrade>();
+            public ObservableCollection<AutoTrade> AutoTrades
+            {
+                get { return this._autoTrades; }
+            }
+
             // コンストラクタ
             public Pair(Pairs p, double fontSize, string ltpFormstString, decimal grouping100, decimal grouping1000)
             {
@@ -2976,6 +2985,7 @@ namespace BitDesk.ViewModels
                 BindingOperations.EnableCollectionSynchronization(this._tickHistory, new object());
                 BindingOperations.EnableCollectionSynchronization(this._activeOrders, new object());
                 BindingOperations.EnableCollectionSynchronization(this._trades, new object());
+                BindingOperations.EnableCollectionSynchronization(this._autoTrades, new object());
             }
 
         }
@@ -3011,7 +3021,7 @@ namespace BitDesk.ViewModels
         {
             get
             {
-                return true;
+                return false;
             }
         }
 
@@ -3098,7 +3108,7 @@ namespace BitDesk.ViewModels
         // チャートの一覧モードフラグ
         private bool _allChartMode = false;
 
-        // LiveChartの不明なエクセプションが起きるので、ver1が出るまで使わない。
+        // LiveChartの不明なエクセプションが起きるので、ver 1 が出るまで使わない。
         private bool _showAllCharts = false;
         public bool ShowAllCharts
         {
@@ -3994,7 +4004,10 @@ namespace BitDesk.ViewModels
                 if (_activePairIndex == 0)
                 {
                     CurrentPair = Pairs.btc_jpy;
-                    ActivePair = PairBtcJpy;
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        ActivePair = PairBtcJpy;
+                    });
 
                     DepthGroupingChanged = true;
 
@@ -4019,7 +4032,10 @@ namespace BitDesk.ViewModels
                 else if (_activePairIndex == 1)
                 {
                     CurrentPair = Pairs.xrp_jpy;
-                    ActivePair = PairXrpJpy;
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        ActivePair = PairXrpJpy;
+                    });
 
                     DepthGroupingChanged = true;
 
@@ -4042,7 +4058,10 @@ namespace BitDesk.ViewModels
                 else if (_activePairIndex == 2)
                 {
                     CurrentPair = Pairs.ltc_btc;
-                    ActivePair = PairLtcBtc;
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        ActivePair = PairLtcBtc;
+                    });
 
                     DepthGroupingChanged = true;
 
@@ -4065,7 +4084,10 @@ namespace BitDesk.ViewModels
                 else if (_activePairIndex == 3)
                 {
                     CurrentPair = Pairs.eth_btc;
-                    ActivePair = PairEthBtc;
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        ActivePair = PairEthBtc;
+                    });
 
                     DepthGroupingChanged = true;
 
@@ -4088,7 +4110,10 @@ namespace BitDesk.ViewModels
                 else if (_activePairIndex == 4)
                 {
                     CurrentPair = Pairs.mona_jpy;
-                    ActivePair = PairMonaJpy;
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        ActivePair = PairMonaJpy;
+                    });
 
                     DepthGroupingChanged = true;
 
@@ -4111,7 +4136,10 @@ namespace BitDesk.ViewModels
                 else if (_activePairIndex == 5)
                 {
                     CurrentPair = Pairs.bcc_jpy;
-                    ActivePair = PairBchJpy;
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        ActivePair = PairBchJpy;
+                    });
 
                     DepthGroupingChanged = true;
 
@@ -4656,13 +4684,6 @@ namespace BitDesk.ViewModels
         public ObservableCollection<Rss> BitcoinNewsEn
         {
             get { return this._bitcoinNewsEn; }
-        }
-
-        // 自動取引2
-        private ObservableCollection<AutoTrade2> _autoTrades2 = new ObservableCollection<AutoTrade2>();
-        public ObservableCollection<AutoTrade2> AutoTrades2
-        {
-            get { return this._autoTrades2; }
         }
 
 
@@ -5585,7 +5606,7 @@ namespace BitDesk.ViewModels
                 this.NotifyPropertyChanged("AutoTradeTitle");
 
                 // 自動取引ループスタート
-                //if (_autoTradeStart) UpdateAutoTrade2();
+                //if (_autoTradeStart) UpdateAutoTrade();
 
             }
         }
@@ -6834,6 +6855,1037 @@ namespace BitDesk.ViewModels
 
         #endregion
 
+        #region == 特殊注文(IFDOCO)用のプロパティ ==
+
+        #region == IFD注文 ==
+
+        // 注文結果表示
+        private string _iFDOrderCommandResult;
+        public string IFDOrderCommandResult
+        {
+            get { return _iFDOrderCommandResult; }
+            set
+            {
+                if (_iFDOrderCommandResult == value)
+                    return;
+
+                _iFDOrderCommandResult = value;
+                this.NotifyPropertyChanged("IFDOrderCommandResult");
+            }
+        }
+
+        // 入力数値エラー表示
+        private string _iFDOrderCommandErrorString;
+        public string IFDOrderCommandErrorString
+        {
+            get { return _iFDOrderCommandErrorString; }
+            set
+            {
+                if (_iFDOrderCommandErrorString == value)
+                    return;
+
+                _iFDOrderCommandErrorString = value;
+                this.NotifyPropertyChanged("IFDOrderCommandErrorString");
+            }
+        }
+
+        // IFD注文 ifd
+
+        // 数量
+        private decimal _iFD_IfdAmount;
+        public decimal IFD_IfdAmount
+        {
+            get
+            {
+                return _iFD_IfdAmount;
+            }
+            set
+            {
+                if (_iFD_IfdAmount == value)
+                    return;
+
+                _iFD_IfdAmount = value;
+                this.NotifyPropertyChanged("IFD_IfdAmount");
+                this.NotifyPropertyChanged("IFD_IfdEstimatePrice");
+            }
+        }
+
+        // 価格
+        private decimal _iFD_IfdPrice;
+        public decimal IFD_IfdPrice
+        {
+            get
+            {
+                return _iFD_IfdPrice;
+            }
+            set
+            {
+                if (_iFD_IfdPrice == value)
+                    return;
+
+                _iFD_IfdPrice = value;
+                this.NotifyPropertyChanged("IFD_IfdPrice");
+                this.NotifyPropertyChanged("IFD_IfdEstimatePrice");
+            }
+        }
+
+        // タイプ（指値・成行）
+        private IfdocoTypes _iFD_IfdType;
+        public IfdocoTypes IFD_IfdType
+        {
+            get
+            {
+                return _iFD_IfdType;
+            }
+            set
+            {
+                if (_iFD_IfdType == value)
+                    return;
+
+                _iFD_IfdType = value;
+                this.NotifyPropertyChanged("IFD_IfdType");
+                this.NotifyPropertyChanged("IFD_IfdEstimatePrice");
+            }
+        }
+
+        // サイド（売り・買い）
+        private IfdocoSide _iFD_IfdSide;
+        public IfdocoSide IFD_IfdSide
+        {
+            get
+            {
+                return _iFD_IfdSide;
+            }
+            set
+            {
+                if (_iFD_IfdSide == value)
+                    return;
+
+                _iFD_IfdSide = value;
+                this.NotifyPropertyChanged("IFD_IfdSide");
+                this.NotifyPropertyChanged("IFD_IfdEstimatePrice");
+            }
+        }
+
+        public decimal IFD_IfdEstimatePrice
+        {
+            get
+            {
+                if (_iFD_IfdType == IfdocoTypes.limit)
+                {
+                    return _iFD_IfdAmount * _iFD_IfdPrice;
+                }
+                else if (_iFD_IfdType == IfdocoTypes.market)
+                {
+                    if (_iFD_IfdSide == IfdocoSide.buy)
+                    {
+                        return _iFD_IfdAmount * ActivePair.Ask;
+                    }
+                    else if (_iFD_IfdSide == IfdocoSide.sell)
+                    {
+                        return _iFD_IfdAmount * ActivePair.Bid;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+        }
+
+        // IFD注文 ifd の done
+
+        // 数量
+        private decimal _iFD_DoAmount;
+        public decimal IFD_DoAmount
+        {
+            get
+            {
+                return _iFD_DoAmount;
+            }
+            set
+            {
+                if (_iFD_DoAmount == value)
+                    return;
+
+                _iFD_DoAmount = value;
+                this.NotifyPropertyChanged("IFD_DoAmount");
+                this.NotifyPropertyChanged("IFD_DoEstimatePrice");
+            }
+        }
+
+        // 価格
+        private decimal _iFD_DoPrice;
+        public decimal IFD_DoPrice
+        {
+            get
+            {
+                return _iFD_DoPrice;
+            }
+            set
+            {
+                if (_iFD_DoPrice == value)
+                    return;
+
+                _iFD_DoPrice = value;
+                this.NotifyPropertyChanged("IFD_DoPrice");
+                this.NotifyPropertyChanged("IFD_DoEstimatePrice");
+            }
+        }
+
+        // タイプ（指値・成行）
+        private IfdocoTypes _iFD_DoType;
+        public IfdocoTypes IFD_DoType
+        {
+            get
+            {
+                return _iFD_DoType;
+            }
+            set
+            {
+                if (_iFD_DoType == value)
+                    return;
+
+                _iFD_DoType = value;
+                this.NotifyPropertyChanged("IFD_DoType");
+                this.NotifyPropertyChanged("IFD_DoEstimatePrice");
+            }
+        }
+
+        // サイド（売り・買い）
+        private IfdocoSide _iFD_DoSide = IfdocoSide.sell;
+        public IfdocoSide IFD_DoSide
+        {
+            get
+            {
+                return _iFD_DoSide;
+            }
+            set
+            {
+                if (_iFD_DoSide == value)
+                    return;
+
+                _iFD_DoSide = value;
+                this.NotifyPropertyChanged("IFD_DoSide");
+                this.NotifyPropertyChanged("IFD_DoEstimatePrice");
+            }
+        }
+
+        public decimal IFD_DoEstimatePrice
+        {
+            get
+            {
+                if (_iFD_DoType == IfdocoTypes.limit)
+                {
+                    return _iFD_DoAmount * _iFD_DoPrice;
+                }
+                else if (_iFD_DoType == IfdocoTypes.market)
+                {
+                    if (_iFD_DoSide == IfdocoSide.buy)
+                    {
+                        return _iFD_DoAmount * ActivePair.Ask;
+                    }
+                    else if (_iFD_DoSide == IfdocoSide.sell)
+                    {
+                        return _iFD_DoAmount * ActivePair.Bid;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+        }
+
+        // Doトリガー価格
+        private decimal _iFD_DoTriggerPrice;
+        public decimal IFD_DoTriggerPrice
+        {
+            get
+            {
+                return _iFD_DoTriggerPrice;
+            }
+            set
+            {
+                if (_iFD_DoTriggerPrice == value)
+                    return;
+
+                _iFD_DoTriggerPrice = value;
+                this.NotifyPropertyChanged("IFD_DoTriggerPrice");
+            }
+        }
+
+        // トリガー[以上(0)以下(1)] // デフォ(1)
+        private int _iFD_DoTriggerUpDown = 0;
+        public int IFD_DoTriggerUpDown
+        {
+            get
+            {
+                return _iFD_DoTriggerUpDown;
+            }
+            set
+            {
+                if (_iFD_DoTriggerUpDown == value)
+                    return;
+
+                _iFD_DoTriggerUpDown = value;
+                this.NotifyPropertyChanged("IFD_DoTriggerUpDown");
+            }
+        }
+
+        #endregion
+
+        #region == OCO注文 ==
+
+        // 注文結果表示
+        private string _ocoOrderCommandResult;
+        public string OcoOrderCommandResult
+        {
+            get { return _ocoOrderCommandResult; }
+            set
+            {
+                if (_ocoOrderCommandResult == value)
+                    return;
+
+                _ocoOrderCommandResult = value;
+                this.NotifyPropertyChanged("OcoOrderCommandResult");
+            }
+        }
+
+        // 入力エラー表示
+        private string _ocoOrderCommandErrorString;
+        public string OcoOrderCommandErrorString
+        {
+            get { return _ocoOrderCommandErrorString; }
+            set
+            {
+                if (_ocoOrderCommandErrorString == value)
+                    return;
+
+                _ocoOrderCommandErrorString = value;
+                this.NotifyPropertyChanged("OcoOrderCommandErrorString");
+            }
+        }
+
+        // OCO注文 One
+
+        // 数量
+        private decimal _oCO_OneAmount;
+        public decimal OCO_OneAmount
+        {
+            get
+            {
+                return _oCO_OneAmount;
+            }
+            set
+            {
+                if (_oCO_OneAmount == value)
+                    return;
+
+                _oCO_OneAmount = value;
+                this.NotifyPropertyChanged("OCO_OneAmount");
+                this.NotifyPropertyChanged("OCO_OneEstimatePrice");
+            }
+        }
+
+        // 価格
+        private decimal _oCO_OnePrice;
+        public decimal OCO_OnePrice
+        {
+            get
+            {
+                return _oCO_OnePrice;
+            }
+            set
+            {
+                if (_oCO_OnePrice == value)
+                    return;
+
+                _oCO_OnePrice = value;
+                this.NotifyPropertyChanged("OCO_OnePrice");
+                this.NotifyPropertyChanged("OCO_OneEstimatePrice");
+            }
+        }
+
+        // タイプ（指値・成行）
+        private IfdocoTypes _oCO_OneType;
+        public IfdocoTypes OCO_OneType
+        {
+            get
+            {
+                return _oCO_OneType;
+            }
+            set
+            {
+                if (_oCO_OneType == value)
+                    return;
+
+                _oCO_OneType = value;
+                this.NotifyPropertyChanged("OCO_OneType");
+                this.NotifyPropertyChanged("OCO_OneEstimatePrice");
+            }
+        }
+
+        // サイド（売り・買い） // デフォ売り
+        private IfdocoSide _oCO_OneSide = IfdocoSide.sell;
+        public IfdocoSide OCO_OneSide
+        {
+            get
+            {
+                return _oCO_OneSide;
+            }
+            set
+            {
+                if (_oCO_OneSide == value)
+                    return;
+
+                _oCO_OneSide = value;
+                this.NotifyPropertyChanged("OCO_OneSide");
+                this.NotifyPropertyChanged("OCO_OneEstimatePrice");
+            }
+        }
+
+        // 予想金額
+        public decimal OCO_OneEstimatePrice
+        {
+            get
+            {
+                if (_oCO_OneType == IfdocoTypes.limit)
+                {
+                    return _oCO_OneAmount * _oCO_OnePrice;
+                }
+                else if (_oCO_OneType == IfdocoTypes.market)
+                {
+                    if (_oCO_OneSide == IfdocoSide.buy)
+                    {
+                        return _oCO_OneAmount * ActivePair.Ask;
+                    }
+                    else if (_oCO_OneSide == IfdocoSide.sell)
+                    {
+                        return _oCO_OneAmount * ActivePair.Bid;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+        }
+
+        // トリガーOne価格
+        private decimal _oCO_OneTriggerPrice;
+        public decimal OCO_OneTriggerPrice
+        {
+            get
+            {
+                return _oCO_OneTriggerPrice;
+            }
+            set
+            {
+                if (_oCO_OneTriggerPrice == value)
+                    return;
+
+                _oCO_OneTriggerPrice = value;
+                this.NotifyPropertyChanged("OCO_OneTriggerPrice");
+            }
+        }
+
+        // トリガー[以上(0)以下(1)] // デフォ(0)
+        private int _oCO_OneTriggerUpDown = 0;
+        public int OCO_OneTriggerUpDown
+        {
+            get
+            {
+                return _oCO_OneTriggerUpDown;
+            }
+            set
+            {
+                if (_oCO_OneTriggerUpDown == value)
+                    return;
+
+                _oCO_OneTriggerUpDown = value;
+                this.NotifyPropertyChanged("OCO_OneTriggerUpDown");
+            }
+        }
+
+        // OCO注文 Other
+
+        // 数量
+        private decimal _oCO_OtherAmount;
+        public decimal OCO_OtherAmount
+        {
+            get
+            {
+                return _oCO_OtherAmount;
+            }
+            set
+            {
+                if (_oCO_OtherAmount == value)
+                    return;
+
+                _oCO_OtherAmount = value;
+                this.NotifyPropertyChanged("OCO_OtherAmount");
+                this.NotifyPropertyChanged("OCO_OtherEstimatePrice");
+            }
+        }
+
+        // 価格
+        private decimal _oCO_OtherPrice;
+        public decimal OCO_OtherPrice
+        {
+            get
+            {
+                return _oCO_OtherPrice;
+            }
+            set
+            {
+                if (_oCO_OtherPrice == value)
+                    return;
+
+                _oCO_OtherPrice = value;
+                this.NotifyPropertyChanged("OCO_OtherPrice");
+                this.NotifyPropertyChanged("OCO_OtherEstimatePrice");
+            }
+        }
+
+        // タイプ（指値・成行）
+        private IfdocoTypes _oCO_OtherType;
+        public IfdocoTypes OCO_OtherType
+        {
+            get
+            {
+                return _oCO_OtherType;
+            }
+            set
+            {
+                if (_oCO_OtherType == value)
+                    return;
+
+                _oCO_OtherType = value;
+                this.NotifyPropertyChanged("OCO_OtherType");
+                this.NotifyPropertyChanged("OCO_OtherEstimatePrice");
+            }
+        }
+
+        // サイド（売り・買い） // デフォ売り
+        private IfdocoSide _oCO_OtherSide = IfdocoSide.sell;
+        public IfdocoSide OCO_OtherSide
+        {
+            get
+            {
+                return _oCO_OtherSide;
+            }
+            set
+            {
+                if (_oCO_OtherSide == value)
+                    return;
+
+                _oCO_OtherSide = value;
+                this.NotifyPropertyChanged("OCO_OtherSide");
+                this.NotifyPropertyChanged("OCO_OtherEstimatePrice");
+            }
+        }
+
+        // 予想金額
+        public decimal OCO_OtherEstimatePrice
+        {
+            get
+            {
+                if (_oCO_OtherType == IfdocoTypes.limit)
+                {
+                    return _oCO_OtherAmount * _oCO_OtherPrice;
+                }
+                else if (_oCO_OtherType == IfdocoTypes.market)
+                {
+                    if (_oCO_OtherSide == IfdocoSide.buy)
+                    {
+                        return _oCO_OtherAmount * ActivePair.Ask;
+                    }
+                    else if (_oCO_OtherSide == IfdocoSide.sell)
+                    {
+                        return _oCO_OtherAmount * ActivePair.Bid;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+        }
+
+        // トリガーOther価格
+        private decimal _oCO_OtherTriggerPrice;
+        public decimal OCO_OtherTriggerPrice
+        {
+            get
+            {
+                return _oCO_OtherTriggerPrice;
+            }
+            set
+            {
+                if (_oCO_OtherTriggerPrice == value)
+                    return;
+
+                _oCO_OtherTriggerPrice = value;
+                this.NotifyPropertyChanged("OCO_OtherTriggerPrice");
+            }
+        }
+
+        // トリガー[以上(0)以下(1)] // デフォ(1)
+        private int _oCO_OtherTriggerUpDown = 1;
+        public int OCO_OtherTriggerUpDown
+        {
+            get
+            {
+                return _oCO_OtherTriggerUpDown;
+            }
+            set
+            {
+                if (_oCO_OtherTriggerUpDown == value)
+                    return;
+
+                _oCO_OtherTriggerUpDown = value;
+                this.NotifyPropertyChanged("OCO_OtherTriggerUpDown");
+            }
+        }
+
+        #endregion
+
+        #region == IFDOCO注文 ==
+
+        // IFDOCO注文 ifd
+
+        private string _ifdocoOrderCommandResult;
+        public string IfdocoOrderCommandResult
+        {
+            get { return _ifdocoOrderCommandResult; }
+            set
+            {
+                if (_ifdocoOrderCommandResult == value)
+                    return;
+
+                _ifdocoOrderCommandResult = value;
+                this.NotifyPropertyChanged("IfdocoOrderCommandResult");
+            }
+        }
+
+        private string _ifdocoOrderCommandErrorString;
+        public string IfdocoOrderCommandErrorString
+        {
+            get { return _ifdocoOrderCommandErrorString; }
+            set
+            {
+                if (_ifdocoOrderCommandErrorString == value)
+                    return;
+
+                _ifdocoOrderCommandErrorString = value;
+                this.NotifyPropertyChanged("IfdocoOrderCommandErrorString");
+            }
+        }
+
+        // 数量
+        private decimal _iFDOCO_IfdAmount;
+        public decimal IFDOCO_IfdAmount
+        {
+            get
+            {
+                return _iFDOCO_IfdAmount;
+            }
+            set
+            {
+                if (_iFDOCO_IfdAmount == value)
+                    return;
+
+                _iFDOCO_IfdAmount = value;
+                this.NotifyPropertyChanged("IFDOCO_IfdAmount");
+                this.NotifyPropertyChanged("IFDOCO_IfdEstimatePrice");
+            }
+        }
+        // 価格
+        private decimal _iFDOCO_IfdPrice;
+        public decimal IFDOCO_IfdPrice
+        {
+            get
+            {
+                return _iFDOCO_IfdPrice;
+            }
+            set
+            {
+                if (_iFDOCO_IfdPrice == value)
+                    return;
+
+                _iFDOCO_IfdPrice = value;
+                this.NotifyPropertyChanged("IFDOCO_IfdPrice");
+                this.NotifyPropertyChanged("IFDOCO_IfdEstimatePrice");
+            }
+        }
+        // タイプ（指値・成行）
+        private IfdocoTypes _iFDOCO_IfdType;
+        public IfdocoTypes IFDOCO_IfdType
+        {
+            get
+            {
+                return _iFDOCO_IfdType;
+            }
+            set
+            {
+                if (_iFDOCO_IfdType == value)
+                    return;
+
+                _iFDOCO_IfdType = value;
+                this.NotifyPropertyChanged("IFDOCO_IfdType");
+                this.NotifyPropertyChanged("IFDOCO_IfdEstimatePrice");
+            }
+        }
+        // サイド（売り・買い）
+        private IfdocoSide _iFDOCO_IfdSide;
+        public IfdocoSide IFDOCO_IfdSide
+        {
+            get
+            {
+                return _iFDOCO_IfdSide;
+            }
+            set
+            {
+                if (_iFDOCO_IfdSide == value)
+                    return;
+
+                _iFDOCO_IfdSide = value;
+                this.NotifyPropertyChanged("IFDOCO_IfdSide");
+                this.NotifyPropertyChanged("IFDOCO_IfdEstimatePrice");
+            }
+        }
+        public decimal IFDOCO_IfdEstimatePrice
+        {
+            get
+            {
+                if (_iFDOCO_IfdType == IfdocoTypes.limit)
+                {
+                    return _iFDOCO_IfdAmount * _iFDOCO_IfdPrice;
+                }
+                else if (_iFDOCO_IfdType == IfdocoTypes.market)
+                {
+                    if (_iFDOCO_IfdSide == IfdocoSide.buy)
+                    {
+                        return _iFDOCO_IfdAmount * ActivePair.Ask;
+                    }
+                    else if (_iFDOCO_IfdSide == IfdocoSide.sell)
+                    {
+                        return _iFDOCO_IfdAmount * ActivePair.Bid;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+        }
+
+        // IFDOCO注文 One
+        // 数量
+        private decimal _iFDOCO_OneAmount;
+        public decimal IFDOCO_OneAmount
+        {
+            get
+            {
+                return _iFDOCO_OneAmount;
+            }
+            set
+            {
+                if (_iFDOCO_OneAmount == value)
+                    return;
+
+                _iFDOCO_OneAmount = value;
+                this.NotifyPropertyChanged("IFDOCO_OneAmount");
+                this.NotifyPropertyChanged("IFDOCO_OneEstimatePrice");
+            }
+        }
+        // 価格
+        private decimal _iFDOCO_OnePrice;
+        public decimal IFDOCO_OnePrice
+        {
+            get
+            {
+                return _iFDOCO_OnePrice;
+            }
+            set
+            {
+                if (_iFDOCO_OnePrice == value)
+                    return;
+
+                _iFDOCO_OnePrice = value;
+                this.NotifyPropertyChanged("IFDOCO_OnePrice");
+                this.NotifyPropertyChanged("IFDOCO_OneEstimatePrice");
+            }
+        }
+        // タイプ（指値・成行）
+        private IfdocoTypes _iFDOCO_OneType;
+        public IfdocoTypes IFDOCO_OneType
+        {
+            get
+            {
+                return _iFDOCO_OneType;
+            }
+            set
+            {
+                if (_iFDOCO_OneType == value)
+                    return;
+
+                _iFDOCO_OneType = value;
+                this.NotifyPropertyChanged("IFDOCO_OneType");
+                this.NotifyPropertyChanged("IFDOCO_OneEstimatePrice");
+            }
+        }
+        // サイド（売り・買い）
+        private IfdocoSide _iFDOCO_OneSide = IfdocoSide.sell;
+        public IfdocoSide IFDOCO_OneSide
+        {
+            get
+            {
+                return _iFDOCO_OneSide;
+            }
+            set
+            {
+                if (_iFDOCO_OneSide == value)
+                    return;
+
+                _iFDOCO_OneSide = value;
+                this.NotifyPropertyChanged("IFDOCO_OneSide");
+                this.NotifyPropertyChanged("IFDOCO_OneEstimatePrice");
+            }
+        }
+        public decimal IFDOCO_OneEstimatePrice
+        {
+            get
+            {
+                if (_iFDOCO_OneType == IfdocoTypes.limit)
+                {
+                    return _iFDOCO_OneAmount * _iFDOCO_OnePrice;
+                }
+                else if (_iFDOCO_OneType == IfdocoTypes.market)
+                {
+                    if (_iFDOCO_OneSide == IfdocoSide.buy)
+                    {
+                        return _iFDOCO_OneAmount * ActivePair.Ask;
+                    }
+                    else if (_iFDOCO_OneSide == IfdocoSide.sell)
+                    {
+                        return _iFDOCO_OneAmount * ActivePair.Bid;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+        }
+
+        // トリガーOne価格
+        private decimal _iFDOCO_OneTriggerPrice;
+        public decimal IFDOCO_OneTriggerPrice
+        {
+            get
+            {
+                return _iFDOCO_OneTriggerPrice;
+            }
+            set
+            {
+                if (_iFDOCO_OneTriggerPrice == value)
+                    return;
+
+                _iFDOCO_OneTriggerPrice = value;
+                this.NotifyPropertyChanged("IFDOCO_OneTriggerPrice");
+            }
+        }
+
+        // トリガー[以上(0)以下(1)] // デフォ(0)
+        private int _iFDOCO_OneTriggerUpDown = 0;
+        public int IFDOCO_OneTriggerUpDown
+        {
+            get
+            {
+                return _iFDOCO_OneTriggerUpDown;
+            }
+            set
+            {
+                if (_iFDOCO_OneTriggerUpDown == value)
+                    return;
+
+                _iFDOCO_OneTriggerUpDown = value;
+                this.NotifyPropertyChanged("IFDOCO_OneTriggerUpDown");
+            }
+        }
+
+
+        // IFDOCO注文 Other
+        // 数量
+        private decimal _iFDOCO_OtherAmount;
+        public decimal IFDOCO_OtherAmount
+        {
+            get
+            {
+                return _iFDOCO_OtherAmount;
+            }
+            set
+            {
+                if (_iFDOCO_OtherAmount == value)
+                    return;
+
+                _iFDOCO_OtherAmount = value;
+                this.NotifyPropertyChanged("IFDOCO_OtherAmount");
+                this.NotifyPropertyChanged("IFDOCO_OtherEstimatePrice");
+            }
+        }
+        // 価格
+        private decimal _iFDOCO_OtherPrice;
+        public decimal IFDOCO_OtherPrice
+        {
+            get
+            {
+                return _iFDOCO_OtherPrice;
+            }
+            set
+            {
+                if (_iFDOCO_OtherPrice == value)
+                    return;
+
+                _iFDOCO_OtherPrice = value;
+                this.NotifyPropertyChanged("IFDOCO_OtherPrice");
+                this.NotifyPropertyChanged("IFDOCO_OtherEstimatePrice");
+            }
+        }
+        // タイプ（指値・成行）
+        private IfdocoTypes _iFDOCO_OtherType;
+        public IfdocoTypes IFDOCO_OtherType
+        {
+            get
+            {
+                return _iFDOCO_OtherType;
+            }
+            set
+            {
+                if (_iFDOCO_OtherType == value)
+                    return;
+
+                _iFDOCO_OtherType = value;
+                this.NotifyPropertyChanged("IFDOCO_OtherType");
+                this.NotifyPropertyChanged("IFDOCO_OtherEstimatePrice");
+            }
+        }
+        // サイド（売り・買い）
+        private IfdocoSide _iFDOCO_OtherSide = IfdocoSide.sell;
+        public IfdocoSide IFDOCO_OtherSide
+        {
+            get
+            {
+                return _iFDOCO_OtherSide;
+            }
+            set
+            {
+                if (_iFDOCO_OtherSide == value)
+                    return;
+
+                _iFDOCO_OtherSide = value;
+                this.NotifyPropertyChanged("IFDOCO_OtherSide");
+                this.NotifyPropertyChanged("IFDOCO_OtherEstimatePrice");
+            }
+        }
+        public decimal IFDOCO_OtherEstimatePrice
+        {
+            get
+            {
+                if (_iFDOCO_OtherType == IfdocoTypes.limit)
+                {
+                    return _iFDOCO_OtherAmount * _iFDOCO_OtherPrice;
+                }
+                else if (_iFDOCO_OtherType == IfdocoTypes.market)
+                {
+                    if (_iFDOCO_OtherSide == IfdocoSide.buy)
+                    {
+                        return _iFDOCO_OtherAmount * ActivePair.Ask;
+                    }
+                    else if (_iFDOCO_OtherSide == IfdocoSide.sell)
+                    {
+                        return _iFDOCO_OtherAmount * ActivePair.Bid;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+        }
+
+        // トリガーOther価格
+        private decimal _iFDOCO_OtherTriggerPrice;
+        public decimal IFDOCO_OtherTriggerPrice
+        {
+            get
+            {
+                return _iFDOCO_OtherTriggerPrice;
+            }
+            set
+            {
+                if (_iFDOCO_OtherTriggerPrice == value)
+                    return;
+
+                _iFDOCO_OtherTriggerPrice = value;
+                this.NotifyPropertyChanged("IFDOCO_OtherTriggerPrice");
+            }
+        }
+
+        // トリガー[以上(0)以下(1)] // デフォ(1)
+        private int _iFDOCO_OtherTriggerUpDown = 1;
+        public int IFDOCO_OtherTriggerUpDown
+        {
+            get
+            {
+                return _iFDOCO_OtherTriggerUpDown;
+            }
+            set
+            {
+                if (_iFDOCO_OtherTriggerUpDown == value)
+                    return;
+
+                _iFDOCO_OtherTriggerUpDown = value;
+                this.NotifyPropertyChanged("IFDOCO_OtherTriggerUpDown");
+            }
+        }
+
+
+        #endregion
+
+        #endregion
+
+
         public MainViewModel()
         {
 
@@ -6894,6 +7946,40 @@ namespace BitDesk.ViewModels
             // 注文関係
             BuyOrderCommand = new RelayCommand(BuyOrderCommand_Execute, BuyOrderCommand_CanExecute);
             SellOrderCommand = new RelayCommand(SellOrderCommand_Execute, SellOrderCommand_CanExecute);
+            CancelOrderListviewCommand = new GenericRelayCommand<object>(
+                param => CancelOrderListviewCommand_Execute(param),
+                param => CancelOrderListviewCommand_CanExecute());
+            RemoveDoneOrderListviewCommand = new RelayCommand(RemoveDoneOrderListviewCommand_Execute, RemoveDoneOrderListviewCommand_CanExecute);
+
+            // 特殊注文
+            IfdOrderCommand = new RelayCommand(IfdOrderCommand_Execute, IfdOrderCommand_CanExecute);
+            OcoOrderCommand = new RelayCommand(OcoOrderCommand_Execute, OcoOrderCommand_CanExecute);
+            IfdocoOrderCommand = new RelayCommand(IfdocoOrderCommand_Execute, IfdocoOrderCommand_CanExecute);
+            CancelIfdocoListviewCommand = new GenericRelayCommand<object>(
+                param => CancelIfdocoListviewCommand_Execute(param),
+                param => CancelIfdocoListviewCommand_CanExecute());
+            RemoveDoneIfdocoListviewCommand = new RelayCommand(RemoveDoneIfdocoListviewCommand_Execute, RemoveDoneIfdocoListviewCommand_CanExecute);
+
+            // 手動で取得系
+            GetTradeHistoryListCommand = new RelayCommand(GetTradeHistoryListCommand_Execute, GetTradeHistoryListCommand_CanExecute);
+            GetAssetsCommand = new RelayCommand(GetAssetsCommand_Execute, GetAssetsCommand_CanExecute);
+            GetOrderListCommand = new RelayCommand(GetOrderListCommand_Execute, GetOrderListCommand_CanExecute);
+
+            // 自動取引系
+            StartAutoTradeCommand = new RelayCommand(StartAutoTradeCommand_Execute, StartAutoTradeCommand_CanExecute);
+            StopAutoTradeCommand = new RelayCommand(StopAutoTradeCommand_Execute, StopAutoTradeCommand_CanExecute);
+
+            AutoTradeCancelListviewCommand = new GenericRelayCommand<object>(
+                param => AutoTradeCancelListviewCommand_Execute(param),
+                param => AutoTradeCancelListviewCommand_CanExecute());
+
+            AutoTradeDeleteErrorItemListviewCommand = new GenericRelayCommand<object>(
+                param => AutoTradeDeleteErrorItemListviewCommand_Execute(param),
+                param => AutoTradeDeleteErrorItemListviewCommand_CanExecute());
+
+            AutoTradeResetErrorListviewCommand = new GenericRelayCommand<object>(
+                param => AutoTradeResetErrorListviewCommand_Execute(param),
+                param => AutoTradeResetErrorListviewCommand_CanExecute());
 
             #endregion
 
@@ -9970,11 +11056,24 @@ namespace BitDesk.ViewModels
             // チャート更新のタイマー起動
             dispatcherChartTimer.Start();
 
+
+            #region == 特殊注文の保存データのロード ==
+
+            LoadIfdocos(PairBtcJpy, AppDataFolder, "BtcJpy");
+            LoadIfdocos(PairXrpJpy, AppDataFolder, "XrpJpy");
+            LoadIfdocos(PairLtcBtc, AppDataFolder, "LtcBtc");
+            LoadIfdocos(PairEthBtc, AppDataFolder, "EthBtc");
+            LoadIfdocos(PairMonaJpy, AppDataFolder, "MonaJpy");
+            LoadIfdocos(PairBchJpy, AppDataFolder, "BchJpy");
+
+            #endregion
+
         }
 
         // 終了時の処理
         public void OnWindowClosing(object sender, CancelEventArgs e)
         {
+
             // データ保存フォルダの取得
             var AppDataFolder = System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             AppDataFolder = AppDataFolder + System.IO.Path.DirectorySeparatorChar + _appDeveloper + System.IO.Path.DirectorySeparatorChar + _appName;
@@ -10585,6 +11684,206 @@ namespace BitDesk.ViewModels
 
             #endregion
 
+            #region == 特殊注文のデータ保存 ==
+
+            SaveIfdocos(PairBtcJpy, AppDataFolder, "BtcJpy");
+            SaveIfdocos(PairXrpJpy, AppDataFolder, "XrpJpy");
+            SaveIfdocos(PairLtcBtc, AppDataFolder, "LtcBtc");
+            SaveIfdocos(PairEthBtc, AppDataFolder, "EthBtc");
+            SaveIfdocos(PairMonaJpy, AppDataFolder, "MonaJpy");
+            SaveIfdocos(PairBchJpy, AppDataFolder, "BchJpy");
+
+            #endregion
+
+        }
+
+        // 特殊注文のデータ保存メソッド
+        private void SaveIfdocos(Pair p, string appDataFolder, string fileName)
+        {
+            //BtcJpy
+            var IFDOCOs_FilePath = appDataFolder + System.IO.Path.DirectorySeparatorChar + fileName + "_IFDOCOs.csv";
+
+            if (p.Ifdocos.Count > 0)
+            {
+                var csv = new StringBuilder();
+
+                foreach (var ifdoco in p.Ifdocos)
+                {
+                    bool test = false;
+
+                    // 未約定のみ保存する
+                    if (ifdoco.Kind == IfdocoKinds.ifd)
+                    {
+                        if (ifdoco.IfdIsDone == false)
+                        {
+                            test = true;
+                        }
+                    }
+                    else if (ifdoco.Kind == IfdocoKinds.oco)
+                    {
+                        if (ifdoco.OcoIsDone == false)
+                        {
+                            test = true;
+                        }
+                    }
+                    else if (ifdoco.Kind == IfdocoKinds.ifdoco)
+                    {
+                        if (ifdoco.IfdocoIsDone == false)
+                        {
+                            test = true;
+                        }
+                    }
+
+                    if (test)
+                    {
+                        var newLine = string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19}", ifdoco.Kind.ToString(), ifdoco.IfdoneOrderID.ToString(), ifdoco.IfdDoOrderID.ToString(), ifdoco.IfdDoSide, ifdoco.IfdDoType.ToString(), ifdoco.IfdDoStartAmount.ToString(), ifdoco.IfdDoPrice.ToString(), ifdoco.OcoOneOrderID.ToString(), ifdoco.OcoOneSide, ifdoco.OcoOneType.ToString(), ifdoco.OcoOneStartAmount, ifdoco.OcoOnePrice, ifdoco.OcoOtherOrderID.ToString(), ifdoco.OcoOtherSide, ifdoco.OcoOtherType.ToString(), ifdoco.OcoOtherStartAmount.ToString(), ifdoco.OcoOtherPrice.ToString(), ifdoco.IfdDoTriggerPrice.ToString(), ifdoco.OcoOneTriggerPrice.ToString(), ifdoco.OcoOtherTriggerPrice.ToString());
+                        csv.AppendLine(newLine);
+                    }
+
+                }
+
+                File.WriteAllText(IFDOCOs_FilePath, csv.ToString());
+
+            }
+            else
+            {
+                // リストが空なので、ファイルも削除。
+                if (File.Exists(IFDOCOs_FilePath))
+                {
+                    File.Delete(IFDOCOs_FilePath);
+                }
+            }
+        }
+
+        // 特殊注文のデータをロードメソッド
+        private void LoadIfdocos(Pair p, string appDataFolder, string fileName)
+        {
+            var IFDOCOs_FilePath = appDataFolder + System.IO.Path.DirectorySeparatorChar + fileName + "_IFDOCOs.csv";
+
+            if (File.Exists(IFDOCOs_FilePath))
+            {
+                try
+                {
+                    var contents = File.ReadAllText(IFDOCOs_FilePath).Split('\n');
+                    var csv = from line in contents select line.Split(',').ToArray();
+
+                    foreach (var row in csv)
+                    {
+                        if (string.IsNullOrEmpty(row[0]))
+                        {
+                            break;
+                        }
+
+                        Ifdoco asdf = new Ifdoco();
+
+                        if (row[0] == "ifd")
+                        {
+                            asdf.Kind = IfdocoKinds.ifd;
+
+                            asdf.IfdoneOrderID = Int32.Parse(row[1]);
+
+                            asdf.IfdDoOrderID = Int32.Parse(row[2]);
+                            asdf.IfdDoSide = row[3];
+
+                            if (row[4] == "limit")
+                            {
+                                asdf.IfdDoType = IfdocoTypes.limit;
+                            }
+                            else if (row[4] == "market")
+                            {
+                                asdf.IfdDoType = IfdocoTypes.market;
+                            }
+
+                            asdf.IfdDoStartAmount = Decimal.Parse(row[5]);
+                            asdf.IfdDoPrice = Decimal.Parse(row[6]);
+
+                            //System.Diagnostics.Debug.WriteLine("■■■■■ "+ row[0]+"-"+ row[1]+"-"+ row[2]);
+                        }
+                        else if (row[0] == "oco")
+                        {
+                            asdf.Kind = IfdocoKinds.oco;
+
+                            asdf.OcoOneOrderID = Int32.Parse(row[7]);
+                            asdf.OcoOneSide = row[8];
+                            if (row[9] == "limit")
+                            {
+                                asdf.OcoOneType = IfdocoTypes.limit;
+                            }
+                            else if (row[9] == "market")
+                            {
+                                asdf.OcoOneType = IfdocoTypes.market;
+                            }
+
+                            asdf.OcoOneStartAmount = Decimal.Parse(row[10]);
+                            asdf.OcoOnePrice = Decimal.Parse(row[11]);
+
+                            asdf.OcoOtherOrderID = Int32.Parse(row[12]);
+                            asdf.OcoOtherSide = row[13];
+                            if (row[14] == "limit")
+                            {
+                                asdf.OcoOtherType = IfdocoTypes.limit;
+                            }
+                            else if (row[14] == "market")
+                            {
+                                asdf.OcoOtherType = IfdocoTypes.market;
+                            }
+
+                            asdf.OcoOtherStartAmount = Decimal.Parse(row[15]);
+                            asdf.OcoOtherPrice = Decimal.Parse(row[16]);
+
+                        }
+                        else if (row[0] == "ifdoco")
+                        {
+                            asdf.Kind = IfdocoKinds.ifdoco;
+
+                            asdf.IfdoneOrderID = Int32.Parse(row[1]);
+
+                            asdf.OcoOneOrderID = Int32.Parse(row[7]);
+                            asdf.OcoOneSide = row[8];
+                            if (row[9] == "limit")
+                            {
+                                asdf.OcoOneType = IfdocoTypes.limit;
+                            }
+                            else if (row[9] == "market")
+                            {
+                                asdf.OcoOneType = IfdocoTypes.market;
+                            }
+
+                            asdf.OcoOneStartAmount = Decimal.Parse(row[10]);
+                            asdf.OcoOnePrice = Decimal.Parse(row[11]);
+
+                            asdf.OcoOtherOrderID = Int32.Parse(row[12]);
+                            asdf.OcoOtherSide = row[13];
+                            if (row[14] == "limit")
+                            {
+                                asdf.OcoOtherType = IfdocoTypes.limit;
+                            }
+                            else if (row[14] == "market")
+                            {
+                                asdf.OcoOtherType = IfdocoTypes.market;
+                            }
+
+                            asdf.OcoOtherStartAmount = Decimal.Parse(row[15]);
+                            asdf.OcoOtherPrice = Decimal.Parse(row[16]);
+
+                        }
+
+                        asdf.IfdDoTriggerPrice = Decimal.Parse(row[17]);
+                        asdf.OcoOneTriggerPrice = Decimal.Parse(row[18]);
+                        asdf.OcoOtherTriggerPrice = Decimal.Parse(row[19]);
+
+                        // リストへ追加
+                        p.Ifdocos.Add(asdf);
+
+                    }
+                }
+                catch (System.IO.FileNotFoundException) { }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine("■■■■■ Error  特殊注文の保存データロード中: " + ex + " while opening : " + IFDOCOs_FilePath);
+                }
+            }
+
         }
 
         // エラーイベント
@@ -10618,6 +11917,7 @@ namespace BitDesk.ViewModels
 
             // 特殊注文リストの更新ループ
             //Task.Run(() => UpdateIfdocos());
+            Task.Run(() => StartLoopBackground());
 
             // 板情報の更新ループ
             Task.Run(() => UpdateDepth());
@@ -10630,6 +11930,24 @@ namespace BitDesk.ViewModels
 
             // 注文リストの更新ループ
             Task.Run(() => UpdateOrderList());
+
+        }
+
+        // ActivePairに関わらず、全ての通貨ペアでループする。
+        private void StartLoopBackground()
+        {
+
+            UpdateIfdocos(PairBtcJpy);
+
+            UpdateIfdocos(PairXrpJpy);
+
+            UpdateIfdocos(PairLtcBtc);
+
+            UpdateIfdocos(PairEthBtc);
+
+            UpdateIfdocos(PairMonaJpy);
+
+            UpdateIfdocos(PairBchJpy);
 
         }
 
@@ -10961,7 +12279,7 @@ namespace BitDesk.ViewModels
 
             try
             {
-                RssResult rs = await _rssCli.GetRSS(Langs.en);
+                RssResult rs = _rssCli.GetRSS(Langs.en);
 
                 //ords.OrderList.Reverse();
 
@@ -10991,7 +12309,7 @@ namespace BitDesk.ViewModels
 
             try
             {
-                RssResult rs = await _rssCli.GetRSS(Langs.ja);
+                RssResult rs = _rssCli.GetRSS(Langs.ja);
 
                 //ords.OrderList.Reverse();
 
@@ -11186,7 +12504,7 @@ namespace BitDesk.ViewModels
             }
 
             // TODO NEED TEST
-            var pair = ActivePair.pair;
+            var pair = ActivePair.ThisPair;
             var orders = ActivePair.ActiveOrders;
             var ltp = ActivePair.Ltp;
 
@@ -11315,7 +12633,6 @@ namespace BitDesk.ViewModels
                     if (lst.Count > 0)
                     {
                         // 最新の情報をゲット
-                        //Orders oup = await _priActiveOrderListApi.GetOrderListByIDs("btc_jpy", lst);
                         Orders oup = await _priApi.GetOrderListByIDs(_getOrdersApiKey, _getOrdersSecret, pair.ToString(), lst);
 
                         if (oup != null)
@@ -11574,12 +12891,2475 @@ namespace BitDesk.ViewModels
 
         }
 
+        // 特殊注文の更新ループ
+        private async void UpdateIfdocos(Pair p)
+        {
+            var ifdocos = p.Ifdocos;
+            var ltp = p.Ltp;
+
+            await Task.Delay(1600);
+
+            // 未約定IDリスト
+            List<int> unfilledOrderIDsList = new List<int>();
+            // 要発注リスト
+            List<Ifdoco> needToOrderList = new List<Ifdoco>();
+            // アクティブな注文数カウンター
+            int actOrd = 0;
+
+            while (true)
+            {
+                // 間隔 1/2
+                await Task.Delay(1600);
+
+                // ログインしていなかったらスルー。
+                if (LoggedInMode == false)
+                {
+                    await Task.Delay(2000);
+                    continue;
+                }
+                // APIキーがセットされていない場合スルー
+                if (IfdocoTradeApiKeyIsSet == false)
+                {
+                    // TODO show message?
+                    await Task.Delay(2000);
+                    continue;
+                }
+
+                unfilledOrderIDsList.Clear();
+                needToOrderList.Clear();
+                actOrd = 0;
+
+                // リストをループして、発注が必要なのを 要発注リストに追加。
+                // 未約定のを未約定IDリストに追加して、後でアップデート。
+                if (Application.Current == null) break;
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+
+                    foreach (var ifdoco in ifdocos)
+                    {
+                        // IFD
+                        if (ifdoco.Kind == IfdocoKinds.ifd)
+                        {
+                            if (ifdoco.IfdIsDone == false)
+                            {
+                                //if (ifdoco.IfdoneIsDone == false)
+                                //{
+
+                                if (ifdoco.IfdoneStatus == "FULLY_FILLED")
+                                {
+                                    // 約定！  Ifd done.
+
+                                    // 済みフラグをセット
+                                    ifdoco.IfdoneIsDone = true;
+
+
+                                }
+                                else if (ifdoco.IfdoneStatus == "CANCELED_UNFILLED" || ifdoco.IfdoneStatus == "CANCELED_PARTIALLY_FILLED")
+                                {
+                                    // キャンセル済み
+
+                                    // ステータス情報等、更新。???
+                                    // TODO
+
+                                    // 済みフラグをセット(これいる？)
+
+                                    ifdoco.IfdDoIsDone = true; // ifdDoを発注させないように、キャンセルする。
+
+                                    ifdoco.IfdoneIsDone = true;
+
+                                }
+                                else
+                                {
+                                    // まだ未約定
+
+                                    // 更新リストに追加して後でアップデートする。
+                                    // Add to ToBeUpdated List and Update Order info lator.
+                                    if (ifdoco.IfdoneOrderID != 0)
+                                    {
+                                        //Debug.WriteLine("■IFD  unfilledOrderIDsList: " + ifdoco.IfdoneOrderID.ToString());
+
+                                        unfilledOrderIDsList.Add(ifdoco.IfdoneOrderID);
+                                    }
+                                    else
+                                    {
+                                        //Debug.WriteLine("■IFD  unfilledOrderIDsList: " + ifdoco.IfdoneOrderID.ToString());
+
+                                    }
+
+                                    if (string.IsNullOrEmpty(ifdoco.IfdoneStatus) == false)
+                                    {
+                                        // アクティブな注文
+                                        actOrd = actOrd + 1;
+
+                                    }
+
+                                }
+
+                                //}
+                                //else
+                                //{
+                                if (ifdoco.IfdDoIsDone == false)
+                                {
+
+                                    if (ifdoco.IfdDoStatus == "FULLY_FILLED")
+                                    {
+                                        // 約定！  Ifd do.
+
+                                        // IFD 注文全部終了タイミング！(色を変える？)
+
+
+                                        // 済みフラグをセット(これいる？)
+                                        ifdoco.IfdDoIsDone = true;
+
+                                        // IfdIsDone フラグ！(IFD注文完了！)
+                                        ifdoco.IfdIsDone = true;
+
+                                    }
+                                    else if (ifdoco.IfdDoStatus == "CANCELED_UNFILLED" || ifdoco.IfdDoStatus == "CANCELED_PARTIALLY_FILLED")
+                                    {
+                                        // キャンセル済み
+
+                                        // ステータス情報等、更新。???
+                                        // TODO
+
+                                        // 済みフラグをセット(これいる？)
+                                        ifdoco.IfdDoIsDone = true;
+
+                                        // IfdIsDone フラグ！(IFD注文完了！)
+                                        ifdoco.IfdIsDone = true;
+
+                                    }
+                                    else
+                                    {
+
+                                        // 更新リストに追加して後でアップデートする。
+                                        // Add to ToBeUpdated List and Update Order info lator.
+
+                                        if (ifdoco.IfdDoOrderID != 0)
+                                        {
+                                            // まだ未約定
+
+                                            unfilledOrderIDsList.Add(ifdoco.IfdDoOrderID);
+                                        }
+                                        else
+                                        {
+
+                                            // 要発注 IfdoneDo
+
+                                            needToOrderList.Add(ifdoco);
+
+                                        }
+
+                                        if (string.IsNullOrEmpty(ifdoco.IfdDoStatus) == false)
+                                        {
+                                            // アクティブな注文
+                                            actOrd = actOrd + 1;
+
+                                        }
+
+                                    }
+
+                                }
+                                else
+                                {
+                                    // Ifd は済んでるよ！
+                                    ifdoco.IfdIsDone = true;
+                                }
+                                //}
+
+                            }
+                        }
+                        // OCO
+                        else if (ifdoco.Kind == IfdocoKinds.oco)
+                        {
+
+                            if (ifdoco.OcoIsDone == false)
+                            {
+                                if (ifdoco.OcoOneIsDone && ifdoco.OcoOtherIsDone)
+                                {
+                                    // タイミングと価格によっては両方同時に約定で返ってくる可能性。
+
+
+                                    // OcoIsDone フラグ
+                                    ifdoco.OcoIsDone = true;
+
+                                }
+                                else if (ifdoco.OcoOneIsDone || ifdoco.OcoOtherIsDone)
+                                {
+                                    // 片方約定
+
+                                    // どちらかをキャンセル
+                                    // 要発注 IfdoneDo
+
+                                    //TODO
+                                    needToOrderList.Add(ifdoco);
+
+
+                                    // OcoIsDone フラグ
+                                    //ifdoco.OcoIsDone = true;
+
+                                }
+                                else
+                                {
+                                    // どちらも未約定
+
+                                    // 更新リストに追加して後でアップデートする。
+                                    // Add to ToBeUpdated List and Update Order info lator.
+                                    if (ifdoco.OcoOneOrderID != 0)
+                                    {
+                                        unfilledOrderIDsList.Add(ifdoco.OcoOneOrderID);
+                                    }
+                                    else
+                                    {
+                                        // 注文IDが０。発注してない。
+                                        needToOrderList.Add(ifdoco);
+
+                                    }
+                                    if (ifdoco.OcoOtherOrderID != 0)
+                                    {
+                                        unfilledOrderIDsList.Add(ifdoco.OcoOtherOrderID);
+                                    }
+                                    else
+                                    {
+                                        // 注文IDが０。発注してない。
+                                        needToOrderList.Add(ifdoco);
+                                    }
+
+                                    // アクティブな注文
+                                    actOrd = actOrd + 1;
+
+
+                                }
+                            }
+
+                        }
+                        // IFDOCO
+                        else if (ifdoco.Kind == IfdocoKinds.ifdoco)
+                        {
+
+                            if (ifdoco.IfdocoIsDone == false)
+                            {
+
+                                // ifd がまだ
+                                //if (ifdoco.IfdoneIsDone == false)
+                                //{
+
+                                if (ifdoco.IfdoneStatus == "FULLY_FILLED")
+                                {
+                                    // 約定！  Ifd done.
+
+                                    // 発注 OCO 二つ
+                                    //TODO
+
+                                    // 発注済みを更新リストに追加して後でアップデートする。
+                                    // Add to ToBeUpdated List and Update Order info lator.
+
+
+                                    // 済みフラグをセット
+                                    ifdoco.IfdoneIsDone = true;
+
+                                    //Debug.WriteLine("■IFDOCO ifdoco : 要発注。");
+
+                                    // 要発注 IfdoneDo
+                                    needToOrderList.Add(ifdoco);
+
+                                }
+                                else if (ifdoco.IfdoneStatus == "CANCELED_UNFILLED" || ifdoco.IfdoneStatus == "CANCELED_PARTIALLY_FILLED")
+                                {
+                                    // キャンセル済み
+
+                                    // ステータス情報等、更新。???
+                                    // TODO
+
+                                    // 済みフラグをセット(これいる？)
+                                    ifdoco.IfdoneIsDone = true;
+
+                                    //TODO
+                                    ifdoco.IfdocoIsDone = true;
+
+                                }
+                                else
+                                {
+                                    // まだ未約定
+
+                                    // 更新リストに追加して後でアップデートする。
+                                    if (ifdoco.IfdoneOrderID != 0)
+                                    {
+                                        unfilledOrderIDsList.Add(ifdoco.IfdoneOrderID);
+                                    }
+                                    else
+                                    {
+                                        // 注文IDが0。　本来リストビューに登録されるべきでない。
+                                        //Debug.WriteLine("■IFDOCO ifd unfilledOrderIDsList: 注文IDが０。" + ifdoco.IfdoneOrderID.ToString());
+                                    }
+
+
+                                    // TODO:
+                                    // if HasError!!!
+
+                                    /*
+                                    // TEMP
+                                    ifdoco.IfdoneHasError = true;
+                                    if (ifdoco.IfdoneErrorInfo == null)
+                                    {
+                                        ifdoco.IfdoneErrorInfo = new ErrorInfo();
+                                    }
+                                    ifdoco.IfdoneErrorInfo.ErrorTitle = "IfdoneOrderID == 0";
+                                    ifdoco.IfdoneErrorInfo.ErrorDescription = "asdfasdf sadf asdf asdf";
+                                    */
+
+                                    if (string.IsNullOrEmpty(ifdoco.IfdoneStatus) == false)
+                                    {
+                                        // アクティブな注文
+                                        actOrd = actOrd + 1;
+
+                                    }
+
+                                }
+
+                                //}
+                                //else
+                                //{
+
+                                // Ifd done の oco
+
+                                //ifdは済み
+
+                                if (ifdoco.OcoIsDone == false)
+                                {
+
+                                    if (ifdoco.OcoOneIsDone && ifdoco.OcoOtherIsDone)
+                                    {
+                                        // タイミングと価格によっては両方同時に約定で返ってくる可能性がある。。
+
+
+
+                                        // OcoIsDone フラグをセット
+                                        ifdoco.OcoIsDone = true;
+
+                                    }
+                                    else if (ifdoco.OcoOneIsDone || ifdoco.OcoOtherIsDone)
+                                    {
+                                        // 片方約定
+
+                                        // どちらかをキャンセル
+
+                                        needToOrderList.Add(ifdoco);
+
+
+                                        // OcoIsDone フラグをセット
+                                        //ifdoco.OcoIsDone = true;
+
+
+                                        // アクティブな注文
+                                        actOrd = actOrd + 1;
+
+                                    }
+                                    else
+                                    {
+                                        // どちらも未約定か、または未発注
+
+                                        // 未発注
+                                        if ((ifdoco.OcoOneOrderID == 0) && (ifdoco.OcoOtherOrderID == 0))
+                                        //if ((ifdoco.OcoOneOrderID == 0) || (ifdoco.OcoOtherOrderID == 0)) // not good
+                                        {
+
+                                            //Debug.WriteLine("□ UpdateIfdocos IFDOCO 要発注");
+
+                                            // 要発注 
+                                            needToOrderList.Add(ifdoco);
+
+
+                                            // アクティブな注文
+                                            actOrd = actOrd + 1;
+
+                                        }
+                                        else
+                                        {
+                                            // 更新リストに追加して後でアップデートする。
+                                            // Add to ToBeUpdated List and Update Order info lator.
+                                            if (ifdoco.OcoOneOrderID != 0)
+                                            {
+                                                unfilledOrderIDsList.Add(ifdoco.OcoOneOrderID);
+                                            }
+                                            else
+                                            {
+                                                //Debug.WriteLine("■IFDOCO oco one unfilledOrderIDsList: 注文IDが０。" + ifdoco.OcoOneOrderID.ToString());
+                                            }
+
+                                            if (ifdoco.OcoOtherOrderID != 0)
+                                            {
+                                                unfilledOrderIDsList.Add(ifdoco.OcoOtherOrderID);
+                                            }
+                                            else
+                                            {
+                                                //Debug.WriteLine("■IFDOCO oco other unfilledOrderIDsList: 注文IDが０。" + ifdoco.OcoOtherOrderID.ToString());
+                                            }
+                                        }
+
+                                        if ((string.IsNullOrEmpty(ifdoco.OcoOtherStatus) == false) || (string.IsNullOrEmpty(ifdoco.OcoOneStatus) == false))
+                                        {
+                                            // アクティブな注文
+                                            actOrd = actOrd + 1;
+
+                                        }
+
+                                    }
+
+                                }
+                                else
+                                {
+                                    // IFDOCO 済んでるよ！
+
+                                    ifdoco.IfdocoIsDone = true;
+                                }
+
+                                //}
+
+                            }
+
+                        }
+
+                    }
+
+                });
+
+                // タブの「IFDOCO注文（＊）」を更新
+                ActiveIfdocosCount = actOrd;
+
+                // リストのリスト（小分けにして分割取得用）
+                List<List<int>> ListOfList = new List<List<int>>();
+
+                // 未約定注文の最新状態をアップデートする。
+                if (unfilledOrderIDsList.Count > 0)
+                {
+                    // GetOrderListByIDs 40015 数が多いとエラーになるから小分けにして。
+                    List<int> temp = new List<int>();
+                    int c = 0;
+
+                    for (int i = 0; i < unfilledOrderIDsList.Count; i++)
+                    {
+
+                        temp.Add(unfilledOrderIDsList[c]);
+
+                        if (temp.Count == 5)
+                        {
+                            // do
+
+                            ListOfList.Add(temp);
+
+                            temp = new List<int>();
+                        }
+
+                        if (c == unfilledOrderIDsList.Count - 1)
+                        {
+                            if (temp.Count > 0)
+                            {
+                                //do
+
+                                ListOfList.Add(temp);
+                            }
+
+                            break;
+                        }
+
+                        c = c + 1;
+                    }
+
+                    foreach (var list in ListOfList)
+                    {
+                        // 最新の注文情報をゲット
+                        Orders ords = await _priApi.GetOrderListByIDs(_ifdocoTradeApiKey, _ifdocoTradeSecret, p.ThisPair.ToString(), list);//unfilledOrderIDsList);
+
+                        if (ords != null)
+                        {
+
+                            if (Application.Current == null)
+                            {
+                                //Debug.WriteLine("■IFD Application.Current == null");
+                                break;
+                            }
+                            Application.Current.Dispatcher.Invoke(() =>
+                            {
+                                //Debug.WriteLine("■IFD Invoke " + ords.OrderList.Count.ToString());
+
+                                // 更新された注文をアップデート
+                                foreach (var ord in ords.OrderList)
+                                {
+                                    //Debug.WriteLine("■IFD loop");
+                                    try
+                                    {
+                                        // Ifdone
+                                        var found = ifdocos.FirstOrDefault((x => x.IfdoneOrderID == ord.OrderID));
+                                        if (found != null)
+                                        {
+
+                                            found.IfdoneSide = ord.Side;
+                                            if (ord.Type == "limit")
+                                            {
+                                                found.IfdoneType = IfdocoTypes.limit;
+                                            }
+                                            else if (ord.Type == "market")
+                                            {
+                                                found.IfdoneType = IfdocoTypes.market;
+                                            }
+                                            found.IfdoneOrderedAt = ord.OrderedAt;
+                                            found.IfdoneStartAmount = ord.StartAmount;
+                                            found.IfdonePrice = ord.Price;
+                                            found.IfdoneExecutedAmount = ord.ExecutedAmount;
+                                            found.IfdoneAveragePrice = ord.AveragePrice;
+                                            found.IfdoneStatus = ord.Status;
+
+                                            if (found.IfdoneStatus == "FULLY_FILLED" || found.IfdoneStatus == "CANCELED_UNFILLED" || found.IfdoneStatus == "CANCELED_PARTIALLY_FILLED")
+                                            {
+                                                found.IfdoneIsDone = true;
+
+                                                if (found.IfdoneStatus == "FULLY_FILLED")
+                                                {
+                                                    //System.Diagnostics.Debug.WriteLine("■■■■■ UpdateIfdocos unfilledOrderIDsList Ifdone 約定！");
+                                                }
+
+                                                if (found.IfdoneStatus == "CANCELED_UNFILLED" || found.IfdoneStatus == "CANCELED_PARTIALLY_FILLED")
+                                                {
+                                                    // キャンセルされたので、ifdDoもストップさせる。
+
+                                                    found.IfdDoIsDone = true;
+                                                    found.IfdIsDone = true;
+                                                }
+                                            }
+
+                                        }
+
+                                        // Ifd Do
+                                        found = ifdocos.FirstOrDefault((x => x.IfdDoOrderID == ord.OrderID));
+                                        if (found != null)
+                                        {
+
+                                            found.IfdDoSide = ord.Side;
+                                            if (ord.Type == "limit")
+                                            {
+                                                found.IfdDoType = IfdocoTypes.limit;
+                                            }
+                                            else if (ord.Type == "market")
+                                            {
+                                                found.IfdDoType = IfdocoTypes.market;
+                                            }
+                                            found.IfdDoOrderedAt = ord.OrderedAt;
+                                            found.IfdDoStartAmount = ord.StartAmount;
+                                            found.IfdDoPrice = ord.Price;
+                                            found.IfdDoExecutedAmount = ord.ExecutedAmount;
+                                            found.IfdDoAveragePrice = ord.AveragePrice;
+                                            found.IfdDoStatus = ord.Status;
+
+                                            if (found.IfdDoStatus == "FULLY_FILLED" || found.IfdDoStatus == "CANCELED_UNFILLED" || found.IfdDoStatus == "CANCELED_PARTIALLY_FILLED")
+                                            {
+                                                found.IfdDoIsDone = true;
+
+                                                if (found.IfdDoStatus == "FULLY_FILLED")
+                                                {
+                                                    //System.Diagnostics.Debug.WriteLine("■■■■■ UpdateIfdocos unfilledOrderIDsList IfdDo 約定！");
+                                                }
+
+                                                if (found.IfdDoStatus == "CANCELED_UNFILLED" || found.IfdDoStatus == "CANCELED_PARTIALLY_FILLED")
+                                                {
+                                                    found.IfdDoIsDone = true;
+                                                    found.IfdIsDone = true;
+                                                }
+                                            }
+
+                                        }
+
+                                        // OCO one
+                                        found = ifdocos.FirstOrDefault((x => x.OcoOneOrderID == ord.OrderID));
+                                        if (found != null)
+                                        {
+
+                                            found.OcoOneSide = ord.Side;
+                                            if (ord.Type == "limit")
+                                            {
+                                                found.OcoOneType = IfdocoTypes.limit;
+                                            }
+                                            else if (ord.Type == "market")
+                                            {
+                                                found.OcoOneType = IfdocoTypes.market;
+                                            }
+                                            found.OcoOneOrderedAt = ord.OrderedAt;
+                                            found.OcoOneStartAmount = ord.StartAmount;
+                                            found.OcoOnePrice = ord.Price;
+                                            found.OcoOneExecutedAmount = ord.ExecutedAmount;
+                                            found.OcoOneAveragePrice = ord.AveragePrice;
+                                            found.OcoOneStatus = ord.Status;
+
+                                            if (found.OcoOneStatus == "FULLY_FILLED" || found.OcoOneStatus == "CANCELED_UNFILLED" || found.OcoOneStatus == "CANCELED_PARTIALLY_FILLED")
+                                            {
+                                                found.OcoOneIsDone = true;
+
+                                                if (found.OcoOneStatus == "FULLY_FILLED")
+                                                {
+                                                    //System.Diagnostics.Debug.WriteLine("■■■■■ UpdateIfdocos unfilledOrderIDsList OcoOne 約定！");
+                                                }
+                                            }
+
+                                        }
+
+                                        // OCO other
+                                        found = ifdocos.FirstOrDefault((x => x.OcoOtherOrderID == ord.OrderID));
+                                        if (found != null)
+                                        {
+
+                                            found.OcoOtherSide = ord.Side;
+                                            if (ord.Type == "limit")
+                                            {
+                                                found.OcoOtherType = IfdocoTypes.limit;
+                                            }
+                                            else if (ord.Type == "market")
+                                            {
+                                                found.OcoOtherType = IfdocoTypes.market;
+                                            }
+                                            found.OcoOtherOrderedAt = ord.OrderedAt;
+                                            found.OcoOtherStartAmount = ord.StartAmount;
+                                            found.OcoOtherPrice = ord.Price;
+                                            found.OcoOtherExecutedAmount = ord.ExecutedAmount;
+                                            found.OcoOtherAveragePrice = ord.AveragePrice;
+                                            found.OcoOtherStatus = ord.Status;
+
+                                            if (found.OcoOtherStatus == "FULLY_FILLED" || found.OcoOtherStatus == "CANCELED_UNFILLED" || found.OcoOtherStatus == "CANCELED_PARTIALLY_FILLED")
+                                            {
+                                                found.OcoOtherIsDone = true;
+
+                                                if (found.OcoOtherStatus == "FULLY_FILLED")
+                                                {
+                                                    //System.Diagnostics.Debug.WriteLine("■■■■■ UpdateIfdocos unfilledOrderIDsList OcoOther 約定！");
+                                                }
+                                            }
+
+                                        }
+
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        System.Diagnostics.Debug.WriteLine("■■■■■ UpdateIfdoco Exception: " + e);
+                                    }
+
+                                }
+                            });
+
+                        }
+                        else
+                        {
+                            System.Diagnostics.Debug.WriteLine("■■■■■ UpdateIfdoco ords == null");
+
+                            // エラー表示
+                            ActiveIfdocosCount = -1;
+
+                        }
+                    }
+
+                }
+
+                // Ifd約定で、Ifd Do / OCO がまだ未発注のがあったら、発注する。
+                if (needToOrderList.Count > 0)
+                {
+
+                    foreach (var ifdoco in needToOrderList)
+                    {
+
+                        if (ifdoco.Kind == IfdocoKinds.ifd)
+                        {
+                            //System.Diagnostics.Debug.WriteLine("■IFD");
+
+                            // IFD
+                            if (ifdoco.IfdoneIsDone)
+                            {
+                                System.Diagnostics.Debug.WriteLine("■IFD IfdoneIsDone");
+
+                                // 条件が揃ったら、IfdDoを発注
+                                if ((ifdoco.IfdDoIsDone == false) && (ifdoco.IfdDoOrderID == 0) && (ifdoco.IfdoneHasError == false))
+                                {
+                                    // トリガー
+                                    System.Diagnostics.Debug.WriteLine("■トリガー:" + ifdoco.IfdDoTriggerPrice.ToString());
+
+                                    if (ifdoco.IfdDoTriggerPrice <= 0) continue;
+
+                                    if (ifdoco.IfdDoTriggerUpDown == 0)
+                                    {
+                                        System.Diagnostics.Debug.WriteLine("■以上");
+                                        // 以上
+                                        if (ltp >= ifdoco.IfdDoTriggerPrice)
+                                        {
+                                            System.Diagnostics.Debug.WriteLine("■good");
+                                            // good
+                                        }
+                                        else
+                                        {
+                                            continue;
+                                        }
+
+                                    }
+                                    else if (ifdoco.IfdDoTriggerUpDown == 1)
+                                    {
+                                        System.Diagnostics.Debug.WriteLine("■以下");
+                                        // 以下
+                                        if (ltp <= ifdoco.IfdDoTriggerPrice)
+                                        {
+                                            System.Diagnostics.Debug.WriteLine("■good");
+                                            // good
+                                        }
+                                        else
+                                        {
+                                            continue;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        continue;
+                                    }
+
+
+                                    OrderResult res = await _priApi.MakeOrder(_ifdocoTradeApiKey, _ifdocoTradeSecret, p.ThisPair.ToString(), ifdoco.IfdDoStartAmount, ifdoco.IfdDoPrice, ifdoco.IfdDoSide, ifdoco.IfdDoType.ToString());
+
+                                    if (res != null)
+                                    {
+                                        if (res.IsSuccess)
+                                        {
+
+                                            ifdoco.IfdDoHasError = false;
+
+                                            ifdoco.IfdDoOrderID = res.OrderID;
+                                            ifdoco.IfdDoOrderedAt = res.OrderedAt;
+                                            ifdoco.IfdDoPrice = res.Price;
+                                            ifdoco.IfdDoAveragePrice = res.AveragePrice;
+                                            ifdoco.IfdDoStatus = res.Status;
+
+                                            ifdoco.IfdDoRemainingAmount = res.RemainingAmount;
+                                            ifdoco.IfdDoExecutedAmount = res.ExecutedAmount;
+                                            // TODO
+
+                                            // 約定
+                                            if (res.Status == "FULLY_FILLED")
+                                            {
+                                                // フラグをセット
+                                                ifdoco.IfdDoIsDone = true;
+                                                ifdoco.IfdIsDone = true;
+
+                                                // 約定！
+
+                                                //System.Diagnostics.Debug.WriteLine("■■■■■ UpdateIfdocos needToOrderList IfdDo 約定！");
+
+                                            }
+
+                                        }
+                                        else
+                                        {
+                                            ifdoco.IfdDoHasError = true;
+                                            if (ifdoco.IfdDoErrorInfo == null)
+                                            {
+                                                ifdoco.IfdDoErrorInfo = new ErrorInfo();
+                                            }
+                                            ifdoco.IfdDoErrorInfo.ErrorTitle = res.Err.ErrorTitle;
+                                            ifdoco.IfdDoErrorInfo.ErrorDescription = res.Err.ErrorDescription;
+                                            ifdoco.IfdDoErrorInfo.ErrorCode = res.Err.ErrorCode;
+
+                                            System.Diagnostics.Debug.WriteLine("■■■■■ UpdateIfdocos needToOrderList IFD MakeOrder API returned error code.");
+                                        }
+                                    }
+                                    else
+                                    {
+                                        ifdoco.IfdDoHasError = true;
+                                        if (ifdoco.IfdDoErrorInfo == null)
+                                        {
+                                            ifdoco.IfdDoErrorInfo = new ErrorInfo();
+                                        }
+                                        ifdoco.IfdDoErrorInfo.ErrorTitle = "注文時にエラーが起きました。";
+                                        ifdoco.IfdDoErrorInfo.ErrorDescription = "priApi.MakeOrder is null.";
+                                        ifdoco.IfdDoErrorInfo.ErrorCode = -1;
+
+                                        System.Diagnostics.Debug.WriteLine("■■■■■ UpdateIfdocos needToOrderList IFD MakeOrder API returned null.");
+
+                                    }
+
+                                }
+                            }
+
+                        }
+                        else if (ifdoco.Kind == IfdocoKinds.oco)
+                        {
+                            // OCO
+                            if ((ifdoco.OcoIsDone == false))
+                            {
+
+                                if (ifdoco.OcoOneIsDone && ifdoco.OcoOtherIsDone)
+                                {
+                                    // do nothing
+                                    continue;
+                                }
+                                else if (ifdoco.OcoOneIsDone || ifdoco.OcoOtherIsDone)
+                                {
+                                    // 片方約定
+                                    // どちらかをキャンセル
+
+                                    if (ifdoco.OcoOneIsDone)
+                                    {
+                                        // 未発注なら済みにする
+                                        if (ifdoco.OcoOtherOrderID == 0)
+                                        {
+                                            ifdoco.OcoOtherIsDone = true;
+                                            ifdoco.OcoIsDone = true;
+                                            continue;
+                                        }
+
+                                        if (ifdoco.OcoOtherHasError == false)
+                                        {
+
+                                            // OCO other をキャンセル
+                                            int cancelId = ifdoco.OcoOtherOrderID;
+
+                                            //System.Diagnostics.Debug.WriteLine("■ UpdateIfdocos needToOrderList OCO CancelOrder .....");
+
+                                            OrderResult res = await _priApi.CancelOrder(_ifdocoTradeApiKey, _ifdocoTradeSecret, p.ThisPair.ToString(), cancelId);
+
+                                            if (res != null)
+                                            {
+                                                if (res.IsSuccess)
+                                                {
+
+                                                    ifdoco.OcoOtherHasError = false;
+
+                                                    ifdoco.OcoOtherOrderID = res.OrderID;
+                                                    ifdoco.OcoOtherOrderedAt = res.OrderedAt;
+                                                    ifdoco.OcoOtherPrice = res.Price;
+                                                    ifdoco.OcoOtherAveragePrice = res.AveragePrice;
+                                                    ifdoco.OcoOtherStatus = res.Status;
+
+                                                    ifdoco.OcoOtherRemainingAmount = res.RemainingAmount;
+                                                    ifdoco.OcoOtherExecutedAmount = res.ExecutedAmount;
+                                                    // TODO
+
+                                                    // 約定
+                                                    if (res.Status == "CANCELED_UNFILLED" || res.Status == "CANCELED_PARTIALLY_FILLED")
+                                                    {
+                                                        // フラグをセット
+                                                        ifdoco.OcoOtherIsDone = true;
+                                                        ifdoco.OcoIsDone = true;
+
+                                                        // 約定！
+
+                                                        //System.Diagnostics.Debug.WriteLine("■ UpdateIfdocos needToOrderList OCO Other cancel");
+
+                                                    }
+
+
+                                                }
+                                                else
+                                                {
+                                                    ifdoco.OcoOtherHasError = true;
+                                                    if (ifdoco.OcoOtherErrorInfo == null)
+                                                    {
+                                                        ifdoco.OcoOtherErrorInfo = new ErrorInfo();
+                                                    }
+                                                    ifdoco.OcoOtherErrorInfo.ErrorTitle = res.Err.ErrorTitle;
+                                                    ifdoco.OcoOtherErrorInfo.ErrorDescription = res.Err.ErrorDescription;
+                                                    ifdoco.OcoOtherErrorInfo.ErrorCode = res.Err.ErrorCode;
+
+                                                    System.Diagnostics.Debug.WriteLine("■■■■■ UpdateIfdocos needToOrderList OCO other CancelOrder API returned error code.");
+                                                }
+                                            }
+                                            else
+                                            {
+                                                ifdoco.OcoOtherHasError = true;
+                                                if (ifdoco.OcoOtherErrorInfo == null)
+                                                {
+                                                    ifdoco.OcoOtherErrorInfo = new ErrorInfo();
+                                                }
+                                                ifdoco.OcoOtherErrorInfo.ErrorTitle = "注文時にエラーが起きました。";
+                                                ifdoco.OcoOtherErrorInfo.ErrorDescription = "priApi.MakeOrder is null.";
+                                                ifdoco.OcoOtherErrorInfo.ErrorCode = -1;
+
+                                                System.Diagnostics.Debug.WriteLine("■■■■■ UpdateIfdocos needToOrderList OCO CancelOrder API returned null.");
+
+
+                                            }
+
+                                        }
+
+                                    }
+                                    else if (ifdoco.OcoOtherIsDone)
+                                    {
+                                        // 未発注なら済みにする
+                                        if (ifdoco.OcoOneOrderID == 0)
+                                        {
+                                            ifdoco.OcoOneIsDone = true;
+                                            ifdoco.OcoIsDone = true;
+                                            continue;
+                                        }
+
+                                        if (ifdoco.OcoOneHasError == false)
+                                        {
+                                            // OCO one をキャンセル
+                                            int cancelId = ifdoco.OcoOneOrderID;
+
+                                            //System.Diagnostics.Debug.WriteLine("■ UpdateIfdocos needToOrderList OCO CancelOrder .....");
+
+                                            OrderResult res = await _priApi.CancelOrder(_ifdocoTradeApiKey, _ifdocoTradeSecret, p.ThisPair.ToString(), cancelId);
+
+                                            if (res != null)
+                                            {
+                                                if (res.IsSuccess)
+                                                {
+
+                                                    ifdoco.OcoOneHasError = false;
+
+                                                    ifdoco.OcoOneOrderID = res.OrderID;
+                                                    ifdoco.OcoOneOrderedAt = res.OrderedAt;
+                                                    ifdoco.OcoOnePrice = res.Price;
+                                                    ifdoco.OcoOneAveragePrice = res.AveragePrice;
+                                                    ifdoco.OcoOneStatus = res.Status;
+
+                                                    ifdoco.OcoOneRemainingAmount = res.RemainingAmount;
+                                                    ifdoco.OcoOneExecutedAmount = res.ExecutedAmount;
+                                                    // TODO
+
+                                                    // 約定
+                                                    if (res.Status == "CANCELED_UNFILLED" || res.Status == "CANCELED_PARTIALLY_FILLED")
+                                                    {
+                                                        // フラグをセット
+                                                        ifdoco.OcoOneIsDone = true;
+                                                        ifdoco.OcoIsDone = true;
+
+                                                        // 約定！
+
+                                                        //System.Diagnostics.Debug.WriteLine("■ UpdateIfdocos needToOrderList OCO One cancel 約定！");
+
+                                                    }
+
+
+                                                }
+                                                else
+                                                {
+                                                    ifdoco.OcoOtherHasError = true;
+                                                    if (ifdoco.OcoOtherErrorInfo == null)
+                                                    {
+                                                        ifdoco.OcoOtherErrorInfo = new ErrorInfo();
+                                                    }
+                                                    ifdoco.OcoOtherErrorInfo.ErrorTitle = res.Err.ErrorTitle;
+                                                    ifdoco.OcoOtherErrorInfo.ErrorDescription = res.Err.ErrorDescription;
+                                                    ifdoco.OcoOtherErrorInfo.ErrorCode = res.Err.ErrorCode;
+
+                                                    System.Diagnostics.Debug.WriteLine("■■■■■ UpdateIfdocos needToOrderList OCO one CancelOrder API returned error code.");
+                                                }
+                                            }
+                                            else
+                                            {
+                                                ifdoco.OcoOtherHasError = true;
+                                                if (ifdoco.OcoOtherErrorInfo == null)
+                                                {
+                                                    ifdoco.OcoOtherErrorInfo = new ErrorInfo();
+                                                }
+                                                ifdoco.OcoOtherErrorInfo.ErrorTitle = "注文時にエラーが起きました。";
+                                                ifdoco.OcoOtherErrorInfo.ErrorDescription = "priApi.MakeOrder is null.";
+                                                ifdoco.OcoOtherErrorInfo.ErrorCode = -1;
+
+                                                System.Diagnostics.Debug.WriteLine("■■■■■ UpdateIfdocos needToOrderList OCO CancelOrder API returned null.");
+
+
+                                            }
+
+                                        }
+
+                                    }
+
+                                }
+                                else
+                                {
+                                    System.Diagnostics.Debug.WriteLine("■OCO どちらも未約定");
+
+                                    // どちらも未約定
+
+                                    // Oco One
+                                    if (ifdoco.OcoOneOrderID == 0)
+                                    {
+                                        if (ifdoco.OcoOneTriggerPrice <= 0) continue;
+
+                                        if (ifdoco.OcoOneTriggerUpDown == 0)
+                                        {
+                                            //System.Diagnostics.Debug.WriteLine("■以上");
+                                            // 以上
+                                            if (ltp >= ifdoco.OcoOneTriggerPrice)
+                                            {
+                                                System.Diagnostics.Debug.WriteLine("■Oco One 以上: Ltp = " + ltp.ToString() + " Trigger = " + ifdoco.OcoOneTriggerPrice.ToString());
+                                                // good
+                                            }
+                                            else
+                                            {
+                                                continue;
+                                            }
+
+                                        }
+                                        else if (ifdoco.OcoOneTriggerUpDown == 1)
+                                        {
+                                            //System.Diagnostics.Debug.WriteLine("■以下");
+                                            // 以下
+                                            if (ltp >= ifdoco.OcoOneTriggerPrice)
+                                            {
+                                                System.Diagnostics.Debug.WriteLine("■Oco One 以下: Ltp = " + ltp.ToString() + " Trigger = " + ifdoco.OcoOneTriggerPrice.ToString());
+                                                // good
+                                            }
+                                            else
+                                            {
+                                                continue;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            continue;
+                                        }
+
+                                        // OcoOne
+                                        OrderResult ord = await _priApi.MakeOrder(_ifdocoTradeApiKey, _ifdocoTradeSecret, p.ThisPair.ToString(), ifdoco.OcoOneStartAmount, ifdoco.OcoOnePrice, ifdoco.OcoOneSide, ifdoco.OcoOneType.ToString());
+
+                                        if (ord != null)
+                                        {
+                                            if (ord.IsSuccess)
+                                            {
+                                                ifdoco.OcoOneHasError = false;
+
+                                                ifdoco.OcoOneOrderID = ord.OrderID;
+                                                ifdoco.OcoOneOrderedAt = ord.OrderedAt;
+                                                ifdoco.OcoOnePrice = ord.Price;
+                                                ifdoco.OcoOneAveragePrice = ord.AveragePrice;
+                                                ifdoco.OcoOneStatus = ord.Status;
+                                                // TODO
+
+                                                // 約定
+                                                if (ord.Status == "FULLY_FILLED")
+                                                {
+                                                    // フラグをセット
+                                                    ifdoco.OcoOneIsDone = true;
+
+                                                    // 後は、UpdateIFDOCOループにまかせる
+                                                }
+                                            }
+                                            else
+                                            {
+                                                ifdoco.OcoOneHasError = true;
+                                                if (ifdoco.OcoOneErrorInfo == null)
+                                                {
+                                                    ifdoco.OcoOneErrorInfo = new ErrorInfo();
+                                                }
+                                                ifdoco.OcoOneErrorInfo.ErrorTitle = ord.Err.ErrorTitle;
+                                                ifdoco.OcoOneErrorInfo.ErrorDescription = ord.Err.ErrorDescription;
+                                                ifdoco.OcoOneErrorInfo.ErrorCode = ord.Err.ErrorCode;
+
+                                                System.Diagnostics.Debug.WriteLine("UpdateIfdocos - OcoOne MakeOrder API failed");
+
+                                            }
+
+                                        }
+                                        else
+                                        {
+                                            ifdoco.OcoOneHasError = true;
+                                            if (ifdoco.OcoOneErrorInfo == null)
+                                            {
+                                                ifdoco.OcoOneErrorInfo = new ErrorInfo();
+                                            }
+                                            ifdoco.OcoOneErrorInfo.ErrorTitle = "注文時にエラーが起きました。";
+                                            ifdoco.OcoOneErrorInfo.ErrorDescription = "priApi.MakeOrder is null.";
+                                            ifdoco.OcoOneErrorInfo.ErrorCode = -1;
+
+                                            System.Diagnostics.Debug.WriteLine("UpdateIfdocos - OcoOne MakeOrder returened NULL");
+
+                                        }
+
+
+                                    }
+
+                                    // Oco Other
+                                    if (ifdoco.OcoOtherOrderID == 0)
+                                    {
+                                        if (ifdoco.OcoOtherTriggerPrice <= 0) continue;
+
+                                        if (ifdoco.OcoOtherTriggerUpDown == 0)
+                                        {
+                                            //System.Diagnostics.Debug.WriteLine("■以上");
+                                            // 以上
+                                            if (ltp >= ifdoco.OcoOtherTriggerPrice)
+                                            {
+                                                System.Diagnostics.Debug.WriteLine("■Oco Other 以上: Ltp = " + ltp.ToString() + " Trigger = " + ifdoco.OcoOtherTriggerPrice.ToString());
+                                                // good
+                                            }
+                                            else
+                                            {
+                                                continue;
+                                            }
+
+                                        }
+                                        else if (ifdoco.OcoOtherTriggerUpDown == 1)
+                                        {
+                                            //System.Diagnostics.Debug.WriteLine("■以下");
+                                            // 以下
+                                            if (ltp <= ifdoco.OcoOtherTriggerPrice)
+                                            {
+                                                System.Diagnostics.Debug.WriteLine("■Oco Other 以下: Ltp = " + ltp.ToString() + " Trigger = " + ifdoco.OcoOtherTriggerPrice.ToString());
+                                                // good
+                                            }
+                                            else
+                                            {
+                                                continue;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            continue;
+                                        }
+
+
+                                        OrderResult ord2 = await _priApi.MakeOrder(_ifdocoTradeApiKey, _ifdocoTradeSecret, p.ThisPair.ToString(), ifdoco.OcoOtherStartAmount, ifdoco.OcoOtherPrice, ifdoco.OcoOtherSide, ifdoco.OcoOtherType.ToString());
+
+                                        if (ord2 != null)
+                                        {
+
+                                            if (ord2.IsSuccess)
+                                            {
+                                                ifdoco.OcoOtherHasError = false;
+
+                                                ifdoco.OcoOtherOrderID = ord2.OrderID;
+                                                ifdoco.OcoOtherOrderedAt = ord2.OrderedAt;
+                                                ifdoco.OcoOtherPrice = ord2.Price;
+                                                ifdoco.OcoOtherAveragePrice = ord2.AveragePrice;
+                                                ifdoco.OcoOtherStatus = ord2.Status;
+                                                // TODO
+
+                                                // 約定
+                                                if (ord2.Status == "FULLY_FILLED")
+                                                {
+
+
+                                                    // フラグをセット
+                                                    ifdoco.OcoOtherIsDone = true;
+
+
+                                                    // 後は、UpdateIFDOCOループにまかせる
+
+                                                }
+                                            }
+                                            else
+                                            {
+                                                ifdoco.OcoOtherHasError = true;
+                                                if (ifdoco.OcoOtherErrorInfo == null)
+                                                {
+                                                    ifdoco.OcoOtherErrorInfo = new ErrorInfo();
+                                                }
+                                                ifdoco.OcoOtherErrorInfo.ErrorTitle = ord2.Err.ErrorTitle;
+                                                ifdoco.OcoOtherErrorInfo.ErrorDescription = ord2.Err.ErrorDescription;
+                                                ifdoco.OcoOtherErrorInfo.ErrorCode = ord2.Err.ErrorCode;
+
+                                                System.Diagnostics.Debug.WriteLine("UpdateIfdocos - OcoOther MakeOrder API failed");
+                                            }
+
+                                        }
+                                        else
+                                        {
+                                            ifdoco.OcoOtherHasError = true;
+                                            if (ifdoco.OcoOtherErrorInfo == null)
+                                            {
+                                                ifdoco.OcoOtherErrorInfo = new ErrorInfo();
+                                            }
+                                            ifdoco.OcoOtherErrorInfo.ErrorTitle = "注文時にエラーが起きました。";
+                                            ifdoco.OcoOtherErrorInfo.ErrorDescription = "priApi.MakeOrder is null.";
+                                            ifdoco.OcoOtherErrorInfo.ErrorCode = -1;
+
+                                            System.Diagnostics.Debug.WriteLine("UpdateIfdocos - OcoOther MakeOrder returened NULL");
+                                        }
+
+                                    }
+
+                                }
+                            }
+
+                        }
+                        else if (ifdoco.Kind == IfdocoKinds.ifdoco)
+                        {
+                            // IFDOCO
+                            if (ifdoco.IfdocoIsDone == false)
+                            {
+                                // IFDone が約定済み
+                                if (ifdoco.IfdoneIsDone)
+                                {
+                                    // OCOが両方とも未発注
+                                    if (((ifdoco.OcoOneOrderID == 0) || (ifdoco.OcoOtherOrderID == 0)) && (ifdoco.OcoIsDone == false))
+                                    {
+                                        // OCO One 発注
+                                        if ((ifdoco.OcoOneOrderID == 0) && (ifdoco.OcoOneHasError == false))
+                                        {
+                                            bool isTriggered = false;
+
+                                            if (ifdoco.OcoOneTriggerUpDown == 0)
+                                            {
+                                                //System.Diagnostics.Debug.WriteLine("■以上");
+                                                // 以上
+                                                if (ltp >= ifdoco.OcoOneTriggerPrice)
+                                                {
+                                                    System.Diagnostics.Debug.WriteLine("■Oco One 以上: Ltp = " + ltp.ToString() + " Trigger = " + ifdoco.OcoOneTriggerPrice.ToString());
+                                                    // good
+                                                    isTriggered = true;
+                                                }
+                                                else
+                                                {
+                                                    //continue;
+                                                }
+
+                                            }
+                                            else if (ifdoco.OcoOneTriggerUpDown == 1)
+                                            {
+                                                //System.Diagnostics.Debug.WriteLine("■以下");
+                                                // 以下
+                                                if (ltp >= ifdoco.OcoOneTriggerPrice)
+                                                {
+                                                    System.Diagnostics.Debug.WriteLine("■Oco One 以下: Ltp = " + ltp.ToString() + " Trigger = " + ifdoco.OcoOneTriggerPrice.ToString());
+                                                    // good
+                                                    isTriggered = true;
+                                                }
+                                                else
+                                                {
+                                                    //continue;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                //continue;
+                                            }
+
+                                            if (ifdoco.OcoOneTriggerPrice <= 0)
+                                            {
+                                                isTriggered = false;
+                                            }
+
+                                            if (isTriggered)
+                                            {
+                                                // OcoOne
+                                                OrderResult ord = await _priApi.MakeOrder(_ifdocoTradeApiKey, _ifdocoTradeSecret, p.ThisPair.ToString(), ifdoco.OcoOneStartAmount, ifdoco.OcoOnePrice, ifdoco.OcoOneSide, ifdoco.OcoOneType.ToString());
+
+                                                if (ord != null)
+                                                {
+
+                                                    if (ord.IsSuccess)
+                                                    {
+                                                        //ifdoco.IfdoneHasError = false;
+                                                        ifdoco.OcoOneHasError = false;
+
+                                                        ifdoco.OcoOneOrderID = ord.OrderID;
+                                                        ifdoco.OcoOneOrderedAt = ord.OrderedAt;
+
+                                                        ifdoco.OcoOnePrice = ord.Price;
+                                                        ifdoco.OcoOneAveragePrice = ord.AveragePrice;
+                                                        ifdoco.OcoOneStatus = ord.Status;
+                                                        // TODO
+
+                                                        // 約定
+                                                        if (ord.Status == "FULLY_FILLED")
+                                                        {
+                                                            // フラグをセット
+                                                            ifdoco.OcoOneIsDone = true;
+
+
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        ifdoco.OcoOneHasError = true;
+                                                        if (ifdoco.OcoOneErrorInfo == null)
+                                                        {
+                                                            ifdoco.OcoOneErrorInfo = new ErrorInfo();
+                                                        }
+                                                        ifdoco.OcoOneErrorInfo.ErrorTitle = ord.Err.ErrorTitle;
+                                                        ifdoco.OcoOneErrorInfo.ErrorDescription = ord.Err.ErrorDescription;
+                                                        ifdoco.OcoOneErrorInfo.ErrorCode = ord.Err.ErrorCode;
+
+                                                        System.Diagnostics.Debug.WriteLine("■■■■■ UpdateIfdocos - Ifdoco - OcoOne MakeOrder API failed:" + ord.Err.ErrorCode.ToString());
+                                                    }
+
+                                                }
+                                                else
+                                                {
+                                                    ifdoco.OcoOneHasError = true;
+                                                    if (ifdoco.OcoOneErrorInfo == null)
+                                                    {
+                                                        ifdoco.OcoOneErrorInfo = new ErrorInfo();
+                                                    }
+                                                    ifdoco.OcoOneErrorInfo.ErrorTitle = "注文時にエラーが起きました。";
+                                                    ifdoco.OcoOneErrorInfo.ErrorDescription = "priApi.MakeOrder is null.";
+                                                    ifdoco.OcoOneErrorInfo.ErrorCode = -1;
+
+                                                    System.Diagnostics.Debug.WriteLine("■■■■■ UpdateIfdocos - Ifdoco - OcoOne MakeOrder returened NULL");
+                                                }
+
+                                            }
+
+                                        }
+                                        else
+                                        {
+                                            // TODO
+                                            //Debug.WriteLine("□ UpdateIfdocos IFDOCO @OCOが未発注 ELSE OcoOneHasError");
+                                        }
+
+                                        // OCO Other 発注
+                                        if ((ifdoco.OcoOtherOrderID == 0) && (ifdoco.OcoOtherHasError == false))
+                                        {
+                                            bool isTriggered = false;
+
+                                            if (ifdoco.OcoOtherTriggerUpDown == 0)
+                                            {
+                                                //System.Diagnostics.Debug.WriteLine("■以上");
+                                                // 以上
+                                                if (ltp >= ifdoco.OcoOtherTriggerPrice)
+                                                {
+                                                    System.Diagnostics.Debug.WriteLine("■Oco Other 以上: Ltp = " + ltp.ToString() + " Trigger = " + ifdoco.OcoOtherTriggerPrice.ToString());
+                                                    // good
+                                                    isTriggered = true;
+                                                }
+                                                else
+                                                {
+                                                    //continue;
+                                                }
+
+                                            }
+                                            else if (ifdoco.OcoOtherTriggerUpDown == 1)
+                                            {
+                                                //System.Diagnostics.Debug.WriteLine("■以下");
+                                                // 以下
+                                                if (ltp <= ifdoco.OcoOtherTriggerPrice)
+                                                {
+                                                    System.Diagnostics.Debug.WriteLine("■Oco Other 以下: Ltp = " + ltp.ToString() + " Trigger = " + ifdoco.OcoOtherTriggerPrice.ToString());
+                                                    // good
+                                                    isTriggered = true;
+                                                }
+                                                else
+                                                {
+                                                    //continue;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                //continue;
+                                            }
+
+                                            if (ifdoco.OcoOtherTriggerPrice <= 0)
+                                            {
+                                                isTriggered = false;
+                                            }
+
+                                            if (isTriggered)
+                                            {
+                                                // OcoOther
+                                                OrderResult ord2 = await _priApi.MakeOrder(_ifdocoTradeApiKey, _ifdocoTradeSecret, p.ThisPair.ToString(), ifdoco.OcoOtherStartAmount, ifdoco.OcoOtherPrice, ifdoco.OcoOtherSide, ifdoco.OcoOtherType.ToString());
+
+                                                if (ord2 != null)
+                                                {
+
+                                                    if (ord2.IsSuccess)
+                                                    {
+                                                        ifdoco.OcoOtherHasError = false;
+
+                                                        ifdoco.OcoOtherOrderID = ord2.OrderID;
+                                                        ifdoco.OcoOtherOrderedAt = ord2.OrderedAt;
+                                                        ifdoco.OcoOtherPrice = ord2.Price;
+                                                        ifdoco.OcoOtherAveragePrice = ord2.AveragePrice;
+                                                        ifdoco.OcoOtherStatus = ord2.Status;
+                                                        // TODO
+
+                                                        // 約定
+                                                        if (ord2.Status == "FULLY_FILLED")
+                                                        {
+
+
+                                                            // フラグをセット
+                                                            ifdoco.OcoOtherIsDone = true;
+
+
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        ifdoco.OcoOtherHasError = true;
+                                                        if (ifdoco.OcoOtherErrorInfo == null)
+                                                        {
+                                                            ifdoco.OcoOtherErrorInfo = new ErrorInfo();
+                                                        }
+                                                        ifdoco.OcoOtherErrorInfo.ErrorTitle = ord2.Err.ErrorTitle;
+                                                        ifdoco.OcoOtherErrorInfo.ErrorDescription = ord2.Err.ErrorDescription;
+                                                        ifdoco.OcoOtherErrorInfo.ErrorCode = ord2.Err.ErrorCode;
+
+                                                        System.Diagnostics.Debug.WriteLine("■■■■■ UpdateIfdocos - Ifdoco OcoOther MakeOrder API failed:" + ord2.Err.ErrorCode.ToString());
+                                                    }
+
+                                                }
+                                                else
+                                                {
+                                                    ifdoco.OcoOtherHasError = true;
+                                                    if (ifdoco.OcoOtherErrorInfo == null)
+                                                    {
+                                                        ifdoco.OcoOtherErrorInfo = new ErrorInfo();
+                                                    }
+                                                    ifdoco.OcoOtherErrorInfo.ErrorTitle = "注文時にエラーが起きました。";
+                                                    ifdoco.OcoOtherErrorInfo.ErrorDescription = "priApi.MakeOrder is null.";
+                                                    ifdoco.OcoOtherErrorInfo.ErrorCode = -1;
+
+                                                    System.Diagnostics.Debug.WriteLine("■■■■■ UpdateIfdocos - Ifdoco OcoOther MakeOrder returened NULL");
+                                                }
+
+
+                                            }
+
+                                        }
+                                        else
+                                        {
+                                            // TODO
+                                            //Debug.WriteLine("□ UpdateIfdocos IFDOCO @OCOが未発注 ELSE OcoOtherHasError");
+                                        }
+
+                                    }
+                                    else if ((ifdoco.OcoOneIsDone || ifdoco.OcoOtherIsDone) && (ifdoco.OcoIsDone == false))
+                                    {
+                                        // OCOの片方が約定済み ＞どちらかをキャンセル
+
+                                        if (ifdoco.OcoOneIsDone)
+                                        {
+                                            // OCO other をキャンセル
+                                            int cancelId = ifdoco.OcoOtherOrderID;
+
+                                            //System.Diagnostics.Debug.WriteLine("■■■■■ UpdateIfdocos needToOrderList OCO CancelOrder .....");
+
+                                            OrderResult res = await _priApi.CancelOrder(_ifdocoTradeApiKey, _ifdocoTradeSecret, p.ThisPair.ToString(), cancelId);
+
+                                            if (res != null)
+                                            {
+                                                if (res.IsSuccess)
+                                                {
+
+                                                    ifdoco.OcoOtherHasError = false;
+
+                                                    ifdoco.OcoOtherOrderID = res.OrderID;
+                                                    ifdoco.OcoOtherOrderedAt = res.OrderedAt;
+                                                    ifdoco.OcoOtherPrice = res.Price;
+                                                    ifdoco.OcoOtherAveragePrice = res.AveragePrice;
+                                                    ifdoco.OcoOtherStatus = res.Status;
+
+                                                    ifdoco.OcoOtherRemainingAmount = res.RemainingAmount;
+                                                    ifdoco.OcoOtherExecutedAmount = res.ExecutedAmount;
+                                                    // TODO
+
+                                                    // 約定
+                                                    if (res.Status == "CANCELED_UNFILLED" || res.Status == "CANCELED_PARTIALLY_FILLED")
+                                                    {
+                                                        // フラグをセット
+                                                        ifdoco.OcoOtherIsDone = true;
+                                                        ifdoco.OcoIsDone = true;
+
+                                                        // 約定！
+
+                                                        //System.Diagnostics.Debug.WriteLine("■■■■■ UpdateIfdocos needToOrderList OCO Other cancel 約定！");
+
+                                                    }
+
+
+                                                }
+                                                else
+                                                {
+                                                    ifdoco.OcoOtherHasError = true;
+                                                    if (ifdoco.OcoOtherErrorInfo == null)
+                                                    {
+                                                        ifdoco.OcoOtherErrorInfo = new ErrorInfo();
+                                                    }
+                                                    ifdoco.OcoOtherErrorInfo.ErrorTitle = res.Err.ErrorTitle;
+                                                    ifdoco.OcoOtherErrorInfo.ErrorDescription = res.Err.ErrorDescription;
+                                                    ifdoco.OcoOtherErrorInfo.ErrorCode = res.Err.ErrorCode;
+
+                                                    System.Diagnostics.Debug.WriteLine("■■■■■ UpdateIfdocos needToOrderList OCO OTHER CancelOrder API returned error code.");
+                                                }
+                                            }
+                                            else
+                                            {
+                                                ifdoco.OcoOtherHasError = true;
+                                                if (ifdoco.OcoOtherErrorInfo == null)
+                                                {
+                                                    ifdoco.OcoOtherErrorInfo = new ErrorInfo();
+                                                }
+                                                ifdoco.OcoOtherErrorInfo.ErrorTitle = "注文時にエラーが起きました。";
+                                                ifdoco.OcoOtherErrorInfo.ErrorDescription = "priApi.MakeOrder is null.";
+                                                ifdoco.OcoOtherErrorInfo.ErrorCode = -1;
+
+                                                System.Diagnostics.Debug.WriteLine("■■■■■ UpdateIfdocos needToOrderList OCO OTHER CancelOrder API returned null.");
+
+
+                                            }
+
+                                        }
+                                        else if (ifdoco.OcoOtherIsDone)
+                                        {
+                                            // OCO one をキャンセル
+                                            int cancelId = ifdoco.OcoOneOrderID;
+
+                                            //System.Diagnostics.Debug.WriteLine("■■■■■ UpdateIfdocos needToOrderList OCO CancelOrder .....");
+
+                                            OrderResult res = await _priApi.CancelOrder(_ifdocoTradeApiKey, _ifdocoTradeSecret, p.ThisPair.ToString(), cancelId);
+
+                                            if (res != null)
+                                            {
+                                                if (res.IsSuccess)
+                                                {
+
+                                                    ifdoco.OcoOneHasError = false;
+
+                                                    ifdoco.OcoOneOrderID = res.OrderID;
+                                                    ifdoco.OcoOneOrderedAt = res.OrderedAt;
+                                                    ifdoco.OcoOnePrice = res.Price;
+                                                    ifdoco.OcoOneAveragePrice = res.AveragePrice;
+                                                    ifdoco.OcoOneStatus = res.Status;
+
+                                                    ifdoco.OcoOneRemainingAmount = res.RemainingAmount;
+                                                    ifdoco.OcoOneExecutedAmount = res.ExecutedAmount;
+                                                    // TODO
+
+                                                    // 約定
+                                                    if (res.Status == "CANCELED_UNFILLED" || res.Status == "CANCELED_PARTIALLY_FILLED")
+                                                    {
+                                                        // フラグをセット
+                                                        ifdoco.OcoOneIsDone = true;
+                                                        ifdoco.OcoIsDone = true;
+
+                                                        // 約定！
+
+                                                        //System.Diagnostics.Debug.WriteLine("■■■■■ UpdateIfdocos needToOrderList OCO One cancel 約定！");
+
+                                                    }
+
+
+                                                }
+                                                else
+                                                {
+                                                    ifdoco.OcoOtherHasError = true;
+                                                    if (ifdoco.OcoOtherErrorInfo == null)
+                                                    {
+                                                        ifdoco.OcoOtherErrorInfo = new ErrorInfo();
+                                                    }
+                                                    ifdoco.OcoOtherErrorInfo.ErrorTitle = res.Err.ErrorTitle;
+                                                    ifdoco.OcoOtherErrorInfo.ErrorDescription = res.Err.ErrorDescription;
+                                                    ifdoco.OcoOtherErrorInfo.ErrorCode = res.Err.ErrorCode;
+
+                                                    System.Diagnostics.Debug.WriteLine("■■■■■ UpdateIfdocos needToOrderList OCO ONE CancelOrder API returned error code.");
+                                                }
+                                            }
+                                            else
+                                            {
+                                                ifdoco.OcoOtherHasError = true;
+                                                if (ifdoco.OcoOtherErrorInfo == null)
+                                                {
+                                                    ifdoco.OcoOtherErrorInfo = new ErrorInfo();
+                                                }
+                                                ifdoco.OcoOtherErrorInfo.ErrorTitle = "注文時にエラーが起きました。";
+                                                ifdoco.OcoOtherErrorInfo.ErrorDescription = "priApi.MakeOrder is null.";
+                                                ifdoco.OcoOtherErrorInfo.ErrorCode = -1;
+
+                                                System.Diagnostics.Debug.WriteLine("■■■■■ UpdateIfdocos needToOrderList OCO ONE CancelOrder API returned null.");
+
+
+                                            }
+
+                                        }
+
+                                    }
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+                // 間隔 1/2 
+                await Task.Delay(1400);
+
+            }
+
+        }
+
+        // 自動取引のループ
+        private async void UpdateAutoTrade()
+        {
+            /*
+            if (ActivePair.ThisPair != Pairs.btc_jpy)
+            {
+                await Task.Delay(1500);
+                return;
+            }
+            */
+
+            var pair = PairBtcJpy;
+            var autoTrades = PairBtcJpy.AutoTrades;
+            var ltp = PairBtcJpy.Ltp;
+
+
+            // 試し買いの単位
+            decimal sentinelAmount = 0.0001M;
+            // 取引単位
+            decimal defaultAmount = 0.001M;
+
+            while (AutoTradeStart)
+            {
+                // ログインしていなかったらスルー。
+                if (LoggedInMode == false)
+                {
+                    await Task.Delay(2000);
+                    continue;
+                }
+
+                if (AutoTradeApiKeyIsSet == false)
+                {
+                    await Task.Delay(2000);
+                    continue;
+                }
+
+                // 間隔 1/2
+                await Task.Delay(1600);
+
+                // 取引単位の変更があった場合に新しい値をセット
+                defaultAmount = AutoTradeTama;
+
+                AutoTradeActiveOrders = 0;
+                AutoTradeSellOrders = 0;
+                AutoTradeBuyOrders = 0;
+                AutoTradeErrOrders = 0;
+
+                if (Application.Current == null) break;
+
+                // 未約定注文の情報更新用リスト
+                List<int> needUpdateIdsList = new List<int>();
+
+                // 全注文数のセット
+                AutoTradeActiveOrders = autoTrades.Count;
+
+                // 未約定注文のリストを作る。
+                foreach (var pos in autoTrades)
+                {
+                    if (pos.IsCanceled)
+                    {
+                        continue;
+                    }
+                    if ((pos.BuyHasError == true) || (pos.SellHasError == true))
+                    {
+                        // エラー注文数をセット
+                        AutoTradeErrOrders = AutoTradeErrOrders + 1;
+
+                        continue;
+                    }
+
+                    if ((pos.BuyOrderId != 0) && ((pos.BuyStatus == "UNFILLED") || pos.BuyStatus == "PARTIALLY_FILLED"))
+                    {
+                        // 買い注文数をセット
+                        AutoTradeBuyOrders = AutoTradeBuyOrders + 1;
+
+                        needUpdateIdsList.Add(pos.BuyOrderId);
+                    }
+
+                    if ((pos.SellOrderId != 0) && ((pos.SellStatus == "UNFILLED") || pos.SellStatus == "PARTIALLY_FILLED"))
+                    {
+                        // 売り注文数をセット
+                        AutoTradeSellOrders = AutoTradeSellOrders + 1;
+
+                        needUpdateIdsList.Add(pos.SellOrderId);
+                    }
+                }
+
+                // 未約定注文の最新状態をアップデートする。
+                if (needUpdateIdsList.Count > 0)
+                {
+                    // リストのリスト（小分けにして分割取得用）
+                    List<List<int>> ListOfList = new List<List<int>>();
+
+                    // GetOrderListByIDs 40015 数が多いとエラーになるので、小分けにして。
+                    List<int> temp = new List<int>();
+                    int c = 0;
+
+                    for (int i = 0; i < needUpdateIdsList.Count; i++)
+                    {
+
+                        temp.Add(needUpdateIdsList[c]);
+
+                        if (temp.Count == 5)
+                        {
+                            ListOfList.Add(temp);
+
+                            temp = new List<int>();
+                        }
+
+                        if (c == needUpdateIdsList.Count - 1)
+                        {
+                            if (temp.Count > 0)
+                            {
+                                ListOfList.Add(temp);
+                            }
+
+                            break;
+                        }
+
+                        c = c + 1;
+                    }
+
+                    foreach (var list in ListOfList)
+                    {
+                        // 最新の注文情報をゲット
+                        Orders ords = await _priApi.GetOrderListByIDs(_autoTradeApiKey, _autoTradeSecret, pair.ThisPair.ToString(), list);//needUpdateIdsList);
+
+                        if (ords != null)
+                        {
+                            if (Application.Current == null)
+                            {
+                                break;
+                            }
+                            Application.Current.Dispatcher.Invoke(() =>
+                            {
+                                // 更新された注文をアップデート
+                                foreach (var ord in ords.OrderList)
+                                {
+                                    try
+                                    {
+                                        // 買い注文
+                                        var found = autoTrades.FirstOrDefault((x => x.BuyOrderId == ord.OrderID));
+                                        if (found != null)
+                                        {
+
+                                            found.BuyStatus = ord.Status;
+
+                                            found.BuyFilledPrice = ord.AveragePrice;
+                                        }
+
+                                        // 売り注文
+                                        found = autoTrades.FirstOrDefault((x => x.SellOrderId == ord.OrderID));
+                                        if (found != null)
+                                        {
+                                            found.SellStatus = ord.Status;
+
+                                            found.SellFilledPrice = ord.AveragePrice;
+                                        }
+
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        System.Diagnostics.Debug.WriteLine("■■■■■ autoTrades GetOrderListByIDs Exception: " + e);
+                                    }
+
+                                }
+                            });
+                        }
+                        else
+                        {
+                            System.Diagnostics.Debug.WriteLine("■■■■■ autoTrades GetOrderListByIDs ords == null");
+
+
+                        }
+                    }
+
+                }
+
+                // 売り未発注を発注するループ。
+                foreach (var pos in autoTrades)
+                {
+                    // キャンセルはスキップ
+                    if (pos.IsCanceled) continue;
+
+                    // 済みはスキップ
+                    if (pos.IsDone) continue;
+
+                    // 買いキャンセルされた スキップ
+                    if ((pos.BuyOrderId != 0) && ((pos.BuyStatus == "CANCELED_UNFILLED") || pos.BuyStatus == "CANCELED_PARTIALLY_FILLED"))
+                    {
+                        pos.IsCanceled = true;
+                        continue;
+                    }
+
+                    // 売りキャンセルされた スキップ
+                    if ((pos.SellOrderId != 0) && ((pos.SellStatus == "CANCELED_UNFILLED") || pos.SellStatus == "CANCELED_PARTIALLY_FILLED"))
+                    {
+                        pos.IsCanceled = true;
+                        continue;
+                    }
+
+                    // TODO HasError スキップ
+                    if ((pos.BuyHasError == true) || (pos.SellHasError == true))
+                    {
+                        continue;
+                    }
+
+                    // 買い約定済み
+                    if ((pos.BuyOrderId != 0) && (pos.BuyStatus == "FULLY_FILLED"))
+                    {
+                        pos.BuyIsDone = true;
+
+                        // 売り未発注 (エラーが起きている売りはどうする？)
+                        if ((pos.SellOrderId == 0) && (pos.SellHasError == false) && (string.IsNullOrEmpty(pos.SellStatus)))
+                        {
+
+                            await Task.Delay(200);
+
+                            // 売り発注
+                            OrderResult ord = await _priApi.MakeOrder(_autoTradeApiKey, _autoTradeSecret, pair.ThisPair.ToString(), pos.SellAmount, pos.SellPrice, pos.SellSide, "limit");
+
+                            if (ord != null)
+                            {
+                                // 売り成功
+                                if (ord.IsSuccess)
+                                {
+                                    pos.SellHasError = false;
+
+                                    pos.SellOrderId = ord.OrderID;
+                                    pos.SellStatus = ord.Status;
+
+                                }
+                                else
+                                {
+                                    pos.SellHasError = true;
+                                    if (pos.SellErrorInfo == null)
+                                    {
+                                        pos.SellErrorInfo = new ErrorInfo();
+                                    }
+                                    pos.SellErrorInfo.ErrorTitle = ord.Err.ErrorTitle;
+                                    pos.SellErrorInfo.ErrorDescription = ord.Err.ErrorDescription;
+                                    pos.SellErrorInfo.ErrorCode = ord.Err.ErrorCode;
+
+                                    System.Diagnostics.Debug.WriteLine("UpdateAutoTrade - 売り　sell MakeOrder API failed");
+                                }
+
+                            }
+                            else
+                            {
+                                pos.SellHasError = true;
+                                if (pos.SellErrorInfo == null)
+                                {
+                                    pos.SellErrorInfo = new ErrorInfo();
+                                }
+                                pos.SellErrorInfo.ErrorTitle = "注文時にエラーが起きました。";
+                                pos.SellErrorInfo.ErrorDescription = "priApi.MakeOrder is null.";
+                                pos.SellErrorInfo.ErrorCode = -1;
+
+                                System.Diagnostics.Debug.WriteLine("UpdateAutoTrade - 売り　sell MakeOrder returened NULL");
+                            }
+
+                            await Task.Delay(200);
+
+                        }
+                        else
+                        {
+                            // 売り注文は済みの場合は、フラグ
+                            if ((pos.SellOrderId != 0) && (pos.SellStatus == "FULLY_FILLED"))
+                            {
+                                pos.SellIsDone = true;
+                                pos.IsDone = true;
+                            }
+
+                        }
+
+
+                    }
+
+                }
+
+                // 完了済み注文を、新たに注文し直す。 ただし、アッパーリミット以下なら（暴騰時に買うと、リバウンドですぐ下がる）
+                if ((ltp < AutoTradeUpperLimit) && (ltp > AutoTradeLowerLimit))
+                {
+
+                    // 買い価格順でソートしたリスト
+                    List<AutoTrade> SortedList = autoTrades.OrderByDescending(o => o.BuyPrice).ToList();
+
+                    // 完了済み注文を、新たに注文し直すループ。
+                    for (int i = 0; i < SortedList.Count; i++)
+                    {
+
+                        if (SortedList[i].IsCanceled)
+                        {
+                            SortedList[i].Counter = 0;
+                            continue;
+                        }
+                        if ((SortedList[i].BuyIsDone == true) && (SortedList[i].SellIsDone == false))
+                        {
+                            SortedList[i].Counter = 0;
+                            continue;
+                        }
+
+                        // TODO HasError スキップ
+                        if ((SortedList[i].BuyHasError == true) || (SortedList[i].SellHasError == true))
+                        {
+                            SortedList[i].Counter = 0;
+                            continue;
+                        }
+
+                        // 一番上 未約定
+                        if ((i == 0) && ((SortedList[i].BuyIsDone == false) && (SortedList[i].SellIsDone == false)))
+                        {
+
+                            // SortedList[i].Counter == 20 とかだったら、チョイ上の+1000価格で、買い注文。ただし、現在値より下の価格で買う。
+                            if (SortedList[i].Counter >= 7)
+                            {
+                                if ((ltp - SortedList[i].BuyPrice) > 500M)
+                                {
+
+                                    decimal basePrice = ltp - 200M;
+                                    //basePrice = ((_ltp / 1000) * 1000);
+
+                                    if ((basePrice < ltp) && (SortedList[i].BuyPrice < basePrice))
+                                    {
+
+                                        AutoTrade position = new AutoTrade();
+                                        position.BuySide = "buy";
+                                        position.BuyAmount = sentinelAmount;//SortedList[i].BuyAmount;
+                                        position.SellSide = "sell";
+                                        position.SellAmount = sentinelAmount;//SortedList[i].SellAmount;
+
+
+                                        position.BuyPrice = basePrice;
+                                        position.SellPrice = basePrice + 500M;
+
+                                        position.ShushiAmount = (position.SellPrice * position.SellAmount) - (position.BuyPrice * position.BuyAmount);
+
+                                        // 注文発注
+                                        OrderResult res = await _priApi.MakeOrder(_autoTradeApiKey, _autoTradeSecret, pair.ThisPair.ToString(), position.BuyAmount, position.BuyPrice, position.BuySide, "limit");
+
+                                        if (res != null)
+                                        {
+                                            if (res.IsSuccess)
+                                            {
+
+                                                position.BuyHasError = false;
+
+                                                position.BuyOrderId = res.OrderID;
+                                                position.BuyFilledPrice = res.AveragePrice;
+                                                position.BuyStatus = res.Status;
+
+                                                // 約定
+                                                if (res.Status == "FULLY_FILLED")
+                                                {
+                                                    // フラグをセット
+                                                    position.BuyIsDone = true;
+                                                }
+
+
+                                                // 暴露カウンターを0にリセット
+                                                SortedList[i].Counter = 0;
+
+
+                                                // 新規追加
+                                                autoTrades.Insert(0, position);
+
+                                                await Task.Delay(200);
+
+                                                if (autoTrades.Count > 5)
+                                                {
+                                                    // チョット下あたりの注文を抜く。
+
+                                                    if (autoTrades[3].BuyIsDone == false)
+                                                    {
+
+                                                        OrderResult ord = await _priApi.CancelOrder(_autoTradeApiKey, _autoTradeSecret, pair.ThisPair.ToString(), autoTrades[3].BuyOrderId);
+                                                        if (ord != null)
+                                                        {
+                                                            if (ord.IsSuccess)
+                                                            {
+                                                                autoTrades.RemoveAt(3);
+
+                                                            }
+                                                            else
+                                                            {
+                                                                autoTrades[3].BuyHasError = true;
+                                                                if (autoTrades[3].BuyErrorInfo == null)
+                                                                {
+                                                                    autoTrades[3].BuyErrorInfo = new ErrorInfo();
+                                                                }
+                                                                autoTrades[3].BuyErrorInfo.ErrorTitle = ord.Err.ErrorTitle;
+                                                                autoTrades[3].BuyErrorInfo.ErrorDescription = ord.Err.ErrorDescription;
+                                                                autoTrades[3].BuyErrorInfo.ErrorCode = ord.Err.ErrorCode;
+
+                                                                System.Diagnostics.Debug.WriteLine("■■■■■ UpdateAutoTrade 一番上 途中を抜くキャンセルで。MakeOrder API returned error code.");
+                                                            }
+
+                                                        }
+                                                        else
+                                                        {
+                                                            autoTrades[3].BuyHasError = true;
+                                                            if (autoTrades[3].BuyErrorInfo == null)
+                                                            {
+                                                                autoTrades[3].BuyErrorInfo = new ErrorInfo();
+                                                            }
+                                                            autoTrades[3].BuyErrorInfo.ErrorTitle = ord.Err.ErrorTitle;
+                                                            autoTrades[3].BuyErrorInfo.ErrorDescription = ord.Err.ErrorDescription;
+                                                            autoTrades[3].BuyErrorInfo.ErrorCode = ord.Err.ErrorCode;
+
+                                                            System.Diagnostics.Debug.WriteLine("■■■■■ UpdateAutoTrade 一番上 途中を抜くキャンセルで。MakeOrder API returned null.");
+                                                        }
+                                                    }
+                                                }
+
+                                                // ループ中にリストを弄ったから、ループから抜ける。
+                                                break;
+
+
+                                            }
+                                            else
+                                            {
+                                                position.BuyHasError = true;
+                                                if (position.BuyErrorInfo == null)
+                                                {
+                                                    position.BuyErrorInfo = new ErrorInfo();
+                                                }
+                                                position.BuyErrorInfo.ErrorTitle = res.Err.ErrorTitle;
+                                                position.BuyErrorInfo.ErrorDescription = res.Err.ErrorDescription;
+                                                position.BuyErrorInfo.ErrorCode = res.Err.ErrorCode;
+
+                                                System.Diagnostics.Debug.WriteLine("■■■■■ UpdateAutoTrade 完了済み注文を、新たに注文し直すループ。一番上 MakeOrder API returned error code.");
+                                            }
+                                        }
+                                        else
+                                        {
+                                            position.BuyHasError = true;
+                                            if (position.BuyErrorInfo == null)
+                                            {
+                                                position.BuyErrorInfo = new ErrorInfo();
+                                            }
+                                            position.BuyErrorInfo.ErrorTitle = "注文時にエラーが起きました。";
+                                            position.BuyErrorInfo.ErrorDescription = "priApi.MakeOrder is null.";
+                                            position.BuyErrorInfo.ErrorCode = -1;
+
+                                            System.Diagnostics.Debug.WriteLine("■■■■■ UpdateAutoTrade 完了済み注文を、新たに注文し直すループ。一番上 MakeOrder API returned null.");
+
+                                        }
+
+
+
+                                    }
+
+
+                                }
+
+                            }
+
+                        }
+
+                        // 売りが約定した
+                        if ((SortedList[i].IsDone) && (SortedList[i].BuyHasError == false) && (SortedList[i].SellHasError == false) && (SortedList[i].IsCanceled == false))
+                        {
+
+                            // 損益更新
+                            //AutoTradeProfit = AutoTradeProfit + ((SortedList[i].SellFilledPrice - SortedList[i].BuyFilledPrice) * SortedList[i].SellAmount);
+                            AutoTradeProfit = AutoTradeProfit + ((SortedList[i].SellPrice - SortedList[i].BuyPrice) * SortedList[i].SellAmount);
+
+                            // 新規
+                            AutoTrade position = new AutoTrade();
+                            position.BuySide = "buy";
+                            position.BuyAmount = defaultAmount;//SortedList[i].BuyAmount;
+                            position.SellSide = "sell";
+                            position.SellAmount = defaultAmount;//SortedList[i].SellAmount;
+
+                            // 上半分
+                            if (i <= 7)
+                            {
+                                // 同じ条件で、再度注文。ただし、現在値より下の価格で買う。
+
+                                position.BuyPrice = SortedList[i].BuyPrice - 200;
+                                position.SellPrice = SortedList[i].SellPrice - 200;
+
+                                if (position.BuyPrice > ltp)
+                                {
+                                    /*
+                                    decimal basePrice = ((_ltp / 1000) * 1000);
+                                    position.BuyPrice = basePrice - 500M;
+                                    position.SellPrice = basePrice + 500M;
+                                    */
+                                    position.BuyPrice = ltp - 500M;
+                                    position.SellPrice = ltp + 500M;
+                                }
+                            }
+                            else
+                            {
+                                // マイナス買い価格で、再度注文。ただし、現在値より下の価格で買う。
+
+                                position.BuyPrice = SortedList[i].BuyPrice - 1000M;
+                                position.SellPrice = SortedList[i].SellPrice - 1000M;
+
+                                if (position.BuyPrice > ltp)
+                                {
+                                    /*
+                                    decimal basePrice = ((_ltp / 1000) * 1000);
+                                    position.BuyPrice = basePrice - 1000M;
+                                    position.SellPrice = basePrice;
+                                    */
+                                    position.BuyPrice = ltp - 1500M;
+                                    position.SellPrice = ltp + 500M;
+                                }
+
+                            }
+
+                            // 予想利益額
+                            position.ShushiAmount = (position.SellPrice * position.SellAmount) - (position.BuyPrice * position.BuyAmount);
+
+
+                            // 注文発注
+                            OrderResult res = await _priApi.MakeOrder(_autoTradeApiKey, _autoTradeSecret, pair.ThisPair.ToString(), position.BuyAmount, position.BuyPrice, position.BuySide, "limit");
+
+                            if (res != null)
+                            {
+                                if (res.IsSuccess)
+                                {
+
+                                    position.BuyHasError = false;
+
+                                    position.BuyOrderId = res.OrderID;
+                                    position.BuyFilledPrice = res.AveragePrice;
+                                    position.BuyStatus = res.Status;
+
+                                    // 約定
+                                    if (res.Status == "FULLY_FILLED")
+                                    {
+                                        // フラグをセット
+                                        position.BuyIsDone = true;
+
+                                    }
+
+                                    // 下のカウンターをリセット
+                                    if (i < autoTrades.Count - 1)
+                                    {
+                                        autoTrades[i + 1].Counter = 0;
+                                    }
+
+
+                                    // IsDone を削除する。>あとで。
+                                    //_autoTrades2.RemoveAt(i);
+
+                                    // 新規追加
+                                    autoTrades.Insert(i, position);
+
+                                    await Task.Delay(300);
+
+
+                                }
+                                else
+                                {
+                                    position.BuyHasError = true;
+                                    if (position.BuyErrorInfo == null)
+                                    {
+                                        position.BuyErrorInfo = new ErrorInfo();
+                                    }
+                                    position.BuyErrorInfo.ErrorTitle = res.Err.ErrorTitle;
+                                    position.BuyErrorInfo.ErrorDescription = res.Err.ErrorDescription;
+                                    position.BuyErrorInfo.ErrorCode = res.Err.ErrorCode;
+
+                                    System.Diagnostics.Debug.WriteLine("■■■■■ UpdateAutoTrade 完了済み注文を、新たに注文し直すループ。途中 MakeOrder API returned error code.");
+                                }
+                            }
+                            else
+                            {
+                                position.BuyHasError = true;
+                                if (position.BuyErrorInfo == null)
+                                {
+                                    position.BuyErrorInfo = new ErrorInfo();
+                                }
+                                position.BuyErrorInfo.ErrorTitle = "注文時にエラーが起きました。";
+                                position.BuyErrorInfo.ErrorDescription = "priApi.MakeOrder is null.";
+                                position.BuyErrorInfo.ErrorCode = -1;
+
+                                System.Diagnostics.Debug.WriteLine("■■■■■ UpdateAutoTrade 完了済み注文を、新たに注文し直すループ。途中 MakeOrder API returned null.");
+
+                            }
+
+
+                            // ループ中にリストを弄ったから、ループから抜ける。
+                            break;
+                        }
+
+                        // SortedList[i].Counter >= 20 とかだったら、停滞中なので、売り待ちの価格より下で、、かつ、現在値よりチョイ下で、買い注文。ただし、全体の数が20を超えない範囲で。
+                        if ((SortedList[i].Counter >= 7) && SortedList.Count < 20)
+                        {
+                            await Task.Delay(200);
+
+                            if ((ltp - SortedList[i].BuyPrice) > 600M)
+                            {
+
+                                // 現在値よりチョイ下の価格で買う。
+                                decimal basePrice = ltp - 400M;
+
+                                if ((basePrice < ltp) && (basePrice > SortedList[i].BuyPrice))
+                                {
+                                    AutoTrade position = new AutoTrade();
+                                    position.BuySide = "buy";
+                                    position.BuyAmount = defaultAmount;//SortedList[i].BuyAmount;
+                                    position.SellSide = "sell";
+                                    position.SellAmount = defaultAmount;//SortedList[i].SellAmount;
+
+                                    position.BuyPrice = basePrice;
+                                    position.SellPrice = basePrice + 600M;
+
+                                    position.ShushiAmount = (position.SellPrice * position.SellAmount) - (position.BuyPrice * position.BuyAmount);
+
+
+                                    // 注文発注
+                                    OrderResult res = await _priApi.MakeOrder(_autoTradeApiKey, _autoTradeSecret, pair.ThisPair.ToString(), position.BuyAmount, position.BuyPrice, position.BuySide, "limit");
+
+                                    if (res != null)
+                                    {
+                                        if (res.IsSuccess)
+                                        {
+
+                                            position.BuyHasError = false;
+
+                                            position.BuyOrderId = res.OrderID;
+                                            position.BuyFilledPrice = res.AveragePrice;
+                                            position.BuyStatus = res.Status;
+
+                                            // 約定
+                                            if (res.Status == "FULLY_FILLED")
+                                            {
+                                                // フラグをセット
+                                                position.BuyIsDone = true;
+
+                                            }
+
+
+                                            // カウンターをリセット
+                                            autoTrades[i].Counter = 0;
+
+                                            // 下のカウンターをリセット
+                                            if (i < autoTrades.Count - 1)
+                                            {
+                                                autoTrades[i + 1].Counter = 0;
+                                            }
+
+                                            await Task.Delay(200);
+
+                                            // 新規追加
+                                            autoTrades.Insert(i, position);
+
+
+
+                                            // ループ中にリストを弄ったから、ループから抜ける。
+                                            break;
+
+                                        }
+                                        else
+                                        {
+                                            position.BuyHasError = true;
+                                            if (position.BuyErrorInfo == null)
+                                            {
+                                                position.BuyErrorInfo = new ErrorInfo();
+                                            }
+                                            position.BuyErrorInfo.ErrorTitle = res.Err.ErrorTitle;
+                                            position.BuyErrorInfo.ErrorDescription = res.Err.ErrorDescription;
+                                            position.BuyErrorInfo.ErrorCode = res.Err.ErrorCode;
+
+                                            System.Diagnostics.Debug.WriteLine("■■■■■ UpdateAutoTrade 完了済み注文を、新たに注文し直すループ。途中 MakeOrder API returned error code.");
+                                        }
+                                    }
+                                    else
+                                    {
+                                        position.BuyHasError = true;
+                                        if (position.BuyErrorInfo == null)
+                                        {
+                                            position.BuyErrorInfo = new ErrorInfo();
+                                        }
+                                        position.BuyErrorInfo.ErrorTitle = "注文時にエラーが起きました。";
+                                        position.BuyErrorInfo.ErrorDescription = "priApi.MakeOrder is null.";
+                                        position.BuyErrorInfo.ErrorCode = -1;
+
+                                        System.Diagnostics.Debug.WriteLine("■■■■■ UpdateAutoTrade 完了済み注文を、新たに注文し直すループ。途中 MakeOrder API returned null.");
+
+                                    }
+
+
+
+                                }
+                            }
+                        }
+
+                        // 暴露カウンターを＋
+                        SortedList[i].Counter = SortedList[i].Counter + 1;
+
+                        // 一番高い買い注文に到達したので、ループから抜ける。
+                        break;
+
+                    }
+
+                }
+
+                await Task.Delay(300);
+
+                // 掃除ループ
+                int h = -1;
+                foreach (var pos in autoTrades)
+                {
+                    h = h + 1;
+
+                    if (pos.IsCanceled == true)
+                    {
+                        //needDeleteIdsList.Add(pos.BuyOrderId);
+                        autoTrades.Remove(pos);
+                        break;
+                    }
+
+                    if (pos.IsDone == true)
+                    {
+                        //AutoTradeProfit = AutoTradeProfit + ((pos.SellFilledPrice - pos.BuyFilledPrice) * pos.SellAmount);
+                        autoTrades.Remove(pos);
+                        break;
+                    }
+
+                    if (pos.BuyHasError == true)
+                    {
+                        //_autoTrades2.Remove(pos);
+                        //break;
+
+
+                        // 停滞タイムアウトでキャンセルしようとして、50010（指定の注文はキャンセル出来ませんエラー）が返ると、エラーが増え続ける。
+                        // ので、スキップ
+                        continue;
+                    }
+                    else if (pos.SellHasError == true)
+                    {
+                        //_autoTrades2.Remove(pos);
+                        //break;
+
+                        continue;
+                    }
+
+
+                    // 停滞中を抜く。
+                    // TODO (一部約定している場合は、キャンセルすると端数が出る。それどうするか)
+                    if ((pos.BuyStatus == "UNFILLED" || pos.BuyStatus == "PARTIALLY_FILLED") && pos.BuyHasError == false)
+                    {
+                        // 先頭でもなく、一番下でもない
+                        if ((h > 0) && (h < 15))
+                        {
+                            // 60秒以上停滞している。
+                            if (pos.Counter > 60)
+                            {
+                                // 注文を抜く。
+                                OrderResult ord = await _priApi.CancelOrder(_autoTradeApiKey, _autoTradeSecret, pair.ThisPair.ToString(), pos.BuyOrderId);
+                                if (ord != null)
+                                {
+                                    if (ord.IsSuccess)
+                                    {
+                                        autoTrades.Remove(pos);
+
+                                    }
+                                    else
+                                    {
+                                        pos.BuyHasError = true;
+                                        if (pos.BuyErrorInfo == null)
+                                        {
+                                            pos.BuyErrorInfo = new ErrorInfo();
+                                        }
+                                        pos.BuyErrorInfo.ErrorTitle = ord.Err.ErrorTitle;
+                                        pos.BuyErrorInfo.ErrorDescription = ord.Err.ErrorDescription;
+                                        pos.BuyErrorInfo.ErrorCode = ord.Err.ErrorCode;
+
+                                        System.Diagnostics.Debug.WriteLine("■■■■■ UpdateAutoTrade 停滞中を抜く。キャンセルで。MakeOrder API returned error code.");
+                                    }
+
+                                }
+                                else
+                                {
+                                    pos.BuyHasError = true;
+                                    if (pos.BuyErrorInfo == null)
+                                    {
+                                        pos.BuyErrorInfo = new ErrorInfo();
+                                    }
+                                    pos.BuyErrorInfo.ErrorTitle = ord.Err.ErrorTitle;
+                                    pos.BuyErrorInfo.ErrorDescription = ord.Err.ErrorDescription;
+                                    pos.BuyErrorInfo.ErrorCode = ord.Err.ErrorCode;
+
+                                    System.Diagnostics.Debug.WriteLine("■■■■■ UpdateAutoTrade 停滞中を抜く。キャンセルで。MakeOrder API returned null.");
+                                }
+
+                                break;
+
+                            }
+
+
+
+
+                        }
+
+
+                    }
+
+
+                    // 指定幅　下がったら、損切。
+                    if ((pos.SellOrderId != 0) && pos.BuyIsDone && (pos.SellIsDone == false))
+                    {
+                        if (pos.SellStatus == "UNFILLED")
+                        {
+                            if ((pos.SellPrice - ltp) > AutoTradeLostCut)
+                            {
+
+
+                                OrderResult ord = await _priApi.CancelOrder(_autoTradeApiKey, _autoTradeSecret, pair.ThisPair.ToString(), pos.SellOrderId);
+                                if (ord != null)
+                                {
+                                    if (ord.IsSuccess)
+                                    {
+                                        pos.SellStatus = ord.Status;
+
+                                        pos.IsCanceled = true;
+                                    }
+                                    else
+                                    {
+                                        pos.SellHasError = true;
+                                        if (pos.SellErrorInfo == null)
+                                        {
+                                            pos.SellErrorInfo = new ErrorInfo();
+                                        }
+                                        pos.SellErrorInfo.ErrorTitle = ord.Err.ErrorTitle;
+                                        pos.SellErrorInfo.ErrorDescription = ord.Err.ErrorDescription;
+                                        pos.SellErrorInfo.ErrorCode = ord.Err.ErrorCode;
+
+                                        System.Diagnostics.Debug.WriteLine("■■■■■ UpdateAutoTrade 損切売りキャンセルで。MakeOrder API returned error code.");
+                                    }
+
+                                }
+                                else
+                                {
+                                    pos.SellHasError = true;
+                                    if (pos.SellErrorInfo == null)
+                                    {
+                                        pos.SellErrorInfo = new ErrorInfo();
+                                    }
+                                    pos.SellErrorInfo.ErrorTitle = ord.Err.ErrorTitle;
+                                    pos.SellErrorInfo.ErrorDescription = ord.Err.ErrorDescription;
+                                    pos.SellErrorInfo.ErrorCode = ord.Err.ErrorCode;
+
+                                    System.Diagnostics.Debug.WriteLine("■■■■■ UpdateAutoTrade 損切売りキャンセルで。MakeOrder API returned null.");
+                                }
+
+
+
+
+                            }
+                        }
+                    }
+
+
+
+
+                }
+
+
+            }
+        }
+
         #region == 注文関係のメソッド ==
 
         // 手動発注から発注。その他は、（priApi）から直に呼び出すこと！
         private async Task<OrderResult> ManualOrder(Pair p, decimal amount, decimal price, string side, string type)
         {
-            System.Diagnostics.Debug.WriteLine("□ Order - " + p.pair.ToString() + ":" + amount + ":" + price.ToString() + ":" + side + ":" + type);
+            System.Diagnostics.Debug.WriteLine("□ Order - " + p.ThisPair.ToString() + ":" + amount + ":" + price.ToString() + ":" + side + ":" + type);
 
             if (ManualTradeApiKeyIsSet == false)
             {
@@ -11594,7 +15374,7 @@ namespace BitDesk.ViewModels
 
             try
             {
-                OrderResult ord = await _priApi.MakeOrder(_manualTradeApiKey, _manualTradeSecret, p.pair.ToString(), amount, price, side, type);
+                OrderResult ord = await _priApi.MakeOrder(_manualTradeApiKey, _manualTradeSecret, p.ThisPair.ToString(), amount, price, side, type);
 
                 if (ord != null)
                 {
@@ -11668,7 +15448,7 @@ namespace BitDesk.ViewModels
             {
                 // キャンセル注文発注
                 //OrderResult ord = await _priMakeOrderApi.CancelOrder(pair, orderID);
-                OrderResult ord = await _priApi.CancelOrder(_manualTradeApiKey, _manualTradeSecret, p.pair.ToString(), orderID);
+                OrderResult ord = await _priApi.CancelOrder(_manualTradeApiKey, _manualTradeSecret, p.ThisPair.ToString(), orderID);
 
                 if (ord != null)
                 {
@@ -14062,6 +17842,1131 @@ namespace BitDesk.ViewModels
         public void GetOrderListCommand_Execute()
         {
             Task.Run(() => GetOrderList());
+        }
+
+        // IDF 注文
+        public ICommand IfdOrderCommand { get; }
+        public bool IfdOrderCommand_CanExecute()
+        {
+            if (PublicApiOnlyMode == true) return false;
+
+            return true;
+        }
+        public async void IfdOrderCommand_Execute()
+        {
+            //System.Diagnostics.Debug.WriteLine("IfdOrderCommand...");
+
+            var pair = ActivePair;
+            var ifdocos = ActivePair.Ifdocos;
+
+            IFDOrderCommandResult = "";
+
+            if (IfdocoTradeApiKeyIsSet == false)
+            {
+                // TODO show message?
+                return;
+            }
+
+            // Input check.
+            if (IFD_IfdAmount <= 0)
+            {
+                IFDOrderCommandErrorString = "数量が0です。";
+                return;
+            }
+
+            if (IFD_IfdPrice <= 0)
+            {
+                IFDOrderCommandErrorString = "価格が0です。";
+                return;
+            }
+
+            if (IFD_DoAmount <= 0)
+            {
+                IFDOrderCommandErrorString = "数量が0です。";
+                return;
+            }
+
+            if (IFD_DoPrice <= 0)
+            {
+                IFDOrderCommandErrorString = "価格が0です。";
+                return;
+            }
+
+            if (IFD_DoTriggerPrice <= 0)
+            {
+                IFDOrderCommandErrorString = "トリガーが0です。";
+                return;
+            }
+
+            Ifdoco ifdoco = new Ifdoco();
+
+            // IFDで
+            ifdoco.Kind = IfdocoKinds.ifd;
+
+            // If done
+            ifdoco.IfdoneType = IFD_IfdType;
+            ifdoco.IfdoneSide = IFD_IfdSide.ToString();
+            ifdoco.IfdoneStartAmount = IFD_IfdAmount;
+            ifdoco.IfdonePrice = IFD_IfdPrice;
+
+            // Do
+            ifdoco.IfdDoType = IFD_DoType;
+            ifdoco.IfdDoSide = IFD_DoSide.ToString();
+            ifdoco.IfdDoStartAmount = IFD_DoAmount;
+            ifdoco.IfdDoPrice = IFD_DoPrice;
+
+            ifdoco.IfdDoTriggerPrice = IFD_DoTriggerPrice;
+            ifdoco.IfdDoTriggerUpDown = IFD_DoTriggerUpDown;
+
+            // Ifd
+            OrderResult ord = await _priApi.MakeOrder(_ifdocoTradeApiKey, _ifdocoTradeSecret, pair.ThisPair.ToString(), ifdoco.IfdoneStartAmount, ifdoco.IfdonePrice, ifdoco.IfdoneSide, ifdoco.IfdoneType.ToString());
+
+            if (ord != null)
+            {
+                if (ord.IsSuccess)
+                {
+                    ifdoco.IfdoneHasError = false;
+
+                    ifdoco.IfdoneOrderID = ord.OrderID;
+                    ifdoco.IfdoneOrderedAt = ord.OrderedAt;
+                    ifdoco.IfdonePrice = ord.Price;
+                    ifdoco.IfdoneAveragePrice = ord.AveragePrice;
+                    ifdoco.IfdoneStatus = ord.Status;
+                    // TODO
+
+                    // 注文画面に結果を表示
+                    IFDOrderCommandResult = "成功。";
+
+                    // 約定
+                    if (ord.Status == "FULLY_FILLED")
+                    {
+                        // フラグをセット
+                        ifdoco.IfdoneIsDone = true;
+
+                        // 後は、UpdateIFDOCOループにまかせる
+
+                    }
+                }
+                else
+                {
+                    ifdoco.IfdoneHasError = true;
+                    if (ifdoco.IfdoneErrorInfo == null)
+                    {
+                        ifdoco.IfdoneErrorInfo = new ErrorInfo();
+                    }
+                    ifdoco.IfdoneErrorInfo.ErrorTitle = ord.Err.ErrorTitle;
+                    ifdoco.IfdoneErrorInfo.ErrorDescription = ord.Err.ErrorDescription;
+                    ifdoco.IfdoneErrorInfo.ErrorCode = ord.Err.ErrorCode;
+
+                    System.Diagnostics.Debug.WriteLine("IfdOrderCommand_Execute - Ifdone MakeOrder API failed");
+
+                    // 注文画面でエラーを表示
+                    IFDOrderCommandResult = "エラーが起きました。一覧を参照ください。";
+                }
+
+            }
+            else
+            {
+                ifdoco.IfdoneHasError = true;
+                if (ifdoco.IfdoneErrorInfo == null)
+                {
+                    ifdoco.IfdoneErrorInfo = new ErrorInfo();
+                }
+                ifdoco.IfdoneErrorInfo.ErrorTitle = "注文時にエラーが起きました。";
+                ifdoco.IfdoneErrorInfo.ErrorDescription = "priApi.MakeOrder is null.";
+                ifdoco.IfdoneErrorInfo.ErrorCode = -1;
+
+                System.Diagnostics.Debug.WriteLine("IfdOrderCommand_Execute - Ifdone MakeOrder returened NULL");
+
+                // 注文画面でエラーを表示
+                IFDOrderCommandResult = "エラーが起きました。一覧を参照ください。";
+            }
+
+            // エラーをクリア
+            IFDOrderCommandErrorString = "";
+
+            // リストビューに追加
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                ifdocos.Insert(0, ifdoco);
+            });
+
+        }
+
+        // OCO 注文
+        public ICommand OcoOrderCommand { get; }
+        public bool OcoOrderCommand_CanExecute()
+        {
+            if (PublicApiOnlyMode == true) return false;
+
+            return true;
+        }
+        public void OcoOrderCommand_Execute()
+        {
+            //System.Diagnostics.Debug.WriteLine("OcoOrderCommand...");
+
+            var pair = ActivePair;
+            var ifdocos = ActivePair.Ifdocos;
+
+            OcoOrderCommandResult = "";
+
+            if (IfdocoTradeApiKeyIsSet == false)
+            {
+                //System.Diagnostics.Debug.WriteLine("IfdocoTradeApiKeyIsSet not set...");
+                return;
+            }
+
+            // Input check.
+            if (OCO_OneAmount <= 0)
+            {
+                OcoOrderCommandErrorString = "数量が0です。";
+                return;
+            }
+
+            if (OCO_OnePrice <= 0)
+            {
+                OcoOrderCommandErrorString = "価格が0です。";
+                return;
+            }
+
+            if (OCO_OtherAmount <= 0)
+            {
+                OcoOrderCommandErrorString = "数量が0です。";
+                return;
+            }
+
+            if (OCO_OtherPrice <= 0)
+            {
+                OcoOrderCommandErrorString = "価格が0です。";
+                return;
+            }
+
+            if (OCO_OneTriggerPrice <= 0)
+            {
+                OcoOrderCommandErrorString = "トリガーが0です。";
+                return;
+            }
+
+            if (OCO_OtherTriggerPrice <= 0)
+            {
+                OcoOrderCommandErrorString = "トリガーが0です。";
+                return;
+            }
+
+            Ifdoco ifdoco = new Ifdoco();
+
+            // OCOで
+            ifdoco.Kind = IfdocoKinds.oco;
+
+            // One
+            ifdoco.OcoOneType = OCO_OneType;
+            ifdoco.OcoOneSide = OCO_OneSide.ToString();
+            ifdoco.OcoOneStartAmount = OCO_OneAmount;
+            ifdoco.OcoOnePrice = OCO_OnePrice;
+
+            ifdoco.OcoOneTriggerPrice = OCO_OneTriggerPrice;
+            ifdoco.OcoOneTriggerUpDown = OCO_OneTriggerUpDown;
+
+            // Other
+            ifdoco.OcoOtherType = OCO_OtherType;
+            ifdoco.OcoOtherSide = OCO_OtherSide.ToString();
+            ifdoco.OcoOtherStartAmount = OCO_OtherAmount;
+            ifdoco.OcoOtherPrice = OCO_OtherPrice;
+
+            ifdoco.OcoOtherTriggerPrice = OCO_OtherTriggerPrice;
+            ifdoco.OcoOtherTriggerUpDown = OCO_OtherTriggerUpDown;
+
+            OcoOrderCommandErrorString = "";
+
+            // リストビューに追加
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                ifdocos.Insert(0, ifdoco);
+
+                OcoOrderCommandResult = "成功。";
+            });
+
+        }
+
+        // IFDOCO注文
+        public ICommand IfdocoOrderCommand { get; }
+        public bool IfdocoOrderCommand_CanExecute()
+        {
+            if (PublicApiOnlyMode == true) return false;
+
+            return true;
+        }
+        public async void IfdocoOrderCommand_Execute()
+        {
+            //System.Diagnostics.Debug.WriteLine("IfdocoOrderCommand...");
+
+            var pair = ActivePair;
+            var ifdocos = ActivePair.Ifdocos;
+
+            IfdocoOrderCommandResult = "";
+
+            if (IfdocoTradeApiKeyIsSet == false)
+            {
+                // TODO show message?
+                return;
+            }
+
+            // Input check.
+
+            if (IFDOCO_IfdAmount <= 0)
+            {
+                IfdocoOrderCommandErrorString = "数量が0です。";
+                return;
+            }
+
+            if (IFDOCO_IfdPrice <= 0)
+            {
+                IfdocoOrderCommandErrorString = "価格が0です。";
+                return;
+            }
+
+            if (IFDOCO_OneAmount <= 0)
+            {
+                IfdocoOrderCommandErrorString = "数量が0です。";
+                return;
+            }
+
+            if (IFDOCO_OnePrice <= 0)
+            {
+                IfdocoOrderCommandErrorString = "価格が0です。";
+                return;
+            }
+
+            if (IFDOCO_OtherAmount <= 0)
+            {
+                IfdocoOrderCommandErrorString = "数量が0です。";
+                return;
+            }
+
+            if (IFDOCO_OtherPrice <= 0)
+            {
+                IfdocoOrderCommandErrorString = "価格が0です。";
+                return;
+            }
+
+            if (IFDOCO_OneTriggerPrice <= 0)
+            {
+                IfdocoOrderCommandErrorString = "トリガーが0です。";
+                return;
+            }
+
+            if (IFDOCO_OtherTriggerPrice <= 0)
+            {
+                IfdocoOrderCommandErrorString = "トリガーが0です。";
+                return;
+            }
+
+            // TODO: 利用可能の額をチェック
+
+            Ifdoco ifdoco = new Ifdoco();
+
+            // IFDOCOで
+            ifdoco.Kind = IfdocoKinds.ifdoco;
+
+
+            /// -
+            ifdoco.IfdoneType = IFDOCO_IfdType;
+            ifdoco.IfdoneSide = IFDOCO_IfdSide.ToString();
+            ifdoco.IfdoneStartAmount = IFDOCO_IfdAmount;
+            ifdoco.IfdonePrice = IFDOCO_IfdPrice;
+
+            /// -
+            ifdoco.OcoOneType = IFDOCO_OneType;
+            ifdoco.OcoOneSide = IFDOCO_OneSide.ToString();
+            ifdoco.OcoOneStartAmount = IFDOCO_OneAmount;
+            ifdoco.OcoOnePrice = IFDOCO_OnePrice;
+
+            ifdoco.OcoOneTriggerPrice = IFDOCO_OneTriggerPrice;
+            ifdoco.OcoOneTriggerUpDown = IFDOCO_OneTriggerUpDown;
+
+            /// -
+            ifdoco.OcoOtherType = IFDOCO_OtherType;
+            ifdoco.OcoOtherSide = IFDOCO_OtherSide.ToString();
+            ifdoco.OcoOtherStartAmount = IFDOCO_OtherAmount;
+            ifdoco.OcoOtherPrice = IFDOCO_OtherPrice;
+
+            ifdoco.OcoOtherTriggerPrice = IFDOCO_OtherTriggerPrice;
+            ifdoco.OcoOtherTriggerUpDown = IFDOCO_OtherTriggerUpDown;
+
+
+            System.Diagnostics.Debug.WriteLine("IfdOrderCommand_Execute - " + "start:" + ifdoco.IfdoneStartAmount.ToString() + ", " + ifdoco.IfdonePrice.ToString());
+
+            //Ifdoco
+            OrderResult ord = await _priApi.MakeOrder(_ifdocoTradeApiKey, _ifdocoTradeSecret, pair.ThisPair.ToString(), ifdoco.IfdoneStartAmount, ifdoco.IfdonePrice, ifdoco.IfdoneSide, ifdoco.IfdoneType.ToString());
+
+            if (ord != null)
+            {
+
+                if (ord.IsSuccess)
+                {
+                    ifdoco.IfdoneHasError = false;
+
+                    ifdoco.IfdoneOrderID = ord.OrderID;
+                    ifdoco.IfdoneOrderedAt = ord.OrderedAt;
+                    ifdoco.IfdoneStartAmount = ord.StartAmount;
+                    ifdoco.IfdonePrice = ord.Price;
+                    ifdoco.IfdoneAveragePrice = ord.AveragePrice;
+                    ifdoco.IfdoneStatus = ord.Status;
+                    // TODO
+
+                    IfdocoOrderCommandResult = "成功。";
+
+                    // 約定
+                    if (ord.Status == "FULLY_FILLED")
+                    {
+
+                        // フラグをセット
+                        ifdoco.IfdoneIsDone = true;
+
+                        // 後は、UpdateIFDOCOループにまかせる
+
+                    }
+                }
+                else
+                {
+                    ifdoco.IfdoneHasError = true;
+                    if (ifdoco.IfdoneErrorInfo == null)
+                    {
+                        ifdoco.IfdoneErrorInfo = new ErrorInfo();
+                    }
+                    ifdoco.IfdoneErrorInfo.ErrorTitle = ord.Err.ErrorTitle;
+                    ifdoco.IfdoneErrorInfo.ErrorDescription = ord.Err.ErrorDescription;
+                    ifdoco.IfdoneErrorInfo.ErrorCode = ord.Err.ErrorCode;
+
+                    System.Diagnostics.Debug.WriteLine("IfdOrderCommand_Execute - Ifdone MakeOrder API failed");
+                }
+
+            }
+            else
+            {
+                ifdoco.IfdoneHasError = true;
+                if (ifdoco.IfdoneErrorInfo == null)
+                {
+                    ifdoco.IfdoneErrorInfo = new ErrorInfo();
+                }
+                ifdoco.IfdoneErrorInfo.ErrorTitle = "注文時にエラーが起きました。";
+                ifdoco.IfdoneErrorInfo.ErrorDescription = "priApi.MakeOrder is null.";
+                ifdoco.IfdoneErrorInfo.ErrorCode = -1;
+
+                System.Diagnostics.Debug.WriteLine("IfdOrderCommand_Execute - Ifdone MakeOrder returened NULL");
+            }
+
+            IfdocoOrderCommandErrorString = "";
+
+            // リストビューに追加
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                ifdocos.Insert(0, ifdoco);
+            });
+
+
+        }
+
+        // 特殊注文リストビュー内の：注文キャンセルコマンド
+        public ICommand CancelIfdocoListviewCommand { get; }
+        public bool CancelIfdocoListviewCommand_CanExecute()
+        {
+            return true;
+        }
+        public async void CancelIfdocoListviewCommand_Execute(object obj)
+        {
+            //Debug.WriteLine("CancelIfdocoListviewCommand_Execute");
+
+            if (IfdocoTradeApiKeyIsSet == false)
+            {
+                // TODO show message?
+                return;
+            }
+
+            if (obj == null) return;
+
+            var pair = ActivePair;
+
+            // 選択注文アイテム保持用
+            List<Ifdoco> ifdocoList = new List<Ifdoco>();
+            // キャンセルする注文IDを保持
+            List<int> cancelIdList = new List<int>();
+
+            // System.Windows.Controls.SelectedItemCollection をキャストして、ループ
+            System.Collections.IList items = (System.Collections.IList)obj;
+            var collection = items.Cast<Ifdoco>();
+
+            foreach (var item in collection)
+            {
+                // アイテム追加
+                ifdocoList.Add(item as Ifdoco);
+            }
+
+            // 選択注文アイテムをループして、キャンセル処理
+            foreach (var item in ifdocoList)
+            {
+                if (item.IsCancelEnabled == false)
+                {
+                    continue;
+                }
+
+                if (item.Kind == IfdocoKinds.ifd)
+                {
+                    if ((item.IfdoneStatus == "UNFILLED") || (item.IfdoneStatus == "PARTIALLY_FILLED"))
+                    {
+                        //cancel
+                        cancelIdList.Add(item.IfdoneOrderID);
+                    }
+                    else if (item.IfdoneHasError)
+                    {
+                        // エラーがあるのを済みにする。
+                        item.IfdoneIsDone = true;
+                    }
+
+                    if ((item.IfdDoStatus == "UNFILLED") || (item.IfdDoStatus == "PARTIALLY_FILLED"))
+                    {
+                        //cancel
+                        cancelIdList.Add(item.IfdDoOrderID);
+                    }
+                    else if (item.IfdDoHasError)
+                    {
+                        // エラーがあるのを済みにする。
+                        item.IfdDoIsDone = true;
+                    }
+
+                    // 未発注なら済みにする。
+                    if (item.IfdDoOrderID == 0)
+                    {
+                        item.IfdDoIsDone = true;
+                    }
+
+                }
+                else if (item.Kind == IfdocoKinds.oco)
+                {
+                    if ((item.OcoOneStatus == "UNFILLED") || (item.OcoOneStatus == "PARTIALLY_FILLED"))
+                    {
+                        //cancel
+                        cancelIdList.Add(item.OcoOneOrderID);
+                    }
+                    else if (item.OcoOneHasError)
+                    {
+                        // エラーがあるのを済みにする。
+                        item.OcoOneIsDone = true;
+                    }
+
+                    if ((item.OcoOtherStatus == "UNFILLED") || (item.OcoOtherStatus == "PARTIALLY_FILLED"))
+                    {
+                        //cancel
+                        cancelIdList.Add(item.OcoOtherOrderID);
+                    }
+                    else if (item.OcoOtherHasError)
+                    {
+                        // エラーがあるのを済みにする。
+                        item.OcoOtherIsDone = true;
+                    }
+
+                    // One未発注なら済みにする。
+                    if (item.OcoOneOrderID == 0)
+                    {
+                        item.OcoOneIsDone = true;
+                    }
+                    // Other未発注なら済みにする。
+                    if (item.OcoOtherOrderID == 0)
+                    {
+                        item.OcoOtherIsDone = true;
+                    }
+                    // 両方未発注ならOCO済みにする。
+                    if ((item.OcoOneIsDone == false) && (item.OcoOneIsDone == false))
+                    {
+                        item.OcoIsDone = false;
+                    }
+
+                }
+                else if (item.Kind == IfdocoKinds.ifdoco)
+                {
+                    if ((item.IfdoneStatus == "UNFILLED") || (item.IfdoneStatus == "PARTIALLY_FILLED"))
+                    {
+                        //cancel
+                        cancelIdList.Add(item.IfdoneOrderID);
+                    }
+                    else if (item.IfdoneHasError)
+                    {
+                        // エラーがあるのを済みにする。
+                        item.IfdoneIsDone = true;
+                    }
+
+                    if ((item.OcoOneStatus == "UNFILLED") || (item.OcoOneStatus == "PARTIALLY_FILLED"))
+                    {
+                        //cancel
+                        cancelIdList.Add(item.OcoOneOrderID);
+                    }
+                    else if (item.OcoOneHasError)
+                    {
+                        // エラーがあるのを済みにする。
+                        item.OcoOneIsDone = true;
+                    }
+
+                    if ((item.OcoOtherStatus == "UNFILLED") || (item.OcoOtherStatus == "PARTIALLY_FILLED"))
+                    {
+                        //cancel
+                        cancelIdList.Add(item.OcoOtherOrderID);
+                    }
+                    else if (item.OcoOtherHasError)
+                    {
+                        // エラーがあるのを済みにする。
+                        item.OcoOtherIsDone = true;
+                    }
+
+                    // One未発注なら済みにする。
+                    if (item.OcoOneOrderID == 0)
+                    {
+                        item.OcoOneIsDone = true;
+                    }
+                    // Other未発注なら済みにする。
+                    if (item.OcoOtherOrderID == 0)
+                    {
+                        item.OcoOtherIsDone = true;
+                    }
+                    // 両方未発注ならOCO済みにする。
+                    if ((item.OcoOneIsDone == false) && (item.OcoOneIsDone == false))
+                    {
+                        item.OcoIsDone = false;
+                    }
+
+                }
+
+                if (cancelIdList.Count > 0)
+                {
+                    // キャンセル実行
+                    Orders oup = await _priApi.CancelOrders(_ifdocoTradeApiKey, _ifdocoTradeSecret, pair.ThisPair.ToString(), cancelIdList);
+
+                    // 後は update loopに任せる
+
+                }
+
+
+            }
+        }
+
+        // 特殊注文リストビュー内の：済みアイテムの削除コマンド
+        public ICommand RemoveDoneIfdocoListviewCommand { get; }
+        public bool RemoveDoneIfdocoListviewCommand_CanExecute()
+        {
+            return true;
+        }
+        public void RemoveDoneIfdocoListviewCommand_Execute()
+        {
+            //Debug.WriteLine("RemoveDoneIfdocoListviewCommand_Execute");
+
+            var ifdocos = ActivePair.Ifdocos;
+
+            int c = ifdocos.Count - 1;
+
+            for (int i = c; i >= 0; i--)
+            {
+                if (ifdocos[i].Kind == IfdocoKinds.ifd)
+                {
+                    if (ifdocos[i].IfdIsDone)
+                    {
+                        ifdocos.Remove(ifdocos[i]);
+                    }
+                }
+                else if (ifdocos[i].Kind == IfdocoKinds.oco)
+                {
+                    if (ifdocos[i].OcoIsDone)
+                    {
+                        ifdocos.Remove(ifdocos[i]);
+                    }
+                }
+                else if (ifdocos[i].Kind == IfdocoKinds.ifdoco)
+                {
+                    if (ifdocos[i].IfdocoIsDone)
+                    {
+                        ifdocos.Remove(ifdocos[i]);
+                    }
+                }
+
+            }
+
+        }
+
+
+        #endregion
+
+        #region == 自動取引係のメソッド ==
+
+        // 自動取引開始コマンド
+        public ICommand StartAutoTradeCommand { get; }
+        public bool StartAutoTradeCommand_CanExecute()
+        {
+            if (PublicApiOnlyMode)
+                return false;
+            else
+                return true;
+        }
+        public async void StartAutoTradeCommand_Execute()
+        {
+            if (AutoTradeApiKeyIsSet == false)
+            {
+                // TODO show message?
+                return;
+            }
+
+            System.Diagnostics.Debug.WriteLine("Start Auto Trading...");
+
+            // TEMP
+            if (ActivePair.ThisPair != Pairs.btc_jpy)
+                return;
+
+            var pair = ActivePair;
+            var ltp = ActivePair.Ltp;
+            var autoTrades = ActivePair.AutoTrades;
+
+            //System.Diagnostics.Debug.WriteLine("Start Auto Trading...");
+
+            // 情報表示数のリセット。
+            AutoTradeActiveOrders = 0;
+            AutoTradeSellOrders = 0;
+            AutoTradeBuyOrders = 0;
+            AutoTradeErrOrders = 0;
+
+            // 損益表示リセット
+            AutoTradeProfit = 0;
+
+            // 上値制限セット
+            if (AutoTradeUpperLimit == 0)
+                AutoTradeUpperLimit = ((ltp / 1000) * 1000) + 10000M;
+            // 下値制限セット
+            if (AutoTradeLowerLimit == 0)
+                AutoTradeLowerLimit = ((ltp / 1000) * 1000) - 10000M;
+
+            // ベース価格
+            decimal basePrice = ((ltp / 1000) * 1000);
+
+            // センチネルの追加
+            for (int i = 0; i < 15; i++)
+            {
+
+                AutoTrade position = new AutoTrade();
+
+                position.BuySide = "buy";
+                position.BuyAmount = 0.0001M;
+                position.SellSide = "sell";
+                position.SellAmount = 0.0001M;
+
+                if (i == 0)
+                {
+                    // 500 単位
+                    position.BuyPrice = basePrice - 500M;
+                    position.SellPrice = position.BuyPrice + 1000M;
+
+                }
+                else if (i == 1)
+                {
+                    // 500 単位
+                    position.BuyPrice = basePrice - 1000M;
+                    position.SellPrice = position.BuyPrice + 1000M;
+                }
+                else if (i == 2)
+                {
+                    // 1000 単位
+                    position.BuyPrice = basePrice - 3000M;
+                    position.SellPrice = position.BuyPrice + 1000M;
+                }
+                else if (i == 3)
+                {
+                    // 1000 単位
+                    position.BuyPrice = basePrice - 5000M;
+                    position.SellPrice = position.BuyPrice + 1000M;
+                }
+                else if (i == 4)
+                {
+                    // 1000 単位
+                    position.BuyPrice = basePrice - 7000M;
+                    position.SellPrice = position.BuyPrice + 1000M;
+                }
+                else if (i == 5)
+                {
+                    // 1000 単位
+                    position.BuyPrice = basePrice - 9000M;
+                    position.SellPrice = position.BuyPrice + 1000M;
+                }
+                else if (i == 6)
+                {
+                    // 1000 単位
+                    position.BuyPrice = basePrice - 11000M;
+                    position.SellPrice = position.BuyPrice + 1000M;
+                }
+                else if (i == 7)
+                {
+                    // 1500 単位
+                    position.BuyPrice = basePrice - 12500M;
+                    position.SellPrice = position.BuyPrice + 1000M;
+                }
+                else if (i == 8)
+                {
+                    // 2500 単位
+                    position.BuyPrice = basePrice - 15000M;
+                    position.SellPrice = position.BuyPrice + 1000M;
+                }
+                else if (i == 9)
+                {
+                    // 5000 単位
+                    position.BuyPrice = basePrice - 20000M;
+                    position.SellPrice = position.BuyPrice + 1000M;
+                }
+                else if (i <= 10)
+                {
+                    // 5000 単位
+                    position.BuyPrice = basePrice - 25000M;
+                    position.SellPrice = position.BuyPrice + 1000M;
+                }
+                else if (i == 11)
+                {
+                    // 5000 単位
+                    position.BuyPrice = basePrice - 30000M;
+                    position.SellPrice = position.BuyPrice + 1000M;
+                }
+                else if (i == 12)
+                {
+                    // 10000 単位
+                    position.BuyPrice = basePrice - 35000M;
+                    position.SellPrice = position.BuyPrice + 1000M;
+                }
+                else if (i == 13)
+                {
+                    // 10000 単位
+                    position.BuyPrice = basePrice - 40000M;
+                    position.SellPrice = position.BuyPrice + 1000M;
+                }
+                else if (i == 14)
+                {
+                    // 10000 単位
+                    position.BuyPrice = basePrice - 45000M;
+                    position.SellPrice = position.BuyPrice + 1000M;
+                }
+
+                position.ShushiAmount = (position.SellPrice * position.SellAmount) - (position.BuyPrice * position.BuyAmount);
+
+
+                // 注文発注
+                OrderResult res = await _priApi.MakeOrder(_autoTradeApiKey, _autoTradeSecret, pair.ThisPair.ToString(), position.BuyAmount, position.BuyPrice, position.BuySide, "limit");
+
+                if (Application.Current == null) { return; }
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+
+                    if (res != null)
+                    {
+                        if (res.IsSuccess)
+                        {
+
+                            position.BuyHasError = false;
+
+                            position.BuyOrderId = res.OrderID;
+                            position.BuyFilledPrice = res.AveragePrice;
+                            position.BuyStatus = res.Status;
+
+                            // 約定
+                            if (res.Status == "FULLY_FILLED")
+                            {
+                                // フラグをセット
+                                position.BuyIsDone = true;
+                            }
+                            Application.Current.Dispatcher.Invoke(() =>
+                            {
+                                // リストヘ追加
+                                autoTrades.Add(position);
+                            });
+                        }
+                        else
+                        {
+                            position.BuyHasError = true;
+                            if (position.BuyErrorInfo == null)
+                            {
+                                position.BuyErrorInfo = new ErrorInfo();
+                            }
+                            position.BuyErrorInfo.ErrorTitle = res.Err.ErrorTitle;
+                            position.BuyErrorInfo.ErrorDescription = res.Err.ErrorDescription;
+                            position.BuyErrorInfo.ErrorCode = res.Err.ErrorCode;
+
+                            System.Diagnostics.Debug.WriteLine("■■■■■ StartAutoTradeCommand_Execute 新規注文ループ MakeOrder API returned error code.");
+                        }
+                    }
+                    else
+                    {
+                        position.BuyHasError = true;
+                        if (position.BuyErrorInfo == null)
+                        {
+                            position.BuyErrorInfo = new ErrorInfo();
+                        }
+                        position.BuyErrorInfo.ErrorTitle = "注文時にエラーが起きました。";
+                        position.BuyErrorInfo.ErrorDescription = "priApi.MakeOrder is null.";
+                        position.BuyErrorInfo.ErrorCode = -1;
+
+                        System.Diagnostics.Debug.WriteLine("■■■■■ StartAutoTradeCommand_Execute 新規注文ループ MakeOrder API returned null.");
+
+                    }
+
+
+                });
+
+                await Task.Delay(100);
+
+            }
+
+
+            // 注文数のセット
+            AutoTradeActiveOrders = autoTrades.Count;
+
+            // 開始フラグセット
+            AutoTradeStart = true;
+
+            // 自動取引ループの開始
+            //Task.Run(() => UpdateAutoTrade());
+            UpdateAutoTrade();
+
+        }
+
+        // 自動取引停止コマンド
+        public ICommand StopAutoTradeCommand { get; }
+        public bool StopAutoTradeCommand_CanExecute()
+        {
+            if (PublicApiOnlyMode == true) return false;
+            return true;
+        }
+        public async void StopAutoTradeCommand_Execute()
+        {
+            //System.Diagnostics.Debug.WriteLine("Stop Auto Trading.");
+
+            if (AutoTradeApiKeyIsSet == false)
+            {
+                // TODO show message?
+                return;
+            }
+
+            var pair = ActivePair;
+            var ltp = ActivePair.Ltp;
+            var autoTrades = ActivePair.AutoTrades;
+
+            // 更新ループを止める。
+            AutoTradeStart = false;
+
+            await Task.Delay(1000);
+
+            // 買い注文をすべてキャンセルする。
+
+            List<int> needCancelIdsList = new List<int>();
+
+            foreach (var position in autoTrades)
+            {
+                // 注文中だったらリスト追加
+                if (position.BuyStatus == "UNFILLED" || position.BuyStatus == "PARTIALLY_FILLED")
+                {
+                    if (position.BuyOrderId > 0)
+                    {
+                        needCancelIdsList.Add(position.BuyOrderId);
+                    }
+                }
+
+            }
+
+            //System.Diagnostics.Debug.WriteLine("Cancelling Buy orders....");
+
+            if (needCancelIdsList.Count > 0)
+            {
+                // CancelOrders
+                Orders ord = await _priApi.CancelOrders(_autoTradeApiKey, _autoTradeSecret, pair.ThisPair.ToString(), needCancelIdsList);
+
+                if (ord != null)
+                {
+                    if (ord.OrderList.Count > 0)
+                    {
+                        // TODO
+
+                        await Task.Delay(3000);
+
+                        try
+                        {
+                            Application.Current.Dispatcher.Invoke(() =>
+                            {
+                                // Just clear the list.
+                                autoTrades.Clear();
+                            });
+                        }
+                        catch { }
+                    }
+                }
+
+            }
+
+            // 情報表示のリセット
+            AutoTradeActiveOrders = 0;
+            AutoTradeSellOrders = 0;
+            AutoTradeBuyOrders = 0;
+            AutoTradeErrOrders = 0;
+
+        }
+
+        // 自動取引リストビュー内の：買い注文キャンセルコマンド
+        public ICommand AutoTradeCancelListviewCommand { get; }
+        public bool AutoTradeCancelListviewCommand_CanExecute()
+        {
+            return true;
+        }
+        public async void AutoTradeCancelListviewCommand_Execute(object obj)
+        {
+            //Debug.WriteLine("AutoTradeCancelListviewCommand_Execute");
+
+            if (ManualTradeApiKeyIsSet == false)
+            {
+                // TODO show message?
+                return;
+            }
+
+            if (obj == null) return;
+
+            var pair = ActivePair;
+
+            // 選択注文アイテム保持用
+            List<AutoTrade> selectedList = new List<AutoTrade>();
+            // キャンセルする注文IDを保持
+            List<int> cancelIdList = new List<int>();
+
+            // System.Windows.Controls.SelectedItemCollection をキャストして、ループ
+            System.Collections.IList items = (System.Collections.IList)obj;
+            var collection = items.Cast<AutoTrade>();
+
+            foreach (var item in collection)
+            {
+                // アイテム追加
+                selectedList.Add(item as AutoTrade);
+            }
+
+            // 選択注文アイテムをループして、キャンセル処理
+            foreach (var item in selectedList)
+            {
+                if (item.IsCanceled)
+                {
+                    continue;
+                }
+
+                if ((item.BuyStatus == "UNFILLED") || (item.BuyStatus == "PARTIALLY_FILLED"))
+                {
+                    //cancel
+                    cancelIdList.Add(item.BuyOrderId);
+                }
+
+                if ((item.SellStatus == "UNFILLED") || (item.SellStatus == "PARTIALLY_FILLED"))
+                {
+                    //cancel
+                    cancelIdList.Add(item.SellOrderId);
+                }
+
+                if (cancelIdList.Count > 0)
+                {
+                    // キャンセル実行
+                    Orders oup = await _priApi.CancelOrders(_manualTradeApiKey, _manualTradeSecret, pair.ThisPair.ToString(), cancelIdList);
+
+                    // 後は update loopに任せる
+
+                }
+
+
+            }
+        }
+
+        // 自動取引リストビュー内の：エラーをリセットするコマンド
+        public ICommand AutoTradeResetErrorListviewCommand { get; }
+        public bool AutoTradeResetErrorListviewCommand_CanExecute()
+        {
+            return true;
+        }
+        public void AutoTradeResetErrorListviewCommand_Execute(object obj)
+        {
+            //Debug.WriteLine("AutoTradeResetErrorListviewCommand_Execute");
+
+            if (obj == null) return;
+
+            // obj == System.Windows.Controls.SelectedItemCollection
+
+            // 選択注文アイテム保持用
+            List<AutoTrade> selectedList = new List<AutoTrade>();
+            // キャンセルする注文IDを保持
+            List<int> cancelIdList = new List<int>();
+
+            // System.Windows.Controls.SelectedItemCollection をキャストして、ループ
+            System.Collections.IList items = (System.Collections.IList)obj;
+            var collection = items.Cast<AutoTrade>();
+
+            foreach (var item in collection)
+            {
+                // アイテム追加
+                selectedList.Add(item as AutoTrade);
+            }
+
+            // 選択注文アイテムをループして、エラーを無かった事にする。
+            foreach (var item in selectedList)
+            {
+                if (item.IsCanceled)
+                {
+                    continue;
+                }
+
+                if (item.BuyHasError == true)
+                {
+                    item.BuyHasError = false;
+                }
+
+                if (item.SellHasError == true)
+                {
+                    item.SellHasError = false;
+                }
+
+            }
+        }
+
+        // 自動取引リストビュー内の：エラーを削除するコマンド
+        public ICommand AutoTradeDeleteErrorItemListviewCommand { get; }
+        public bool AutoTradeDeleteErrorItemListviewCommand_CanExecute()
+        {
+            return true;
+        }
+        public void AutoTradeDeleteErrorItemListviewCommand_Execute(object obj)
+        {
+            //Debug.WriteLine("AutoTradeDeleteErrorItemListviewCommand_Execute");
+
+            if (obj == null) return;
+
+            var autoTrades = ActivePair.AutoTrades;
+
+            // 選択注文アイテム保持用
+            List<AutoTrade> selectedList = new List<AutoTrade>();
+            // キャンセルする注文IDを保持
+            List<int> cancelIdList = new List<int>();
+
+            // System.Windows.Controls.SelectedItemCollection をキャストして、ループ
+            System.Collections.IList items = (System.Collections.IList)obj;
+            var collection = items.Cast<AutoTrade>();
+
+            foreach (var item in collection)
+            {
+                // アイテム追加
+                selectedList.Add(item as AutoTrade);
+            }
+
+            // 念のため、UIスレッドで。
+            if (Application.Current == null) { return; }
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                // 選択注文アイテムをループして、エラーを削除する
+                foreach (var item in selectedList)
+                {
+                    autoTrades.Remove(item);
+                }
+            });
+
+
         }
 
         #endregion

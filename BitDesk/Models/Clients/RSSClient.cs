@@ -124,13 +124,13 @@ namespace BitDesk.Models.Clients
     public class RSSClient : BaseClient
     {
         // 日本語版
-        protected Uri _endpoint1 = new Uri ("https://news.google.com/news/rss/search/section/q/%E3%83%93%E3%83%83%E3%83%88%E3%82%B3%E3%82%A4%E3%83%B3%7CBitcoin?ned=us&gl=US&hl=en");
+        protected Uri _endpointEn = new Uri ("https://news.google.com/news/rss/search/section/q/%E3%83%93%E3%83%83%E3%83%88%E3%82%B3%E3%82%A4%E3%83%B3%7CBitcoin?ned=us&gl=US&hl=en");
 
-        protected Uri _endpoint2 = new Uri("https://news.google.com/news/rss/search/section/q/%E3%83%93%E3%83%83%E3%83%88%E3%82%B3%E3%82%A4%E3%83%B3%7CBitcoin?ned=jp&gl=JP&hl=ja");
+        protected Uri _endpointJa = new Uri("https://news.google.com/news/rss/search/section/q/%E3%83%93%E3%83%83%E3%83%88%E3%82%B3%E3%82%A4%E3%83%B3%7CBitcoin?ned=jp&gl=JP&hl=ja");
         // 英語版
 
         // RSS取得メソッド
-        public async Task<RssResult> GetRSS(Langs lang)
+        public RssResult GetRSS(Langs lang)
         {
             RssResult rr = new RssResult();
 
@@ -138,7 +138,7 @@ namespace BitDesk.Models.Clients
             {
                 try
                 {
-                    XmlReader reader = XmlReader.Create(_endpoint1.ToString());
+                    XmlReader reader = XmlReader.Create(_endpointEn.ToString());
                     SyndicationFeed feed = SyndicationFeed.Load(reader);
                     reader.Close();
 
@@ -165,7 +165,7 @@ namespace BitDesk.Models.Clients
 
                 try
                 {
-                    XmlReader reader2 = XmlReader.Create(_endpoint2.ToString());
+                    XmlReader reader2 = XmlReader.Create(_endpointJa.ToString());
                     SyndicationFeed feed2 = SyndicationFeed.Load(reader2);
                     reader2.Close();
 

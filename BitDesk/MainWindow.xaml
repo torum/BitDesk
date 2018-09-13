@@ -92,25 +92,27 @@
                         </Viewbox>
 
                         <!-- 自動取引の情報　表示 -->
-                        <Border Visibility="{Binding ExperimentalMode,Converter={StaticResource BooleanToVisibilityConverter}}">
-                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="24 0 0 3" Visibility="{Binding AutoTradeStart,Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <Border Visibility="{Binding ExperimentalMode, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
+                            <Border Visibility="{Binding MinMode, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="24 6 3 3" Visibility="{Binding AutoTradeStart, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
 
-                                <!-- [買い 売り (エラー) 総数] -->
-                                <TextBlock Style="{StaticResource DefaultTextBlockStyle}">
-                                <Run Text="["></Run>
-                                <Run Text="{Binding AutoTradeBuyOrders,Mode=OneWay}"></Run>
-                                <Run Text=" "></Run>
-                                <Run Text="{Binding AutoTradeSellOrders,Mode=OneWay}"></Run>
-                                <Run Text=" "></Run>
-                                <Run Text="{Binding AutoTradeErrOrders,Mode=OneWay}"></Run>
-                                <Run Text=" "></Run>
-                                <Run Text="{Binding AutoTradeActiveOrders,Mode=OneWay}"></Run>
-                                <Run Text="]"></Run>
-                                </TextBlock>
-
-                                <Label Content=" 損益：" Margin="6 0 0 0"></Label>
-                                <TextBlock Text="{Binding AutoTradeProfit, Mode=OneWay, StringFormat=0.#############################}" Style="{StaticResource DefaultTextBlockStyle}"></TextBlock>
-                            </StackPanel>
+                                    <!-- [買い 売り (エラー) 総数] -->
+                                    <TextBlock Style="{StaticResource DefaultTextBlockStyle}" VerticalAlignment="Center">
+                                        <Run Text="["></Run>
+                                        <Run Text="{Binding AutoTradeBuyOrders,Mode=OneWay}"></Run>
+                                        <Run Text=" "></Run>
+                                        <Run Text="{Binding AutoTradeSellOrders,Mode=OneWay}"></Run>
+                                        <Run Text=" "></Run>
+                                        <Run Text="{Binding AutoTradeErrOrders,Mode=OneWay}"></Run>
+                                        <Run Text=" "></Run>
+                                        <Run Text="{Binding AutoTradeActiveOrders,Mode=OneWay}"></Run>
+                                        <Run Text="]"></Run>
+                                    </TextBlock>
+                                    <Label Content=" 損益：" Margin="6 0 0 0" Style="{DynamicResource DefaultLabelStyle}" VerticalAlignment="Center"></Label>
+                                    <TextBlock Text="{Binding AutoTradeProfit, Mode=OneWay, StringFormat=0.#############################}" Style="{StaticResource DefaultTextBlockStyle}" VerticalAlignment="Center"></TextBlock>
+                                
+                                </StackPanel>
+                            </Border>
                         </Border>
 
                     </StackPanel>
@@ -152,12 +154,13 @@
 
                         </StackPanel>
 
-                        <!-- 透明度変更 -->
-                        <Slider x:Name="SliderSeek" Grid.Column="1" Width="60" Opacity="0.7" Minimum="0.1" Maximum="1" Value="{Binding Mode=TwoWay, Path=WindowOpacity}" ToolTip="画面の透過率" VerticalAlignment="Center"  Margin="3" Foreground="Gray" Background="Transparent" IsMoveToPointEnabled="True" Style="{DynamicResource CustomSliderStyle}"></Slider>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0" Visibility="{Binding NotMinMode, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
+                            <!-- 透明度変更 -->
+                            <Slider x:Name="SliderSeek" Width="60" Opacity="0.7" Minimum="0.1" Maximum="1" Value="{Binding Mode=TwoWay, Path=WindowOpacity}" ToolTip="画面の透過率" VerticalAlignment="Center"  Margin="3" Foreground="Gray" Background="Transparent" IsMoveToPointEnabled="True" Style="{DynamicResource CustomSliderStyle}"></Slider>
 
-                        <!-- テーマ切替 -->
-                        <ComboBox x:Name="ThemeComboBox" ItemsSource="{Binding Themes}" SelectedItem="{Binding CurrentTheme}" DisplayMemberPath="Label" VerticalAlignment="Center" Margin="3 0 12 0" Padding="0 0 0 0" Background="Transparent" Style="{DynamicResource ComboBoxFlatStyle}">
-                        </ComboBox>
+                            <!-- テーマ切替 -->
+                            <ComboBox x:Name="ThemeComboBox" ItemsSource="{Binding Themes}" SelectedItem="{Binding CurrentTheme}" DisplayMemberPath="Label" VerticalAlignment="Center" Margin="3 0 12 0" Padding="0 0 0 0" Background="Transparent" Style="{DynamicResource ComboBoxFlatStyle}"/>
+                        </StackPanel>
 
                         <!-- 設定画面表示 -->
                         <Button x:Name="SettingsButton" Style="{DynamicResource PathButton}" Width="18" Height="18" Margin="3" Opacity="0.7" Command="{Binding ShowSettingsCommand}" ToolTip="設定(Ctrl+S)"
@@ -1769,7 +1772,7 @@
                                                                 <Border Width="320" Height="176" Margin="3 0 0 0">
                                                                     <StackPanel Margin="0 6 0 0">
 
-                                                                        <Label Content="[IFDone 注文]" VerticalAlignment="Bottom" BorderBrush="Gainsboro" BorderThickness="0 0 0 0.5" Padding="0" Margin="3 0 0 3"/>
+                                                                        <Label Content="[IFDone 注文]" VerticalAlignment="Bottom" BorderBrush="Gainsboro" BorderThickness="0 0 0 0.5" Padding="0" Margin="3 0 0 3" Style="{DynamicResource DefaultLabelStyle}"/>
 
                                                                         <Grid Margin="3">
                                                                             <Grid.RowDefinitions>
@@ -1780,8 +1783,8 @@
                                                                                 <ColumnDefinition Width="50*"/>
                                                                             </Grid.ColumnDefinitions>
 
-                                                                            <RadioButton x:Name="IfdSideBuyRadioButton" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="IfdSide" Content="買い" Margin="0" IsChecked="{Binding IFD_IfdSide, ConverterParameter={x:Static vms:IfdocoSide.buy}, Converter={StaticResource EnumBooleanConverter}}"/>
-                                                                            <RadioButton x:Name="IfdSideSellRadioButton" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="IfdSide" Content="売り" Margin="0" IsChecked="{Binding IFD_IfdSide, ConverterParameter={x:Static vms:IfdocoSide.sell}, Converter={StaticResource EnumBooleanConverter}}"/>
+                                                                            <RadioButton x:Name="IfdSideBuyRadioButton" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="IfdSide" Content="買い" Margin="0" IsChecked="{Binding IFD_IfdSide, ConverterParameter={x:Static vms:IfdocoSide.buy}, Converter={StaticResource EnumBooleanConverter}}" Style="{DynamicResource SelectionRadioButtonStyle}"/>
+                                                                            <RadioButton x:Name="IfdSideSellRadioButton" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="IfdSide" Content="売り" Margin="0" IsChecked="{Binding IFD_IfdSide, ConverterParameter={x:Static vms:IfdocoSide.sell}, Converter={StaticResource EnumBooleanConverter}}" Style="{DynamicResource SelectionRadioButtonStyle}"/>
                                                                         </Grid>
 
                                                                         <Grid Margin="3">
@@ -1793,24 +1796,24 @@
                                                                                 <ColumnDefinition Width="50*"/>
                                                                             </Grid.ColumnDefinitions>
 
-                                                                            <RadioButton x:Name="IfdTypeLimitRadioButton" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="IfdType" Content="指値" Margin="0" IsChecked="{Binding IFD_IfdType, ConverterParameter={x:Static vms:IfdocoTypes.limit}, Converter={StaticResource EnumBooleanConverter}}"/>
-                                                                            <RadioButton x:Name="IfdTypeMarketRadioButton" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="IfdType" Content="成行" Margin="0" IsChecked="{Binding IFD_IfdType, ConverterParameter={x:Static vms:IfdocoTypes.market}, Converter={StaticResource EnumBooleanConverter}}"/>
+                                                                            <RadioButton x:Name="IfdTypeLimitRadioButton" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="IfdType" Content="指値" Margin="0" IsChecked="{Binding IFD_IfdType, ConverterParameter={x:Static vms:IfdocoTypes.limit}, Converter={StaticResource EnumBooleanConverter}}" Style="{DynamicResource SelectionRadioButtonStyle}"/>
+                                                                            <RadioButton x:Name="IfdTypeMarketRadioButton" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="IfdType" Content="成行" Margin="0" IsChecked="{Binding IFD_IfdType, ConverterParameter={x:Static vms:IfdocoTypes.market}, Converter={StaticResource EnumBooleanConverter}}" Style="{DynamicResource SelectionRadioButtonStyle}"/>
                                                                         </Grid>
 
                                                                         <StackPanel Orientation="Horizontal" Margin="0 6 0 3" VerticalAlignment="Bottom">
-                                                                            <Label Content="数量：" Margin="0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="数量：" Margin="0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                             <TextBox x:Name="IfdAmountTextbox" Width="80" Text="{Binding IFD_IfdAmount}" GotFocus="Textbox_GotFocus" VerticalAlignment="Bottom"/>
-                                                                            <Label Content=" BTC" Margin="0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="{Binding CurrentCoinString, Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                         </StackPanel>
 
                                                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3" VerticalAlignment="Bottom">
-                                                                            <Label Content="価格：" Margin="0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="価格：" Margin="0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                             <TextBox x:Name="IfdPriceTextbox" Width="80" VerticalAlignment="Bottom" IsEnabled="{Binding IsChecked, ElementName=IfdTypeLimitRadioButton}" Text="{Binding IFD_IfdPrice,UpdateSourceTrigger=PropertyChanged}" GotFocus="Textbox_GotFocus"/>
-                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
 
-                                                                            <Label Content="予想金額：" Margin="12 0 0 0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="予想金額：" Margin="12 0 0 0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                             <TextBlock Text="{Binding IFD_IfdEstimatePrice, StringFormat={}{0:N0},Mode=OneWay}" Style="{StaticResource DefaultTextBlockStyle}" VerticalAlignment="Bottom"/>
-                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
 
                                                                         </StackPanel>
 
@@ -1820,7 +1823,7 @@
                                                                 <Border Width="320" Height="176" Margin="3 0 0 0">
                                                                     <StackPanel Margin="0 6 0 0">
 
-                                                                        <Label Content="[do 注文]" VerticalAlignment="Bottom" BorderBrush="Gainsboro" BorderThickness="0 0 0 0.5" Padding="0" Margin="3 0 0 3"/>
+                                                                        <Label Content="[do 注文]" VerticalAlignment="Bottom" BorderBrush="Gainsboro" BorderThickness="0 0 0 0.5" Padding="0" Margin="3 0 0 3" Style="{DynamicResource DefaultLabelStyle}"/>
 
                                                                         <Grid Margin="3">
                                                                             <Grid.RowDefinitions>
@@ -1831,8 +1834,8 @@
                                                                                 <ColumnDefinition Width="50*"/>
                                                                             </Grid.ColumnDefinitions>
 
-                                                                            <RadioButton x:Name="IfdDoneSideBuyRadioButton" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="IfdDoneSide" Content="買い" Margin="0" IsChecked="{Binding IFD_DoSide, ConverterParameter={x:Static vms:IfdocoSide.buy}, Converter={StaticResource EnumBooleanConverter}}"/>
-                                                                            <RadioButton x:Name="IfdDoneSideSellRadioButton" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="IfdDoneSide" Content="売り" Margin="0" IsChecked="{Binding IFD_DoSide, ConverterParameter={x:Static vms:IfdocoSide.sell}, Converter={StaticResource EnumBooleanConverter}}"/>
+                                                                            <RadioButton x:Name="IfdDoneSideBuyRadioButton" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="IfdDoneSide" Content="買い" Margin="0" IsChecked="{Binding IFD_DoSide, ConverterParameter={x:Static vms:IfdocoSide.buy}, Converter={StaticResource EnumBooleanConverter}}" Style="{DynamicResource SelectionRadioButtonStyle}"/>
+                                                                            <RadioButton x:Name="IfdDoneSideSellRadioButton" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="IfdDoneSide" Content="売り" Margin="0" IsChecked="{Binding IFD_DoSide, ConverterParameter={x:Static vms:IfdocoSide.sell}, Converter={StaticResource EnumBooleanConverter}}" Style="{DynamicResource SelectionRadioButtonStyle}"/>
                                                                         </Grid>
 
                                                                         <Grid Margin="3">
@@ -1844,31 +1847,31 @@
                                                                                 <ColumnDefinition Width="50*"/>
                                                                             </Grid.ColumnDefinitions>
 
-                                                                            <RadioButton x:Name="IfdDoneTypeLimitRadioButton" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="IfdDoneType" Content="指値" Margin="0" IsChecked="{Binding IFD_DoType, ConverterParameter={x:Static vms:IfdocoTypes.limit}, Converter={StaticResource EnumBooleanConverter}}"/>
-                                                                            <RadioButton x:Name="IfdDoneTypeMarketRadioButton" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="IfdDoneType" Content="成行" Margin="0" IsChecked="{Binding IFD_DoType, ConverterParameter={x:Static vms:IfdocoTypes.market}, Converter={StaticResource EnumBooleanConverter}}"/>
+                                                                            <RadioButton x:Name="IfdDoneTypeLimitRadioButton" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="IfdDoneType" Content="指値" Margin="0" IsChecked="{Binding IFD_DoType, ConverterParameter={x:Static vms:IfdocoTypes.limit}, Converter={StaticResource EnumBooleanConverter}}" Style="{DynamicResource SelectionRadioButtonStyle}"/>
+                                                                            <RadioButton x:Name="IfdDoneTypeMarketRadioButton" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="IfdDoneType" Content="成行" Margin="0" IsChecked="{Binding IFD_DoType, ConverterParameter={x:Static vms:IfdocoTypes.market}, Converter={StaticResource EnumBooleanConverter}}" Style="{DynamicResource SelectionRadioButtonStyle}"/>
                                                                         </Grid>
 
                                                                         <StackPanel Orientation="Horizontal" Margin="0 6 0 3" VerticalAlignment="Bottom">
-                                                                            <Label Content="数量：" Margin="0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="数量：" Margin="0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                             <TextBox x:Name="IfdDoneAmountTextbox" Width="80" Text="{Binding IFD_DoAmount}" GotFocus="Textbox_GotFocus" VerticalAlignment="Bottom"/>
-                                                                            <Label Content=" BTC" Margin="0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="{Binding CurrentCoinString, Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                         </StackPanel>
 
                                                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3" VerticalAlignment="Bottom">
-                                                                            <Label Content="価格：" Margin="0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="価格：" Margin="0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                             <TextBox x:Name="IfdDonePriceTextbox" Width="80" VerticalAlignment="Bottom" IsEnabled="{Binding IsChecked, ElementName=IfdDoneTypeLimitRadioButton}" Text="{Binding IFD_DoPrice,UpdateSourceTrigger=PropertyChanged}" GotFocus="Textbox_GotFocus"/>
-                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
 
-                                                                            <Label Content="予想金額：" Margin="12 0 0 0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="予想金額：" Margin="12 0 0 0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                             <TextBlock Text="{Binding IFD_DoEstimatePrice, StringFormat={}{0:N0},Mode=OneWay}" Style="{StaticResource DefaultTextBlockStyle}" VerticalAlignment="Bottom"/>
-                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                         </StackPanel>
 
                                                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3" VerticalAlignment="Bottom">
-                                                                            <Label Content="トリガー：" Margin="0" Padding="0" VerticalAlignment="Center"/>
+                                                                            <Label Content="トリガー：" Margin="0" Padding="0" VerticalAlignment="Center" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                             <TextBox Width="80" Text="{Binding IFD_DoTriggerPrice}" GotFocus="Textbox_GotFocus" VerticalAlignment="Center"/>
 
-                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Center"/>
+                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Center" Style="{DynamicResource DefaultLabelStyle}"/>
 
                                                                             <ComboBox SelectedIndex="{Binding IFD_DoTriggerUpDown}" VerticalAlignment="Center" Margin="0 0 0 0" Padding="0 0 0 0" Background="Transparent" Style="{StaticResource ComboBoxFlatStyle}">
                                                                                 <ComboBoxItem Content="以上" Foreground="White"></ComboBoxItem>
@@ -1883,7 +1886,7 @@
                                                                 <Border Width="142" Height="176" Margin="3 0 0 0" VerticalAlignment="Top">
                                                                     <StackPanel Margin="0 6 0 0">
 
-                                                                        <Label Content="発注" VerticalAlignment="Bottom" BorderBrush="Gainsboro" BorderThickness="0 0 0 0.5" Padding="0" Margin="3 0 0 3"/>
+                                                                        <Label Content="発注" VerticalAlignment="Bottom" BorderBrush="Gainsboro" BorderThickness="0 0 0 0.5" Padding="0" Margin="3 0 0 3" Style="{DynamicResource DefaultLabelStyle}"/>
 
                                                                         <StackPanel Orientation="Horizontal" Margin="6 6 6 3" VerticalAlignment="Bottom" HorizontalAlignment="Right">
                                                                             <Button Command="{Binding IfdOrderCommand}" Content="IFD 発注" FontWeight="Bold" Margin="0 0 0 0" Padding="3 0 3 0"/>
@@ -1910,7 +1913,7 @@
                                                                 <Border Width="320" Height="176" Margin="3 0 0 0">
                                                                     <StackPanel Margin="0 6 0 0">
 
-                                                                        <Label Content="[One side 注文]" VerticalAlignment="Bottom" BorderBrush="Gainsboro" BorderThickness="0 0 0 0.5" Padding="0" Margin="3 0 0 3"/>
+                                                                        <Label Content="[One side 注文]" VerticalAlignment="Bottom" BorderBrush="Gainsboro" BorderThickness="0 0 0 0.5" Padding="0" Margin="3 0 0 3" Style="{DynamicResource DefaultLabelStyle}"/>
 
                                                                         <Grid Margin="3">
                                                                             <Grid.RowDefinitions>
@@ -1921,8 +1924,8 @@
                                                                                 <ColumnDefinition Width="50*"/>
                                                                             </Grid.ColumnDefinitions>
 
-                                                                            <RadioButton x:Name="OcoSideBuyRadioButton" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="OcoSide" Content="買い" Margin="0" IsChecked="{Binding OCO_OneSide, ConverterParameter={x:Static vms:IfdocoSide.buy}, Converter={StaticResource EnumBooleanConverter}}"/>
-                                                                            <RadioButton x:Name="OcoSideSellRadioButton" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="OcoSide" Content="売り" Margin="0" IsChecked="{Binding OCO_OneSide, ConverterParameter={x:Static vms:IfdocoSide.sell}, Converter={StaticResource EnumBooleanConverter}}"/>
+                                                                            <RadioButton x:Name="OcoSideBuyRadioButton" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="OcoSide" Content="買い" Margin="0" IsChecked="{Binding OCO_OneSide, ConverterParameter={x:Static vms:IfdocoSide.buy}, Converter={StaticResource EnumBooleanConverter}}" Style="{DynamicResource SelectionRadioButtonStyle}"/>
+                                                                            <RadioButton x:Name="OcoSideSellRadioButton" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="OcoSide" Content="売り" Margin="0" IsChecked="{Binding OCO_OneSide, ConverterParameter={x:Static vms:IfdocoSide.sell}, Converter={StaticResource EnumBooleanConverter}}" Style="{DynamicResource SelectionRadioButtonStyle}"/>
                                                                         </Grid>
 
                                                                         <Grid Margin="3">
@@ -1934,31 +1937,31 @@
                                                                                 <ColumnDefinition Width="50*"/>
                                                                             </Grid.ColumnDefinitions>
 
-                                                                            <RadioButton x:Name="OcoTypeLimitRadioButton" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="OcoType" Content="指値" Margin="0" IsChecked="{Binding OCO_OneType, ConverterParameter={x:Static vms:IfdocoTypes.limit}, Converter={StaticResource EnumBooleanConverter}}"/>
-                                                                            <RadioButton x:Name="OcoTypeMarketRadioButton" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="OcoType" Content="成行" Margin="0" IsChecked="{Binding OCO_OneType, ConverterParameter={x:Static vms:IfdocoTypes.market}, Converter={StaticResource EnumBooleanConverter}}"/>
+                                                                            <RadioButton x:Name="OcoTypeLimitRadioButton" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="OcoType" Content="指値" Margin="0" IsChecked="{Binding OCO_OneType, ConverterParameter={x:Static vms:IfdocoTypes.limit}, Converter={StaticResource EnumBooleanConverter}}" Style="{DynamicResource SelectionRadioButtonStyle}"/>
+                                                                            <RadioButton x:Name="OcoTypeMarketRadioButton" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="OcoType" Content="成行" Margin="0" IsChecked="{Binding OCO_OneType, ConverterParameter={x:Static vms:IfdocoTypes.market}, Converter={StaticResource EnumBooleanConverter}}" Style="{DynamicResource SelectionRadioButtonStyle}"/>
                                                                         </Grid>
 
                                                                         <StackPanel Orientation="Horizontal" Margin="0 6 0 3" VerticalAlignment="Bottom">
-                                                                            <Label Content="数量：" Margin="0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="数量：" Margin="0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                             <TextBox x:Name="OcoAmountTextbox" Width="80" Text="{Binding OCO_OneAmount}" GotFocus="Textbox_GotFocus" VerticalAlignment="Bottom"/>
-                                                                            <Label Content=" BTC" Margin="0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="{Binding CurrentCoinString, Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                         </StackPanel>
 
                                                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3" VerticalAlignment="Bottom">
-                                                                            <Label Content="価格：" Margin="0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="価格：" Margin="0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                             <TextBox x:Name="OcoPriceTextbox" Width="80" VerticalAlignment="Bottom" IsEnabled="{Binding IsChecked, ElementName=OcoTypeLimitRadioButton}" Text="{Binding OCO_OnePrice,UpdateSourceTrigger=PropertyChanged}" GotFocus="Textbox_GotFocus"/>
-                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
 
-                                                                            <Label Content="予想金額：" Margin="12 0 0 0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="予想金額：" Margin="12 0 0 0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                             <TextBlock Text="{Binding OCO_OneEstimatePrice, StringFormat={}{0:N0},Mode=OneWay}" Style="{StaticResource DefaultTextBlockStyle}" VerticalAlignment="Bottom"/>
-                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                         </StackPanel>
 
                                                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3" VerticalAlignment="Bottom">
-                                                                            <Label Content="トリガー：" Margin="0" Padding="0" VerticalAlignment="Center"/>
+                                                                            <Label Content="トリガー：" Margin="0" Padding="0" VerticalAlignment="Center" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                             <TextBox Width="80" Text="{Binding OCO_OneTriggerPrice}" GotFocus="Textbox_GotFocus" VerticalAlignment="Center"/>
 
-                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Center"/>
+                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Center" Style="{DynamicResource DefaultLabelStyle}"/>
 
                                                                             <ComboBox SelectedIndex="{Binding OCO_OneTriggerUpDown}" VerticalAlignment="Center" Margin="0 0 0 0" Padding="0 0 0 0" Background="Transparent" Style="{StaticResource ComboBoxFlatStyle}">
                                                                                 <ComboBoxItem Content="以上" Foreground="White"></ComboBoxItem>
@@ -1973,7 +1976,7 @@
                                                                 <Border Width="320" Height="176" Margin="3 0 0 0">
                                                                     <StackPanel Margin="0 6 0 0">
 
-                                                                        <Label Content="[the Other 注文]" VerticalAlignment="Bottom" BorderBrush="Gainsboro" BorderThickness="0 0 0 0.5" Padding="0" Margin="3 0 0 3"/>
+                                                                        <Label Content="[the Other 注文]" VerticalAlignment="Bottom" BorderBrush="Gainsboro" BorderThickness="0 0 0 0.5" Padding="0" Margin="3 0 0 3" Style="{DynamicResource DefaultLabelStyle}"/>
 
                                                                         <Grid Margin="3">
                                                                             <Grid.RowDefinitions>
@@ -1984,8 +1987,8 @@
                                                                                 <ColumnDefinition Width="50*"/>
                                                                             </Grid.ColumnDefinitions>
 
-                                                                            <RadioButton x:Name="OcoDoneSideBuyRadioButton" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="OcoDoneSide" Content="買い" Margin="0" IsChecked="{Binding OCO_OtherSide, ConverterParameter={x:Static vms:IfdocoSide.buy}, Converter={StaticResource EnumBooleanConverter}}"/>
-                                                                            <RadioButton x:Name="OcoDoneSideSellRadioButton" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="OcoDoneSide" Content="売り" Margin="0" IsChecked="{Binding OCO_OtherSide, ConverterParameter={x:Static vms:IfdocoSide.sell}, Converter={StaticResource EnumBooleanConverter}}"/>
+                                                                            <RadioButton x:Name="OcoDoneSideBuyRadioButton" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="OcoDoneSide" Content="買い" Margin="0" IsChecked="{Binding OCO_OtherSide, ConverterParameter={x:Static vms:IfdocoSide.buy}, Converter={StaticResource EnumBooleanConverter}}" Style="{DynamicResource SelectionRadioButtonStyle}"/>
+                                                                            <RadioButton x:Name="OcoDoneSideSellRadioButton" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="OcoDoneSide" Content="売り" Margin="0" IsChecked="{Binding OCO_OtherSide, ConverterParameter={x:Static vms:IfdocoSide.sell}, Converter={StaticResource EnumBooleanConverter}}" Style="{DynamicResource SelectionRadioButtonStyle}"/>
                                                                         </Grid>
 
                                                                         <Grid Margin="3">
@@ -1997,31 +2000,31 @@
                                                                                 <ColumnDefinition Width="50*"/>
                                                                             </Grid.ColumnDefinitions>
 
-                                                                            <RadioButton x:Name="OcoDoneTypeLimitRadioButton" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="OcoDoneType" Content="指値" Margin="0" IsChecked="{Binding OCO_OtherType, ConverterParameter={x:Static vms:IfdocoTypes.limit}, Converter={StaticResource EnumBooleanConverter}}"/>
-                                                                            <RadioButton x:Name="OcoDoneTypeMarketRadioButton" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="OcoDoneType" Content="成行" Margin="0" IsChecked="{Binding OCO_OtherType, ConverterParameter={x:Static vms:IfdocoTypes.market}, Converter={StaticResource EnumBooleanConverter}}"/>
+                                                                            <RadioButton x:Name="OcoDoneTypeLimitRadioButton" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="OcoDoneType" Content="指値" Margin="0" IsChecked="{Binding OCO_OtherType, ConverterParameter={x:Static vms:IfdocoTypes.limit}, Converter={StaticResource EnumBooleanConverter}}" Style="{DynamicResource SelectionRadioButtonStyle}"/>
+                                                                            <RadioButton x:Name="OcoDoneTypeMarketRadioButton" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="OcoDoneType" Content="成行" Margin="0" IsChecked="{Binding OCO_OtherType, ConverterParameter={x:Static vms:IfdocoTypes.market}, Converter={StaticResource EnumBooleanConverter}}" Style="{DynamicResource SelectionRadioButtonStyle}"/>
                                                                         </Grid>
 
                                                                         <StackPanel Orientation="Horizontal" Margin="0 6 0 3" VerticalAlignment="Bottom">
-                                                                            <Label Content="数量：" Margin="0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="数量：" Margin="0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                             <TextBox x:Name="OcoDoneAmountTextbox" Width="80" Text="{Binding OCO_OtherAmount}" GotFocus="Textbox_GotFocus" VerticalAlignment="Bottom"/>
-                                                                            <Label Content=" BTC" Margin="0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="{Binding CurrentCoinString, Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                         </StackPanel>
 
                                                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3" VerticalAlignment="Bottom">
-                                                                            <Label Content="価格：" Margin="0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="価格：" Margin="0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                             <TextBox x:Name="OcoDonePriceTextbox" Width="80" VerticalAlignment="Bottom" IsEnabled="{Binding IsChecked, ElementName=OcoDoneTypeLimitRadioButton}" Text="{Binding OCO_OtherPrice,UpdateSourceTrigger=PropertyChanged}" GotFocus="Textbox_GotFocus"/>
-                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
 
-                                                                            <Label Content="予想金額：" Margin="12 0 0 0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="予想金額：" Margin="12 0 0 0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                             <TextBlock Text="{Binding OCO_OtherEstimatePrice, StringFormat={}{0:N0},Mode=OneWay}" Style="{StaticResource DefaultTextBlockStyle}" VerticalAlignment="Bottom"/>
-                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="0 0 0 0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="0 0 0 0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                         </StackPanel>
 
                                                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3" VerticalAlignment="Bottom">
-                                                                            <Label Content="トリガー：" Margin="0" Padding="0" VerticalAlignment="Center"/>
+                                                                            <Label Content="トリガー：" Margin="0" Padding="0" VerticalAlignment="Center" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                             <TextBox Width="80" Text="{Binding OCO_OtherTriggerPrice}" GotFocus="Textbox_GotFocus" VerticalAlignment="Center"/>
 
-                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="0 0 0 0" Padding="0" VerticalAlignment="Center"/>
+                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="0 0 0 0" Padding="0" VerticalAlignment="Center" Style="{DynamicResource DefaultLabelStyle}"/>
 
                                                                             <ComboBox SelectedIndex="{Binding OCO_OtherTriggerUpDown}" VerticalAlignment="Center" Margin="0 0 0 0" Padding="0 0 0 0" Background="Transparent" Style="{StaticResource ComboBoxFlatStyle}">
                                                                                 <ComboBoxItem Content="以上" Foreground="White"></ComboBoxItem>
@@ -2036,7 +2039,7 @@
                                                                 <Border Width="142" Height="176" Margin="3 0 0 0" VerticalAlignment="Top">
                                                                     <StackPanel Margin="0 6 0 0">
 
-                                                                        <Label Content="発注" VerticalAlignment="Bottom" BorderBrush="Gainsboro" BorderThickness="0 0 0 0.5" Padding="0" Margin="3 0 0 3"/>
+                                                                        <Label Content="発注" VerticalAlignment="Bottom" BorderBrush="Gainsboro" BorderThickness="0 0 0 0.5" Padding="0" Margin="3 0 0 3" Style="{DynamicResource DefaultLabelStyle}"/>
 
                                                                         <StackPanel Orientation="Horizontal" Margin="6 6 6 3" VerticalAlignment="Bottom" HorizontalAlignment="Right">
                                                                             <Button Command="{Binding OcoOrderCommand}" Content="OCO 発注" FontWeight="Bold" Margin="0 0 0 0" Padding="3 0 3 0"/>
@@ -2063,7 +2066,7 @@
                                                                 <Border Width="230" Height="176" Margin="3 0 0 0">
                                                                     <StackPanel Margin="0 6 0 0">
 
-                                                                        <Label Content="[IFDone 注文]" VerticalAlignment="Bottom" BorderBrush="Gainsboro" BorderThickness="0 0 0 0.5" Padding="0" Margin="3 0 0 3"/>
+                                                                        <Label Content="[IFDone 注文]" VerticalAlignment="Bottom" BorderBrush="Gainsboro" BorderThickness="0 0 0 0.5" Padding="0" Margin="3 0 0 3" Style="{DynamicResource DefaultLabelStyle}"/>
 
                                                                         <Grid Margin="3">
                                                                             <Grid.RowDefinitions>
@@ -2074,8 +2077,8 @@
                                                                                 <ColumnDefinition Width="50*"/>
                                                                             </Grid.ColumnDefinitions>
 
-                                                                            <RadioButton x:Name="IFDOCOSideBuyRadioButton" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="IFDOCOSide" Content="買い" Margin="0" IsChecked="{Binding IFDOCO_IfdSide, ConverterParameter={x:Static vms:IfdocoSide.buy}, Converter={StaticResource EnumBooleanConverter}}"/>
-                                                                            <RadioButton x:Name="IFDOCOSideSellRadioButton" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="IFDOCOSide" Content="売り" Margin="0" IsChecked="{Binding IFDOCO_IfdSide, ConverterParameter={x:Static vms:IfdocoSide.sell}, Converter={StaticResource EnumBooleanConverter}}"/>
+                                                                            <RadioButton x:Name="IFDOCOSideBuyRadioButton" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="IFDOCOSide" Content="買い" Margin="0" IsChecked="{Binding IFDOCO_IfdSide, ConverterParameter={x:Static vms:IfdocoSide.buy}, Converter={StaticResource EnumBooleanConverter}}" Style="{DynamicResource SelectionRadioButtonStyle}"/>
+                                                                            <RadioButton x:Name="IFDOCOSideSellRadioButton" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="IFDOCOSide" Content="売り" Margin="0" IsChecked="{Binding IFDOCO_IfdSide, ConverterParameter={x:Static vms:IfdocoSide.sell}, Converter={StaticResource EnumBooleanConverter}}" Style="{DynamicResource SelectionRadioButtonStyle}"/>
                                                                         </Grid>
 
                                                                         <Grid Margin="3">
@@ -2087,25 +2090,25 @@
                                                                                 <ColumnDefinition Width="50*"/>
                                                                             </Grid.ColumnDefinitions>
 
-                                                                            <RadioButton x:Name="IFDOCOTypeLimitRadioButton" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="IFDOCOType" Content="指値" Margin="0" IsChecked="{Binding IFDOCO_IfdType, ConverterParameter={x:Static vms:IfdocoTypes.limit}, Converter={StaticResource EnumBooleanConverter}}"/>
-                                                                            <RadioButton x:Name="IFDOCOTypeMarketRadioButton" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="IFDOCOType" Content="成行" Margin="0" IsChecked="{Binding IFDOCO_IfdType, ConverterParameter={x:Static vms:IfdocoTypes.market}, Converter={StaticResource EnumBooleanConverter}}"/>
+                                                                            <RadioButton x:Name="IFDOCOTypeLimitRadioButton" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="IFDOCOType" Content="指値" Margin="0" IsChecked="{Binding IFDOCO_IfdType, ConverterParameter={x:Static vms:IfdocoTypes.limit}, Converter={StaticResource EnumBooleanConverter}}" Style="{DynamicResource SelectionRadioButtonStyle}"/>
+                                                                            <RadioButton x:Name="IFDOCOTypeMarketRadioButton" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="IFDOCOType" Content="成行" Margin="0" IsChecked="{Binding IFDOCO_IfdType, ConverterParameter={x:Static vms:IfdocoTypes.market}, Converter={StaticResource EnumBooleanConverter}}" Style="{DynamicResource SelectionRadioButtonStyle}"/>
                                                                         </Grid>
 
                                                                         <StackPanel Orientation="Horizontal" Margin="0 6 0 3" VerticalAlignment="Bottom">
-                                                                            <Label Content="数量：" Margin="0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="数量：" Margin="0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                             <TextBox x:Name="IFDOCOAmountTextbox" Width="80" Text="{Binding IFDOCO_IfdAmount}" GotFocus="Textbox_GotFocus" VerticalAlignment="Bottom"/>
-                                                                            <Label Content=" BTC" Margin="0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="{Binding CurrentCoinString, Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                         </StackPanel>
 
                                                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3" VerticalAlignment="Bottom">
-                                                                            <Label Content="価格：" Margin="0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="価格：" Margin="0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                             <TextBox x:Name="IFDOCOPriceTextbox" Width="80" VerticalAlignment="Bottom" IsEnabled="{Binding IsChecked, ElementName=IFDOCOTypeLimitRadioButton}" Text="{Binding IFDOCO_IfdPrice,UpdateSourceTrigger=PropertyChanged}" GotFocus="Textbox_GotFocus"/>
-                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
 
-                                                                            <Label Content="(" Margin="6 0 0 0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="(" Margin="6 0 0 0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                             <TextBlock Text="{Binding IFDOCO_IfdEstimatePrice, StringFormat={}{0:N0},Mode=OneWay}" Style="{StaticResource DefaultTextBlockStyle}" VerticalAlignment="Bottom"/>
-                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom"/>
-                                                                            <Label Content=")" Margin="0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
+                                                                            <Label Content=")" Margin="0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                         </StackPanel>
                                                                     </StackPanel>
                                                                 </Border>
@@ -2113,7 +2116,7 @@
                                                                 <Border Width="230" Height="176" Margin="3 0 0 0">
                                                                     <StackPanel Margin="0 6 0 0">
 
-                                                                        <Label Content="[One side 注文]" VerticalAlignment="Bottom" BorderBrush="Gainsboro" BorderThickness="0 0 0 0.5" Padding="0" Margin="3 0 0 3"/>
+                                                                        <Label Content="[One side 注文]" VerticalAlignment="Bottom" BorderBrush="Gainsboro" BorderThickness="0 0 0 0.5" Padding="0" Margin="3 0 0 3" Style="{DynamicResource DefaultLabelStyle}"/>
 
                                                                         <Grid Margin="3">
                                                                             <Grid.RowDefinitions>
@@ -2124,8 +2127,8 @@
                                                                                 <ColumnDefinition Width="50*"/>
                                                                             </Grid.ColumnDefinitions>
 
-                                                                            <RadioButton x:Name="IFDOCOOcoSideBuyRadioButton" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="IFDOCOOcoSide" Content="買い" Margin="0" IsChecked="{Binding IFDOCO_OneSide, ConverterParameter={x:Static vms:IfdocoSide.buy}, Converter={StaticResource EnumBooleanConverter}}"/>
-                                                                            <RadioButton x:Name="IFDOCOOcoSideSellRadioButton" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="IFDOCOOcoSide" Content="売り" Margin="0" IsChecked="{Binding IFDOCO_OneSide, ConverterParameter={x:Static vms:IfdocoSide.sell}, Converter={StaticResource EnumBooleanConverter}}"/>
+                                                                            <RadioButton x:Name="IFDOCOOcoSideBuyRadioButton" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="IFDOCOOcoSide" Content="買い" Margin="0" IsChecked="{Binding IFDOCO_OneSide, ConverterParameter={x:Static vms:IfdocoSide.buy}, Converter={StaticResource EnumBooleanConverter}}" Style="{DynamicResource SelectionRadioButtonStyle}"/>
+                                                                            <RadioButton x:Name="IFDOCOOcoSideSellRadioButton" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="IFDOCOOcoSide" Content="売り" Margin="0" IsChecked="{Binding IFDOCO_OneSide, ConverterParameter={x:Static vms:IfdocoSide.sell}, Converter={StaticResource EnumBooleanConverter}}" Style="{DynamicResource SelectionRadioButtonStyle}"/>
                                                                         </Grid>
 
                                                                         <Grid Margin="3">
@@ -2137,31 +2140,31 @@
                                                                                 <ColumnDefinition Width="50*"/>
                                                                             </Grid.ColumnDefinitions>
 
-                                                                            <RadioButton x:Name="IFDOCOOcoTypeLimitRadioButton" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="IFDOCOOcoType" Content="指値" Margin="0" IsChecked="{Binding IFDOCO_OneType, ConverterParameter={x:Static vms:IfdocoTypes.limit}, Converter={StaticResource EnumBooleanConverter}}"/>
-                                                                            <RadioButton x:Name="IFDOCOOcoTypeMarketRadioButton" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="IFDOCOOcoType" Content="成行" Margin="0" IsChecked="{Binding IFDOCO_OneType, ConverterParameter={x:Static vms:IfdocoTypes.market}, Converter={StaticResource EnumBooleanConverter}}"/>
+                                                                            <RadioButton x:Name="IFDOCOOcoTypeLimitRadioButton" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="IFDOCOOcoType" Content="指値" Margin="0" IsChecked="{Binding IFDOCO_OneType, ConverterParameter={x:Static vms:IfdocoTypes.limit}, Converter={StaticResource EnumBooleanConverter}}" Style="{DynamicResource SelectionRadioButtonStyle}"/>
+                                                                            <RadioButton x:Name="IFDOCOOcoTypeMarketRadioButton" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="IFDOCOOcoType" Content="成行" Margin="0" IsChecked="{Binding IFDOCO_OneType, ConverterParameter={x:Static vms:IfdocoTypes.market}, Converter={StaticResource EnumBooleanConverter}}" Style="{DynamicResource SelectionRadioButtonStyle}"/>
                                                                         </Grid>
 
                                                                         <StackPanel Orientation="Horizontal" Margin="0 6 0 3" VerticalAlignment="Bottom">
-                                                                            <Label Content="数量：" Margin="0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="数量：" Margin="0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                             <TextBox x:Name="IFDOCOOcoAmountTextbox" Width="80" Text="{Binding IFDOCO_OneAmount}" GotFocus="Textbox_GotFocus" VerticalAlignment="Bottom"/>
-                                                                            <Label Content=" BTC" Margin="0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="{Binding CurrentCoinString, Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                         </StackPanel>
 
                                                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3" VerticalAlignment="Bottom">
-                                                                            <Label Content="価格：" Margin="0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="価格：" Margin="0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                             <TextBox x:Name="IFDOCOOcoPriceTextbox" Width="80" VerticalAlignment="Bottom" IsEnabled="{Binding IsChecked, ElementName=IFDOCOOcoTypeLimitRadioButton}" Text="{Binding IFDOCO_OnePrice,UpdateSourceTrigger=PropertyChanged}" GotFocus="Textbox_GotFocus"/>
-                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
 
-                                                                            <Label Content="(" Margin="6 0 0 0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="(" Margin="6 0 0 0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                             <TextBlock Text="{Binding IFDOCO_OneEstimatePrice, StringFormat={}{0:N0},Mode=OneWay}" Style="{StaticResource DefaultTextBlockStyle}" VerticalAlignment="Bottom"/>
-                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom"/>
-                                                                            <Label Content=")" Margin="0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
+                                                                            <Label Content=")" Margin="0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                         </StackPanel>
 
                                                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3" VerticalAlignment="Bottom">
-                                                                            <Label Content="トリガー：" Margin="0" Padding="0" VerticalAlignment="Center"/>
+                                                                            <Label Content="トリガー：" Margin="0" Padding="0" VerticalAlignment="Center" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                             <TextBox Width="80" Text="{Binding IFDOCO_OneTriggerPrice}" GotFocus="Textbox_GotFocus" VerticalAlignment="Center"/>
-                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Center"/>
+                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Center" Style="{DynamicResource DefaultLabelStyle}"/>
 
                                                                             <ComboBox SelectedIndex="{Binding IFDOCO_OneTriggerUpDown}" VerticalAlignment="Center" Margin="0 0 0 0" Padding="0 0 0 0" Background="Transparent" Style="{StaticResource ComboBoxFlatStyle}">
                                                                                 <ComboBoxItem Content="以上" Foreground="White"></ComboBoxItem>
@@ -2175,7 +2178,7 @@
                                                                 <Border Width="230" Height="176" Margin="3 0 0 0">
                                                                     <StackPanel Margin="0 6 0 0">
 
-                                                                        <Label Content="[the Other 注文]" VerticalAlignment="Bottom" BorderBrush="Gainsboro" BorderThickness="0 0 0 0.5" Padding="0" Margin="3 0 0 3"/>
+                                                                        <Label Content="[the Other 注文]" VerticalAlignment="Bottom" BorderBrush="Gainsboro" BorderThickness="0 0 0 0.5" Padding="0" Margin="3 0 0 3" Style="{DynamicResource DefaultLabelStyle}"/>
 
                                                                         <Grid Margin="3">
                                                                             <Grid.RowDefinitions>
@@ -2186,8 +2189,8 @@
                                                                                 <ColumnDefinition Width="50*"/>
                                                                             </Grid.ColumnDefinitions>
 
-                                                                            <RadioButton x:Name="IFDOCOOcoDoneSideBuyRadioButton" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="IFDOCOOcoDoneSide" Content="買い" Margin="0" IsChecked="{Binding IFDOCO_OtherSide, ConverterParameter={x:Static vms:IfdocoSide.buy}, Converter={StaticResource EnumBooleanConverter}}"/>
-                                                                            <RadioButton x:Name="IFDOCOOcoDoneSideSellRadioButton" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="IFDOCOOcoDoneSide" Content="売り" Margin="0" IsChecked="{Binding IFDOCO_OtherSide, ConverterParameter={x:Static vms:IfdocoSide.sell}, Converter={StaticResource EnumBooleanConverter}}"/>
+                                                                            <RadioButton x:Name="IFDOCOOcoDoneSideBuyRadioButton" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="IFDOCOOcoDoneSide" Content="買い" Margin="0" IsChecked="{Binding IFDOCO_OtherSide, ConverterParameter={x:Static vms:IfdocoSide.buy}, Converter={StaticResource EnumBooleanConverter}}" Style="{DynamicResource SelectionRadioButtonStyle}"/>
+                                                                            <RadioButton x:Name="IFDOCOOcoDoneSideSellRadioButton" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="IFDOCOOcoDoneSide" Content="売り" Margin="0" IsChecked="{Binding IFDOCO_OtherSide, ConverterParameter={x:Static vms:IfdocoSide.sell}, Converter={StaticResource EnumBooleanConverter}}" Style="{DynamicResource SelectionRadioButtonStyle}"/>
                                                                         </Grid>
 
                                                                         <Grid Margin="3">
@@ -2199,31 +2202,31 @@
                                                                                 <ColumnDefinition Width="50*"/>
                                                                             </Grid.ColumnDefinitions>
 
-                                                                            <RadioButton x:Name="IFDOCOOcoDoneTypeLimitRadioButton" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="IFDOCOOcoDoneType" Content="指値" Margin="0" IsChecked="{Binding IFDOCO_OtherType, ConverterParameter={x:Static vms:IfdocoTypes.limit}, Converter={StaticResource EnumBooleanConverter}}"/>
-                                                                            <RadioButton x:Name="IFDOCOOcoDoneTypeMarketRadioButton" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="IFDOCOOcoDoneType" Content="成行" Margin="0" IsChecked="{Binding IFDOCO_OtherType, ConverterParameter={x:Static vms:IfdocoTypes.market}, Converter={StaticResource EnumBooleanConverter}}"/>
+                                                                            <RadioButton x:Name="IFDOCOOcoDoneTypeLimitRadioButton" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="IFDOCOOcoDoneType" Content="指値" Margin="0" IsChecked="{Binding IFDOCO_OtherType, ConverterParameter={x:Static vms:IfdocoTypes.limit}, Converter={StaticResource EnumBooleanConverter}}" Style="{DynamicResource SelectionRadioButtonStyle}"/>
+                                                                            <RadioButton x:Name="IFDOCOOcoDoneTypeMarketRadioButton" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="IFDOCOOcoDoneType" Content="成行" Margin="0" IsChecked="{Binding IFDOCO_OtherType, ConverterParameter={x:Static vms:IfdocoTypes.market}, Converter={StaticResource EnumBooleanConverter}}" Style="{DynamicResource SelectionRadioButtonStyle}"/>
                                                                         </Grid>
 
                                                                         <StackPanel Orientation="Horizontal" Margin="0 6 0 3" VerticalAlignment="Bottom">
-                                                                            <Label Content="数量：" Margin="0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="数量：" Margin="0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                             <TextBox x:Name="IFDOCOOcoDoneAmountTextbox" Width="80" Text="{Binding IFDOCO_OtherAmount}" GotFocus="Textbox_GotFocus" VerticalAlignment="Bottom"/>
-                                                                            <Label Content=" BTC" Margin="0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="{Binding CurrentCoinString, Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                         </StackPanel>
 
                                                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3" VerticalAlignment="Bottom">
-                                                                            <Label Content="価格：" Margin="0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="価格：" Margin="0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                             <TextBox x:Name="IFDOCOOcoDonePriceTextbox" Width="80" VerticalAlignment="Bottom" IsEnabled="{Binding IsChecked, ElementName=IFDOCOOcoDoneTypeLimitRadioButton}" Text="{Binding IFDOCO_OtherPrice,UpdateSourceTrigger=PropertyChanged}" GotFocus="Textbox_GotFocus"/>
-                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
 
-                                                                            <Label Content="(" Margin="6 0 0 0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="(" Margin="6 0 0 0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                             <TextBlock Text="{Binding IFDOCO_OtherEstimatePrice, StringFormat={}{0:N0},Mode=OneWay}" Style="{StaticResource DefaultTextBlockStyle}" VerticalAlignment="Bottom"/>
-                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom"/>
-                                                                            <Label Content=")" Margin="0" Padding="0" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
+                                                                            <Label Content=")" Margin="0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                         </StackPanel>
 
                                                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3" VerticalAlignment="Bottom">
-                                                                            <Label Content="トリガー：" Margin="0" Padding="0" VerticalAlignment="Center"/>
+                                                                            <Label Content="トリガー：" Margin="0" Padding="0" VerticalAlignment="Center" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                             <TextBox Width="80" Text="{Binding IFDOCO_OtherTriggerPrice}" GotFocus="Textbox_GotFocus" VerticalAlignment="Center"/>
-                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Center"/>
+                                                                            <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Center" Style="{DynamicResource DefaultLabelStyle}"/>
 
                                                                             <ComboBox SelectedIndex="{Binding IFDOCO_OtherTriggerUpDown}" VerticalAlignment="Center" Margin="0 0 0 0" Padding="0 0 0 0" Background="Transparent" Style="{StaticResource ComboBoxFlatStyle}">
                                                                                 <ComboBoxItem Content="以上" Foreground="White"></ComboBoxItem>
@@ -2237,7 +2240,7 @@
                                                                 <Border Width="230" Height="176" Margin="3 0 0 0" VerticalAlignment="Top">
                                                                     <StackPanel Margin="0 6 0 0">
 
-                                                                        <Label Content="発注" VerticalAlignment="Bottom" BorderBrush="Gainsboro" BorderThickness="0 0 0 0.5" Padding="0" Margin="3 0 0 3"/>
+                                                                        <Label Content="発注" VerticalAlignment="Bottom" BorderBrush="Gainsboro" BorderThickness="0 0 0 0.5" Padding="0" Margin="3 0 0 3" Style="{DynamicResource DefaultLabelStyle}"/>
 
                                                                         <StackPanel Orientation="Horizontal" Margin="6 6 6 3" VerticalAlignment="Bottom" HorizontalAlignment="Right">
                                                                             <Button Command="{Binding IfdocoOrderCommand}" Content="IFDOCO 発注" FontWeight="Bold" Margin="0 0 0 0" Padding="3 0 3 0"/>
@@ -2357,7 +2360,7 @@
                                                         </Grid.ColumnDefinitions>
 
                                                         <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" BorderBrush="Gainsboro" BorderThickness="0 0 0 0.1" Margin="3" Padding="3" HorizontalAlignment="Center">
-                                                            <Label FontWeight="Bold" Content="自動取引ステータス"/>
+                                                            <Label FontWeight="Bold" Content="自動取引ステータス" Style="{DynamicResource DefaultLabelStyle}"/>
                                                         </Border>
                                                         <Border Grid.Row="1" Grid.Column="0" BorderBrush="Gainsboro" BorderThickness="0 0 0 0" Margin="3" Padding="6">
                                                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0">
@@ -2372,31 +2375,31 @@
 
                                                         <Border Grid.Row="3" Grid.Column="0"  Padding="3 12 3 3">
                                                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                                                                <Label Content="下値制限： " VerticalAlignment="Bottom"></Label>
-                                                                <TextBox Text="{Binding AutoTradeLowerLimit}" Width="80"></TextBox>
+                                                                <Label Content="下値制限： " VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"></Label>
+                                                                <TextBox Text="{Binding AutoTradeLowerLimit}" Width="80" Style="{DynamicResource DefaultTextBoxStyle}"></TextBox>
                                                             </StackPanel>
                                                         </Border>
                                                         <Border Grid.Row="3" Grid.Column="1" Padding="3 12 3 3" >
                                                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                                                                <Label Content="上値制限： " VerticalAlignment="Bottom"></Label>
-                                                                <TextBox Text="{Binding AutoTradeUpperLimit}" Width="80"></TextBox>
+                                                                <Label Content="上値制限： " VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"></Label>
+                                                                <TextBox Text="{Binding AutoTradeUpperLimit}" Width="80" Style="{DynamicResource DefaultTextBoxStyle}"></TextBox>
                                                             </StackPanel>
                                                         </Border>
                                                         <Border Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Padding="3">
                                                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                                                                <Label Content="損切値幅： " VerticalAlignment="Bottom"></Label>
-                                                                <TextBox Text="{Binding AutoTradeLostCut}" Width="80"></TextBox>
+                                                                <Label Content="損切値幅： " VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"></Label>
+                                                                <TextBox Text="{Binding AutoTradeLostCut}" Width="80" Style="{DynamicResource DefaultTextBoxStyle}"></TextBox>
                                                             </StackPanel>
                                                         </Border>
                                                         <Border Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Padding="3">
                                                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                                                                <Label Content="取引単位： " VerticalAlignment="Bottom"></Label>
-                                                                <TextBox Text="{Binding AutoTradeTama}" Width="80"></TextBox>
+                                                                <Label Content="取引単位： " VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"></Label>
+                                                                <TextBox Text="{Binding AutoTradeTama}" Width="80" Style="{DynamicResource DefaultTextBoxStyle}"></TextBox>
                                                             </StackPanel>
                                                         </Border>
                                                         <Border Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Padding="3">
                                                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0 24 0 0">
-                                                                <Label Content="損益： " FontSize="24"></Label>
+                                                                <Label Content="損益： " FontSize="24" Style="{DynamicResource DefaultLabelStyle}"></Label>
                                                                 <TextBlock Text="{Binding AutoTradeProfit, Mode=OneWay, StringFormat=0.#############################}" FontSize="24" Style="{StaticResource DefaultTextBlockStyle}"></TextBlock>
                                                             </StackPanel>
                                                         </Border>
@@ -3269,7 +3272,7 @@
                                     <Grid x:Name="AIfdocoWidth18" Grid.Column="18" />
                                 </Grid>
 
-                                <ListView x:Name="IFDOCO_ListView" Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Ifdocos}" IsSynchronizedWithCurrentItem="True" common:GridViewSort.AutoSort="True" common:GridViewSort.ShowSortGlyph="False" Background="Transparent" AlternationCount="2" MinHeight="80" BorderThickness="0" Padding="0 0 0 0" Margin="0" SelectionMode="Extended" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible">
+                                <ListView x:Name="IFDOCO_ListView" Grid.Row="1" Grid.Column="0" ItemsSource="{Binding ActivePair.Ifdocos}" IsSynchronizedWithCurrentItem="True" common:GridViewSort.AutoSort="True" common:GridViewSort.ShowSortGlyph="False" Background="Transparent" AlternationCount="2" MinHeight="80" BorderThickness="0" Padding="0 0 0 0" Margin="0" SelectionMode="Extended" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible">
                                     <ListView.Resources>
                                         <ContextMenu x:Key="IFDOCO_ItemContextMenu">
                                             <MenuItem Header="選択アイテム">
@@ -4219,7 +4222,7 @@
                                     <Grid x:Name="AT2Width13" Grid.Column="13" />
                                 </Grid>
 
-                                <ListView x:Name="AutoTrade2ListView" Grid.Row="1" Grid.Column="0" ItemsSource="{Binding AutoTrades2}" IsSynchronizedWithCurrentItem="True" common:GridViewSort.AutoSort="True" common:GridViewSort.ShowSortGlyph="False" Background="Transparent" AlternationCount="2" MinHeight="80" BorderThickness="0" Padding="0 0 0 0" Margin="0 0 0 0" SelectionMode="Extended" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible">
+                                <ListView x:Name="AutoTrade2ListView" Grid.Row="1" Grid.Column="0" ItemsSource="{Binding ActivePair.AutoTrades}" IsSynchronizedWithCurrentItem="True" common:GridViewSort.AutoSort="True" common:GridViewSort.ShowSortGlyph="False" Background="Transparent" AlternationCount="2" MinHeight="80" BorderThickness="0" Padding="0 0 0 0" Margin="0 0 0 0" SelectionMode="Extended" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible">
                                     <ListView.Resources>
                                         <ContextMenu x:Key="ATItemContextMenu">
                                             <MenuItem Header="選択アイテム">

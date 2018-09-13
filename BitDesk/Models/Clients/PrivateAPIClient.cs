@@ -142,7 +142,6 @@ namespace BitDesk.Models.Clients
         public string MakerTaker { get; set; }
         public Decimal FeeAmountBase { get; set; }
         public Decimal FeeAmountQuote { get; set; }
-
         public DateTime ExecutedAt { get; set; } 
     }
 
@@ -548,7 +547,6 @@ namespace BitDesk.Models.Clients
         }
     }
 
-
     #endregion
 
     class PrivateAPIClient : BaseClient
@@ -625,8 +623,10 @@ namespace BitDesk.Models.Clients
         // プライベートAPIのベースURL
         private readonly Uri PrivateAPIUri = new Uri("https://api.bitbank.cc/v1");
 
+        // デリゲート
         public delegate void ClinetErrorEvent(PrivateAPIClient sender, ClientError err);
 
+        // エラーイベント
         public event ClinetErrorEvent ErrorOccured;
 
         #endregion
@@ -642,23 +642,13 @@ namespace BitDesk.Models.Clients
         // 資産残高取得メソッド
         public async Task<Assets> GetAssetList(string _ApiKey, string _ApiSecret)
         {
-            //System.Diagnostics.Debug.WriteLine("GettingAsset...");
-            /*
-            while (_httpClientIsBusy)
-            {
-                await Task.Delay(100);
-            }
-            */
 
-            Uri path = new Uri("/user/assets", UriKind.Relative);//APIの通信URL
+            Uri path = new Uri("/user/assets", UriKind.Relative);
 
             string json = await Send(path, _ApiKey, _ApiSecret, HttpMethod.Get);
 
             if (!string.IsNullOrEmpty(json))
             {
-                //System.Diagnostics.Debug.WriteLine("GetAsset: " + json);
-
-                //var deserialized = JsonConvert.DeserializeObject<JsonAssetObject>(json);
 
                 var deserialized = JsonAsset.FromJson(json);
 
@@ -712,13 +702,6 @@ namespace BitDesk.Models.Clients
         // 注文発注メソッド
         public async Task<OrderResult> MakeOrder(string _ApiKey, string _ApiSecret, string pair, Decimal amount, Decimal price, string side, string type)
         {
-            /*
-            while (_httpClientIsBusy)
-            {
-                await Task.Delay(100);
-            }
-            */
-
             //パラメータ 
             // https://docs.bitbank.cc/#/Order
             /*
@@ -848,15 +831,8 @@ namespace BitDesk.Models.Clients
         // 注文情報をIDから取得メソッド
         public async Task<OrderResult> GetOrderByID(string _ApiKey, string _ApiSecret, string pair, int orderID)
         {
-            //System.Diagnostics.Debug.WriteLine("GetOrderByID...");
-            /*
-            while (_httpClientIsBusy)
-            {
-                await Task.Delay(100);
-            }
-            */
 
-            Uri path = new Uri("/user/spot/order", UriKind.Relative);//APIの通信URL
+            Uri path = new Uri("/user/spot/order", UriKind.Relative);
 
             var param = new Dictionary<string, string>{
                 { "pair", pair },//取引する通貨の種類
@@ -948,19 +924,11 @@ namespace BitDesk.Models.Clients
         // 注文情報を複数のIDから取得メソッド
         public async Task<Orders> GetOrderListByIDs(string _ApiKey, string _ApiSecret, string pair, List<int> orderIDs)
         {
-            //System.Diagnostics.Debug.WriteLine("GetOrderListByIDs body: " + body);
-            /*
-            while (_httpClientIsBusy)
-            {
-                await Task.Delay(100);
-            }
-            */
 
-            Uri path = new Uri("/user/spot/orders_info", UriKind.Relative);//APIの通信URL
+            Uri path = new Uri("/user/spot/orders_info", UriKind.Relative);
 
             var idParam = new PairOrderIdList(pair, orderIDs);
             var body = JsonConvert.SerializeObject(idParam);
-
 
             string json = await Send(path, _ApiKey, _ApiSecret, HttpMethod.Post, body);
 
@@ -986,11 +954,6 @@ namespace BitDesk.Models.Clients
                                     Pair = ord.pair,
                                     Side = ord.side,
                                     Type = ord.type,
-                                    //startAmount = decimal.Parse(ord.start_amount),
-                                    //remainingAmount = decimal.Parse(ord.remaining_amount),
-                                    //executedAmount = decimal.Parse(ord.executed_amount),
-                                    //price = decimal.Parse(ord.price),
-                                    //averagePrice = decimal.Parse(ord.average_price),
                                     OrderedAt = (new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).AddMilliseconds(ord.ordered_at).ToLocalTime(),
                                     Status = ord.status
                                 };
@@ -1059,36 +1022,8 @@ namespace BitDesk.Models.Clients
         // 注文キャンセルメソッド
         public async Task<OrderResult> CancelOrder(string _ApiKey, string _ApiSecret, string pair, int orderID)
         {
-            //System.Diagnostics.Debug.WriteLine("CancelOrder...");
-            /*
-            while (_httpClientIsBusy)
-            {
-                await Task.Delay(100);
-            }
-            */
 
-            /*
-            ///////////////////////////////////
-            // test data
-            Order ord = new Order();
-            ord.orderID = orderID;
-            ord.pair = pair;
-            ord.side = "-";
-            ord.type = "-";
-            ord.startAmount = 0M;
-            ord.remainingAmount = 0.001M;
-            ord.executedAmount = 0.001M;
-            ord.price = 0M;
-            ord.averagePrice = 840001M;
-            ord.orderedAt = DateTime.Now;
-            ord.status = "CANCELED_UNFILLED";
-
-            return ord;
-            ///////////////////////////////////
-            */
-
-
-            Uri path = new Uri("/user/spot/cancel_order", UriKind.Relative);//APIの通信URL
+            Uri path = new Uri("/user/spot/cancel_order", UriKind.Relative);
 
             var cancelOrderParam = new PairOrderIdParam(pair, orderID);
 
@@ -1178,19 +1113,11 @@ namespace BitDesk.Models.Clients
         // 文キャンセル（複数）メソッド
         public async Task<Orders> CancelOrders(string _ApiKey, string _ApiSecret, string pair, List<int> orderIDs)
         {
-            //System.Diagnostics.Debug.WriteLine("GetOrderListByIDs body: " + body);
-            /*
-            while (_httpClientIsBusy)
-            {
-                await Task.Delay(100);
-            }
-            */
 
-            Uri path = new Uri("/user/spot/cancel_orders", UriKind.Relative);//APIの通信URL
+            Uri path = new Uri("/user/spot/cancel_orders", UriKind.Relative);
 
             var idParam = new PairOrderIdList(pair, orderIDs);
             var body = JsonConvert.SerializeObject(idParam);
-
 
             string json = await Send(path, _ApiKey, _ApiSecret, HttpMethod.Post, body);
 
@@ -1216,11 +1143,6 @@ namespace BitDesk.Models.Clients
                                     Pair = ord.pair,
                                     Side = ord.side,
                                     Type = ord.type,
-                                    //startAmount = decimal.Parse(ord.start_amount),
-                                    //remainingAmount = decimal.Parse(ord.remaining_amount),
-                                    //executedAmount = decimal.Parse(ord.executed_amount),
-                                    //price = decimal.Parse(ord.price),
-                                    //averagePrice = decimal.Parse(ord.average_price),
                                     OrderedAt = (new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).AddMilliseconds(ord.ordered_at).ToLocalTime(),
                                     Status = ord.status
                                 };
@@ -1290,7 +1212,7 @@ namespace BitDesk.Models.Clients
         public async Task<Orders> GetOrderList(string pair, string _ApiKey, string _ApiSecret)
         {
 
-            Uri path = new Uri("/user/spot/active_orders", UriKind.Relative);//APIの通信URL
+            Uri path = new Uri("/user/spot/active_orders", UriKind.Relative);
 
             var param = new Dictionary<string, string>{
                 { "pair", pair },//取引する通貨の種類
@@ -1371,7 +1293,7 @@ namespace BitDesk.Models.Clients
         public async Task<TradeHistory> GetTradeHistory(string pair ,string _ApiKey, string _ApiSecret)
         {
 
-            Uri path = new Uri("/user/spot/trade_history", UriKind.Relative);//APIの通信URL
+            Uri path = new Uri("/user/spot/trade_history", UriKind.Relative);
 
             var param = new Dictionary<string, string>{
                 { "pair", pair },//取得する約定数
@@ -1455,14 +1377,6 @@ namespace BitDesk.Models.Clients
         // HTTPリクエスト送信メソッド
         internal async Task<string> Send(Uri path, string apiKey, string secret, HttpMethod method, string body = "", Dictionary<string, string> queries = null)
         {
-            /*
-            while (_httpClientIsBusy)
-            {
-                await Task.Delay(100);
-            }
-            */
-
-            //_httpClientIsBusy = true;
 
             try {
 
@@ -1497,24 +1411,6 @@ namespace BitDesk.Models.Clients
                 //ACCESS-SIGNATURE
                 string _accessSignature = BitConverter.ToString(hash).ToLower().Replace("-", "");//バイト配列をを16進文字列へ
 
-                /*
-                try
-                {
-                    // HTTPヘッダをセット
-                    _HTTPConn.Client.DefaultRequestHeaders.Clear();
-                    _HTTPConn.Client.DefaultRequestHeaders.Add("ACCESS-KEY", apiKey);
-                    _HTTPConn.Client.DefaultRequestHeaders.Add("ACCESS-NONCE", _accessNonce);
-                    _HTTPConn.Client.DefaultRequestHeaders.Add("ACCESS-SIGNATURE", _accessSignature);
-                    //ACCEPT header
-                    //_HTTPConn.Client.DefaultRequestHeaders.Add("Accept", "application/json");
-                }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Debug.WriteLine("■■■■■ HTTP GET/POST HTTPヘッダをセット - Exception : " + ex.Message);
-
-                }
-                */
-
                 //System.Diagnostics.Debug.WriteLine("Sending..." + Environment.NewLine + _HTTPConn.Client.DefaultRequestHeaders.ToString());
 
                 HttpResponseMessage res;
@@ -1522,13 +1418,9 @@ namespace BitDesk.Models.Clients
                 {
                     var content = new StringContent(body, Encoding.UTF8, "application/json");
 
-                    //System.Diagnostics.Debug.WriteLine("HTTP Post..." + Environment.NewLine + _HTTPConn.Client.BaseAddress.ToString() + path.ToString());
-
-                    //
                     content.Headers.Add("ACCESS-KEY", apiKey);
                     content.Headers.Add("ACCESS-NONCE", _accessNonce);
                     content.Headers.Add("ACCESS-SIGNATURE", _accessSignature);
-                    //
 
                     res = await _HTTPConn.Client.PostAsync(_HTTPConn.Client.BaseAddress.ToString() + path.ToString(), content);
                 }
@@ -1544,11 +1436,6 @@ namespace BitDesk.Models.Clients
                         requestMessage.Headers.Add("ACCESS-SIGNATURE", _accessSignature);
                         
                         res = await _HTTPConn.Client.SendAsync(requestMessage);
-                        //
-
-                        //System.Diagnostics.Debug.WriteLine("HTTP Get no queries..." + Environment.NewLine + _HTTPConn.Client.BaseAddress.ToString() + path.ToString());
-                        
-                        //res = await _HTTPConn.Client.GetAsync(_HTTPConn.Client.BaseAddress.ToString() + path.ToString());
                     }
                     else
                     {
@@ -1562,11 +1449,6 @@ namespace BitDesk.Models.Clients
                         requestMessage.Headers.Add("ACCESS-SIGNATURE", _accessSignature);
 
                         res = await _HTTPConn.Client.SendAsync(requestMessage);
-                        //
-
-                        //System.Diagnostics.Debug.WriteLine("HTTP Get with queries..." + Environment.NewLine + _HTTPConn.Client.BaseAddress.ToString() + path.ToString() + "?" + param);
-
-                        //res = await _HTTPConn.Client.GetAsync(_HTTPConn.Client.BaseAddress.ToString() + path.ToString() + "?" + param);
                     }
                 }
                 else
