@@ -97,6 +97,9 @@
                     </Style>
 
                     <Style x:Key="DefaultTextBoxStyle" TargetType="{x:Type TextBox}">
+                        <Setter Property="Margin" Value="0"/>
+                        <Setter Property="HorizontalAlignment" Value="Left"/>
+                        <Setter Property="VerticalAlignment" Value="Center"/>
                         <Setter Property="Background" Value="{DynamicResource NormalTextBoxBackgroundColorBrush}" />
                         <Style.Triggers>
                             <Trigger Property="IsKeyboardFocusWithin" Value="true">

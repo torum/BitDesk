@@ -409,8 +409,6 @@ namespace BitDesk
         private void ResizeToXXXSmall()
         {
 
-            //AppTitleBar.SetValue(Grid.ColumnSpanProperty, 9);
-
             // ボトムを消す
             BottomContents.Visibility = Visibility.Collapsed;
             // ボトムのコラムスパンを１に指定
@@ -434,8 +432,6 @@ namespace BitDesk
 
             // メインコンテンツグリッドのコラムスパンを１に指定
             MainContentsGrid.SetValue(Grid.ColumnSpanProperty, 1);
-            // メインコンテンツグリッドの高さを指定。
-            //    MainContentsGrid.Height = 1200;//1036
 
             // メイン１コラムのコラムスパンを１に指定
             Main1Grid.SetValue(Grid.ColumnSpanProperty, 1);
@@ -467,24 +463,16 @@ namespace BitDesk
             Main3Grid.Height = 420;
 
             Middle.Width = 360;
+            Middle.Margin = new Thickness(3, 2, 3, 0);
 
-
-            Main2Colum.Width = new GridLength(0, GridUnitType.Pixel);
-            Main3Colum.Width = new GridLength(0, GridUnitType.Pixel);
-
-            Transaction.Margin = new Thickness(3, 0, 20, 0);
+            Transaction.Width = 360;
+            Transaction.Margin = new Thickness(3, 4, 10, 0);
 
             BottomContents.Margin = new Thickness(3, 0, 0, 0);
-            Middle.Margin = new Thickness(3, 0, 3, 0);
 
             ChartSpanOneYearRadioButton.Visibility = Visibility.Collapsed;
             ChartSpanOneWeekRadioButton.Visibility = Visibility.Collapsed;
             ChartSpanThreeHourRadioButton.Visibility = Visibility.Collapsed;
-
-
-            //.Width = this.ActualWidth;
-            //AppTitleBar.SetValue(Grid.ColumnSpanProperty, 4);
-            
 
         }
 
@@ -495,8 +483,6 @@ namespace BitDesk
             Split.SetValue(Grid.ColumnSpanProperty, 2);
 
             MainScroller.SetValue(Grid.ColumnSpanProperty, 2);
-            // メインスクロールVのRowスパンを1に指定
-            //MainScroller.SetValue(Grid.RowSpanProperty, 1);
             // メインスクロールVのRowスパンを3に指定
             MainScroller.SetValue(Grid.RowSpanProperty, 3);
 
@@ -528,14 +514,15 @@ namespace BitDesk
             Main3Grid.Height = 420;
 
             Middle.Width = 357;
+            Middle.Height = 417;
+            Middle.Margin = new Thickness(3, 0, 3, 0);
 
             Main2Colum.Width = new GridLength(360, GridUnitType.Pixel);
             Main3Colum.Width = new GridLength(0, GridUnitType.Pixel);
 
             BottomContents.Margin = new Thickness(3, 0, 3, 0);
 
-            Transaction.Margin = new Thickness(0, 0, 20, 4);
-            Middle.Margin = new Thickness(0, 0, 3, 4);
+            //Transaction.Margin = new Thickness(0, 0, 10, 3);
 
             ChartSpanOneYearRadioButton.Visibility = Visibility.Collapsed;
             ChartSpanOneWeekRadioButton.Visibility = Visibility.Collapsed;
@@ -556,14 +543,9 @@ namespace BitDesk
             // スプリッタのコラムスパンを１に指定
             Split.SetValue(Grid.ColumnSpanProperty, 3);
 
-            // 歩み値を
-            //Transaction.Visibility = Visibility.Collapsed; //TODO
-            //Transaction.SetValue(Grid.ColumnProperty, 2);
-            //Transaction.SetValue(Grid.RowProperty, 0);
             Transaction.Visibility = Visibility.Visible;
             Transaction.SetValue(Grid.ColumnProperty, 3);
             Transaction.SetValue(Grid.RowProperty, 0);
-
 
             // メインスクロールVのコラムスパンを3に指定
             MainScroller.SetValue(Grid.ColumnSpanProperty, 3);
@@ -591,16 +573,9 @@ namespace BitDesk
             // メイン3コラムを１に指定
             Main3Grid.SetValue(Grid.ColumnProperty, 1);
 
-
-            //Asset.SetValue(Grid.ColumnSpanProperty, 2);
-            //Order.SetValue(Grid.ColumnSpanProperty, 2);
-            //Ifdoco.SetValue(Grid.ColumnSpanProperty, 2);
-            //Chart.SetValue(Grid.ColumnSpanProperty, 2);
             Middle.SetValue(Grid.ColumnSpanProperty, 2);
 
             Depth.Visibility = Visibility.Collapsed;
-
-
 
             // メインコンテンツグリッドの高さ指定。＊スクロールが出るかでないかここのサイズ。
             MainContentsGrid.Height = 420;//1036;
@@ -610,18 +585,21 @@ namespace BitDesk
             Main2Grid.Height = 420;
             Main3Grid.Height = 420;
 
-
             // 中央のサイズ
-            Middle.Width = 477;//487;
+            Middle.Width = 487;
+            Middle.Height = 417;
+            Middle.Margin = new Thickness(3, 0, 0, 3);
+
+            Main3Grid.Width = 504;
 
             Main2Colum.Width = new GridLength(360, GridUnitType.Pixel);
             Main3Colum.Width = new GridLength(360, GridUnitType.Pixel);
 
-
             BottomContents.Margin = new Thickness(3, 0, 3, 0);
 
-            Transaction.Margin = new Thickness(0, 0, 23, 3);
-            Middle.Margin = new Thickness(0, 0, 20, 3);
+            Transaction.Height = 417;
+            Transaction.Width = 213;
+            Transaction.Margin = new Thickness(3, 0, 3, 3);
 
             RightSide1Colum.Width = new GridLength(0, GridUnitType.Pixel);
             RightSide2Colum.Width = new GridLength(0, GridUnitType.Pixel);
@@ -687,18 +665,21 @@ namespace BitDesk
             Main2Grid.Height = 420;
             Main3Grid.Height = 420;
 
-            //Middle.Width = 740;
-            Middle.Width = 730;
+            Middle.Width = 740;
+            Middle.Height = 417;
+            Middle.Margin = new Thickness(3, 0, 0, 3);
 
-            //Main2Colum.Width = new GridLength(360, GridUnitType.Pixel);
-            //Main3Colum.Width = new GridLength(360, GridUnitType.Pixel);
+            Main3Grid.Width = 757;
+
+            Transaction.Height = 417;
+            Transaction.Width = 213;
+            Transaction.Margin = new Thickness(3, 0, 3, 3);
+
             Main2Colum.Width = new GridLength(380, GridUnitType.Pixel);
             Main3Colum.Width = new GridLength(380, GridUnitType.Pixel);
 
             BottomContents.Margin = new Thickness(3, 0, 3, 0);
 
-            Transaction.Margin = new Thickness(0, 0, 23, 3);
-            Middle.Margin = new Thickness(0, 0, 20, 3);
 
             RightSide1Colum.Width = new GridLength(213, GridUnitType.Pixel);
             RightSide2Colum.Width = new GridLength(0, GridUnitType.Pixel);
@@ -754,20 +735,23 @@ namespace BitDesk
 
             Main3Grid.Height = 420;
 
-            // 720 だと左のラインが消える?
-            //Middle.Width = 719;
-            Middle.Width = 709;
+            Middle.Width = 743;
+            Middle.Height = 417;
+            Middle.Margin = new Thickness(3, 0, 0, 3);
+
+            Main3Grid.Width = 760;
+
+            Transaction.Height = 417;
+            Transaction.Width = 210;
+            Transaction.Margin = new Thickness(3, 0, 0, 3);
 
             Main2Colum.Width = new GridLength(380, GridUnitType.Pixel);
             Main3Colum.Width = new GridLength(380, GridUnitType.Pixel);
 
-            BottomContents.Margin = new Thickness(3, 0, 20, 0);
-
-            Transaction.Margin = new Thickness(0, 0, 20, 3);
-            Middle.Margin = new Thickness(0, 0, 20, 3);
+            BottomContents.Margin = new Thickness(3, 0, 3, 0);
 
             RightSide1Colum.Width = new GridLength(213, GridUnitType.Pixel);
-            RightSide2Colum.Width = new GridLength(213, GridUnitType.Pixel);
+            RightSide2Colum.Width = new GridLength(229, GridUnitType.Pixel);
 
             ChartSpanOneYearRadioButton.Visibility = Visibility.Visible;
             ChartSpanOneWeekRadioButton.Visibility = Visibility.Visible;
