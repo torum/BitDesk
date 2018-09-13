@@ -1287,19 +1287,13 @@ namespace BitDesk.Models.Clients
         }
 
         // 注文リスト取得メソッド
-        public async Task<Orders> GetOrderList(string _ApiKey, string _ApiSecret)
+        public async Task<Orders> GetOrderList(string pair, string _ApiKey, string _ApiSecret)
         {
-            /*
-            while (_httpClientIsBusy)
-            {
-                await Task.Delay(100);
-            }
-            */
 
             Uri path = new Uri("/user/spot/active_orders", UriKind.Relative);//APIの通信URL
 
             var param = new Dictionary<string, string>{
-                { "pair", "btc_jpy" },//取引する通貨の種類
+                { "pair", pair },//取引する通貨の種類
                 //{ "count", "10" },//取得する注文数（double）
                 //{ "from_id", "100000" },//取得開始注文ID
                 //{ "end_id", "100000" },//取得終了注文ID
@@ -1321,33 +1315,13 @@ namespace BitDesk.Models.Clients
 
                     foreach (var ord in deserialized.data.orders)
                     {
-                        /*
-                         ords.OrderList.Add(new Order
-                        {
-                            orderID = ord.order_id,
-                            pair = ord.pair,
-                            side = ord.side,
-                            type = ord.type,
-                            //startAmount = decimal.Parse(ord.start_amount),
-                            //remainingAmount = decimal.Parse(ord.remaining_amount),
-                            //executedAmount = decimal.Parse(ord.executed_amount),
-                            //price = decimal.Parse(ord.price),
-                            averagePrice = decimal.Parse(ord.average_price),
-                            orderedAt = (new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).AddMilliseconds(ord.ordered_at).ToLocalTime(),
-                            status = ord.status
-                        });
-                        */
+
                         Order o = new Order
                         {
                             OrderID = ord.order_id,
                             Pair = ord.pair,
                             Side = ord.side,
                             Type = ord.type,
-                            //startAmount = decimal.Parse(ord.start_amount),
-                            //remainingAmount = decimal.Parse(ord.remaining_amount),
-                            //executedAmount = decimal.Parse(ord.executed_amount),
-                            //price = decimal.Parse(ord.price),
-                            //averagePrice = decimal.Parse(ord.average_price),
                             OrderedAt = (new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).AddMilliseconds(ord.ordered_at).ToLocalTime(),
                             Status = ord.status
                         };
@@ -1394,19 +1368,13 @@ namespace BitDesk.Models.Clients
         }
         
         // 取引履歴取得メソッド
-        public async Task<TradeHistory> GetTradeHistory(string _ApiKey, string _ApiSecret)
+        public async Task<TradeHistory> GetTradeHistory(string pair ,string _ApiKey, string _ApiSecret)
         {
-            /*
-            while (_httpClientIsBusy)
-            {
-                await Task.Delay(100);
-            }
-            */
 
             Uri path = new Uri("/user/spot/trade_history", UriKind.Relative);//APIの通信URL
 
             var param = new Dictionary<string, string>{
-                { "pair", "btc_jpy" },//取得する約定数
+                { "pair", pair },//取得する約定数
                 { "count", "10" },//取得する注文数（double）
                 //{ "order_id", "100000" },//注文ID
                 //{ "since", "100000" },//開始UNIXタイムスタンプ

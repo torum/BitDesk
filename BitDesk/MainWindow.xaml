@@ -1462,14 +1462,14 @@
                                                     <RadioButton x:Name="ChartSpanFiveYearRadioButton" GroupName="ChartSpan" Content="５年" Width="48" Margin="0" IsChecked="{Binding Path=SelectedChartSpan, ConverterParameter={x:Static vms:ChartSpans.FiveYear}, Converter={StaticResource EnumBooleanConverter}}"/>
                                                     -->
                                                     
-                                                    <RadioButton x:Name="ChartSpanOneYearRadioButton" GroupName="ChartSpan" Content="１年" IsChecked="{Binding Path=SelectedChartSpan, ConverterParameter={x:Static vms:ChartSpans.OneYear}, Converter={StaticResource EnumBooleanConverter}}" Style="{DynamicResource SelectionRadioButtonStyle}"/>
-                                                    <RadioButton x:Name="ChartSpanTwoMonthRadioButton" GroupName="ChartSpan" Content="２ヵ月" IsChecked="{Binding Path=SelectedChartSpan, ConverterParameter={x:Static vms:ChartSpans.TwoMonth}, Converter={StaticResource EnumBooleanConverter}}" Style="{DynamicResource SelectionRadioButtonStyle}"/>
-                                                    <RadioButton x:Name="ChartSpanOneMonthRadioButton" GroupName="ChartSpan" Content="１ヵ月" IsChecked="{Binding Path=SelectedChartSpan, ConverterParameter={x:Static vms:ChartSpans.OneMonth}, Converter={StaticResource EnumBooleanConverter}}" Style="{DynamicResource SelectionRadioButtonStyle}"/>
-                                                    <RadioButton x:Name="ChartSpanOneWeekRadioButton" GroupName="ChartSpan" Content="１週間" IsChecked="{Binding Path=SelectedChartSpan, ConverterParameter={x:Static vms:ChartSpans.OneWeek}, Converter={StaticResource EnumBooleanConverter}}" Style="{DynamicResource SelectionRadioButtonStyle}"/>
-                                                    <RadioButton x:Name="ChartSpanThreeDayRadioButton" GroupName="ChartSpan" Content="３日" IsChecked="{Binding Path=SelectedChartSpan, ConverterParameter={x:Static vms:ChartSpans.ThreeDay}, Converter={StaticResource EnumBooleanConverter}}" Style="{DynamicResource SelectionRadioButtonStyle}"/>
-                                                    <RadioButton x:Name="ChartSpanOneDayRadioButton" GroupName="ChartSpan" Content="１日" IsChecked="{Binding Path=SelectedChartSpan, ConverterParameter={x:Static vms:ChartSpans.OneDay}, Converter={StaticResource EnumBooleanConverter}}" Style="{DynamicResource SelectionRadioButtonStyle}"/>
-                                                    <RadioButton x:Name="ChartSpanThreeHourRadioButton" GroupName="ChartSpan" Content="３時間" IsChecked="{Binding Path=SelectedChartSpan, ConverterParameter={x:Static vms:ChartSpans.ThreeHour}, Converter={StaticResource EnumBooleanConverter}}" Style="{DynamicResource SelectionRadioButtonStyle}"/>
-                                                    <RadioButton x:Name="ChartSpanOneHourRadioButton" GroupName="ChartSpan" Content="１時間" IsChecked="{Binding Path=SelectedChartSpan, ConverterParameter={x:Static vms:ChartSpans.OneHour}, Converter={StaticResource EnumBooleanConverter}}" Style="{DynamicResource SelectionRadioButtonStyle}"/>
+                                                    <RadioButton x:Name="ChartSpanOneYearRadioButton" GroupName="ChartSpan" Content="１年" Width="48" IsChecked="{Binding Path=SelectedChartSpan, ConverterParameter={x:Static vms:ChartSpans.OneYear}, Converter={StaticResource EnumBooleanConverter}}" Style="{DynamicResource SelectionRadioButtonStyle}"/>
+                                                    <RadioButton x:Name="ChartSpanTwoMonthRadioButton" GroupName="ChartSpan" Content="２ヵ月" Width="48" IsChecked="{Binding Path=SelectedChartSpan, ConverterParameter={x:Static vms:ChartSpans.TwoMonth}, Converter={StaticResource EnumBooleanConverter}}" Style="{DynamicResource SelectionRadioButtonStyle}"/>
+                                                    <RadioButton x:Name="ChartSpanOneMonthRadioButton" GroupName="ChartSpan" Content="１ヵ月" Width="48" IsChecked="{Binding Path=SelectedChartSpan, ConverterParameter={x:Static vms:ChartSpans.OneMonth}, Converter={StaticResource EnumBooleanConverter}}" Style="{DynamicResource SelectionRadioButtonStyle}"/>
+                                                    <RadioButton x:Name="ChartSpanOneWeekRadioButton" GroupName="ChartSpan" Content="１週間" Width="48" IsChecked="{Binding Path=SelectedChartSpan, ConverterParameter={x:Static vms:ChartSpans.OneWeek}, Converter={StaticResource EnumBooleanConverter}}" Style="{DynamicResource SelectionRadioButtonStyle}"/>
+                                                    <RadioButton x:Name="ChartSpanThreeDayRadioButton" GroupName="ChartSpan" Content="３日" Width="48" IsChecked="{Binding Path=SelectedChartSpan, ConverterParameter={x:Static vms:ChartSpans.ThreeDay}, Converter={StaticResource EnumBooleanConverter}}" Style="{DynamicResource SelectionRadioButtonStyle}"/>
+                                                    <RadioButton x:Name="ChartSpanOneDayRadioButton" GroupName="ChartSpan" Content="１日" Width="48" IsChecked="{Binding Path=SelectedChartSpan, ConverterParameter={x:Static vms:ChartSpans.OneDay}, Converter={StaticResource EnumBooleanConverter}}" Style="{DynamicResource SelectionRadioButtonStyle}"/>
+                                                    <RadioButton x:Name="ChartSpanThreeHourRadioButton" GroupName="ChartSpan" Content="３時間" Width="48" IsChecked="{Binding Path=SelectedChartSpan, ConverterParameter={x:Static vms:ChartSpans.ThreeHour}, Converter={StaticResource EnumBooleanConverter}}" Style="{DynamicResource SelectionRadioButtonStyle}"/>
+                                                    <RadioButton x:Name="ChartSpanOneHourRadioButton" GroupName="ChartSpan" Content="１時間" Width="48" IsChecked="{Binding Path=SelectedChartSpan, ConverterParameter={x:Static vms:ChartSpans.OneHour}, Converter={StaticResource EnumBooleanConverter}}" Style="{DynamicResource SelectionRadioButtonStyle}"/>
 
                                                 </StackPanel>
 
@@ -1557,15 +1557,13 @@
                                                     <WrapPanel VerticalAlignment="Top">
 
                                                         <!-- 買い注文 -->
-                                                        <Border Width="344" Height="190" Margin="3 1 3 0" VerticalAlignment="Top">
+                                                        <Border Width="339" Margin="3 1 0 6" VerticalAlignment="Top">
 
-                                                            <ScrollViewer MaxHeight="190" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Style="{StaticResource CustomScrollViewerStyle}" VerticalAlignment="Top">
+                                                            <ScrollViewer MaxHeight="200" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Style="{StaticResource CustomScrollViewerStyle}" VerticalAlignment="Top">
                                                                 <StackPanel>
 
                                                                     <Border BorderBrush="Gainsboro" BorderThickness="0 0 0 0.5" Margin="3 0 3 3" Padding="3">
-                                                                        <StackPanel Orientation="Horizontal" Margin="0 0 3 3">
-                                                                            <Label Padding="0" Content="[買い注文]" Style="{StaticResource SectionTitle}" Foreground="{StaticResource PriceUpColorBrush}"/>
-                                                                        </StackPanel>
+                                                                        <Label Padding="0" Content="[買い注文]" Style="{StaticResource SectionTitle}" Foreground="{StaticResource PriceUpColorBrush}"/>
                                                                     </Border>
 
                                                                     <Grid Margin="3">
@@ -1581,38 +1579,36 @@
                                                                         <RadioButton x:Name="buyMarketRadioButton" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="buyType" Content="成行" Margin="0" IsChecked="{Binding BuyType, ConverterParameter={x:Static vms:OrderTypes.market}, Converter={StaticResource EnumBooleanConverter}}" Style="{DynamicResource SelectionRadioButtonStyle}"/>
                                                                     </Grid>
 
-                                                                    <StackPanel Margin="6">
+                                                                    <StackPanel Margin="6 3 3 0">
 
-                                                                        <StackPanel Orientation="Horizontal" Margin="0 0 0 6" VerticalAlignment="Bottom">
-                                                                            <Label Margin="0 0 0 0" Content="数量：" VerticalAlignment="Bottom"/>
+                                                                        <StackPanel Orientation="Horizontal" Margin="0 0 0 3" VerticalAlignment="Bottom">
+                                                                            <Label Margin="0 0 0 0" Content="数量：" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                             <TextBox x:Name="buyAmountTextbox" Width="100" Text="{Binding BuyAmount}" GotFocus="Textbox_GotFocus" Style="{DynamicResource DefaultTextBoxStyle}"/>
-                                                                            <Label Content=" BTC" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="{Binding CurrentCoinString, Mode=OneWay}" Margin="3 0 0 0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                         </StackPanel>
 
-                                                                        <StackPanel Orientation="Horizontal" Margin="0 0 0 6" VerticalAlignment="Bottom">
-                                                                            <Label Margin="0 0 0 0" Content="価格：" VerticalAlignment="Bottom"/>
+                                                                        <StackPanel Orientation="Horizontal" Margin="0 0 0 3" VerticalAlignment="Bottom">
+                                                                            <Label Margin="0 0 0 0" Content="価格：" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                             <TextBox x:Name="buyPriceTextbox" Width="100" Text="{Binding BuyPrice}" GotFocus="Textbox_GotFocus" IsEnabled="{Binding IsChecked, ElementName=buyLimitRadioButton}" Style="{DynamicResource DefaultTextBoxStyle}"/>
-                                                                            <Label Margin="3 0 12 0" Content="{Binding CurrentPairUnitString,Mode=OneWay}" VerticalAlignment="Bottom"/>
+                                                                            <Label Margin="3 0 12 0" Content="{Binding CurrentPairUnitString,Mode=OneWay}" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
 
-                                                                            <Label Margin="12 0 0 0" Content="予想金額：" VerticalAlignment="Bottom"/>
+                                                                            <Label Margin="6 0 0 0" Content="予想金額：" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                             <TextBlock Text="{Binding BuyEstimatePrice}" Style="{StaticResource DefaultTextBlockStyle}"/>
-                                                                            <Label Margin="3 0 12 0" Content="{Binding CurrentPairUnitString,Mode=OneWay}" VerticalAlignment="Bottom"/>
+                                                                            <Label Margin="3 0 12 0" Content="{Binding CurrentPairUnitString, Mode=OneWay}" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
 
                                                                         </StackPanel>
 
-                                                                        <StackPanel Orientation="Horizontal" Margin="0 0 12 6" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                                                                        <StackPanel Orientation="Horizontal" Margin="0 3 12 3" HorizontalAlignment="Right" VerticalAlignment="Bottom">
                                                                             <Button Content="買い注文" Command="{Binding BuyOrderCommand}" Width="90" FontWeight="Bold" Margin="0 0 0 0" Padding="0" VerticalAlignment="Bottom"/>
                                                                         </StackPanel>
 
-                                                                        <StackPanel Orientation="Horizontal" Margin="0 0 0 3" VerticalAlignment="Top">
-                                                                            <Label Margin="0 0 0 0" Content="発注結果：" VerticalAlignment="Bottom"/>
-                                                                            <TextBlock Text="{Binding APIResultBuyCommandResult, NotifyOnTargetUpdated=True}" Style="{StaticResource BlinkStyle2}"/>
-                                                                        </StackPanel>
-
                                                                         <StackPanel Orientation="Horizontal" Margin="0 0 0 0" VerticalAlignment="Top">
-                                                                            <TextBlock Text="{Binding APIResultBuyCommandErrorString}" Style="{StaticResource ErrorInfoTextBlockStyle}"/>
+                                                                            <Label Margin="0 0 0 0" Content="発注結果：" VerticalAlignment="Top" Style="{DynamicResource DefaultLabelStyle}"/>
+                                                                            <TextBlock Text="{Binding APIResultBuyCommandResult, NotifyOnTargetUpdated=True}" Style="{StaticResource BlinkStyle2}" VerticalAlignment="Top"/>
                                                                         </StackPanel>
 
+                                                                        <TextBlock Text="{Binding APIResultBuyCommandErrorString}" Style="{StaticResource ErrorInfoTextBlockStyle}" TextWrapping="Wrap" VerticalAlignment="Top"/>
+                                                                        
                                                                     </StackPanel>
 
                                                                 </StackPanel>
@@ -1621,16 +1617,13 @@
                                                         </Border>
 
                                                         <!-- 売り注文 -->
-                                                        <Border Width="344" Height="190" Margin="3 1 3 0" VerticalAlignment="Top">
+                                                        <Border Width="339" Margin="3 1 0 0" VerticalAlignment="Top">
 
-                                                            <ScrollViewer MaxHeight="190" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Style="{StaticResource CustomScrollViewerStyle}" VerticalAlignment="Top">
+                                                            <ScrollViewer MaxHeight="200" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Style="{StaticResource CustomScrollViewerStyle}" VerticalAlignment="Top">
                                                                 <StackPanel>
 
                                                                     <Border BorderBrush="Gainsboro" BorderThickness="0 0 0 0.5" Margin="3 0 3 3" Padding="3">
-                                                                        <StackPanel Orientation="Horizontal" Margin="0 0 3 3">
-                                                                            <Label Padding="0" Content="[売り注文]" Style="{StaticResource SectionTitle}" Foreground="{StaticResource PriceDownColorBrush}"/>
-
-                                                                        </StackPanel>
+                                                                        <Label Padding="0" Content="[売り注文]" Style="{StaticResource SectionTitle}" Foreground="{StaticResource PriceDownColorBrush}"/>
                                                                     </Border>
 
                                                                     <Grid Margin="3">
@@ -1646,37 +1639,35 @@
                                                                         <RadioButton x:Name="sellMarketRadioButton" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" GroupName="sellType" Content="成行" Margin="0" IsChecked="{Binding SellType, ConverterParameter={x:Static vms:OrderTypes.market}, Converter={StaticResource EnumBooleanConverter}}" Style="{DynamicResource SelectionRadioButtonStyle}"/>
                                                                     </Grid>
 
-                                                                    <StackPanel Margin="6">
+                                                                    <StackPanel Margin="6 3 3 0">
 
-                                                                        <StackPanel Orientation="Horizontal" Margin="0 0 0 6" VerticalAlignment="Bottom">
-                                                                            <Label Margin="0 0 0 0" Content="数量：" VerticalAlignment="Bottom"/>
+                                                                        <StackPanel Orientation="Horizontal" Margin="0 0 0 3" VerticalAlignment="Bottom">
+                                                                            <Label Margin="0 0 0 0" Content="数量：" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                             <TextBox x:Name="sellAmountTextbox" Width="100" Text="{Binding SellAmount}" GotFocus="Textbox_GotFocus" Style="{DynamicResource DefaultTextBoxStyle}"/>
-                                                                            <Label Content=" BTC" VerticalAlignment="Bottom"/>
+                                                                            <Label Content="{Binding CurrentCoinString, Mode=OneWay}" Margin="3 0 0 0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                         </StackPanel>
 
-                                                                        <StackPanel Orientation="Horizontal" Margin="0 0 0 6" VerticalAlignment="Bottom">
-                                                                            <Label Margin="0 0 0 0" Content="価格：" VerticalAlignment="Bottom"/>
+                                                                        <StackPanel Orientation="Horizontal" Margin="0 0 0 3" VerticalAlignment="Bottom">
+                                                                            <Label Margin="0 0 0 0" Content="価格：" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                             <TextBox x:Name="sellPriceTextbox" Width="100" Text="{Binding SellPrice}" IsEnabled="{Binding IsChecked, ElementName=sellLimitRadioButton}" GotFocus="Textbox_GotFocus" Style="{DynamicResource DefaultTextBoxStyle}"/>
-                                                                            <Label Margin="3 0 12 0" Content="{Binding CurrentPairUnitString,Mode=OneWay}" VerticalAlignment="Bottom"/>
+                                                                            <Label Margin="3 0 12 0" Content="{Binding CurrentPairUnitString,Mode=OneWay}" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
 
-                                                                            <Label Margin="12 0 0 0" Content="予想金額：" VerticalAlignment="Bottom"/>
+                                                                            <Label Margin="6 0 0 0" Content="予想金額：" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                             <TextBlock Text="{Binding SellEstimatePrice}" Style="{StaticResource DefaultTextBlockStyle}"/>
-                                                                            <Label Margin="3 0 12 0" Content="{Binding CurrentPairUnitString,Mode=OneWay}" VerticalAlignment="Bottom"/>
+                                                                            <Label Margin="3 0 12 0" Content="{Binding CurrentPairUnitString,Mode=OneWay}" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
 
                                                                         </StackPanel>
 
-                                                                        <StackPanel  Orientation="Horizontal" Margin="0 0 12 6" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                                                                        <StackPanel  Orientation="Horizontal" Margin="0 3 12 3" HorizontalAlignment="Right" VerticalAlignment="Bottom">
                                                                             <Button Content="売り注文" Command="{Binding SellOrderCommand}" Width="90" FontWeight="Bold" Margin="0 0 0 0" Padding="0" VerticalAlignment="Bottom"/>
                                                                         </StackPanel>
 
-                                                                        <StackPanel  Orientation="Horizontal" Margin="0 0 0 3" VerticalAlignment="Top">
-                                                                            <Label Margin="0 0 0 0" Content="発注結果：" VerticalAlignment="Bottom"/>
-                                                                            <TextBlock Text="{Binding APIResultSellCommandResult, NotifyOnTargetUpdated=True}" Style="{StaticResource BlinkStyle2}"/>
+                                                                        <StackPanel  Orientation="Horizontal" Margin="0 0 0 0" VerticalAlignment="Top">
+                                                                            <Label Margin="0 0 0 0" Content="発注結果：" VerticalAlignment="Top" Style="{DynamicResource DefaultLabelStyle}"/>
+                                                                            <TextBlock Text="{Binding APIResultSellCommandResult, NotifyOnTargetUpdated=True}" Style="{StaticResource BlinkStyle2}" VerticalAlignment="Top"/>
                                                                         </StackPanel>
 
-                                                                        <StackPanel Orientation="Horizontal" Margin="0 0 0 0" VerticalAlignment="Top">
-                                                                            <TextBlock Text="{Binding APIResultSellCommandErrorString}" Style="{StaticResource ErrorInfoTextBlockStyle}"/>
-                                                                        </StackPanel>
+                                                                        <TextBlock Text="{Binding APIResultSellCommandErrorString}" Style="{StaticResource ErrorInfoTextBlockStyle}" TextWrapping="Wrap" VerticalAlignment="Top"/>
 
                                                                     </StackPanel>
 
@@ -2865,7 +2856,7 @@
                                 <Grid x:Name="AODummy" Grid.Row="0" Grid.Column="0" Visibility="Hidden" Margin="0 0 27 0">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="80" />
-                                        <ColumnDefinition Width="5*"/>
+                                        <ColumnDefinition Width="5*" MinWidth="80"/>
                                         <ColumnDefinition Width="3*" />
                                         <ColumnDefinition Width="3*" />
                                         <ColumnDefinition Width="4*" />
@@ -2874,7 +2865,7 @@
                                         <ColumnDefinition Width="4*" />
                                         <ColumnDefinition Width="4*" />
                                         <ColumnDefinition Width="4*" />
-                                        <ColumnDefinition Width="8*" MinWidth="50" />
+                                        <ColumnDefinition Width="8*" MinWidth="45" />
                                         <ColumnDefinition Width="32" MinWidth="24" />
 
                                     </Grid.ColumnDefinitions>
@@ -2895,7 +2886,8 @@
 
                                 </Grid>
 
-                                <ListView x:Name="ActiveOrdersListView" Grid.Row="1" Grid.Column="0" ItemsSource="{Binding ActiveOrders}" IsSynchronizedWithCurrentItem="True" common:GridViewSort.AutoSort="True" common:GridViewSort.ShowSortGlyph="False" Background="Transparent" AlternationCount="2" MinHeight="80" BorderThickness="0" Padding="0 0 0 0" Margin="0 0 0 0" SelectionMode="Extended" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible">
+                                <ListView x:Name="ActiveOrdersListView" Grid.Row="1" Grid.Column="0" ItemsSource="{Binding ActivePair.ActiveOrders}" IsSynchronizedWithCurrentItem="True" common:GridViewSort.AutoSort="True" common:GridViewSort.ShowSortGlyph="False" Background="Transparent" AlternationCount="2" MinHeight="80" BorderThickness="0" Padding="0 0 0 0" Margin="0 0 0 0" SelectionMode="Extended" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible">
+                                    
                                     <ListView.Resources>
                                         <ContextMenu x:Key="ItemContextMenu">
                                             <MenuItem Header="選択アイテム">
@@ -2946,19 +2938,20 @@
                                             </Style.Triggers>
                                         </Style>
                                     </ListView.Resources>
+                                    
                                     <ListView.ItemContainerStyle>
                                         <Style TargetType="ListViewItem" BasedOn="{StaticResource ListViewItemStyle}">
                                             <Setter Property="Margin" Value="1 0 0 0"/>
                                             <Setter Property="Padding" Value="0 1 0 1"/>
                                             <Setter Property="Foreground" Value="WhiteSmoke"/>
                                             <Setter Property="HorizontalContentAlignment" Value="Center"/>
-
                                             <Setter Property="ContextMenu" Value="{StaticResource ItemContextMenu}" />
                                         </Style>
                                     </ListView.ItemContainerStyle>
 
                                     <ListView.View>
                                         <GridView>
+                                            
                                             <GridView.ColumnHeaderContainerStyle>
                                                 <Style TargetType="GridViewColumnHeader" BasedOn="{StaticResource GridViewColumnHeaderStyle}">
                                                     <Setter Property="Visibility" Value="Visible" />
@@ -2977,15 +2970,6 @@
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
                                             </GridViewColumn>
-                                            <!--
-                                        <GridViewColumn Header="通貨ペア" Width="60">
-                                            <GridViewColumn.CellTemplate>
-                                                <DataTemplate>
-                                                    <TextBlock Text="{Binding pair}" Padding="3" />
-                                                </DataTemplate>
-                                            </GridViewColumn.CellTemplate>
-                                        </GridViewColumn>
-                                        -->
                                             <GridViewColumn Header="注文日時" Width="{Binding ElementName=AOhwidth1, Path=ActualWidth}" common:GridViewSort.PropertyName="OrderedAt">
                                                 <GridViewColumn.CellTemplate>
                                                     <DataTemplate>
@@ -3064,14 +3048,6 @@
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
                                             </GridViewColumn>
-                                            <!--
-                                        <GridViewColumn Header="約定済み数量" Width="90">
-                                            <GridViewColumn.CellTemplate>
-                                                <DataTemplate>
-                                                    <TextBlock Text="{Binding ExecutedAmount,StringFormat=0.#############################}" Padding="3" />
-                                                </DataTemplate>
-                                            </GridViewColumn.CellTemplate>
-                                        </GridViewColumn> -->
                                             <GridViewColumn Header="平均約定"  Width="{Binding ElementName=AOhwidth7, Path=ActualWidth}" common:GridViewSort.PropertyName="AveragePrice">
                                                 <GridViewColumn.CellTemplate>
                                                     <DataTemplate>
@@ -4684,13 +4660,14 @@
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="4*" />
                                         <ColumnDefinition Width="4*"/>
-                                        <ColumnDefinition Width="5*" MinWidth="96" />
-                                        <ColumnDefinition Width="4*" />
-                                        <ColumnDefinition Width="4*" />
+                                        <ColumnDefinition Width="4*"/>
+                                        <ColumnDefinition Width="5*" MinWidth="80"/>
+                                        <ColumnDefinition Width="3*" />
+                                        <ColumnDefinition Width="3*" />
                                         <ColumnDefinition Width="4*" />
                                         <ColumnDefinition Width="4*"/>
                                         <ColumnDefinition Width="4*" />
-                                        <ColumnDefinition Width="4*" />
+                                        <ColumnDefinition Width="3*" />
                                     </Grid.ColumnDefinitions>
 
                                     <!--  This is the hidden helper Field which is used to bind to, using the "Fill" column of the helper grid  -->
@@ -4703,9 +4680,11 @@
                                     <Grid x:Name="TDwidth6" Grid.Column="6" />
                                     <Grid x:Name="TDwidth7" Grid.Column="7" />
                                     <Grid x:Name="TDwidth8" Grid.Column="8" />
+                                    <Grid x:Name="TDwidth9" Grid.Column="9" />
                                 </Grid>
 
-                                <ListView x:Name="TradeHistoryListView" Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Trades}" IsSynchronizedWithCurrentItem="True" common:GridViewSort.AutoSort="True" common:GridViewSort.ShowSortGlyph="False" Background="Transparent" AlternationCount="2" MinHeight="80" BorderThickness="0" Padding="0 0 0 0" Margin="0 0 0 0" SelectionMode="Extended" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible">
+                                <ListView x:Name="TradeHistoryListView" Grid.Row="1" Grid.Column="0" ItemsSource="{Binding ActivePair.Trades}" IsSynchronizedWithCurrentItem="True" common:GridViewSort.AutoSort="True" common:GridViewSort.ShowSortGlyph="False" Background="Transparent" AlternationCount="2" MinHeight="80" BorderThickness="0" Padding="0 0 0 0" Margin="0 0 0 0" SelectionMode="Extended" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible">
+                                    
                                     <ListView.Resources>
                                         <Style TargetType="{x:Type ScrollBar}">
                                             <Setter Property="Margin" Value="0,0,0,0" />
@@ -4719,6 +4698,7 @@
                                             </Style.Triggers>
                                         </Style>
                                     </ListView.Resources>
+                                    
                                     <ListView.ItemContainerStyle>
                                         <Style TargetType="ListViewItem" BasedOn="{StaticResource ListViewItemStyle}">
                                             <Setter Property="Margin" Value="1 0 0 0"/>
@@ -4743,30 +4723,30 @@
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
                                             </GridViewColumn>
-                                            <!--
-                                        <GridViewColumn Header="通貨ペア" Width="60">
-                                            <GridViewColumn.CellTemplate>
-                                                <DataTemplate>
-                                                    <TextBlock Text="{Binding pair}" Padding="3" />
-                                                </DataTemplate>
-                                            </GridViewColumn.CellTemplate>
-                                        </GridViewColumn>
-                                        -->
-                                            <GridViewColumn Header="注文ID" Width="{Binding ElementName=TDwidth1, Path=ActualWidth}" common:GridViewSort.PropertyName="OrderID">
+
+                                            <GridViewColumn Header="通貨ペア" Width="{Binding ElementName=TDwidth1, Path=ActualWidth}" common:GridViewSort.PropertyName="Pair">
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding Pair}" Padding="3" />
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                            </GridViewColumn>
+
+                                            <GridViewColumn Header="注文ID" Width="{Binding ElementName=TDwidth2, Path=ActualWidth}" common:GridViewSort.PropertyName="OrderID">
                                                 <GridViewColumn.CellTemplate>
                                                     <DataTemplate>
                                                         <TextBlock Text="{Binding OrderID, Mode=OneWay}" Padding="3"/>
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
                                             </GridViewColumn>
-                                            <GridViewColumn Header="注文日時" Width="{Binding ElementName=TDwidth2, Path=ActualWidth}" common:GridViewSort.PropertyName="ExecutedAt">
+                                            <GridViewColumn Header="注文日時" Width="{Binding ElementName=TDwidth3, Path=ActualWidth}" common:GridViewSort.PropertyName="ExecutedAt">
                                                 <GridViewColumn.CellTemplate>
                                                     <DataTemplate>
-                                                        <TextBlock Text="{Binding ExecutedAt, Mode=OneWay, StringFormat=MM/dd HH:mm:ss}" Padding="3"/>
+                                                        <TextBlock Text="{Binding ExecutedAt, Mode=OneWay, StringFormat=M/d HH:mm:ss}" Padding="3"/>
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
                                             </GridViewColumn>
-                                            <GridViewColumn Header="売/買" Width="{Binding ElementName=TDwidth3, Path=ActualWidth}" common:GridViewSort.PropertyName="Side">
+                                            <GridViewColumn Header="売/買" Width="{Binding ElementName=TDwidth4, Path=ActualWidth}" common:GridViewSort.PropertyName="Side">
                                                 <GridViewColumn.CellTemplate>
                                                     <DataTemplate>
                                                         <TextBlock x:Name="HistorySideText" Text="{Binding SideText, Mode=OneWay}" Padding="3"/>
@@ -4781,35 +4761,35 @@
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
                                             </GridViewColumn>
-                                            <GridViewColumn Header="タイプ" Width="{Binding ElementName=TDwidth4, Path=ActualWidth}" common:GridViewSort.PropertyName="Type">
+                                            <GridViewColumn Header="タイプ" Width="{Binding ElementName=TDwidth5, Path=ActualWidth}" common:GridViewSort.PropertyName="Type">
                                                 <GridViewColumn.CellTemplate>
                                                     <DataTemplate>
                                                         <TextBlock Text="{Binding TypeText, Mode=OneWay}" Padding="3"/>
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
                                             </GridViewColumn>
-                                            <GridViewColumn Header="数量" Width="{Binding ElementName=TDwidth5, Path=ActualWidth}" common:GridViewSort.PropertyName="Amount">
+                                            <GridViewColumn Header="数量" Width="{Binding ElementName=TDwidth6, Path=ActualWidth}" common:GridViewSort.PropertyName="Amount">
                                                 <GridViewColumn.CellTemplate>
                                                     <DataTemplate>
                                                         <TextBlock Text="{Binding Amount, Mode=OneWay, StringFormat=0.#############################}" Padding="3" />
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
                                             </GridViewColumn>
-                                            <GridViewColumn Header="価格" Width="{Binding ElementName=TDwidth6, Path=ActualWidth}" common:GridViewSort.PropertyName="Price">
+                                            <GridViewColumn Header="価格" Width="{Binding ElementName=TDwidth7, Path=ActualWidth}" common:GridViewSort.PropertyName="Price">
                                                 <GridViewColumn.CellTemplate>
                                                     <DataTemplate>
                                                         <TextBlock Text="{Binding Price, Mode=OneWay, StringFormat=0.#############################}" Padding="3" />
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
                                             </GridViewColumn>
-                                            <GridViewColumn Header="手数料" Width="{Binding ElementName=TDwidth7, Path=ActualWidth}" common:GridViewSort.PropertyName="FeeAmountQuote">
+                                            <GridViewColumn Header="手数料" Width="{Binding ElementName=TDwidth8, Path=ActualWidth}" common:GridViewSort.PropertyName="FeeAmountQuote">
                                                 <GridViewColumn.CellTemplate>
                                                     <DataTemplate>
                                                         <TextBlock Text="{Binding FeeAmountQuote, Mode=OneWay}" Padding="3"/>
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
                                             </GridViewColumn>
-                                            <GridViewColumn Header="M/T" Width="{Binding ElementName=TDwidth8, Path=ActualWidth}" common:GridViewSort.PropertyName="MakerTaker">
+                                            <GridViewColumn Header="M/T" Width="{Binding ElementName=TDwidth9, Path=ActualWidth}" common:GridViewSort.PropertyName="MakerTaker">
                                                 <GridViewColumn.CellTemplate>
                                                     <DataTemplate>
                                                         <TextBlock Text="{Binding MakerTaker, Mode=OneWay}" Padding="3"/>
@@ -4956,7 +4936,6 @@
             <Grid Grid.Row="1" Grid.Column="0" Grid.RowSpan="3" Grid.ColumnSpan="9" Visibility="{Binding ShowLogIn, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
 
                 <Rectangle HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Fill="#121212" Opacity="0.8"></Rectangle>
-
 
                 <!-- 通常ログイン -->
                 <Border HorizontalAlignment="Center" VerticalAlignment="Center" CornerRadius="4" BorderBrush="{DynamicResource BorderDarkColorBrush}" BorderThickness="2" Background="{DynamicResource BoardBackgroundColorBrush}" Visibility="{Binding IsPasswordSet, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">

@@ -465,6 +465,9 @@ namespace BitDesk
             Middle.Width = 360;
             Middle.Margin = new Thickness(3, 2, 3, 0);
 
+            Main2Colum.Width = new GridLength(0, GridUnitType.Pixel);
+            Main3Colum.Width = new GridLength(0, GridUnitType.Pixel);
+
             Transaction.Width = 360;
             Transaction.Margin = new Thickness(3, 4, 10, 0);
 

@@ -2117,8 +2117,10 @@ namespace BitDesk.ViewModels
         // テスト用
         private decimal _initPrice = 81800M;
 
+        #region == 通貨ペアクラス ==
+
         /// <summary>
-        /// 各通貨ペア用のクラス
+        /// 各通貨ペア毎の情報を保持するクラス
         /// </summary>
         public class Pair : ViewModelBase
         {
@@ -2143,14 +2145,22 @@ namespace BitDesk.ViewModels
             // 通貨フォーマット用
             private string _ltpFormstString = "{0:#,0}";
             // 通貨ペア
-            private Pairs p;
+            private Pairs _p;
 
-            // 表示用 通貨ペア名 "BTC/JPY";
-            public string CurrentPairString
+            public Pairs pair
             {
                 get
                 {
-                    return PairStrings[p];
+                    return _p;
+                }
+            }
+
+            // 表示用 通貨ペア名 "BTC/JPY";
+            public string PairString
+            {
+                get
+                {
+                    return PairStrings[_p];
                 }
             }
 
@@ -2293,7 +2303,7 @@ namespace BitDesk.ViewModels
             }
             public string TickTimeStampString
             {
-                get { return CurrentPairString + " - " + _tickTimeStamp.ToLocalTime().ToString("yyyy/MM/dd/HH:mm:ss"); }
+                get { return PairString + " - " + _tickTimeStamp.ToLocalTime().ToString("yyyy/MM/dd/HH:mm:ss"); }
             }
 
             #region == アラーム用のプロパティ ==
@@ -2939,18 +2949,38 @@ namespace BitDesk.ViewModels
                 get { return this._tickHistory; }
             }
 
+            // アクティブな注文一覧
+            private ObservableCollection<Order> _activeOrders = new ObservableCollection<Order>();
+            public ObservableCollection<Order> ActiveOrders
+            {
+                get { return this._activeOrders; }
+            }
+
+            // 取引履歴 trade list
+            private ObservableCollection<Trade> _trades = new ObservableCollection<Trade>();
+            public ObservableCollection<Trade> Trades
+            {
+                get { return this._trades; }
+            }
+
             // コンストラクタ
             public Pair(Pairs p, double fontSize, string ltpFormstString, decimal grouping100, decimal grouping1000)
             {
-                this.p = p;
+                this._p = p;
                 _ltpFontSize = fontSize;
                 _ltpFormstString = ltpFormstString;
 
                 _depthGrouping100 = grouping100;
                 _depthGrouping1000 = grouping1000;
+
+                BindingOperations.EnableCollectionSynchronization(this._tickHistory, new object());
+                BindingOperations.EnableCollectionSynchronization(this._activeOrders, new object());
+                BindingOperations.EnableCollectionSynchronization(this._trades, new object());
             }
 
         }
+
+        #endregion
 
         #region == 基本 ==
 
@@ -3965,7 +3995,6 @@ namespace BitDesk.ViewModels
                 {
                     CurrentPair = Pairs.btc_jpy;
                     ActivePair = PairBtcJpy;
-                    ActivePair.Ltp = PairBtcJpy.Ltp;
 
                     DepthGroupingChanged = true;
 
@@ -3991,7 +4020,6 @@ namespace BitDesk.ViewModels
                 {
                     CurrentPair = Pairs.xrp_jpy;
                     ActivePair = PairXrpJpy;
-                    ActivePair.Ltp = PairXrpJpy.Ltp;
 
                     DepthGroupingChanged = true;
 
@@ -4015,7 +4043,6 @@ namespace BitDesk.ViewModels
                 {
                     CurrentPair = Pairs.ltc_btc;
                     ActivePair = PairLtcBtc;
-                    ActivePair.Ltp = PairLtcBtc.Ltp;
 
                     DepthGroupingChanged = true;
 
@@ -4039,7 +4066,6 @@ namespace BitDesk.ViewModels
                 {
                     CurrentPair = Pairs.eth_btc;
                     ActivePair = PairEthBtc;
-                    ActivePair.Ltp = PairEthBtc.Ltp;
 
                     DepthGroupingChanged = true;
 
@@ -4063,7 +4089,6 @@ namespace BitDesk.ViewModels
                 {
                     CurrentPair = Pairs.mona_jpy;
                     ActivePair = PairMonaJpy;
-                    ActivePair.Ltp = PairMonaJpy.Ltp;
 
                     DepthGroupingChanged = true;
 
@@ -4087,7 +4112,6 @@ namespace BitDesk.ViewModels
                 {
                     CurrentPair = Pairs.bcc_jpy;
                     ActivePair = PairBchJpy;
-                    ActivePair.Ltp = PairBchJpy.Ltp;
 
                     DepthGroupingChanged = true;
 
@@ -4108,6 +4132,13 @@ namespace BitDesk.ViewModels
 
                 }
 
+                // 注文の値をクリア
+                SellAmount = 0;
+                SellPrice = 0;
+                BuyAmount = 0;
+                BuyPrice = 0;
+                this.NotifyPropertyChanged("BuyEstimatePrice");
+                this.NotifyPropertyChanged("SellEstimatePrice");
 
                 // チャートの表示
                 DisplayChart(CurrentPair);
@@ -4129,12 +4160,9 @@ namespace BitDesk.ViewModels
                     return;
 
                 _currentPair = value;
-
                 this.NotifyPropertyChanged("CurrentPair");
-                this.NotifyPropertyChanged("CurrentPairString");
                 this.NotifyPropertyChanged("CurrentCoinString");
                 this.NotifyPropertyChanged("CurrentPairUnitString");
-
                 this.NotifyPropertyChanged("TickTimeStampString");
 
             }
@@ -4145,7 +4173,7 @@ namespace BitDesk.ViewModels
         {
             get
             {
-                return CurrentPairCoin[CurrentPair].ToUpper();//_coin.ToUpper();
+                return CurrentPairCoin[CurrentPair];//.ToUpper();
             }
         }
 
@@ -4169,19 +4197,6 @@ namespace BitDesk.ViewModels
 
             }
         }
-
-        // TODO いる？
-        public Dictionary<Pairs, decimal> Ltps { get; set; } = new Dictionary<Pairs, decimal>()
-        {
-            {Pairs.btc_jpy, 0},
-            {Pairs.xrp_jpy, 0},
-            {Pairs.ltc_btc, 0},
-            {Pairs.eth_btc, 0},
-            {Pairs.mona_jpy, 0},
-            {Pairs.mona_btc, 0},
-            {Pairs.bcc_jpy, 0},
-            {Pairs.bcc_btc, 0},
-        };
 
         public Dictionary<Pairs, string> PairStrings { get; set; } = new Dictionary<Pairs, string>()
         {
@@ -4209,14 +4224,14 @@ namespace BitDesk.ViewModels
 
         public Dictionary<Pairs, string> CurrentPairCoin { get; set; } = new Dictionary<Pairs, string>()
         {
-            {Pairs.btc_jpy, "btc"},
-            {Pairs.xrp_jpy, "xrp"},
-            {Pairs.eth_btc, "eth"},
-            {Pairs.ltc_btc, "ltc"},
-            {Pairs.mona_jpy, "mona"},
-            {Pairs.mona_btc, "mona"},
-            {Pairs.bcc_jpy, "bch"},
-            {Pairs.bcc_btc, "bch"},
+            {Pairs.btc_jpy, "BTC"},
+            {Pairs.xrp_jpy, "XRP"},
+            {Pairs.eth_btc, "ETH"},
+            {Pairs.ltc_btc, "LTC"},
+            {Pairs.mona_jpy, "Mona"},
+            {Pairs.mona_btc, "Mona"},
+            {Pairs.bcc_jpy, "BCH"},
+            {Pairs.bcc_btc, "BCH"},
         };
 
         // デフォの通貨ペアクラス
@@ -4649,6 +4664,7 @@ namespace BitDesk.ViewModels
         {
             get { return this._autoTrades2; }
         }
+
 
         #endregion
 
@@ -6522,6 +6538,302 @@ namespace BitDesk.ViewModels
 
         #endregion
 
+        #region == 手動取引用のプロパティ ==
+
+        // Order 発注
+        // 売り数量
+        private decimal _sellAmount;// = 0.001M; // 通貨別デフォ指定 TODO
+        public decimal SellAmount
+        {
+            get
+            {
+                return _sellAmount;
+            }
+            set
+            {
+                if (_sellAmount == value)
+                    return;
+
+                _sellAmount = value;
+                this.NotifyPropertyChanged("SellAmount");
+                this.NotifyPropertyChanged("SellEstimatePrice");
+
+                APIResultSellCommandOrderIDString = "";
+                APIResultSellCommandErrorString = "";
+                APIResultSellCommandResult = "";
+            }
+        }
+
+        // 売り価格
+        private decimal _sellPrice; // 通貨別デフォ指定 TODO
+        public decimal SellPrice
+        {
+            get
+            {
+                return _sellPrice;
+            }
+            set
+            {
+                if (_sellPrice == value)
+                    return;
+
+                _sellPrice = value;
+                this.NotifyPropertyChanged("SellPrice");
+                this.NotifyPropertyChanged("SellEstimatePrice");
+
+                APIResultSellCommandOrderIDString = "";
+                APIResultSellCommandErrorString = "";
+                APIResultSellCommandResult = "";
+            }
+        }
+
+        // 売りタイプ（指値・成行）
+        private OrderTypes _sellType;
+        public OrderTypes SellType
+        {
+            get
+            {
+                return _sellType;
+            }
+            set
+            {
+                if (_sellType == value)
+                    return;
+
+                _sellType = value;
+                this.NotifyPropertyChanged("SellType");
+                this.NotifyPropertyChanged("SellEstimatePrice");
+
+                APIResultSellCommandOrderIDString = "";
+                APIResultSellCommandErrorString = "";
+                APIResultSellCommandResult = "";
+            }
+        }
+
+        // 売り予想金額
+        public decimal SellEstimatePrice
+        {
+            get
+            {
+                if (SellType == OrderTypes.market)
+                {
+                    return SellAmount * ActivePair.Bid;//_bid;
+                }
+                else
+                {
+                    return SellAmount * SellPrice;
+                }
+            }
+        }
+
+        // 買い数量
+        private decimal _buyAmount;// = 0.001M; // 通貨別デフォ指定 TODO
+        public decimal BuyAmount
+        {
+            get
+            {
+                return _buyAmount;
+            }
+            set
+            {
+                if (_buyAmount == value)
+                    return;
+
+                _buyAmount = value;
+                this.NotifyPropertyChanged("BuyAmount");
+                this.NotifyPropertyChanged("BuyEstimatePrice");
+
+                APIResultBuyCommandOrderIDString = "";
+                APIResultBuyCommandErrorString = "";
+                APIResultBuyCommandResult = "";
+            }
+        }
+
+        // 買い価格
+        private decimal _buyPrice;
+        public decimal BuyPrice
+        {
+            get
+            {
+                return _buyPrice;
+            }
+            set
+            {
+                if (_buyPrice == value)
+                    return;
+
+                _buyPrice = value;
+                this.NotifyPropertyChanged("BuyPrice");
+                this.NotifyPropertyChanged("BuyEstimatePrice");
+
+                APIResultBuyCommandOrderIDString = "";
+                APIResultBuyCommandErrorString = "";
+                APIResultBuyCommandResult = "";
+            }
+        }
+
+        // 買いタイプ（指値・成行）
+        private OrderTypes _buyType;
+        public OrderTypes BuyType
+        {
+            get
+            {
+                return _buyType;
+            }
+            set
+            {
+                if (_buyType == value)
+                    return;
+
+                _buyType = value;
+                this.NotifyPropertyChanged("BuyType");
+                this.NotifyPropertyChanged("BuyEstimatePrice");
+
+                APIResultBuyCommandOrderIDString = "";
+                APIResultBuyCommandErrorString = "";
+                APIResultBuyCommandResult = "";
+            }
+        }
+
+        // 買い予想金額
+        public decimal BuyEstimatePrice
+        {
+            get
+            {
+                if (BuyType == OrderTypes.market)
+                {
+                    return BuyAmount * ActivePair.Ask;//_ask;
+                }
+                else
+                {
+                    return BuyAmount * BuyPrice;
+                }
+            }
+        }
+
+        // API注文コマンド成否結果文字列
+        private string _aPIResultBuyCommandResult;
+        public string APIResultBuyCommandResult
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(APIResultBuyCommandOrderIDString))
+                {
+                    return _aPIResultBuyCommandResult;
+                }
+                else
+                {
+                    return _aPIResultBuyCommandResult + " - 注文ID: " + APIResultBuyCommandOrderIDString;
+                }
+            }
+            set
+            {
+                // don't 同じ値でも値をセットした時にBlinkさせたい。
+                //if (_aPIResultBuyCommandResult == value)
+                //    return;
+
+                _aPIResultBuyCommandResult = value;
+                this.NotifyPropertyChanged("APIResultBuyCommandResult");
+            }
+        }
+
+        private string _aPIResultSellCommandResult;
+        public string APIResultSellCommandResult
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(APIResultSellCommandOrderIDString))
+                {
+                    return _aPIResultSellCommandResult;
+                }
+                else
+                {
+                    return _aPIResultSellCommandResult + " - 注文ID: " + APIResultSellCommandOrderIDString;
+                }
+            }
+            set
+            {
+                // don't 同じ値でも値をセットした時にBlinkさせたい。
+                //if (_aPIResultSellCommandResult == value)
+                //    return;
+
+                _aPIResultSellCommandResult = value;
+                this.NotifyPropertyChanged("APIResultSellCommandResult");
+            }
+        }
+
+        // API注文コマンドエラー結果文字列
+        private string _aPIResultBuyCommandErrorString;
+        public string APIResultBuyCommandErrorString
+        {
+            get
+            {
+                return _aPIResultBuyCommandErrorString;
+            }
+            set
+            {
+                //if (_aPIResultBuyCommandErrorString == value)
+                //    return;
+
+                _aPIResultBuyCommandErrorString = value;
+                this.NotifyPropertyChanged("APIResultBuyCommandErrorString");
+            }
+        }
+
+        private string _aPIResultSellCommandErrorString;
+        public string APIResultSellCommandErrorString
+        {
+            get
+            {
+                return _aPIResultSellCommandErrorString;
+            }
+            set
+            {
+                //if (_aPIResultSellCommandErrorString == value)
+                //    return;
+
+                _aPIResultSellCommandErrorString = value;
+                this.NotifyPropertyChanged("APIResultSellCommandErrorString");
+            }
+        }
+
+        // API注文コマンド成功時、Order ID 表示
+        private string _aPIResultBuyCommandOrderIDString;
+        public string APIResultBuyCommandOrderIDString
+        {
+            get
+            {
+                return _aPIResultBuyCommandOrderIDString;
+            }
+            set
+            {
+                //if (_aPIResultBuyCommandOrderIDString == value)
+                //    return;
+
+                _aPIResultBuyCommandOrderIDString = value;
+                this.NotifyPropertyChanged("APIResultBuyCommandOrderIDString");
+            }
+        }
+
+        private string _aPIResultSellCommandOrderIDString;
+        public string APIResultSellCommandOrderIDString
+        {
+            get
+            {
+                return _aPIResultSellCommandOrderIDString;
+            }
+            set
+            {
+                //if (_aPIResultSellCommandOrderIDString == value)
+                //    return;
+
+                _aPIResultSellCommandOrderIDString = value;
+                this.NotifyPropertyChanged("APIResultSellCommandOrderIDString");
+            }
+        }
+
+        #endregion
+
         public MainViewModel()
         {
 
@@ -6579,6 +6891,10 @@ namespace BitDesk.ViewModels
             ViewMinimumCommand = new RelayCommand(ViewMinimumCommand_Execute, ViewMinimumCommand_CanExecute);
             ViewRestoreCommand = new RelayCommand(ViewRestoreCommand_Execute, ViewRestoreCommand_CanExecute);
 
+            // 注文関係
+            BuyOrderCommand = new RelayCommand(BuyOrderCommand_Execute, BuyOrderCommand_CanExecute);
+            SellOrderCommand = new RelayCommand(SellOrderCommand_Execute, SellOrderCommand_CanExecute);
+
             #endregion
 
             #region == テーマのイニシャライズ ==
@@ -6612,6 +6928,7 @@ namespace BitDesk.ViewModels
             BindingOperations.EnableCollectionSynchronization(this._depth, new object());
             BindingOperations.EnableCollectionSynchronization(this._transactions, new object());
             BindingOperations.EnableCollectionSynchronization(this._errors, new object());
+
 
             #endregion
 
@@ -6989,6 +7306,8 @@ namespace BitDesk.ViewModels
 
                                 #region == アラーム ==
 
+                                PairBtcJpy.HighLowInfoText = "";
+
                                 // TODO 非表示の通貨の場合はどうする？？？
                                 if (pair == CurrentPair)
                                 {
@@ -7001,7 +7320,7 @@ namespace BitDesk.ViewModels
                                         if (tick.LTP >= PairBtcJpy.AlarmPlus)
                                         {
                                             PairBtcJpy.HighLowInfoTextColorFlag = true;
-                                            PairBtcJpy.HighLowInfoText = "⇑⇑⇑　高値アラーム " + PairBtcJpy.CurrentPairString;
+                                            PairBtcJpy.HighLowInfoText = "⇑⇑⇑　高値アラーム " + PairBtcJpy.PairString;
 
                                             if (PlaySound)
                                             {
@@ -7021,7 +7340,7 @@ namespace BitDesk.ViewModels
                                         if (tick.LTP <= PairBtcJpy.AlarmMinus)
                                         {
                                             PairBtcJpy.HighLowInfoTextColorFlag = false;
-                                            PairBtcJpy.HighLowInfoText = "⇓⇓⇓　安値アラーム " + PairBtcJpy.CurrentPairString;
+                                            PairBtcJpy.HighLowInfoText = "⇓⇓⇓　安値アラーム " + PairBtcJpy.PairString;
                                             if (PlaySound)
                                             {
                                                 SystemSounds.Beep.Play();
@@ -7041,7 +7360,7 @@ namespace BitDesk.ViewModels
                                         if ((PairBtcJpy.TickHistories.Count > 25) && ((PairBtcJpy.BasePrice + 2000M) < tick.LTP))
                                         {
                                             PairBtcJpy.HighLowInfoTextColorFlag = true;
-                                            PairBtcJpy.HighLowInfoText = "⇑⇑⇑　起動後最高値更新 " + PairBtcJpy.CurrentPairString;
+                                            PairBtcJpy.HighLowInfoText = "⇑⇑⇑　起動後最高値更新 " + PairBtcJpy.PairString;
 
                                             if ((isPlayed == false) && (PairBtcJpy.PlaySoundHighest == true))
                                             {
@@ -7059,7 +7378,7 @@ namespace BitDesk.ViewModels
                                         if ((PairBtcJpy.TickHistories.Count > 25) && ((PairBtcJpy.BasePrice - 2000M) > tick.LTP))
                                         {
                                             PairBtcJpy.HighLowInfoTextColorFlag = false;
-                                            PairBtcJpy.HighLowInfoText = "⇓⇓⇓　起動後最安値更新 " + PairBtcJpy.CurrentPairString;
+                                            PairBtcJpy.HighLowInfoText = "⇓⇓⇓　起動後最安値更新 " + PairBtcJpy.PairString;
 
                                             if ((isPlayed == false) && (PairBtcJpy.PlaySoundLowest == true))
                                             {
@@ -7076,7 +7395,7 @@ namespace BitDesk.ViewModels
                                     if (tick.LTP >= PairBtcJpy.HighestIn24Price)
                                     {
                                         PairBtcJpy.HighLowInfoTextColorFlag = true;
-                                        PairBtcJpy.HighLowInfoText = "⇑⇑⇑⇑⇑⇑　過去24時間最高値更新 " + PairBtcJpy.CurrentPairString;
+                                        PairBtcJpy.HighLowInfoText = "⇑⇑⇑⇑⇑⇑　過去24時間最高値更新 " + PairBtcJpy.PairString;
 
                                         if ((isPlayed == false) && (PairBtcJpy.PlaySoundHighest24h == true))
                                         {
@@ -7091,7 +7410,7 @@ namespace BitDesk.ViewModels
                                     if (tick.LTP <= PairBtcJpy.LowestIn24Price)
                                     {
                                         PairBtcJpy.HighLowInfoTextColorFlag = false;
-                                        PairBtcJpy.HighLowInfoText = "⇓⇓⇓⇓⇓⇓　過去24時間最安値更新 " + PairBtcJpy.CurrentPairString;
+                                        PairBtcJpy.HighLowInfoText = "⇓⇓⇓⇓⇓⇓　過去24時間最安値更新 " + PairBtcJpy.PairString;
 
                                         if ((isPlayed == false) && (PairBtcJpy.PlaySoundLowest24h == true))
                                         {
@@ -7202,14 +7521,6 @@ namespace BitDesk.ViewModels
                                 // 起動時価格セット
                                 if (PairXrpJpy.BasePrice == 0) PairXrpJpy.BasePrice = tick.LTP;
 
-                                /*
-                                // ビットコイン時価評価額の計算
-                                if (AssetBTCAmount != 0)
-                                {
-                                    AssetBTCEstimateAmount = _ltp * AssetBTCAmount;
-                                }
-                                */
-
                                 // 最安値登録
                                 if (PairXrpJpy.LowestPrice == 0)
                                 {
@@ -7308,6 +7619,8 @@ namespace BitDesk.ViewModels
 
                                 #region == アラーム ==
 
+                                PairXrpJpy.HighLowInfoText = "";
+
                                 // TODO 非表示の通貨の場合はどうする？？？
                                 if (pair == CurrentPair)
                                 {
@@ -7320,7 +7633,7 @@ namespace BitDesk.ViewModels
                                         if (tick.LTP >= PairXrpJpy.AlarmPlus)
                                         {
                                             PairXrpJpy.HighLowInfoTextColorFlag = true;
-                                            PairXrpJpy.HighLowInfoText = "⇑⇑⇑　高値アラーム " + PairXrpJpy.CurrentPairString;
+                                            PairXrpJpy.HighLowInfoText = "⇑⇑⇑　高値アラーム " + PairXrpJpy.PairString;
 
                                             if (PlaySound)
                                             {
@@ -7332,7 +7645,7 @@ namespace BitDesk.ViewModels
                                     else
                                     {
                                         // 起動後初期値セット
-                                        PairXrpJpy.AlarmPlus = (long)(tick.LTP) + 2M;
+                                        PairXrpJpy.AlarmPlus = (tick.LTP) + 2M;
                                     }
 
                                     if (PairXrpJpy.AlarmMinus > 0)
@@ -7340,7 +7653,7 @@ namespace BitDesk.ViewModels
                                         if (tick.LTP <= PairXrpJpy.AlarmMinus)
                                         {
                                             PairXrpJpy.HighLowInfoTextColorFlag = false;
-                                            PairXrpJpy.HighLowInfoText = "⇓⇓⇓　安値アラーム " + PairXrpJpy.CurrentPairString;
+                                            PairXrpJpy.HighLowInfoText = "⇓⇓⇓　安値アラーム " + PairXrpJpy.PairString;
                                             if (PlaySound)
                                             {
                                                 SystemSounds.Beep.Play();
@@ -7351,7 +7664,7 @@ namespace BitDesk.ViewModels
                                     else
                                     {
                                         // 起動後初期値セット
-                                        PairXrpJpy.AlarmMinus = (long)(tick.LTP) - 2M;
+                                        PairXrpJpy.AlarmMinus = (tick.LTP) - 2M;
                                     }
 
                                     // 起動後最高値
@@ -7360,7 +7673,7 @@ namespace BitDesk.ViewModels
                                         if ((PairXrpJpy.TickHistories.Count > 25) && ((PairXrpJpy.BasePrice + 0.3M) < tick.LTP))
                                         {
                                             PairXrpJpy.HighLowInfoTextColorFlag = true;
-                                            PairXrpJpy.HighLowInfoText = "⇑⇑⇑　起動後最高値更新 " + PairXrpJpy.CurrentPairString;
+                                            PairXrpJpy.HighLowInfoText = "⇑⇑⇑　起動後最高値更新 " + PairXrpJpy.PairString;
 
                                             if ((isPlayed == false) && (PairXrpJpy.PlaySoundHighest == true))
                                             {
@@ -7378,7 +7691,7 @@ namespace BitDesk.ViewModels
                                         if ((PairXrpJpy.TickHistories.Count > 25) && ((PairXrpJpy.BasePrice - 0.3M) > tick.LTP))
                                         {
                                             PairXrpJpy.HighLowInfoTextColorFlag = false;
-                                            PairXrpJpy.HighLowInfoText = "⇓⇓⇓　起動後最安値更新 " + PairXrpJpy.CurrentPairString;
+                                            PairXrpJpy.HighLowInfoText = "⇓⇓⇓　起動後最安値更新 " + PairXrpJpy.PairString;
 
                                             if ((isPlayed == false) && (PairXrpJpy.PlaySoundLowest == true))
                                             {
@@ -7395,7 +7708,7 @@ namespace BitDesk.ViewModels
                                     if (tick.LTP >= PairXrpJpy.HighestIn24Price)
                                     {
                                         PairXrpJpy.HighLowInfoTextColorFlag = true;
-                                        PairXrpJpy.HighLowInfoText = "⇑⇑⇑⇑⇑⇑　過去24時間最高値更新 " + PairXrpJpy.CurrentPairString;
+                                        PairXrpJpy.HighLowInfoText = "⇑⇑⇑⇑⇑⇑　過去24時間最高値更新 " + PairXrpJpy.PairString;
 
                                         if ((isPlayed == false) && (PairXrpJpy.PlaySoundHighest24h == true))
                                         {
@@ -7410,7 +7723,7 @@ namespace BitDesk.ViewModels
                                     if (tick.LTP <= PairXrpJpy.LowestIn24Price)
                                     {
                                         PairXrpJpy.HighLowInfoTextColorFlag = false;
-                                        PairXrpJpy.HighLowInfoText = "⇓⇓⇓⇓⇓⇓　過去24時間最安値更新 " + PairXrpJpy.CurrentPairString;
+                                        PairXrpJpy.HighLowInfoText = "⇓⇓⇓⇓⇓⇓　過去24時間最安値更新 " + PairXrpJpy.PairString;
 
                                         if ((isPlayed == false) && (PairXrpJpy.PlaySoundLowest24h == true))
                                         {
@@ -7616,6 +7929,8 @@ namespace BitDesk.ViewModels
 
                                 #region == アラーム ==
 
+                                PairEthBtc.HighLowInfoText = "";
+
                                 // TODO 非表示の通貨の場合はどうする？？？
                                 if (pair == CurrentPair)
                                 {
@@ -7628,7 +7943,7 @@ namespace BitDesk.ViewModels
                                         if (tick.LTP >= PairEthBtc.AlarmPlus)
                                         {
                                             PairEthBtc.HighLowInfoTextColorFlag = true;
-                                            PairEthBtc.HighLowInfoText = "⇑⇑⇑　高値アラーム " + PairEthBtc.CurrentPairString;
+                                            PairEthBtc.HighLowInfoText = "⇑⇑⇑　高値アラーム " + PairEthBtc.PairString;
 
                                             if (PlaySound)
                                             {
@@ -7648,7 +7963,7 @@ namespace BitDesk.ViewModels
                                         if (tick.LTP <= PairEthBtc.AlarmMinus)
                                         {
                                             PairEthBtc.HighLowInfoTextColorFlag = false;
-                                            PairEthBtc.HighLowInfoText = "⇓⇓⇓　安値アラーム " + PairEthBtc.CurrentPairString;
+                                            PairEthBtc.HighLowInfoText = "⇓⇓⇓　安値アラーム " + PairEthBtc.PairString;
                                             if (PlaySound)
                                             {
                                                 SystemSounds.Beep.Play();
@@ -7668,7 +7983,7 @@ namespace BitDesk.ViewModels
                                         if ((PairEthBtc.TickHistories.Count > 25) && ((PairEthBtc.BasePrice + 2000M) < tick.LTP))
                                         {
                                             PairEthBtc.HighLowInfoTextColorFlag = true;
-                                            PairEthBtc.HighLowInfoText = "⇑⇑⇑　起動後最高値更新 " + PairEthBtc.CurrentPairString;
+                                            PairEthBtc.HighLowInfoText = "⇑⇑⇑　起動後最高値更新 " + PairEthBtc.PairString;
 
                                             if ((isPlayed == false) && (PairEthBtc.PlaySoundHighest == true))
                                             {
@@ -7686,7 +8001,7 @@ namespace BitDesk.ViewModels
                                         if ((PairEthBtc.TickHistories.Count > 25) && ((PairEthBtc.BasePrice - 2000M) > tick.LTP))
                                         {
                                             PairEthBtc.HighLowInfoTextColorFlag = false;
-                                            PairEthBtc.HighLowInfoText = "⇓⇓⇓　起動後最安値更新 " + PairEthBtc.CurrentPairString;
+                                            PairEthBtc.HighLowInfoText = "⇓⇓⇓　起動後最安値更新 " + PairEthBtc.PairString;
 
                                             if ((isPlayed == false) && (PairEthBtc.PlaySoundLowest == true))
                                             {
@@ -7703,7 +8018,7 @@ namespace BitDesk.ViewModels
                                     if (tick.LTP >= PairEthBtc.HighestIn24Price)
                                     {
                                         PairEthBtc.HighLowInfoTextColorFlag = true;
-                                        PairEthBtc.HighLowInfoText = "⇑⇑⇑⇑⇑⇑　過去24時間最高値更新 " + PairEthBtc.CurrentPairString;
+                                        PairEthBtc.HighLowInfoText = "⇑⇑⇑⇑⇑⇑　過去24時間最高値更新 " + PairEthBtc.PairString;
 
                                         if ((isPlayed == false) && (PairEthBtc.PlaySoundHighest24h == true))
                                         {
@@ -7718,7 +8033,7 @@ namespace BitDesk.ViewModels
                                     if (tick.LTP <= PairEthBtc.LowestIn24Price)
                                     {
                                         PairEthBtc.HighLowInfoTextColorFlag = false;
-                                        PairEthBtc.HighLowInfoText = "⇓⇓⇓⇓⇓⇓　過去24時間最安値更新 " + PairEthBtc.CurrentPairString;
+                                        PairEthBtc.HighLowInfoText = "⇓⇓⇓⇓⇓⇓　過去24時間最安値更新 " + PairEthBtc.PairString;
 
                                         if ((isPlayed == false) && (PairEthBtc.PlaySoundLowest24h == true))
                                         {
@@ -7924,6 +8239,8 @@ namespace BitDesk.ViewModels
 
                                 #region == アラーム ==
 
+                                PairMonaJpy.HighLowInfoText = "";
+
                                 // TODO 非表示の通貨の場合はどうする？？？
                                 if (pair == CurrentPair)
                                 {
@@ -7936,7 +8253,7 @@ namespace BitDesk.ViewModels
                                         if (tick.LTP >= PairMonaJpy.AlarmPlus)
                                         {
                                             PairMonaJpy.HighLowInfoTextColorFlag = true;
-                                            PairMonaJpy.HighLowInfoText = "⇑⇑⇑　高値アラーム " + PairMonaJpy.CurrentPairString;
+                                            PairMonaJpy.HighLowInfoText = "⇑⇑⇑　高値アラーム " + PairMonaJpy.PairString;
 
                                             if (PlaySound)
                                             {
@@ -7956,7 +8273,7 @@ namespace BitDesk.ViewModels
                                         if (tick.LTP <= PairMonaJpy.AlarmMinus)
                                         {
                                             PairMonaJpy.HighLowInfoTextColorFlag = false;
-                                            PairMonaJpy.HighLowInfoText = "⇓⇓⇓　安値アラーム " + PairMonaJpy.CurrentPairString;
+                                            PairMonaJpy.HighLowInfoText = "⇓⇓⇓　安値アラーム " + PairMonaJpy.PairString;
                                             if (PlaySound)
                                             {
                                                 SystemSounds.Beep.Play();
@@ -7976,7 +8293,7 @@ namespace BitDesk.ViewModels
                                         if ((PairMonaJpy.TickHistories.Count > 25) && ((PairMonaJpy.BasePrice + 2M) < tick.LTP))
                                         {
                                             PairMonaJpy.HighLowInfoTextColorFlag = true;
-                                            PairMonaJpy.HighLowInfoText = "⇑⇑⇑　起動後最高値更新 " + PairMonaJpy.CurrentPairString;
+                                            PairMonaJpy.HighLowInfoText = "⇑⇑⇑　起動後最高値更新 " + PairMonaJpy.PairString;
 
                                             if ((isPlayed == false) && (PairMonaJpy.PlaySoundHighest == true))
                                             {
@@ -7994,7 +8311,7 @@ namespace BitDesk.ViewModels
                                         if ((PairMonaJpy.TickHistories.Count > 25) && ((PairMonaJpy.BasePrice - 2M) > tick.LTP))
                                         {
                                             PairMonaJpy.HighLowInfoTextColorFlag = false;
-                                            PairMonaJpy.HighLowInfoText = "⇓⇓⇓　起動後最安値更新 " + PairMonaJpy.CurrentPairString;
+                                            PairMonaJpy.HighLowInfoText = "⇓⇓⇓　起動後最安値更新 " + PairMonaJpy.PairString;
 
                                             if ((isPlayed == false) && (PairMonaJpy.PlaySoundLowest == true))
                                             {
@@ -8011,7 +8328,7 @@ namespace BitDesk.ViewModels
                                     if (tick.LTP >= PairMonaJpy.HighestIn24Price)
                                     {
                                         PairMonaJpy.HighLowInfoTextColorFlag = true;
-                                        PairMonaJpy.HighLowInfoText = "⇑⇑⇑⇑⇑⇑　過去24時間最高値更新 " + PairMonaJpy.CurrentPairString;
+                                        PairMonaJpy.HighLowInfoText = "⇑⇑⇑⇑⇑⇑　過去24時間最高値更新 " + PairMonaJpy.PairString;
 
                                         if ((isPlayed == false) && (PairMonaJpy.PlaySoundHighest24h == true))
                                         {
@@ -8026,7 +8343,7 @@ namespace BitDesk.ViewModels
                                     if (tick.LTP <= PairMonaJpy.LowestIn24Price)
                                     {
                                         PairMonaJpy.HighLowInfoTextColorFlag = false;
-                                        PairMonaJpy.HighLowInfoText = "⇓⇓⇓⇓⇓⇓　過去24時間最安値更新 " + PairMonaJpy.CurrentPairString;
+                                        PairMonaJpy.HighLowInfoText = "⇓⇓⇓⇓⇓⇓　過去24時間最安値更新 " + PairMonaJpy.PairString;
 
                                         if ((isPlayed == false) && (PairMonaJpy.PlaySoundLowest24h == true))
                                         {
@@ -8130,14 +8447,6 @@ namespace BitDesk.ViewModels
                                 // 起動時価格セット
                                 if (PairLtcBtc.BasePrice == 0) PairLtcBtc.BasePrice = tick.LTP;
 
-                                /*
-                                // ビットコイン時価評価額の計算
-                                if (AssetBTCAmount != 0)
-                                {
-                                    AssetBTCEstimateAmount = _ltp * AssetBTCAmount;
-                                }
-                                */
-
                                 // 最安値登録
                                 if (PairLtcBtc.LowestPrice == 0)
                                 {
@@ -8236,6 +8545,8 @@ namespace BitDesk.ViewModels
 
                                 #region == アラーム ==
 
+                                PairLtcBtc.HighLowInfoText = "";
+
                                 // TODO 非表示の通貨の場合はどうする？？？
                                 if (pair == CurrentPair)
                                 {
@@ -8248,7 +8559,7 @@ namespace BitDesk.ViewModels
                                         if (tick.LTP >= PairLtcBtc.AlarmPlus)
                                         {
                                             PairLtcBtc.HighLowInfoTextColorFlag = true;
-                                            PairLtcBtc.HighLowInfoText = "⇑⇑⇑　高値アラーム " + PairLtcBtc.CurrentPairString;
+                                            PairLtcBtc.HighLowInfoText = "⇑⇑⇑　高値アラーム " + PairLtcBtc.PairString;
 
                                             if (PlaySound)
                                             {
@@ -8260,7 +8571,7 @@ namespace BitDesk.ViewModels
                                     else
                                     {
                                         // 起動後初期値セット
-                                        PairLtcBtc.AlarmPlus = tick.LTP + 0.0005M;
+                                        PairLtcBtc.AlarmPlus = tick.LTP + 0.001M;
                                     }
 
                                     if (PairLtcBtc.AlarmMinus > 0)
@@ -8268,7 +8579,7 @@ namespace BitDesk.ViewModels
                                         if (tick.LTP <= PairLtcBtc.AlarmMinus)
                                         {
                                             PairLtcBtc.HighLowInfoTextColorFlag = false;
-                                            PairLtcBtc.HighLowInfoText = "⇓⇓⇓　安値アラーム " + PairLtcBtc.CurrentPairString;
+                                            PairLtcBtc.HighLowInfoText = "⇓⇓⇓　安値アラーム " + PairLtcBtc.PairString;
                                             if (PlaySound)
                                             {
                                                 SystemSounds.Beep.Play();
@@ -8279,7 +8590,7 @@ namespace BitDesk.ViewModels
                                     else
                                     {
                                         // 起動後初期値セット
-                                        PairLtcBtc.AlarmMinus = tick.LTP - 0.0005M;
+                                        PairLtcBtc.AlarmMinus = tick.LTP - 0.001M;
                                     }
 
                                     // 起動後最高値
@@ -8288,7 +8599,7 @@ namespace BitDesk.ViewModels
                                         if ((PairLtcBtc.TickHistories.Count > 25) && ((PairLtcBtc.BasePrice + 0.0001M) < tick.LTP))
                                         {
                                             PairLtcBtc.HighLowInfoTextColorFlag = true;
-                                            PairLtcBtc.HighLowInfoText = "⇑⇑⇑　起動後最高値更新 " + PairLtcBtc.CurrentPairString;
+                                            PairLtcBtc.HighLowInfoText = "⇑⇑⇑　起動後最高値更新 " + PairLtcBtc.PairString;
 
                                             if ((isPlayed == false) && (PairLtcBtc.PlaySoundHighest == true))
                                             {
@@ -8306,7 +8617,7 @@ namespace BitDesk.ViewModels
                                         if ((PairLtcBtc.TickHistories.Count > 25) && ((PairLtcBtc.BasePrice - 0.0001M) > tick.LTP))
                                         {
                                             PairLtcBtc.HighLowInfoTextColorFlag = false;
-                                            PairLtcBtc.HighLowInfoText = "⇓⇓⇓　起動後最安値更新 " + PairLtcBtc.CurrentPairString;
+                                            PairLtcBtc.HighLowInfoText = "⇓⇓⇓　起動後最安値更新 " + PairLtcBtc.PairString;
 
                                             if ((isPlayed == false) && (PairLtcBtc.PlaySoundLowest == true))
                                             {
@@ -8323,7 +8634,7 @@ namespace BitDesk.ViewModels
                                     if (tick.LTP >= PairLtcBtc.HighestIn24Price)
                                     {
                                         PairLtcBtc.HighLowInfoTextColorFlag = true;
-                                        PairLtcBtc.HighLowInfoText = "⇑⇑⇑⇑⇑⇑　過去24時間最高値更新 " + PairLtcBtc.CurrentPairString;
+                                        PairLtcBtc.HighLowInfoText = "⇑⇑⇑⇑⇑⇑　過去24時間最高値更新 " + PairLtcBtc.PairString;
 
                                         if ((isPlayed == false) && (PairLtcBtc.PlaySoundHighest24h == true))
                                         {
@@ -8338,7 +8649,7 @@ namespace BitDesk.ViewModels
                                     if (tick.LTP <= PairLtcBtc.LowestIn24Price)
                                     {
                                         PairLtcBtc.HighLowInfoTextColorFlag = false;
-                                        PairLtcBtc.HighLowInfoText = "⇓⇓⇓⇓⇓⇓　過去24時間最安値更新 " + PairLtcBtc.CurrentPairString;
+                                        PairLtcBtc.HighLowInfoText = "⇓⇓⇓⇓⇓⇓　過去24時間最安値更新 " + PairLtcBtc.PairString;
 
                                         if ((isPlayed == false) && (PairLtcBtc.PlaySoundLowest24h == true))
                                         {
@@ -8548,6 +8859,8 @@ namespace BitDesk.ViewModels
 
                                 #region == アラーム ==
 
+                                PairBchJpy.HighLowInfoText = "";
+
                                 // TODO 非表示の通貨の場合はどうする？？？
                                 if (pair == CurrentPair)
                                 {
@@ -8560,7 +8873,7 @@ namespace BitDesk.ViewModels
                                         if (tick.LTP >= PairBchJpy.AlarmPlus)
                                         {
                                             PairBchJpy.HighLowInfoTextColorFlag = true;
-                                            PairBchJpy.HighLowInfoText = "⇑⇑⇑　高値アラーム " + PairBchJpy.CurrentPairString;
+                                            PairBchJpy.HighLowInfoText = "⇑⇑⇑　高値アラーム " + PairBchJpy.PairString;
 
                                             if (PlaySound)
                                             {
@@ -8580,7 +8893,7 @@ namespace BitDesk.ViewModels
                                         if (tick.LTP <= PairBchJpy.AlarmMinus)
                                         {
                                             PairBchJpy.HighLowInfoTextColorFlag = false;
-                                            PairBchJpy.HighLowInfoText = "⇓⇓⇓　安値アラーム " + PairBchJpy.CurrentPairString;
+                                            PairBchJpy.HighLowInfoText = "⇓⇓⇓　安値アラーム " + PairBchJpy.PairString;
                                             if (PlaySound)
                                             {
                                                 SystemSounds.Beep.Play();
@@ -8600,7 +8913,7 @@ namespace BitDesk.ViewModels
                                         if ((PairBchJpy.TickHistories.Count > 25) && ((PairBchJpy.BasePrice + 200M) < tick.LTP))
                                         {
                                             PairBchJpy.HighLowInfoTextColorFlag = true;
-                                            PairBchJpy.HighLowInfoText = "⇑⇑⇑　起動後最高値更新 " + PairBchJpy.CurrentPairString;
+                                            PairBchJpy.HighLowInfoText = "⇑⇑⇑　起動後最高値更新 " + PairBchJpy.PairString;
 
                                             if ((isPlayed == false) && (PairBchJpy.PlaySoundHighest == true))
                                             {
@@ -8618,7 +8931,7 @@ namespace BitDesk.ViewModels
                                         if ((PairBchJpy.TickHistories.Count > 25) && ((PairBchJpy.BasePrice - 200M) > tick.LTP))
                                         {
                                             PairBchJpy.HighLowInfoTextColorFlag = false;
-                                            PairBchJpy.HighLowInfoText = "⇓⇓⇓　起動後最安値更新 " + PairBchJpy.CurrentPairString;
+                                            PairBchJpy.HighLowInfoText = "⇓⇓⇓　起動後最安値更新 " + PairBchJpy.PairString;
 
                                             if ((isPlayed == false) && (PairBchJpy.PlaySoundLowest == true))
                                             {
@@ -8635,7 +8948,7 @@ namespace BitDesk.ViewModels
                                     if (tick.LTP >= PairBchJpy.HighestIn24Price)
                                     {
                                         PairBchJpy.HighLowInfoTextColorFlag = true;
-                                        PairBchJpy.HighLowInfoText = "⇑⇑⇑⇑⇑⇑　過去24時間最高値更新 " + PairBchJpy.CurrentPairString;
+                                        PairBchJpy.HighLowInfoText = "⇑⇑⇑⇑⇑⇑　過去24時間最高値更新 " + PairBchJpy.PairString;
 
                                         if ((isPlayed == false) && (PairBchJpy.PlaySoundHighest24h == true))
                                         {
@@ -8650,7 +8963,7 @@ namespace BitDesk.ViewModels
                                     if (tick.LTP <= PairBchJpy.LowestIn24Price)
                                     {
                                         PairBchJpy.HighLowInfoTextColorFlag = false;
-                                        PairBchJpy.HighLowInfoText = "⇓⇓⇓⇓⇓⇓　過去24時間最安値更新 " + PairBchJpy.CurrentPairString;
+                                        PairBchJpy.HighLowInfoText = "⇓⇓⇓⇓⇓⇓　過去24時間最安値更新 " + PairBchJpy.PairString;
 
                                         if ((isPlayed == false) && (PairBchJpy.PlaySoundLowest24h == true))
                                         {
@@ -10313,10 +10626,10 @@ namespace BitDesk.ViewModels
             Task.Run(() => UpdateTransactions());
 
             // 取引履歴のGet
-            //Task.Run(() => UpdateTradeHistory());
+            Task.Run(() => UpdateTradeHistory());
 
             // 注文リストの更新ループ
-            //Task.Run(() => UpdateOrderList());
+            Task.Run(() => UpdateOrderList());
 
         }
 
@@ -10862,7 +11175,552 @@ namespace BitDesk.ViewModels
 
         }
 
+        // 注文リスト取得
+        private async Task<bool> GetOrderList()
+        {
 
+            if (OrdersApiKeyIsSet == false)
+            {
+                // TODO show message?
+                return false;
+            }
+
+            // TODO NEED TEST
+            var pair = ActivePair.pair;
+            var orders = ActivePair.ActiveOrders;
+            var ltp = ActivePair.Ltp;
+
+            //System.Diagnostics.Debug.WriteLine("GetOrderList......");
+
+            try
+            {
+
+                Orders ords = await _priApi.GetOrderList(pair.ToString(), _getOrdersApiKey, _getOrdersSecret);
+
+                if (ords != null)
+                {
+                    // タブの「注文一覧（＊）」を更新
+                    ActiveOrdersCount = ords.OrderList.Count;
+
+                    // 逆順にする
+                    ords.OrderList.Reverse();
+
+                    if (Application.Current == null) return false;
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                    try
+                    {
+                        foreach (var ord in ords.OrderList)
+                        {
+
+                            var found = orders.FirstOrDefault(x => x.OrderID == ord.OrderID);
+                            if (found != null)
+                            {
+                                found.AveragePrice = ord.AveragePrice;
+                                found.OrderedAt = ord.OrderedAt;
+                                found.Pair = ord.Pair;
+                                found.Price = ord.Price;
+                                found.RemainingAmount = ord.RemainingAmount;
+                                found.ExecutedAmount = ord.ExecutedAmount;
+                                found.Side = ord.Side;
+                                found.StartAmount = ord.StartAmount;
+                                found.Type = ord.Type;
+                                found.Status = ord.Status;
+
+                                // 現在値のセット
+                                // 投資金額
+                                if (found.Type == "limit")
+                                {
+                                    // 
+                                    found.ActualPrice = (ord.Price * ord.StartAmount);
+                                    // 一部約定の時は考えない？
+                                }
+                                else
+                                {
+                                    found.ActualPrice = (ord.AveragePrice * ord.StartAmount);
+                                }
+                                // 現在値との差額
+                                if ((found.Status == "UNFILLED") || (found.Status == "PARTIALLY_FILLED"))
+                                {
+                                    found.Shushi = ((ltp - ord.Price));
+                                }
+                                else
+                                {
+                                    // 約定済みなので
+                                    found.Shushi = 0;
+                                }
+
+                            }
+                            else
+                            {
+                                // 現在値のセット
+                                // 投資金額
+                                if (ord.Type == "limit")
+                                {
+                                    ord.ActualPrice = (ord.Price * ord.StartAmount);
+                                }
+                                else
+                                {
+                                    ord.ActualPrice = (ord.AveragePrice * ord.StartAmount);
+                                }
+                                // 現在値との差額
+                                if ((ord.Status == "UNFILLED") || (ord.Status == "PARTIALLY_FILLED"))
+                                {
+                                    ord.Shushi = ((ltp - ord.Price));
+                                }
+                                else
+                                {
+                                    // 約定済みなので
+                                    ord.Shushi = 0;
+                                }
+
+                                // リスト追加
+                                orders.Insert(0, ord);
+                            }
+                        }
+
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine("■■■■■ GetOrderList: Exception - " + ex.Message);
+
+                    }
+                    });
+
+                    // 返ってきた注文リストに存在しない、注文を抽出
+                    List<int> lst = new List<int>();
+                    try
+                    {
+                        foreach (var ors in orders)
+                        {
+                            var found = ords.OrderList.FirstOrDefault(x => x.OrderID == ors.OrderID);
+                            if (found == null)
+                            {
+                                if (string.IsNullOrEmpty(ors.Status) || (ors.Status == "UNFILLED") || (ors.Status == "PARTIALLY_FILLED"))
+                                {
+                                    //if ( (ors.Status != "FULLY_FILLED") || (ors.Status != "CANCELED_UNFILLED") || (ors.Status != "CANCELED_PARTIALLY_FILLED")) { 
+                                    lst.Add(ors.OrderID);
+                                }
+                            }
+
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine("■■■■■ GetOrderList lst: Exception - " + ex.Message);
+
+                    }
+
+                    // 注文リスト更新
+                    if (lst.Count > 0)
+                    {
+                        // 最新の情報をゲット
+                        //Orders oup = await _priActiveOrderListApi.GetOrderListByIDs("btc_jpy", lst);
+                        Orders oup = await _priApi.GetOrderListByIDs(_getOrdersApiKey, _getOrdersSecret, pair.ToString(), lst);
+
+                        if (oup != null)
+                        {
+                            // 注文をアップデート
+                            foreach (var ord in oup.OrderList)
+                            {
+                                if (Application.Current == null)
+                                {
+                                    return false;
+                                }
+                                //Application.Current.Dispatcher.Invoke(() =>
+                                //{
+                                try
+                                {
+                                    var found = orders.FirstOrDefault(x => x.OrderID == ord.OrderID);
+                                    if (found != null)
+                                    {
+                                        int i = orders.IndexOf(found);
+                                        if (i > -1)
+                                        {
+                                            orders[i].Status = ord.Status;
+                                            orders[i].AveragePrice = ord.AveragePrice;
+                                            orders[i].OrderedAt = ord.OrderedAt;
+                                            orders[i].Type = ord.Type;
+                                            orders[i].StartAmount = ord.StartAmount;
+                                            orders[i].RemainingAmount = ord.RemainingAmount;
+                                            orders[i].ExecutedAmount = ord.ExecutedAmount;
+                                            orders[i].Price = ord.Price;
+                                            orders[i].AveragePrice = ord.AveragePrice;
+
+
+                                            // 現在値のセット
+                                            // 投資金額
+                                            if (orders[i].Type == "limit")
+                                            {
+                                                orders[i].ActualPrice = (ord.Price * ord.StartAmount);
+                                            }
+                                            else
+                                            {
+                                                orders[i].ActualPrice = (ord.AveragePrice * ord.StartAmount);
+                                            }
+                                            // 現在値との差額
+                                            if ((orders[i].Status == "UNFILLED") || (orders[i].Status == "PARTIALLY_FILLED"))
+                                            {
+                                                orders[i].Shushi = ((ltp - ord.Price));
+                                            }
+                                            else
+                                            {
+                                                // 約定済みなので
+                                                orders[i].Shushi = 0;
+                                            }
+
+
+                                            //TODO
+                                            //　約定！
+
+                                        }
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    System.Diagnostics.Debug.WriteLine("■■■■■ Order oup: Exception - " + ex.Message);
+
+                                }
+                                //});
+                            }
+                        }
+                    }
+
+
+                    APIResultActiveOrders = "";
+                    //NotifyPropertyChanged(nameof(APIResultActiveOrders));
+
+                    await Task.Delay(1000);
+                    return true;
+                }
+                else
+                {
+                    //
+                    ActiveOrdersCount = -1;
+
+                    APIResultActiveOrders = "<<注文一覧　取得失敗>>";
+                    //NotifyPropertyChanged(nameof(APIResultActiveOrders));
+                    System.Diagnostics.Debug.WriteLine("■■■■■ GetOrderList 注文一覧　取得失敗");
+
+                    await Task.Delay(1000);
+                    return false;
+                }
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine("■■■■■ GetOrderList Exception: " + e);
+
+                await Task.Delay(1000);
+                return false;
+            }
+
+        }
+
+        // 注文リスト更新ループ
+        private async void UpdateOrderList()
+        {
+            while (true)
+            {
+                // ログインしていなかったらスルー。
+                if (LoggedInMode == false)
+                {
+                    await Task.Delay(2000);
+                    continue;
+                }
+                // 省エネモードならスルー。
+                if (MinMode)
+                {
+                    await Task.Delay(5000);
+                    continue;
+                }
+
+                if (OrdersApiKeyIsSet == false)
+                {
+                    await Task.Delay(6000);
+                    continue;
+                }
+
+                // 間隔 1/2
+                await Task.Delay(1200);
+
+                try
+                {
+                    await GetOrderList();
+                }
+                catch (Exception e)
+                {
+                    System.Diagnostics.Debug.WriteLine("■■■■■ UpdateOrderList Exception: " + e);
+                }
+
+                // 間隔 1/2
+                await Task.Delay(1900);
+            }
+
+        }
+
+        // 取引履歴の取得
+        private async Task<bool> GetTradeHistoryList()
+        {
+
+            if (TradeHistoryApiKeyIsSet == false)
+            {
+                // TODO show message?
+                return false;
+            }
+
+            // TODO NEED TEST
+            var pair = CurrentPair;
+            var trades = ActivePair.Trades;
+
+            //System.Diagnostics.Debug.WriteLine("GetTradeHistory......");
+
+            try
+            {
+
+                TradeHistory trd = await _priApi.GetTradeHistory(pair.ToString() ,_getTradeHistoryApiKey, _getTradeHistorySecret);
+
+                if (trd != null)
+                {
+
+                    // 逆順にする
+                    trd.TradeList.Reverse();
+
+                    if (Application.Current == null) return false;
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+
+                    foreach (var tr in trd.TradeList)
+                    {
+
+                        var found = trades.FirstOrDefault(x => x.TradeID == tr.TradeID);
+                        if (found == null)
+                        {
+                            // "btc_jpy" を "BTC/JPY"に。
+                            if (GetPairs.ContainsKey(tr.Pair))
+                                tr.Pair = PairStrings[GetPairs[tr.Pair]];
+
+                            trades.Insert(0, tr);
+                        }
+
+                    }
+
+                    });
+
+                    _tradeHistories = trades.Count;
+                    NotifyPropertyChanged(nameof(TradeHistoryTitle));
+
+                    APIResultTradeHistory = "";
+
+                    return true;
+                }
+                else
+                {
+                    _tradeHistories = -1;
+                    NotifyPropertyChanged(nameof(TradeHistoryTitle));
+
+                    APIResultTradeHistory = "<<取得失敗>>";
+
+                    return false;
+                }
+
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine("■■■■■ GetTradeHistoryList Exception: " + e);
+
+                return false;
+            }
+
+        }
+
+        // 取引履歴の更新ループ
+        private async void UpdateTradeHistory()
+        {
+            while (true)
+            {
+                // ログインしていなかったらスルー。
+                if (LoggedInMode == false)
+                {
+                    await Task.Delay(2000);
+                    continue;
+                }
+                // 省エネモードならスルー。
+                if (MinMode)
+                {
+                    await Task.Delay(6000);
+                    continue;
+                }
+                if (TradeHistoryApiKeyIsSet == false)
+                {
+                    await Task.Delay(6000);
+                    continue;
+                }
+
+                // 間隔 1/2
+                await Task.Delay(1100);
+
+                try
+                {
+                    await GetTradeHistoryList();
+                }
+                catch (Exception e)
+                {
+                    System.Diagnostics.Debug.WriteLine("■■■■■ UpdateTradeHistory Exception: " + e);
+                }
+
+                // 間隔 1/2
+                await Task.Delay(2500);
+            }
+
+        }
+
+        #region == 注文関係のメソッド ==
+
+        // 手動発注から発注。その他は、（priApi）から直に呼び出すこと！
+        private async Task<OrderResult> ManualOrder(Pair p, decimal amount, decimal price, string side, string type)
+        {
+            System.Diagnostics.Debug.WriteLine("□ Order - " + p.pair.ToString() + ":" + amount + ":" + price.ToString() + ":" + side + ":" + type);
+
+            if (ManualTradeApiKeyIsSet == false)
+            {
+                // TODO show message?
+                Debug.WriteLine("(ManualTradeApiKeyIsSet == false)");
+
+                return null;
+            }
+
+            var orders = p.ActiveOrders;
+            var ltp = p.Ltp;
+
+            try
+            {
+                OrderResult ord = await _priApi.MakeOrder(_manualTradeApiKey, _manualTradeSecret, p.pair.ToString(), amount, price, side, type);
+
+                if (ord != null)
+                {
+                    if (ord.IsSuccess)
+                    {
+                        // TODO
+                        // 注文リストに追加する（Insert）
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            try
+                            {
+                                var found = orders.FirstOrDefault(x => x.OrderID == ord.OrderID);
+                                if (found == null)
+                                {
+                                    // 現在値のセット
+                                    try
+                                    {
+                                        ord.Shushi = ((ltp - ord.Price) * ord.StartAmount);
+                                        ord.ActualPrice = (ord.Price * ord.StartAmount);
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        System.Diagnostics.Debug.WriteLine("■■■■■ Order 現在値のセット2: " + e);
+                                    }
+                                    // リスト追加
+                                    orders.Insert(0, ord);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                System.Diagnostics.Debug.WriteLine("■■■■■ Order: Exception - " + ex.Message);
+
+                            }
+
+                        });
+
+                        return ord;
+                    }
+                    else
+                    {
+                        return ord;
+                    }
+
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine("■■■■■ Order Exception: " + e);
+
+                return null;
+            }
+        }
+
+        // 注文キャンセル
+        private async Task<OrderResult> CancelOrder(Pair p, int orderID)
+        {
+            if (ManualTradeApiKeyIsSet == false)
+            {
+                // TODO show message?
+                return null;
+            }
+
+            var orders = p.ActiveOrders;
+            var ltp = p.Ltp;
+
+            try
+            {
+                // キャンセル注文発注
+                //OrderResult ord = await _priMakeOrderApi.CancelOrder(pair, orderID);
+                OrderResult ord = await _priApi.CancelOrder(_manualTradeApiKey, _manualTradeSecret, p.pair.ToString(), orderID);
+
+                if (ord != null)
+                {
+                    if (ord.IsSuccess)
+                    {
+
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            try
+                            {
+                                // 注文リストの中から、同一IDをキャンセル注文結果と入れ替える
+                                var found = orders.FirstOrDefault(x => x.OrderID == orderID);
+                                int i = orders.IndexOf(found);
+                                if (i > -1)
+                                {
+                                    orders[i] = ord;
+                                }
+                                //or
+                                //var found = theCollection.FirstOrDefault(x => x.Id == myId);
+                                //theCollection.Remove(found);
+                                //theCollection.Add(newObject);
+
+                            }
+                            catch (Exception ex)
+                            {
+                                System.Diagnostics.Debug.WriteLine("■■■■■ CancelOrder: Exception - " + ex.Message);
+
+                            }
+                        });
+
+                        return ord;
+                    }
+                    else
+                    {
+                        return ord;
+                    }
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine("■■■■■ CancelOrder Exception: " + e);
+
+                return null;
+            }
+
+        }
+
+        #endregion
 
         #region == 認証関連のメソッド ==
 
@@ -12492,7 +13350,7 @@ namespace BitDesk.ViewModels
 
         }
 
-        #region == 認証・設定画面表示関係 ==
+        #region == 認証・設定画面表示関係コマンド ==
 
         // 設定画面表示
         public ICommand ShowSettingsCommand { get; }
@@ -12711,7 +13569,7 @@ namespace BitDesk.ViewModels
 
         #endregion
 
-        #region == APIキー ==
+        #region == APIキー関係コマンド ==
 
         // 資産情報のAPIキーセット
         public ICommand SetAssetsAPIKeyCommand { get; }
@@ -12916,8 +13774,300 @@ namespace BitDesk.ViewModels
             }
         }
 
+        #region == 注文系コマンド ==
+
+        // 買い注文コマンド
+        public ICommand BuyOrderCommand { get; }
+        public bool BuyOrderCommand_CanExecute()
+        {
+            if (PublicApiOnlyMode == true) return false;
+
+            return true;
+
+        }
+        public async void BuyOrderCommand_Execute()
+        {
+
+            if (BuyAmount <= 0)
+            {
+                APIResultBuyCommandErrorString = "数量が不正です。";
+                APIResultBuyCommandResult = "";
+                return;
+            }
+            if (_buyType == OrderTypes.limit)
+            {
+                if (BuyPrice <= 0)
+                {
+                    APIResultBuyCommandErrorString = "価格が不正です。";
+                    APIResultBuyCommandResult = "";
+                    return;
+                }
+            }
+
+            var pair = ActivePair;
+
+            APIResultBuyCommandOrderIDString = "";
+            APIResultBuyCommandErrorString = "";
+            APIResultBuyCommandResult = "";
+
+            string TypeStr;
+            if (_buyType == OrderTypes.limit)
+            {
+                TypeStr = "limit";
+            }
+            else if (_buyType == OrderTypes.market)
+            {
+                TypeStr = "market";
+                BuyPrice = 0;
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine("■■■■■ BuyOrderCommand_Execute _buyType undefined");
+                return;
+            }
+
+            OrderResult result = await ManualOrder(pair, BuyAmount, BuyPrice, "buy", TypeStr);
+
+            if (result != null)
+            {
+                if (result.IsSuccess == true)
+                {
+                    APIResultBuyCommandOrderIDString = result.OrderID.ToString(); // こっち先にセット！
+                    APIResultBuyCommandErrorString = "";
+                    APIResultBuyCommandResult = "成功"; // ここで結果表示
+                }
+                else
+                {
+                    APIResultBuyCommandOrderIDString = "";
+
+                    if (result.HasErrorInfo)
+                    {
+                        APIResultBuyCommandErrorString = "「" + result.Err.ErrorDescription + "」";
+                        APIResultBuyCommandResult = "失敗 - " + result.Err.ErrorTitle;
+                    }
+                    else
+                    {
+                        APIResultBuyCommandErrorString = "";
+                        APIResultBuyCommandResult = "失敗";
+                    }
+                }
+            }
+            else
+            {
+                APIResultBuyCommandErrorString = "通信エラーが起きました。";
+                APIResultBuyCommandResult = "失敗";
+            }
+        }
+
+        // 売り注文コマンド
+        public ICommand SellOrderCommand { get; }
+        public bool SellOrderCommand_CanExecute()
+        {
+            if (PublicApiOnlyMode == true) return false;
+
+            return true;
+
+        }
+        public async void SellOrderCommand_Execute()
+        {
+            if (SellAmount <= 0)
+            {
+                APIResultSellCommandErrorString = "数量が不正です。";
+                APIResultSellCommandResult = "";
+                return;
+            }
+            if (_sellType == OrderTypes.limit)
+            {
+                if (SellPrice <= 0)
+                {
+                    APIResultSellCommandErrorString = "価格が不正です。";
+                    APIResultSellCommandResult = "";
+                    return;
+                }
+            }
+
+            var pair = ActivePair;
+
+            APIResultSellCommandOrderIDString = "";
+            APIResultSellCommandErrorString = "";
+            APIResultSellCommandResult = "";
+
+            string TypeStr;
+            if (_sellType == OrderTypes.limit)
+            {
+                TypeStr = "limit";
+            }
+            else if (_sellType == OrderTypes.market)
+            {
+                TypeStr = "market";
+            }
+            else
+            {
+                return;
+            }
+
+            OrderResult result = await ManualOrder(pair, _sellAmount, _sellPrice, "sell", TypeStr);
+
+            if (result != null)
+            {
+                if (result.IsSuccess == true)
+                {
+                    APIResultSellCommandOrderIDString = result.OrderID.ToString();// こっち先にセット！
+                    APIResultSellCommandErrorString = "";
+                    APIResultSellCommandResult = "成功"; // ここで結果表示
+                }
+                else
+                {
+                    APIResultSellCommandOrderIDString = "";
+
+                    if (result.HasErrorInfo)
+                    {
+                        APIResultSellCommandErrorString = "「"+result.Err.ErrorDescription+"」";
+                        APIResultSellCommandResult = "失敗 - " + result.Err.ErrorTitle;
+                    }
+                    else
+                    {
+                        APIResultSellCommandErrorString = "";
+                        APIResultSellCommandResult = "失敗";
+                    }
+                }
+            }
+            else
+            {
+                APIResultSellCommandErrorString = "通信エラーが起きました。";
+                APIResultSellCommandResult = "失敗";
+            }
+
+
+        }
+
+        // 注文一覧リストビュー内の：注文キャンセルコマンド
+        public ICommand CancelOrderListviewCommand { get; }
+        public bool CancelOrderListviewCommand_CanExecute()
+        {
+            if (PublicApiOnlyMode == true) return false;
+
+            return true;
+        }
+        public async void CancelOrderListviewCommand_Execute(object obj)
+        {
+            var pair = ActivePair;
+
+            if (obj == null) return;
+
+            // 選択注文アイテム保持用
+            Orders ords = new Orders();
+
+            // System.Windows.Controls.SelectedItemCollection をキャストして、ループ
+            System.Collections.IList items = (System.Collections.IList)obj;
+            var collection = items.Cast<Order>();
+
+            foreach (var item in collection)
+            {
+                // アイテム追加
+                ords.OrderList.Add(item as Order);
+            }
+
+            // 選択注文アイテムをループして、キャンセル処理
+            foreach (var item in ords.OrderList)
+            {
+
+                if (item.IsCancelEnabled == false)
+                    continue;
+
+                Order ord = item as Order;
+
+                System.Diagnostics.Debug.WriteLine("CancelOrderListviewCommand_Execute...: " + ord.OrderID.ToString());
+
+                OrderResult result = await CancelOrder(pair, ord.OrderID);
+
+                if (result.HasErrorInfo)
+                {
+                    ord.HasErrorInfo = true;
+                    ord.Err.ErrorTitle = result.Err.ErrorTitle;
+                    ord.Err.ErrorDescription = result.Err.ErrorDescription;
+                    ord.Err.ErrorCode = result.Err.ErrorCode;
+
+                }
+                else
+                {
+                    ord.HasErrorInfo = false;
+                    ord.Err.ErrorTitle = "";
+                    ord.Err.ErrorDescription = result.Err.ErrorDescription = "";
+                    ord.Err.ErrorCode = 0;
+
+                }
+
+            }
+
+
+        }
+
+        // 注文一覧リストビュー内の：済みアイテムの削除コマンド
+        public ICommand RemoveDoneOrderListviewCommand { get; }
+        public bool RemoveDoneOrderListviewCommand_CanExecute()
+        {
+            return true;
+        }
+        public void RemoveDoneOrderListviewCommand_Execute()
+        {
+            var activeOrders = ActivePair.ActiveOrders;
+
+            int c = activeOrders.Count - 1;
+
+            for (int i = c; i >= 0; i--)
+            {
+                if ((activeOrders[i].Status == "FULLY_FILLED") || (activeOrders[i].Status == "CANCELED_UNFILLED") || (activeOrders[i].Status == "CANCELED_PARTIALLY_FILLED"))
+                {
+                    activeOrders.Remove(activeOrders[i]);
+                }
+
+            }
+        }
+
+        // 手動で 取引履歴の取得コマンド
+        public ICommand GetTradeHistoryListCommand { get; }
+        public bool GetTradeHistoryListCommand_CanExecute()
+        {
+            if (PublicApiOnlyMode == true) return false;
+
+            return true;
+        }
+        public void GetTradeHistoryListCommand_Execute()
+        {
+            Task.Run(() => GetTradeHistoryList());
+        }
+
+        // 手動で 資産の取得コマンド
+        public ICommand GetAssetsCommand { get; }
+        public bool GetAssetsCommand_CanExecute()
+        {
+            if (PublicApiOnlyMode == true) return false;
+
+            return true;
+        }
+        public void GetAssetsCommand_Execute()
+        {
+            Task.Run(() => GetAssets());
+        }
+
+        // 手動で 注文一覧の取得コマンド
+        public ICommand GetOrderListCommand { get; }
+        public bool GetOrderListCommand_CanExecute()
+        {
+            if (PublicApiOnlyMode == true) return false;
+
+            return true;
+        }
+        public void GetOrderListCommand_Execute()
+        {
+            Task.Run(() => GetOrderList());
+        }
 
         #endregion
+
+        #endregion
+
 
     }
 

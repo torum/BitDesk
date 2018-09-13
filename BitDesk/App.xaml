@@ -108,6 +108,14 @@
                             <Trigger Property="IsMouseOver" Value="true">
                                 <Setter Property="Background" Value="White" />
                             </Trigger>
+                            <!--
+                            <Trigger Property="Text" Value="0">
+                                <Setter Property="Text" Value="" />
+                            </Trigger>
+                            -->
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Text" Value="" />
+                            </Trigger>
                         </Style.Triggers>
                     </Style>
 
@@ -371,7 +379,6 @@
                         <Setter Property="BorderBrush" Value="{StaticResource RadioButton.Static.UncheckedBorder}"/>
                         <Setter Property="Foreground" Value="{StaticResource ControlForegroundColorBrush}"/>
                         <Setter Property="BorderThickness" Value="0"/>
-                        <Setter Property="Width" Value="48"/>
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type RadioButton}">
@@ -907,7 +914,7 @@
                                 <Setter Property="BorderThickness" Value="0,0,0,0.1" />
                             </Trigger>
                             <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="Background" Value="{StaticResource AccentCoolDarkColor}" />
+                                <Setter Property="Background" Value="{StaticResource AccentCoolDarkColorBrush}" />
                                 <Setter Property="Foreground" Value="White" />
                                 <Setter Property="TextElement.FontWeight" Value="Bold"/>
                                 <Setter Property="BorderBrush" Value="WhiteSmoke" />
@@ -2305,7 +2312,7 @@
                                             <Setter TargetName="HeaderBorder" Property="BorderThickness" Value="0 0 0 1" />
 
                                             <Setter Property="Background" Value="{DynamicResource ControlMediumColorBrush}" />
-                                            <Setter Property="Foreground" Value="{DynamicResource ControlDarkColor}" />
+                                            <Setter Property="Foreground" Value="{DynamicResource ControlDarkColorBrush}" />
                                         </MultiTrigger>
 
                                         <MultiTrigger>
