@@ -4,17 +4,15 @@
 ## ビットバンク向け仮想通貨トレーディングアプリ 
 #### - Cryptocurrency trading app made for Bitbank.cc
 
-マイクロソフトストアで公開しようとしたら、「Microsft Store App Policies: 10.8.3 Collection of Banking and Financial Information - Apps that collect financial data must be Business account type」という事で、「ファインシャル情報を取得するアプリは法人（ビジネスアカウント）でないとなりません」とあえなく却下。ビットバンクさん、公式アプリとして採用してくれませんか？^^
-
 ![alt text](https://github.com/torum/BitDesk/blob/master/docs/Images/BitDesk-screenshot.png?raw=true)
 
-![alt text](https://github.com/torum/BitDesk/blob/master/docs/Images/BitDesk-Wallpaper.jpg?raw=true)
-  
-### 機能：
-- ビットコインの取引
-- その他、アルトコインの取引は開発中です  
+![alt text](https://github.com/torum/BitDesk/blob/master/docs/Images/BitDesk1.gif?raw=true)
 
-取引を行うには、ビットバンクのアカウントが必要です。  
+マイクロソフトストアで公開しようとしたら、「App Policies: 10.8.3 Collection of Banking and Financial Information - Apps that collect financial data must be Business account type」という事で、「ファインシャル情報を取得するアプリは法人でないとなりません」とあえなく却下。ビットバンクさん、公式アプリとして採用してくれませんか？^^
+
+### 機能：
+- ビットコイン/円、リップル/円、ライトコイン/ビットコイン、イーサリアム/ビットコイン、モナーコイン/円、ビットコインキャッシュ/円の通貨ペアで取引が出来ます。
+  *取引を行うには、ビットバンクのアカウントが必要です。  
   
 ### 必要構成：
 - Windows 10
