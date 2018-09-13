@@ -961,6 +961,7 @@
                                               Height="16"
                                             Stroke="Transparent"
                                             StrokeThickness="1"
+                                  Margin="4 0 0 0"
                                               RenderTransformOrigin="0.5,0.5">
                                 <Path.RenderTransform>
                                     <TransformGroup>
@@ -1716,7 +1717,12 @@
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type Thumb}">
-                                    <Border CornerRadius="0" Background="{DynamicResource ScrollBarColorBrush}" BorderBrush="{DynamicResource ScrollBarBorderBrush}" BorderThickness="1" />
+                                    <Border x:Name="CustamThumb" CornerRadius="0" Background="{DynamicResource ScrollBarColorBrush}" BorderBrush="{DynamicResource ScrollBarBorderBrush}" BorderThickness="1" Margin="2"/>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="CustamThumb" Property="Background" Value="{DynamicResource ControlDarkColorBrush}"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
                                 </ControlTemplate>
                             </Setter.Value>
                         </Setter>
@@ -1752,7 +1758,7 @@
                                                         <RepeatButton Style="{StaticResource ScrollBarTrackStyle}"  Command="ScrollBar.PageUpCommand" />
                                                     </Track.DecreaseRepeatButton>
                                                     <Track.Thumb>
-                                                        <Thumb Style="{StaticResource ScrollBarThumbStyle}"  Margin="0,1,0,1"/>
+                                                        <Thumb Style="{StaticResource ScrollBarThumbStyle}" Margin="0,1,0,1"/>
                                                     </Track.Thumb>
                                                     <Track.IncreaseRepeatButton>
                                                         <RepeatButton Style="{StaticResource ScrollBarTrackStyle}" Command="ScrollBar.PageDownCommand" />
@@ -2312,7 +2318,7 @@
                                             <Setter TargetName="HeaderBorder" Property="BorderThickness" Value="0 0 0 1" />
 
                                             <Setter Property="Background" Value="{DynamicResource ControlMediumColorBrush}" />
-                                            <Setter Property="Foreground" Value="{DynamicResource ControlDarkColorBrush}" />
+                                            <Setter Property="Foreground" Value="{DynamicResource BoardBackgroundColorBrush}" />
                                         </MultiTrigger>
 
                                         <MultiTrigger>

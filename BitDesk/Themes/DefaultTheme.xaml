@@ -59,7 +59,7 @@
     <!-- ボーダーの色 #66ffffff -->
     <SolidColorBrush x:Key="ScrollBarBorderBrush" Color="Transparent" />
     <!-- トラック（レーン）の色 #33ffffff -->
-    <SolidColorBrush x:Key="ScrollBarTrackBrush" Color="Transparent" />
+    <SolidColorBrush x:Key="ScrollBarTrackBrush" Color="{DynamicResource WindowBackgroundColor}" />
     <!-- 三角の色 -->
     <SolidColorBrush x:Key="ScrollBarHilightBrush" Color="#ccffffff" />
     <!-- ボタンを押した時の色 #99ffffff -->

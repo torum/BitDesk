@@ -843,7 +843,7 @@
                             </Grid.ColumnDefinitions>
 
                             <!-- 最新取引価格 -->
-                            <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource BoardStyle}" Height="125" Margin="3 0 0 6" Width="360" HorizontalAlignment="Left" BorderThickness="0">
+                            <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource BoardStyle}" Height="128" Margin="3 0 0 3" Width="360" HorizontalAlignment="Left" BorderThickness="0">
                                 <StackPanel>
 
                                     <Border BorderBrush="DimGray" BorderThickness="0 0 0 0.5" Margin="3" Padding="3" >
@@ -942,7 +942,7 @@
                             </Border>
 
                             <!-- アラーム設定 -->
-                            <Border Grid.Row="1" Grid.Column="0" Style="{StaticResource BoardStyle}" Height="86" Margin="3 0 0 6" Width="360" HorizontalAlignment="Left" BorderThickness="0">
+                            <Border Grid.Row="1" Grid.Column="0" Style="{StaticResource BoardStyle}" Height="89" Margin="3 0 0 3" Width="360" HorizontalAlignment="Left" BorderThickness="0">
                                 <StackPanel>
 
                                     <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" BorderBrush="DimGray" BorderThickness="0 0 0 0.5" Margin="3" Padding="3">
@@ -1019,7 +1019,7 @@
                             </Border>
 
                             <!-- 保有資産 API キー設定画面 -->
-                            <Border Grid.Row="2" Grid.Column="0" Style="{StaticResource BoardStyle}" Height="99" Margin="3 0 0 6" Width="360" HorizontalAlignment="Left" Visibility="{Binding ShowAssetApiSet, Converter={StaticResource BoolToVisibilityCollapsedConverter}}" BorderThickness="0">
+                            <Border Grid.Row="2" Grid.Column="0" Style="{StaticResource BoardStyle}" Height="102" Margin="3 0 0 3" Width="360" HorizontalAlignment="Left" Visibility="{Binding ShowAssetApiSet, Converter={StaticResource BoolToVisibilityCollapsedConverter}}" BorderThickness="0">
                                 <StackPanel>
                                     <Border BorderBrush="DimGray" BorderThickness="0 0 0 0.5" Margin="3" Padding="3">
                                         <Label Padding="0" Content="保有資産情報の取得用APIキー設定" Style="{StaticResource SectionTitle}"/>
@@ -1079,7 +1079,7 @@
                                 </StackPanel>
                             </Border>
                             <!-- 保有資産 未ログイン画面 -->
-                            <Border Grid.Row="2" Grid.Column="0" Style="{StaticResource BoardStyle}" Height="99" Margin="3 0 0 6" Width="360" HorizontalAlignment="Left" Visibility="{Binding PublicApiOnlyMode, Converter={StaticResource BoolToVisibilityCollapsedConverter}}" BorderThickness="0">
+                            <Border Grid.Row="2" Grid.Column="0" Style="{StaticResource BoardStyle}" Height="102" Margin="3 0 0 3" Width="360" HorizontalAlignment="Left" Visibility="{Binding PublicApiOnlyMode, Converter={StaticResource BoolToVisibilityCollapsedConverter}}" BorderThickness="0">
                                 <StackPanel>
                                     <Border BorderBrush="DimGray" BorderThickness="0 0 0 0.5" Margin="3" Padding="3">
                                         <Label Padding="0" Content="保有資産" Style="{StaticResource SectionTitle}"/>
@@ -1093,7 +1093,7 @@
                                 </StackPanel>
                             </Border>
                             <!-- 保有資産 -->
-                            <Border Grid.Row="2" Grid.Column="0" Style="{StaticResource BoardStyle}" Height="99" Margin="3 0 0 6" Width="360" HorizontalAlignment="Left" Visibility="{Binding ShowAsset, Converter={StaticResource BoolToVisibilityCollapsedConverter}}" BorderThickness="0">
+                            <Border Grid.Row="2" Grid.Column="0" Style="{StaticResource BoardStyle}" Height="102" Margin="3 0 0 3" Width="360" HorizontalAlignment="Left" Visibility="{Binding ShowAsset, Converter={StaticResource BoolToVisibilityCollapsedConverter}}" BorderThickness="0">
 
                                 <StackPanel>
                                     <Border Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" BorderBrush="DimGray" BorderThickness="0 0 0 0.5" Margin="3" Padding="3">
@@ -1270,10 +1270,10 @@
                                 </StackPanel>
                             </Border>
 
-                            <!-- 統計情報 -->
-                            <Border Grid.Row="3" Grid.Column="0" Style="{StaticResource BoardStyle}" Height="86" Margin="3 0 0 6" Width="360" HorizontalAlignment="Left" BorderThickness="0">
+                            <!-- 統計情報 --> <!-- Height="89" -->
+                            <Border Grid.Row="3" Grid.Column="0" Style="{StaticResource BoardStyle}" Height="89" Margin="3 0 0 3" Width="360" HorizontalAlignment="Left" BorderThickness="0">
                                 <StackPanel>
-                                    <Border Grid.ColumnSpan="2" BorderBrush="DimGray" BorderThickness="0 0 0 0.5" Margin="3" Padding="3">
+                                    <Border BorderBrush="DimGray" BorderThickness="0 0 0 0.5" Margin="3" Padding="3">
                                         <Label Padding="0" Content="統計" Style="{StaticResource SectionTitle}"/>
                                     </Border>
                                     <Grid Margin="6">
