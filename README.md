@@ -1,10 +1,9 @@
 # BitDesk
 ## 仮想通貨取引のデスクトップアプリ  
 
-![alt text](https://github.com/torum/BitDesk/blob/master/docs/Images/BitDesk1.gif?raw=true)
-
 ![alt text](https://github.com/torum/BitDesk/blob/master/docs/Images/BitDesk-screenshot.png?raw=true)
 
+![alt text](https://github.com/torum/BitDesk/blob/master/docs/Images/BitDesk1.gif?raw=true)
 
 マイクロソフトストアで公開しようとしたら、「App Policies: 10.8.3 Collection of Banking and Financial Information - Apps that collect financial data must be Business account type」という事で、「ファインシャル情報を取得するアプリは法人でないとなりません」とあえなく却下。ビットバンクさん、公式アプリとして採用してくれませんか？^^
 
