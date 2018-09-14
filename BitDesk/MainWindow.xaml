@@ -843,7 +843,7 @@
                             </Grid.ColumnDefinitions>
 
                             <!-- 最新取引価格 -->
-                            <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource BoardStyle}" Height="128" Margin="3 0 0 3" Width="360" HorizontalAlignment="Left" BorderThickness="0">
+                            <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource BoardStyle}" Height="127" Margin="3 1 0 3" Width="360" HorizontalAlignment="Left" BorderThickness="0">
                                 <StackPanel>
 
                                     <Border BorderBrush="DimGray" BorderThickness="0 0 0 0.5" Margin="3" Padding="3" >
@@ -942,7 +942,7 @@
                             </Border>
 
                             <!-- アラーム設定 -->
-                            <Border Grid.Row="1" Grid.Column="0" Style="{StaticResource BoardStyle}" Height="89" Margin="3 0 0 3" Width="360" HorizontalAlignment="Left" BorderThickness="0">
+                            <Border Grid.Row="1" Grid.Column="0" Style="{StaticResource BoardStyle}" Height="88" Margin="3 1 0 3" Width="360" HorizontalAlignment="Left" BorderThickness="0">
                                 <StackPanel>
 
                                     <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" BorderBrush="DimGray" BorderThickness="0 0 0 0.5" Margin="3" Padding="3">
@@ -1019,7 +1019,7 @@
                             </Border>
 
                             <!-- 保有資産 API キー設定画面 -->
-                            <Border Grid.Row="2" Grid.Column="0" Style="{StaticResource BoardStyle}" Height="102" Margin="3 0 0 3" Width="360" HorizontalAlignment="Left" Visibility="{Binding ShowAssetApiSet, Converter={StaticResource BoolToVisibilityCollapsedConverter}}" BorderThickness="0">
+                            <Border Grid.Row="2" Grid.Column="0" Style="{StaticResource BoardStyle}" Height="101" Margin="3 1 0 3" Width="360" HorizontalAlignment="Left" Visibility="{Binding ShowAssetApiSet, Converter={StaticResource BoolToVisibilityCollapsedConverter}}" BorderThickness="0">
                                 <StackPanel>
                                     <Border BorderBrush="DimGray" BorderThickness="0 0 0 0.5" Margin="3" Padding="3">
                                         <Label Padding="0" Content="保有資産情報の取得用APIキー設定" Style="{StaticResource SectionTitle}"/>
@@ -1079,7 +1079,7 @@
                                 </StackPanel>
                             </Border>
                             <!-- 保有資産 未ログイン画面 -->
-                            <Border Grid.Row="2" Grid.Column="0" Style="{StaticResource BoardStyle}" Height="102" Margin="3 0 0 3" Width="360" HorizontalAlignment="Left" Visibility="{Binding PublicApiOnlyMode, Converter={StaticResource BoolToVisibilityCollapsedConverter}}" BorderThickness="0">
+                            <Border Grid.Row="2" Grid.Column="0" Style="{StaticResource BoardStyle}" Height="101" Margin="3 1 0 3" Width="360" HorizontalAlignment="Left" Visibility="{Binding PublicApiOnlyMode, Converter={StaticResource BoolToVisibilityCollapsedConverter}}" BorderThickness="0">
                                 <StackPanel>
                                     <Border BorderBrush="DimGray" BorderThickness="0 0 0 0.5" Margin="3" Padding="3">
                                         <Label Padding="0" Content="保有資産" Style="{StaticResource SectionTitle}"/>
@@ -1093,7 +1093,7 @@
                                 </StackPanel>
                             </Border>
                             <!-- 保有資産 -->
-                            <Border Grid.Row="2" Grid.Column="0" Style="{StaticResource BoardStyle}" Height="102" Margin="3 0 0 3" Width="360" HorizontalAlignment="Left" Visibility="{Binding ShowAsset, Converter={StaticResource BoolToVisibilityCollapsedConverter}}" BorderThickness="0">
+                            <Border Grid.Row="2" Grid.Column="0" Style="{StaticResource BoardStyle}" Height="101" Margin="3 1 0 3" Width="360" HorizontalAlignment="Left" Visibility="{Binding ShowAsset, Converter={StaticResource BoolToVisibilityCollapsedConverter}}" BorderThickness="0">
 
                                 <StackPanel>
                                     <Border Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" BorderBrush="DimGray" BorderThickness="0 0 0 0.5" Margin="3" Padding="3">
@@ -1138,7 +1138,7 @@
                                         </StackPanel>
 
                                         <!-- JPY -->
-                                        <Label Grid.Row="1" Grid.Column="0" Padding="6 0 3 3" Content="JPY：" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}" Visibility="{Binding IsJpyAssetVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}"/>
+                                        <Label Grid.Row="1" Grid.Column="0" Padding="6 1 3 4" Content="JPY：" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}" Visibility="{Binding IsJpyAssetVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}"/>
 
                                         <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Margin="3 0 3 3" VerticalAlignment="Bottom" HorizontalAlignment="Right" Visibility="{Binding IsJpyAssetVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
                                             <TextBlock Margin="0" Padding="0" Text="{Binding AssetJPYFreeAmount, Mode=OneWay, StringFormat={}{0:n4}}" VerticalAlignment="Bottom" Style="{DynamicResource DefaultTextBlockStyle}"/>
@@ -1152,7 +1152,7 @@
                                         </StackPanel>
 
                                         <!-- BTC/Jpy -->
-                                        <Label Grid.Row="2" Grid.Column="0" Padding="6 0 3 3" Content="BTC：" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}" Visibility="{Binding IsBtcJpyAssetVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}"/>
+                                        <Label Grid.Row="2" Grid.Column="0" Padding="6 1 3 4" Content="BTC：" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}" Visibility="{Binding IsBtcJpyAssetVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}"/>
 
                                         <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Margin="3 0 3 3" VerticalAlignment="Bottom" HorizontalAlignment="Right" Visibility="{Binding IsBtcJpyAssetVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
 
@@ -1171,7 +1171,7 @@
                                         </StackPanel>
 
                                         <!-- Xrp/Jpy -->
-                                        <Label Grid.Row="2" Grid.Column="0" Padding="6 0 3 0" Content="XRP：" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}" Visibility="{Binding IsXrpJpyAssetVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}"/>
+                                        <Label Grid.Row="2" Grid.Column="0" Padding="6 1 3 0" Content="XRP：" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}" Visibility="{Binding IsXrpJpyAssetVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}"/>
 
                                         <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Margin="3 0 3 0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Visibility="{Binding IsXrpJpyAssetVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
 
@@ -1190,7 +1190,7 @@
                                         </StackPanel>
 
                                         <!-- Mona/Jpy -->
-                                        <Label Grid.Row="2" Grid.Column="0" Padding="6 0 3 0" Content="Mona：" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}" Visibility="{Binding IsMonaJpyAssetVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}"/>
+                                        <Label Grid.Row="2" Grid.Column="0" Padding="6 1 3 0" Content="Mona：" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}" Visibility="{Binding IsMonaJpyAssetVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}"/>
 
                                         <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Margin="3 0 3 0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Visibility="{Binding IsMonaJpyAssetVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
 
@@ -1209,7 +1209,7 @@
                                         </StackPanel>
 
                                         <!-- Bch/Jpy -->
-                                        <Label Grid.Row="2" Grid.Column="0" Padding="6 0 3 0" Content="BCH：" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}" Visibility="{Binding IsBchJpyAssetVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}"/>
+                                        <Label Grid.Row="2" Grid.Column="0" Padding="6 1 3 0" Content="BCH：" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}" Visibility="{Binding IsBchJpyAssetVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}"/>
 
                                         <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Margin="3 0 3 0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Visibility="{Binding IsBchJpyAssetVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
 
@@ -1228,7 +1228,7 @@
                                         </StackPanel>
 
                                         <!-- Eth/Btc -->
-                                        <Label Grid.Row="3" Grid.Column="0" Padding="6 0 3 0" Content="ETH：" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}" Visibility="{Binding IsEthBtcAssetVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}"/>
+                                        <Label Grid.Row="3" Grid.Column="0" Padding="6 1 3 0" Content="ETH：" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}" Visibility="{Binding IsEthBtcAssetVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}"/>
 
                                         <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" Margin="3 0 3 0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Visibility="{Binding IsEthBtcAssetVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
 
@@ -1247,7 +1247,7 @@
                                         </StackPanel>
 
                                         <!-- Ltc/Btc -->
-                                        <Label Grid.Row="3" Grid.Column="0" Padding="6 0 3 0" Content="LTC：" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}" Visibility="{Binding IsLtcBtcAssetVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}"/>
+                                        <Label Grid.Row="3" Grid.Column="0" Padding="6 1 3 0" Content="LTC：" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}" Visibility="{Binding IsLtcBtcAssetVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}"/>
 
                                         <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" Margin="3 0 3 0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Visibility="{Binding IsLtcBtcAssetVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
 
@@ -1271,7 +1271,7 @@
                             </Border>
 
                             <!-- 統計情報 --> <!-- Height="89" -->
-                            <Border Grid.Row="3" Grid.Column="0" Style="{StaticResource BoardStyle}" Height="89" Margin="3 0 0 3" Width="360" HorizontalAlignment="Left" BorderThickness="0">
+                            <Border Grid.Row="3" Grid.Column="0" Style="{StaticResource BoardStyle}" Height="88" Margin="3 1 0 3" Width="360" HorizontalAlignment="Left" BorderThickness="0">
                                 <StackPanel>
                                     <Border BorderBrush="DimGray" BorderThickness="0 0 0 0.5" Margin="3" Padding="3">
                                         <Label Padding="0" Content="統計" Style="{StaticResource SectionTitle}"/>
@@ -1584,13 +1584,13 @@
 
                                                                     <StackPanel Margin="6 3 3 0">
 
-                                                                        <StackPanel Orientation="Horizontal" Margin="0 0 0 3" VerticalAlignment="Bottom">
+                                                                        <StackPanel Orientation="Horizontal" Margin="0 6 0 3" VerticalAlignment="Bottom">
                                                                             <Label Margin="0 0 0 0" Content="数量：" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                             <TextBox x:Name="buyAmountTextbox" Width="100" Text="{Binding BuyAmount}" GotFocus="Textbox_GotFocus" Style="{DynamicResource DefaultTextBoxStyle}"/>
                                                                             <Label Content="{Binding CurrentCoinString, Mode=OneWay}" Margin="3 0 0 0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                         </StackPanel>
 
-                                                                        <StackPanel Orientation="Horizontal" Margin="0 0 0 3" VerticalAlignment="Bottom">
+                                                                        <StackPanel Orientation="Horizontal" Margin="0 3 0 3" VerticalAlignment="Bottom">
                                                                             <Label Margin="0 0 0 0" Content="価格：" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                             <TextBox x:Name="buyPriceTextbox" Width="100" Text="{Binding BuyPrice}" GotFocus="Textbox_GotFocus" IsEnabled="{Binding IsChecked, ElementName=buyLimitRadioButton}" Style="{DynamicResource DefaultTextBoxStyle}"/>
                                                                             <Label Margin="3 0 12 0" Content="{Binding CurrentPairUnitString,Mode=OneWay}" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
@@ -1644,13 +1644,13 @@
 
                                                                     <StackPanel Margin="6 3 3 0">
 
-                                                                        <StackPanel Orientation="Horizontal" Margin="0 0 0 3" VerticalAlignment="Bottom">
+                                                                        <StackPanel Orientation="Horizontal" Margin="0 6 0 3" VerticalAlignment="Bottom">
                                                                             <Label Margin="0 0 0 0" Content="数量：" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                             <TextBox x:Name="sellAmountTextbox" Width="100" Text="{Binding SellAmount}" GotFocus="Textbox_GotFocus" Style="{DynamicResource DefaultTextBoxStyle}"/>
                                                                             <Label Content="{Binding CurrentCoinString, Mode=OneWay}" Margin="3 0 0 0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                         </StackPanel>
 
-                                                                        <StackPanel Orientation="Horizontal" Margin="0 0 0 3" VerticalAlignment="Bottom">
+                                                                        <StackPanel Orientation="Horizontal" Margin="0 3 0 3" VerticalAlignment="Bottom">
                                                                             <Label Margin="0 0 0 0" Content="価格：" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                             <TextBox x:Name="sellPriceTextbox" Width="100" Text="{Binding SellPrice}" IsEnabled="{Binding IsChecked, ElementName=sellLimitRadioButton}" GotFocus="Textbox_GotFocus" Style="{DynamicResource DefaultTextBoxStyle}"/>
                                                                             <Label Margin="3 0 12 0" Content="{Binding CurrentPairUnitString,Mode=OneWay}" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
@@ -3433,6 +3433,10 @@
                                                                 <Setter TargetName="OcoOneSide" Property="TextBlock.Foreground" Value="{StaticResource PriceDownColorBrush}"/>
                                                             </DataTrigger>
 
+                                                            <DataTrigger Binding="{Binding OcoOneOrderID}" Value="0">
+                                                                <Setter TargetName="OcoOneSide" Property="TextBlock.Foreground" Value="Gray"/>
+                                                            </DataTrigger>
+
                                                         </DataTemplate.Triggers>
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
@@ -3462,6 +3466,10 @@
                                                                 <Setter TargetName="IfdoneType" Property="TextBlock.Foreground" Value="Gray"/>
                                                             </DataTrigger>
                                                             <DataTrigger Binding="{Binding OcoOneIsDone}" Value="true">
+                                                                <Setter TargetName="OcoOneType" Property="TextBlock.Foreground" Value="Gray"/>
+                                                            </DataTrigger>
+
+                                                            <DataTrigger Binding="{Binding OcoOneOrderID}" Value="0">
                                                                 <Setter TargetName="OcoOneType" Property="TextBlock.Foreground" Value="Gray"/>
                                                             </DataTrigger>
                                                         </DataTemplate.Triggers>
@@ -3495,6 +3503,9 @@
                                                             <DataTrigger Binding="{Binding OcoOneIsDone}" Value="true">
                                                                 <Setter TargetName="OcoOneStartAmount" Property="TextBlock.Foreground" Value="Gray"/>
                                                             </DataTrigger>
+                                                            <DataTrigger Binding="{Binding OcoOneOrderID}" Value="0">
+                                                                <Setter TargetName="OcoOneStartAmount" Property="TextBlock.Foreground" Value="Gray"/>
+                                                            </DataTrigger>
                                                         </DataTemplate.Triggers>
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
@@ -3508,7 +3519,7 @@
                                                             <TextBlock x:Name="IfdoneTriggerPrice" Text="{Binding IfdoneTriggerPrice, Mode=OneWay, StringFormat=0.#############################}" Padding="3" />
                                                             -->
                                                             <TextBlock x:Name="IfdoneTriggerPrice" Text=""/>
-                                                            <TextBlock x:Name="OcoOneTriggerPrice" Text="{Binding OcoOneTriggerPrice, Mode=OneWay, StringFormat=0.#############################}" Padding="3" />
+                                                            <TextBlock x:Name="OcoOneTriggerPrice" Text="{Binding OcoOneTriggerPriceString, Mode=OneWay}" Padding="3" />
                                                         </StackPanel>
                                                         <DataTemplate.Triggers>
                                                             <DataTrigger Binding="{Binding KindString}" Value="IFD">
@@ -3528,6 +3539,13 @@
                                                                 <Setter TargetName="IfdoneTriggerPrice" Property="TextBlock.Foreground" Value="Gray"/>
                                                             </DataTrigger>
                                                             <DataTrigger Binding="{Binding OcoOneIsDone}" Value="true">
+                                                                <Setter TargetName="OcoOneTriggerPrice" Property="TextBlock.Foreground" Value="Gray"/>
+                                                            </DataTrigger>
+
+                                                            <DataTrigger Binding="{Binding OcoOneOrderID}" Value="0">
+                                                                <Setter TargetName="OcoOneTriggerPrice" Property="TextBlock.Foreground" Value="Gray"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding OcoOneOrderID}" Value="0">
                                                                 <Setter TargetName="OcoOneTriggerPrice" Property="TextBlock.Foreground" Value="Gray"/>
                                                             </DataTrigger>
                                                         </DataTemplate.Triggers>
@@ -3561,6 +3579,9 @@
                                                             <DataTrigger Binding="{Binding OcoOneIsDone}" Value="true">
                                                                 <Setter TargetName="OcoOnePrice" Property="TextBlock.Foreground" Value="Gray"/>
                                                             </DataTrigger>
+                                                            <DataTrigger Binding="{Binding OcoOneOrderID}" Value="0">
+                                                                <Setter TargetName="OcoOnePrice" Property="TextBlock.Foreground" Value="Gray"/>
+                                                            </DataTrigger>
                                                         </DataTemplate.Triggers>
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
@@ -3590,6 +3611,9 @@
                                                                 <Setter TargetName="IfdoneAveragePrice" Property="TextBlock.Foreground" Value="Gray"/>
                                                             </DataTrigger>
                                                             <DataTrigger Binding="{Binding OcoOneIsDone}" Value="true">
+                                                                <Setter TargetName="OcoOneAveragePrice" Property="TextBlock.Foreground" Value="Gray"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding OcoOneOrderID}" Value="0">
                                                                 <Setter TargetName="OcoOneAveragePrice" Property="TextBlock.Foreground" Value="Gray"/>
                                                             </DataTrigger>
                                                         </DataTemplate.Triggers>
@@ -3623,6 +3647,9 @@
                                                             <DataTrigger Binding="{Binding OcoOneIsDone}" Value="true">
                                                                 <Setter TargetName="OcoOneRemainingAmount" Property="TextBlock.Foreground" Value="Gray"/>
                                                             </DataTrigger>
+                                                            <DataTrigger Binding="{Binding OcoOneOrderID}" Value="0">
+                                                                <Setter TargetName="OcoOneRemainingAmount" Property="TextBlock.Foreground" Value="Gray"/>
+                                                            </DataTrigger>
                                                         </DataTemplate.Triggers>
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
@@ -3652,6 +3679,9 @@
                                                                 <Setter TargetName="IfdoneStatus" Property="TextBlock.Foreground" Value="Gray"/>
                                                             </DataTrigger>
                                                             <DataTrigger Binding="{Binding OcoOneIsDone}" Value="true">
+                                                                <Setter TargetName="OcoOneStatus" Property="TextBlock.Foreground" Value="Gray"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding OcoOneOrderID}" Value="0">
                                                                 <Setter TargetName="OcoOneStatus" Property="TextBlock.Foreground" Value="Gray"/>
                                                             </DataTrigger>
                                                         </DataTemplate.Triggers>
@@ -3782,6 +3812,9 @@
                                                             <DataTrigger Binding="{Binding IfdDoOrderID}" Value="0">
                                                                 <Setter TargetName="IfdDoSide" Property="TextBlock.Foreground" Value="Gray"/>
                                                             </DataTrigger>
+                                                            <DataTrigger Binding="{Binding OcoOtherOrderID}" Value="0">
+                                                                <Setter TargetName="OcoOtherSide" Property="TextBlock.Foreground" Value="Gray"/>
+                                                            </DataTrigger>
 
                                                         </DataTemplate.Triggers>
                                                     </DataTemplate>
@@ -3818,7 +3851,9 @@
                                                             <DataTrigger Binding="{Binding IfdDoOrderID}" Value="0">
                                                                 <Setter TargetName="IfdDoTypeString" Property="TextBlock.Foreground" Value="Gray"/>
                                                             </DataTrigger>
-
+                                                            <DataTrigger Binding="{Binding OcoOtherOrderID}" Value="0">
+                                                                <Setter TargetName="OcoOtherTypeString" Property="TextBlock.Foreground" Value="Gray"/>
+                                                            </DataTrigger>
                                                         </DataTemplate.Triggers>
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
@@ -3855,6 +3890,9 @@
                                                                 <Setter TargetName="IfdDoStartAmount" Property="TextBlock.Foreground" Value="Gray"/>
                                                             </DataTrigger>
 
+                                                            <DataTrigger Binding="{Binding OcoOtherOrderID}" Value="0">
+                                                                <Setter TargetName="OcoOtherStartAmount" Property="TextBlock.Foreground" Value="Gray"/>
+                                                            </DataTrigger>
                                                         </DataTemplate.Triggers>
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
@@ -3864,8 +3902,8 @@
                                                 <GridViewColumn.CellTemplate>
                                                     <DataTemplate>
                                                         <StackPanel>
-                                                            <TextBlock x:Name="IfdDoTriggerPrice" Text="{Binding IfdDoTriggerPrice, Mode=OneWay, StringFormat=0.#############################}" Padding="3" />
-                                                            <TextBlock x:Name="OcoOtherTriggerPrice" Text="{Binding OcoOtherTriggerPrice, Mode=OneWay, StringFormat=0.#############################}" Padding="3" />
+                                                            <TextBlock x:Name="IfdDoTriggerPrice" Text="{Binding IfdDoTriggerPriceString, Mode=OneWay}" Padding="3" />
+                                                            <TextBlock x:Name="OcoOtherTriggerPrice" Text="{Binding OcoOtherTriggerPriceString, Mode=OneWay}" Padding="3" />
                                                         </StackPanel>
                                                         <DataTemplate.Triggers>
                                                             <DataTrigger Binding="{Binding KindString}" Value="IFD">
@@ -3887,6 +3925,14 @@
                                                             <DataTrigger Binding="{Binding OcoOneIsDone}" Value="true">
                                                                 <Setter TargetName="OcoOtherTriggerPrice" Property="TextBlock.Foreground" Value="Gray"/>
                                                             </DataTrigger>
+
+                                                            <DataTrigger Binding="{Binding IfdDoOrderID}" Value="0">
+                                                                <Setter TargetName="IfdDoTriggerPrice" Property="TextBlock.Foreground" Value="Gray"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding OcoOtherOrderID}" Value="0">
+                                                                <Setter TargetName="OcoOtherTriggerPrice" Property="TextBlock.Foreground" Value="Gray"/>
+                                                            </DataTrigger>
+
                                                         </DataTemplate.Triggers>
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
@@ -3922,7 +3968,9 @@
                                                             <DataTrigger Binding="{Binding IfdDoOrderID}" Value="0">
                                                                 <Setter TargetName="IfdDoPrice" Property="TextBlock.Foreground" Value="Gray"/>
                                                             </DataTrigger>
-
+                                                            <DataTrigger Binding="{Binding OcoOtherOrderID}" Value="0">
+                                                                <Setter TargetName="OcoOtherPrice" Property="TextBlock.Foreground" Value="Gray"/>
+                                                            </DataTrigger>
                                                         </DataTemplate.Triggers>
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
@@ -3958,7 +4006,9 @@
                                                             <DataTrigger Binding="{Binding IfdDoOrderID}" Value="0">
                                                                 <Setter TargetName="IfdDoAveragePrice" Property="TextBlock.Foreground" Value="Gray"/>
                                                             </DataTrigger>
-
+                                                            <DataTrigger Binding="{Binding OcoOtherOrderID}" Value="0">
+                                                                <Setter TargetName="OcoOtherAveragePrice" Property="TextBlock.Foreground" Value="Gray"/>
+                                                            </DataTrigger>
                                                         </DataTemplate.Triggers>
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
@@ -3994,7 +4044,9 @@
                                                             <DataTrigger Binding="{Binding IfdDoOrderID}" Value="0">
                                                                 <Setter TargetName="IfdDoRemainingAmount" Property="TextBlock.Foreground" Value="Gray"/>
                                                             </DataTrigger>
-
+                                                            <DataTrigger Binding="{Binding OcoOtherOrderID}" Value="0">
+                                                                <Setter TargetName="OcoOtherRemainingAmount" Property="TextBlock.Foreground" Value="Gray"/>
+                                                            </DataTrigger>
                                                         </DataTemplate.Triggers>
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
@@ -4030,7 +4082,9 @@
                                                             <DataTrigger Binding="{Binding IfdDoOrderID}" Value="0">
                                                                 <Setter TargetName="IfdDoStatus" Property="TextBlock.Foreground" Value="Gray"/>
                                                             </DataTrigger>
-
+                                                            <DataTrigger Binding="{Binding OcoOtherOrderID}" Value="0">
+                                                                <Setter TargetName="OcoOtherStatus" Property="TextBlock.Foreground" Value="Gray"/>
+                                                            </DataTrigger>
                                                         </DataTemplate.Triggers>
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>

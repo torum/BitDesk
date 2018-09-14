@@ -1453,6 +1453,7 @@ namespace BitDesk.ViewModels
 
                 _ifdDoTriggerPrice = value;
                 this.NotifyPropertyChanged("IfdDoTriggerPrice");
+                this.NotifyPropertyChanged("IfdDoTriggerPriceString");
             }
         }
         private decimal _ocoOneTriggerPrice;
@@ -1469,6 +1470,7 @@ namespace BitDesk.ViewModels
 
                 _ocoOneTriggerPrice = value;
                 this.NotifyPropertyChanged("OcoOneTriggerPrice");
+                this.NotifyPropertyChanged("OcoOneTriggerPriceString");
             }
         }
         private decimal _ocoOtherTriggerPrice;
@@ -1485,6 +1487,7 @@ namespace BitDesk.ViewModels
 
                 _ocoOtherTriggerPrice = value;
                 this.NotifyPropertyChanged("OcoOtherTriggerPrice");
+                this.NotifyPropertyChanged("OcoOtherTriggerPriceString");
             }
         }
 
@@ -1535,6 +1538,49 @@ namespace BitDesk.ViewModels
 
                 _ocoOtherTriggerUpDown = value;
                 this.NotifyPropertyChanged("OcoOtherTriggerUpDown");
+            }
+        }
+
+        public string IfdDoTriggerPriceString
+        {
+            get
+            {
+                if (IfdDoTriggerUpDown == 0)
+                {
+                    return ">=" + IfdDoTriggerPrice.ToString();
+                }
+                else
+                {
+                    return "<=" + IfdDoTriggerPrice.ToString();
+                }
+            }
+        }
+        public string OcoOneTriggerPriceString
+        {
+            get
+            {
+                if (OcoOneTriggerUpDown == 0)
+                {
+                    return ">=" + OcoOneTriggerPrice.ToString();
+                }
+                else
+                {
+                    return "<=" + OcoOneTriggerPrice.ToString();
+                }
+            }
+        }
+        public string OcoOtherTriggerPriceString
+        {
+            get
+            {
+                if (OcoOtherTriggerUpDown == 0)
+                {
+                    return ">=" + OcoOtherTriggerPrice.ToString();
+                }
+                else
+                {
+                    return "<=" + OcoOtherTriggerPrice.ToString();
+                }
             }
         }
 
@@ -3021,7 +3067,7 @@ namespace BitDesk.ViewModels
         {
             get
             {
-                return false;
+                return true;
             }
         }
 
@@ -4752,7 +4798,7 @@ namespace BitDesk.ViewModels
                 _selectedCandleType = value;
                 this.NotifyPropertyChanged("SelectedCandleType");
 
-                Debug.WriteLine("SelectedCandleType " + _selectedCandleType.ToString());
+                //Debug.WriteLine("SelectedCandleType " + _selectedCandleType.ToString());
 
                 // 
                 if (_selectedCandleType == CandleTypes.OneMin)
@@ -7120,10 +7166,11 @@ namespace BitDesk.ViewModels
 
                 _iFD_DoTriggerPrice = value;
                 this.NotifyPropertyChanged("IFD_DoTriggerPrice");
+                this.NotifyPropertyChanged("IFD_DoTriggerPriceString");
             }
         }
 
-        // トリガー[以上(0)以下(1)] // デフォ(1)
+        // トリガー[以上(0)以下(1)] // デフォ(0)
         private int _iFD_DoTriggerUpDown = 0;
         public int IFD_DoTriggerUpDown
         {
@@ -7138,6 +7185,21 @@ namespace BitDesk.ViewModels
 
                 _iFD_DoTriggerUpDown = value;
                 this.NotifyPropertyChanged("IFD_DoTriggerUpDown");
+            }
+        }
+
+        public string IFD_DoTriggerPriceString
+        {
+            get
+            {
+                if (IFD_DoTriggerUpDown == 0)
+                {
+                    return ">=" + IFD_DoTriggerPrice.ToString();
+                }
+                else
+                {
+                    return "<=" + IFD_DoTriggerPrice.ToString();
+                }
             }
         }
 
@@ -7299,7 +7361,8 @@ namespace BitDesk.ViewModels
 
                 _oCO_OneTriggerPrice = value;
                 this.NotifyPropertyChanged("OCO_OneTriggerPrice");
-            }
+                this.NotifyPropertyChanged("OCO_OneTriggerPriceString");
+                            }
         }
 
         // トリガー[以上(0)以下(1)] // デフォ(0)
@@ -7317,6 +7380,21 @@ namespace BitDesk.ViewModels
 
                 _oCO_OneTriggerUpDown = value;
                 this.NotifyPropertyChanged("OCO_OneTriggerUpDown");
+            }
+        }
+
+        public string OCO_OneTriggerPriceString
+        {
+            get
+            {
+                if (OCO_OneTriggerUpDown == 0)
+                {
+                    return ">=" + OCO_OneTriggerPrice.ToString();
+                }
+                else
+                {
+                    return "<=" + OCO_OneTriggerPrice.ToString();
+                }
             }
         }
 
@@ -7444,6 +7522,7 @@ namespace BitDesk.ViewModels
 
                 _oCO_OtherTriggerPrice = value;
                 this.NotifyPropertyChanged("OCO_OtherTriggerPrice");
+                this.NotifyPropertyChanged("OCO_OtherTriggerPriceString");
             }
         }
 
@@ -7462,6 +7541,21 @@ namespace BitDesk.ViewModels
 
                 _oCO_OtherTriggerUpDown = value;
                 this.NotifyPropertyChanged("OCO_OtherTriggerUpDown");
+            }
+        }
+
+        public string OCO_OtherTriggerPriceString
+        {
+            get
+            {
+                if (OCO_OtherTriggerUpDown == 0)
+                {
+                    return ">=" + OCO_OtherTriggerPrice.ToString();
+                }
+                else
+                {
+                    return "<=" + OCO_OtherTriggerPrice.ToString();
+                }
             }
         }
 
@@ -8209,8 +8303,6 @@ namespace BitDesk.ViewModels
             dispatcherTimerRss.Interval = new TimeSpan(0, 15, 0);
             dispatcherTimerRss.Start();
 
-            // ループ再生開始　
-            StartLoop();
 
             // TODO TEMP
             ActivePairIndex = 0;
@@ -8235,6 +8327,12 @@ namespace BitDesk.ViewModels
 
             ShowAllCharts = false;
             ShowMainContents = true;
+            // -------------
+
+
+
+            // ループ再生開始　
+            StartLoop();
         }
 
         #region == イベント・タイマー系 ==
@@ -10198,6 +10296,12 @@ namespace BitDesk.ViewModels
         // チャート表示 タイマー
         private void ChartTimer(object source, EventArgs e)
         {
+            // 省エネモードならスルー。
+            if (MinMode)
+            {
+                return;
+            }
+
             Debug.WriteLine("ChartTimer");
 
             if (_showAllCharts)
@@ -11736,7 +11840,7 @@ namespace BitDesk.ViewModels
 
                     if (test)
                     {
-                        var newLine = string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19}", ifdoco.Kind.ToString(), ifdoco.IfdoneOrderID.ToString(), ifdoco.IfdDoOrderID.ToString(), ifdoco.IfdDoSide, ifdoco.IfdDoType.ToString(), ifdoco.IfdDoStartAmount.ToString(), ifdoco.IfdDoPrice.ToString(), ifdoco.OcoOneOrderID.ToString(), ifdoco.OcoOneSide, ifdoco.OcoOneType.ToString(), ifdoco.OcoOneStartAmount, ifdoco.OcoOnePrice, ifdoco.OcoOtherOrderID.ToString(), ifdoco.OcoOtherSide, ifdoco.OcoOtherType.ToString(), ifdoco.OcoOtherStartAmount.ToString(), ifdoco.OcoOtherPrice.ToString(), ifdoco.IfdDoTriggerPrice.ToString(), ifdoco.OcoOneTriggerPrice.ToString(), ifdoco.OcoOtherTriggerPrice.ToString());
+                        var newLine = string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20},{21},{22}", ifdoco.Kind.ToString(), ifdoco.IfdoneOrderID.ToString(), ifdoco.IfdDoOrderID.ToString(), ifdoco.IfdDoSide, ifdoco.IfdDoType.ToString(), ifdoco.IfdDoStartAmount.ToString(), ifdoco.IfdDoPrice.ToString(), ifdoco.OcoOneOrderID.ToString(), ifdoco.OcoOneSide, ifdoco.OcoOneType.ToString(), ifdoco.OcoOneStartAmount, ifdoco.OcoOnePrice, ifdoco.OcoOtherOrderID.ToString(), ifdoco.OcoOtherSide, ifdoco.OcoOtherType.ToString(), ifdoco.OcoOtherStartAmount.ToString(), ifdoco.OcoOtherPrice.ToString(), ifdoco.IfdDoTriggerPrice.ToString(), ifdoco.OcoOneTriggerPrice.ToString(), ifdoco.OcoOtherTriggerPrice.ToString(), ifdoco.IfdDoTriggerUpDown.ToString(), ifdoco.OcoOneTriggerUpDown.ToString(), ifdoco.OcoOtherTriggerUpDown.ToString());
                         csv.AppendLine(newLine);
                     }
 
@@ -11871,6 +11975,10 @@ namespace BitDesk.ViewModels
                         asdf.IfdDoTriggerPrice = Decimal.Parse(row[17]);
                         asdf.OcoOneTriggerPrice = Decimal.Parse(row[18]);
                         asdf.OcoOtherTriggerPrice = Decimal.Parse(row[19]);
+
+                        asdf.IfdDoTriggerUpDown = int.Parse(row[20]);
+                        asdf.OcoOneTriggerUpDown = int.Parse(row[21]);
+                        asdf.OcoOtherTriggerUpDown = int.Parse(row[22]);
 
                         // リストへ追加
                         p.Ifdocos.Add(asdf);
@@ -12897,14 +13005,11 @@ namespace BitDesk.ViewModels
             var ifdocos = p.Ifdocos;
             var ltp = p.Ltp;
 
-            await Task.Delay(1600);
-
             // 未約定IDリスト
             List<int> unfilledOrderIDsList = new List<int>();
             // 要発注リスト
             List<Ifdoco> needToOrderList = new List<Ifdoco>();
-            // アクティブな注文数カウンター
-            int actOrd = 0;
+
 
             while (true)
             {
@@ -12927,7 +13032,12 @@ namespace BitDesk.ViewModels
 
                 unfilledOrderIDsList.Clear();
                 needToOrderList.Clear();
-                actOrd = 0;
+                // アクティブな注文数カウンター
+                int actOrd = 0;
+
+                // !
+                ifdocos = p.Ifdocos;
+                ltp = p.Ltp;
 
                 // リストをループして、発注が必要なのを 要発注リストに追加。
                 // 未約定のを未約定IDリストに追加して、後でアップデート。
@@ -12942,130 +13052,103 @@ namespace BitDesk.ViewModels
                         {
                             if (ifdoco.IfdIsDone == false)
                             {
-                                //if (ifdoco.IfdoneIsDone == false)
-                                //{
-
-                                if (ifdoco.IfdoneStatus == "FULLY_FILLED")
+                                if (ifdoco.IfdoneIsDone == false)
                                 {
-                                    // 約定！  Ifd done.
-
-                                    // 済みフラグをセット
-                                    ifdoco.IfdoneIsDone = true;
-
-
-                                }
-                                else if (ifdoco.IfdoneStatus == "CANCELED_UNFILLED" || ifdoco.IfdoneStatus == "CANCELED_PARTIALLY_FILLED")
-                                {
-                                    // キャンセル済み
-
-                                    // ステータス情報等、更新。???
-                                    // TODO
-
-                                    // 済みフラグをセット(これいる？)
-
-                                    ifdoco.IfdDoIsDone = true; // ifdDoを発注させないように、キャンセルする。
-
-                                    ifdoco.IfdoneIsDone = true;
-
-                                }
-                                else
-                                {
-                                    // まだ未約定
-
-                                    // 更新リストに追加して後でアップデートする。
-                                    // Add to ToBeUpdated List and Update Order info lator.
-                                    if (ifdoco.IfdoneOrderID != 0)
+                                    if (ifdoco.IfdoneStatus == "FULLY_FILLED")
                                     {
-                                        //Debug.WriteLine("■IFD  unfilledOrderIDsList: " + ifdoco.IfdoneOrderID.ToString());
+                                        // 済みフラグをセット
+                                        ifdoco.IfdoneIsDone = true;
+                                    }
+                                    else if (ifdoco.IfdoneStatus == "CANCELED_UNFILLED" || ifdoco.IfdoneStatus == "CANCELED_PARTIALLY_FILLED")
+                                    {
+                                        // キャンセル済み
 
-                                        unfilledOrderIDsList.Add(ifdoco.IfdoneOrderID);
+                                        // 済みフラグをセット
+
+                                        ifdoco.IfdDoIsDone = true; // ifdDoを発注させないように、キャンセルする。
+
+                                        ifdoco.IfdoneIsDone = true;
+
                                     }
                                     else
                                     {
-                                        //Debug.WriteLine("■IFD  unfilledOrderIDsList: " + ifdoco.IfdoneOrderID.ToString());
+                                        // まだ未約定
 
-                                    }
+                                        // 更新リストに追加して後でアップデートする。
+                                        // Add to ToBeUpdated List and Update Order info lator.
+                                        if (ifdoco.IfdoneOrderID != 0)
+                                        {
+                                            unfilledOrderIDsList.Add(ifdoco.IfdoneOrderID);
+                                        }
+                                        else
+                                        {
+                                        }
 
-                                    if (string.IsNullOrEmpty(ifdoco.IfdoneStatus) == false)
-                                    {
                                         // アクティブな注文
                                         actOrd = actOrd + 1;
 
                                     }
 
                                 }
-
-                                //}
-                                //else
-                                //{
-                                if (ifdoco.IfdDoIsDone == false)
+                                else
                                 {
-
-                                    if (ifdoco.IfdDoStatus == "FULLY_FILLED")
-                                    {
-                                        // 約定！  Ifd do.
-
-                                        // IFD 注文全部終了タイミング！(色を変える？)
-
-
-                                        // 済みフラグをセット(これいる？)
-                                        ifdoco.IfdDoIsDone = true;
-
-                                        // IfdIsDone フラグ！(IFD注文完了！)
-                                        ifdoco.IfdIsDone = true;
-
-                                    }
-                                    else if (ifdoco.IfdDoStatus == "CANCELED_UNFILLED" || ifdoco.IfdDoStatus == "CANCELED_PARTIALLY_FILLED")
-                                    {
-                                        // キャンセル済み
-
-                                        // ステータス情報等、更新。???
-                                        // TODO
-
-                                        // 済みフラグをセット(これいる？)
-                                        ifdoco.IfdDoIsDone = true;
-
-                                        // IfdIsDone フラグ！(IFD注文完了！)
-                                        ifdoco.IfdIsDone = true;
-
-                                    }
-                                    else
+                                    if (ifdoco.IfdDoIsDone == false)
                                     {
 
-                                        // 更新リストに追加して後でアップデートする。
-                                        // Add to ToBeUpdated List and Update Order info lator.
-
-                                        if (ifdoco.IfdDoOrderID != 0)
+                                        if (ifdoco.IfdDoStatus == "FULLY_FILLED")
                                         {
-                                            // まだ未約定
+                                            // IFD 注文全部終了タイミング(色を変える？)
 
-                                            unfilledOrderIDsList.Add(ifdoco.IfdDoOrderID);
+                                            // 済みフラグをセット
+                                            ifdoco.IfdDoIsDone = true;
+
+                                            // IfdIsDone フラグ！
+                                            ifdoco.IfdIsDone = true;
+
+                                        }
+                                        else if (ifdoco.IfdDoStatus == "CANCELED_UNFILLED" || ifdoco.IfdDoStatus == "CANCELED_PARTIALLY_FILLED")
+                                        {
+                                            // キャンセル済み
+
+                                            // 済みフラグをセット(
+                                            ifdoco.IfdDoIsDone = true;
+
+                                            // IfdIsDone フラグ！
+                                            ifdoco.IfdIsDone = true;
+
                                         }
                                         else
                                         {
 
-                                            // 要発注 IfdoneDo
+                                            // 更新リストに追加して後でアップデートする。
+                                            // Add to ToBeUpdated List and Update Order info lator.
 
-                                            needToOrderList.Add(ifdoco);
+                                            if (ifdoco.IfdDoOrderID != 0)
+                                            {
+                                                // まだ未約定
 
-                                        }
+                                                unfilledOrderIDsList.Add(ifdoco.IfdDoOrderID);
+                                            }
+                                            else
+                                            {
 
-                                        if (string.IsNullOrEmpty(ifdoco.IfdDoStatus) == false)
-                                        {
+                                                // 要発注 IfdoneDo
+
+                                                needToOrderList.Add(ifdoco);
+
+                                            }
+
                                             // アクティブな注文
                                             actOrd = actOrd + 1;
 
                                         }
 
                                     }
-
+                                    else
+                                    {
+                                        ifdoco.IfdIsDone = true;
+                                    }
                                 }
-                                else
-                                {
-                                    // Ifd は済んでるよ！
-                                    ifdoco.IfdIsDone = true;
-                                }
-                                //}
 
                             }
                         }
@@ -13079,7 +13162,6 @@ namespace BitDesk.ViewModels
                                 {
                                     // タイミングと価格によっては両方同時に約定で返ってくる可能性。
 
-
                                     // OcoIsDone フラグ
                                     ifdoco.OcoIsDone = true;
 
@@ -13091,12 +13173,7 @@ namespace BitDesk.ViewModels
                                     // どちらかをキャンセル
                                     // 要発注 IfdoneDo
 
-                                    //TODO
                                     needToOrderList.Add(ifdoco);
-
-
-                                    // OcoIsDone フラグ
-                                    //ifdoco.OcoIsDone = true;
 
                                 }
                                 else
@@ -13128,7 +13205,6 @@ namespace BitDesk.ViewModels
                                     // アクティブな注文
                                     actOrd = actOrd + 1;
 
-
                                 }
                             }
 
@@ -13146,14 +13222,8 @@ namespace BitDesk.ViewModels
 
                                 if (ifdoco.IfdoneStatus == "FULLY_FILLED")
                                 {
-                                    // 約定！  Ifd done.
-
-                                    // 発注 OCO 二つ
-                                    //TODO
-
                                     // 発注済みを更新リストに追加して後でアップデートする。
                                     // Add to ToBeUpdated List and Update Order info lator.
-
 
                                     // 済みフラグをセット
                                     ifdoco.IfdoneIsDone = true;
@@ -13324,8 +13394,11 @@ namespace BitDesk.ViewModels
 
                 });
 
-                // タブの「IFDOCO注文（＊）」を更新
-                ActiveIfdocosCount = actOrd;
+                if (p.ThisPair == CurrentPair)
+                {
+                    // タブの「IFDOCO注文（＊）」を更新
+                    ActiveIfdocosCount = actOrd;
+                }
 
                 // リストのリスト（小分けにして分割取得用）
                 List<List<int>> ListOfList = new List<List<int>>();
@@ -13566,8 +13639,6 @@ namespace BitDesk.ViewModels
 
                         if (ifdoco.Kind == IfdocoKinds.ifd)
                         {
-                            //System.Diagnostics.Debug.WriteLine("■IFD");
-
                             // IFD
                             if (ifdoco.IfdoneIsDone)
                             {
@@ -13579,7 +13650,7 @@ namespace BitDesk.ViewModels
                                     // トリガー
                                     System.Diagnostics.Debug.WriteLine("■トリガー:" + ifdoco.IfdDoTriggerPrice.ToString());
 
-                                    if (ifdoco.IfdDoTriggerPrice <= 0) continue;
+                                    bool trigger = false;
 
                                     if (ifdoco.IfdDoTriggerUpDown == 0)
                                     {
@@ -13588,11 +13659,7 @@ namespace BitDesk.ViewModels
                                         if (ltp >= ifdoco.IfdDoTriggerPrice)
                                         {
                                             System.Diagnostics.Debug.WriteLine("■good");
-                                            // good
-                                        }
-                                        else
-                                        {
-                                            continue;
+                                            trigger = true;
                                         }
 
                                     }
@@ -13603,51 +13670,58 @@ namespace BitDesk.ViewModels
                                         if (ltp <= ifdoco.IfdDoTriggerPrice)
                                         {
                                             System.Diagnostics.Debug.WriteLine("■good");
-                                            // good
-                                        }
-                                        else
-                                        {
-                                            continue;
+                                            trigger = true;
                                         }
                                     }
-                                    else
+
+                                    if (trigger)
                                     {
-                                        continue;
-                                    }
+                                        OrderResult res = await _priApi.MakeOrder(_ifdocoTradeApiKey, _ifdocoTradeSecret, p.ThisPair.ToString(), ifdoco.IfdDoStartAmount, ifdoco.IfdDoPrice, ifdoco.IfdDoSide, ifdoco.IfdDoType.ToString());
 
-
-                                    OrderResult res = await _priApi.MakeOrder(_ifdocoTradeApiKey, _ifdocoTradeSecret, p.ThisPair.ToString(), ifdoco.IfdDoStartAmount, ifdoco.IfdDoPrice, ifdoco.IfdDoSide, ifdoco.IfdDoType.ToString());
-
-                                    if (res != null)
-                                    {
-                                        if (res.IsSuccess)
+                                        if (res != null)
                                         {
-
-                                            ifdoco.IfdDoHasError = false;
-
-                                            ifdoco.IfdDoOrderID = res.OrderID;
-                                            ifdoco.IfdDoOrderedAt = res.OrderedAt;
-                                            ifdoco.IfdDoPrice = res.Price;
-                                            ifdoco.IfdDoAveragePrice = res.AveragePrice;
-                                            ifdoco.IfdDoStatus = res.Status;
-
-                                            ifdoco.IfdDoRemainingAmount = res.RemainingAmount;
-                                            ifdoco.IfdDoExecutedAmount = res.ExecutedAmount;
-                                            // TODO
-
-                                            // 約定
-                                            if (res.Status == "FULLY_FILLED")
+                                            if (res.IsSuccess)
                                             {
-                                                // フラグをセット
-                                                ifdoco.IfdDoIsDone = true;
-                                                ifdoco.IfdIsDone = true;
 
-                                                // 約定！
+                                                ifdoco.IfdDoHasError = false;
 
-                                                //System.Diagnostics.Debug.WriteLine("■■■■■ UpdateIfdocos needToOrderList IfdDo 約定！");
+                                                ifdoco.IfdDoOrderID = res.OrderID;
+                                                ifdoco.IfdDoOrderedAt = res.OrderedAt;
+                                                ifdoco.IfdDoPrice = res.Price;
+                                                ifdoco.IfdDoAveragePrice = res.AveragePrice;
+                                                ifdoco.IfdDoStatus = res.Status;
+
+                                                ifdoco.IfdDoRemainingAmount = res.RemainingAmount;
+                                                ifdoco.IfdDoExecutedAmount = res.ExecutedAmount;
+                                                // TODO
+
+                                                // 約定
+                                                if (res.Status == "FULLY_FILLED")
+                                                {
+                                                    // フラグをセット
+                                                    ifdoco.IfdDoIsDone = true;
+                                                    ifdoco.IfdIsDone = true;
+
+                                                    // 約定！
+
+                                                    //System.Diagnostics.Debug.WriteLine("■■■■■ UpdateIfdocos needToOrderList IfdDo 約定！");
+
+                                                }
 
                                             }
+                                            else
+                                            {
+                                                ifdoco.IfdDoHasError = true;
+                                                if (ifdoco.IfdDoErrorInfo == null)
+                                                {
+                                                    ifdoco.IfdDoErrorInfo = new ErrorInfo();
+                                                }
+                                                ifdoco.IfdDoErrorInfo.ErrorTitle = res.Err.ErrorTitle;
+                                                ifdoco.IfdDoErrorInfo.ErrorDescription = res.Err.ErrorDescription;
+                                                ifdoco.IfdDoErrorInfo.ErrorCode = res.Err.ErrorCode;
 
+                                                System.Diagnostics.Debug.WriteLine("■■■■■ UpdateIfdocos needToOrderList IFD MakeOrder API returned error code.");
+                                            }
                                         }
                                         else
                                         {
@@ -13656,25 +13730,14 @@ namespace BitDesk.ViewModels
                                             {
                                                 ifdoco.IfdDoErrorInfo = new ErrorInfo();
                                             }
-                                            ifdoco.IfdDoErrorInfo.ErrorTitle = res.Err.ErrorTitle;
-                                            ifdoco.IfdDoErrorInfo.ErrorDescription = res.Err.ErrorDescription;
-                                            ifdoco.IfdDoErrorInfo.ErrorCode = res.Err.ErrorCode;
+                                            ifdoco.IfdDoErrorInfo.ErrorTitle = "注文時にエラーが起きました。";
+                                            ifdoco.IfdDoErrorInfo.ErrorDescription = "priApi.MakeOrder is null.";
+                                            ifdoco.IfdDoErrorInfo.ErrorCode = -1;
 
-                                            System.Diagnostics.Debug.WriteLine("■■■■■ UpdateIfdocos needToOrderList IFD MakeOrder API returned error code.");
-                                        }
-                                    }
-                                    else
-                                    {
-                                        ifdoco.IfdDoHasError = true;
-                                        if (ifdoco.IfdDoErrorInfo == null)
-                                        {
-                                            ifdoco.IfdDoErrorInfo = new ErrorInfo();
-                                        }
-                                        ifdoco.IfdDoErrorInfo.ErrorTitle = "注文時にエラーが起きました。";
-                                        ifdoco.IfdDoErrorInfo.ErrorDescription = "priApi.MakeOrder is null.";
-                                        ifdoco.IfdDoErrorInfo.ErrorCode = -1;
+                                            System.Diagnostics.Debug.WriteLine("■■■■■ UpdateIfdocos needToOrderList IFD MakeOrder API returned null.");
 
-                                        System.Diagnostics.Debug.WriteLine("■■■■■ UpdateIfdocos needToOrderList IFD MakeOrder API returned null.");
+                                        }
+
 
                                     }
 
@@ -13826,12 +13889,9 @@ namespace BitDesk.ViewModels
                                                         ifdoco.OcoOneIsDone = true;
                                                         ifdoco.OcoIsDone = true;
 
-                                                        // 約定！
-
-                                                        //System.Diagnostics.Debug.WriteLine("■ UpdateIfdocos needToOrderList OCO One cancel 約定！");
+                                                        //System.Diagnostics.Debug.WriteLine("■ UpdateIfdocos needToOrderList OCO One cancel 約定");
 
                                                     }
-
 
                                                 }
                                                 else
@@ -13872,72 +13932,76 @@ namespace BitDesk.ViewModels
                                 else
                                 {
                                     System.Diagnostics.Debug.WriteLine("■OCO どちらも未約定");
-
                                     // どちらも未約定
 
                                     // Oco One
                                     if (ifdoco.OcoOneOrderID == 0)
                                     {
-                                        if (ifdoco.OcoOneTriggerPrice <= 0) continue;
+                                        bool triggered = false;
 
                                         if (ifdoco.OcoOneTriggerUpDown == 0)
                                         {
-                                            //System.Diagnostics.Debug.WriteLine("■以上");
+                                            //System.Diagnostics.Debug.WriteLine("■Oco One 以上 " + ifdoco.OcoOneTriggerPrice.ToString());
                                             // 以上
                                             if (ltp >= ifdoco.OcoOneTriggerPrice)
                                             {
                                                 System.Diagnostics.Debug.WriteLine("■Oco One 以上: Ltp = " + ltp.ToString() + " Trigger = " + ifdoco.OcoOneTriggerPrice.ToString());
-                                                // good
+                                                triggered = true;
                                             }
-                                            else
-                                            {
-                                                continue;
-                                            }
-
                                         }
                                         else if (ifdoco.OcoOneTriggerUpDown == 1)
                                         {
-                                            //System.Diagnostics.Debug.WriteLine("■以下");
+                                            //System.Diagnostics.Debug.WriteLine("■Oco One 以下");
                                             // 以下
-                                            if (ltp >= ifdoco.OcoOneTriggerPrice)
+                                            if (ltp <= ifdoco.OcoOneTriggerPrice)
                                             {
                                                 System.Diagnostics.Debug.WriteLine("■Oco One 以下: Ltp = " + ltp.ToString() + " Trigger = " + ifdoco.OcoOneTriggerPrice.ToString());
-                                                // good
-                                            }
-                                            else
-                                            {
-                                                continue;
+                                                triggered = true;
                                             }
                                         }
-                                        else
-                                        {
-                                            continue;
-                                        }
 
-                                        // OcoOne
-                                        OrderResult ord = await _priApi.MakeOrder(_ifdocoTradeApiKey, _ifdocoTradeSecret, p.ThisPair.ToString(), ifdoco.OcoOneStartAmount, ifdoco.OcoOnePrice, ifdoco.OcoOneSide, ifdoco.OcoOneType.ToString());
-
-                                        if (ord != null)
+                                        if (triggered == true)
                                         {
-                                            if (ord.IsSuccess)
+                                            // OcoOne
+                                            OrderResult ord = await _priApi.MakeOrder(_ifdocoTradeApiKey, _ifdocoTradeSecret, p.ThisPair.ToString(), ifdoco.OcoOneStartAmount, ifdoco.OcoOnePrice, ifdoco.OcoOneSide, ifdoco.OcoOneType.ToString());
+
+                                            if (ord != null)
                                             {
-                                                ifdoco.OcoOneHasError = false;
-
-                                                ifdoco.OcoOneOrderID = ord.OrderID;
-                                                ifdoco.OcoOneOrderedAt = ord.OrderedAt;
-                                                ifdoco.OcoOnePrice = ord.Price;
-                                                ifdoco.OcoOneAveragePrice = ord.AveragePrice;
-                                                ifdoco.OcoOneStatus = ord.Status;
-                                                // TODO
-
-                                                // 約定
-                                                if (ord.Status == "FULLY_FILLED")
+                                                if (ord.IsSuccess)
                                                 {
-                                                    // フラグをセット
-                                                    ifdoco.OcoOneIsDone = true;
+                                                    ifdoco.OcoOneHasError = false;
 
-                                                    // 後は、UpdateIFDOCOループにまかせる
+                                                    ifdoco.OcoOneOrderID = ord.OrderID;
+                                                    ifdoco.OcoOneOrderedAt = ord.OrderedAt;
+                                                    ifdoco.OcoOnePrice = ord.Price;
+                                                    ifdoco.OcoOneAveragePrice = ord.AveragePrice;
+                                                    ifdoco.OcoOneStatus = ord.Status;
+                                                    // TODO
+
+                                                    // 約定
+                                                    if (ord.Status == "FULLY_FILLED")
+                                                    {
+                                                        // フラグをセット
+                                                        ifdoco.OcoOneIsDone = true;
+
+                                                        // 後は、UpdateIFDOCOループにまかせる
+                                                    }
                                                 }
+                                                else
+                                                {
+                                                    ifdoco.OcoOneHasError = true;
+                                                    if (ifdoco.OcoOneErrorInfo == null)
+                                                    {
+                                                        ifdoco.OcoOneErrorInfo = new ErrorInfo();
+                                                    }
+                                                    ifdoco.OcoOneErrorInfo.ErrorTitle = ord.Err.ErrorTitle;
+                                                    ifdoco.OcoOneErrorInfo.ErrorDescription = ord.Err.ErrorDescription;
+                                                    ifdoco.OcoOneErrorInfo.ErrorCode = ord.Err.ErrorCode;
+
+                                                    System.Diagnostics.Debug.WriteLine("UpdateIfdocos - OcoOne MakeOrder API failed");
+
+                                                }
+
                                             }
                                             else
                                             {
@@ -13946,101 +14010,89 @@ namespace BitDesk.ViewModels
                                                 {
                                                     ifdoco.OcoOneErrorInfo = new ErrorInfo();
                                                 }
-                                                ifdoco.OcoOneErrorInfo.ErrorTitle = ord.Err.ErrorTitle;
-                                                ifdoco.OcoOneErrorInfo.ErrorDescription = ord.Err.ErrorDescription;
-                                                ifdoco.OcoOneErrorInfo.ErrorCode = ord.Err.ErrorCode;
+                                                ifdoco.OcoOneErrorInfo.ErrorTitle = "注文時にエラーが起きました。";
+                                                ifdoco.OcoOneErrorInfo.ErrorDescription = "priApi.MakeOrder is null.";
+                                                ifdoco.OcoOneErrorInfo.ErrorCode = -1;
 
-                                                System.Diagnostics.Debug.WriteLine("UpdateIfdocos - OcoOne MakeOrder API failed");
+                                                System.Diagnostics.Debug.WriteLine("UpdateIfdocos - OcoOne MakeOrder returened NULL");
 
                                             }
 
                                         }
-                                        else
-                                        {
-                                            ifdoco.OcoOneHasError = true;
-                                            if (ifdoco.OcoOneErrorInfo == null)
-                                            {
-                                                ifdoco.OcoOneErrorInfo = new ErrorInfo();
-                                            }
-                                            ifdoco.OcoOneErrorInfo.ErrorTitle = "注文時にエラーが起きました。";
-                                            ifdoco.OcoOneErrorInfo.ErrorDescription = "priApi.MakeOrder is null.";
-                                            ifdoco.OcoOneErrorInfo.ErrorCode = -1;
-
-                                            System.Diagnostics.Debug.WriteLine("UpdateIfdocos - OcoOne MakeOrder returened NULL");
-
-                                        }
-
 
                                     }
 
                                     // Oco Other
                                     if (ifdoco.OcoOtherOrderID == 0)
                                     {
-                                        if (ifdoco.OcoOtherTriggerPrice <= 0) continue;
+                                        bool triggered = false;
 
                                         if (ifdoco.OcoOtherTriggerUpDown == 0)
                                         {
-                                            //System.Diagnostics.Debug.WriteLine("■以上");
+                                            System.Diagnostics.Debug.WriteLine("■ OcoOtherTriggerPrice以上");
                                             // 以上
                                             if (ltp >= ifdoco.OcoOtherTriggerPrice)
                                             {
                                                 System.Diagnostics.Debug.WriteLine("■Oco Other 以上: Ltp = " + ltp.ToString() + " Trigger = " + ifdoco.OcoOtherTriggerPrice.ToString());
-                                                // good
+                                                triggered = true;
                                             }
-                                            else
-                                            {
-                                                continue;
-                                            }
-
                                         }
                                         else if (ifdoco.OcoOtherTriggerUpDown == 1)
                                         {
-                                            //System.Diagnostics.Debug.WriteLine("■以下");
+                                            System.Diagnostics.Debug.WriteLine("■OcoOtherTriggerPrice以上以下");
                                             // 以下
                                             if (ltp <= ifdoco.OcoOtherTriggerPrice)
                                             {
                                                 System.Diagnostics.Debug.WriteLine("■Oco Other 以下: Ltp = " + ltp.ToString() + " Trigger = " + ifdoco.OcoOtherTriggerPrice.ToString());
-                                                // good
-                                            }
-                                            else
-                                            {
-                                                continue;
+                                                triggered = true;
                                             }
                                         }
-                                        else
+
+                                        if (triggered == true)
                                         {
-                                            continue;
-                                        }
+                                            OrderResult ord2 = await _priApi.MakeOrder(_ifdocoTradeApiKey, _ifdocoTradeSecret, p.ThisPair.ToString(), ifdoco.OcoOtherStartAmount, ifdoco.OcoOtherPrice, ifdoco.OcoOtherSide, ifdoco.OcoOtherType.ToString());
 
-
-                                        OrderResult ord2 = await _priApi.MakeOrder(_ifdocoTradeApiKey, _ifdocoTradeSecret, p.ThisPair.ToString(), ifdoco.OcoOtherStartAmount, ifdoco.OcoOtherPrice, ifdoco.OcoOtherSide, ifdoco.OcoOtherType.ToString());
-
-                                        if (ord2 != null)
-                                        {
-
-                                            if (ord2.IsSuccess)
+                                            if (ord2 != null)
                                             {
-                                                ifdoco.OcoOtherHasError = false;
 
-                                                ifdoco.OcoOtherOrderID = ord2.OrderID;
-                                                ifdoco.OcoOtherOrderedAt = ord2.OrderedAt;
-                                                ifdoco.OcoOtherPrice = ord2.Price;
-                                                ifdoco.OcoOtherAveragePrice = ord2.AveragePrice;
-                                                ifdoco.OcoOtherStatus = ord2.Status;
-                                                // TODO
-
-                                                // 約定
-                                                if (ord2.Status == "FULLY_FILLED")
+                                                if (ord2.IsSuccess)
                                                 {
+                                                    ifdoco.OcoOtherHasError = false;
+
+                                                    ifdoco.OcoOtherOrderID = ord2.OrderID;
+                                                    ifdoco.OcoOtherOrderedAt = ord2.OrderedAt;
+                                                    ifdoco.OcoOtherPrice = ord2.Price;
+                                                    ifdoco.OcoOtherAveragePrice = ord2.AveragePrice;
+                                                    ifdoco.OcoOtherStatus = ord2.Status;
+                                                    // TODO
+
+                                                    // 約定
+                                                    if (ord2.Status == "FULLY_FILLED")
+                                                    {
 
 
-                                                    // フラグをセット
-                                                    ifdoco.OcoOtherIsDone = true;
+                                                        // フラグをセット
+                                                        ifdoco.OcoOtherIsDone = true;
 
 
-                                                    // 後は、UpdateIFDOCOループにまかせる
+                                                        // 後は、UpdateIFDOCOループにまかせる
 
+                                                    }
                                                 }
+                                                else
+                                                {
+                                                    ifdoco.OcoOtherHasError = true;
+                                                    if (ifdoco.OcoOtherErrorInfo == null)
+                                                    {
+                                                        ifdoco.OcoOtherErrorInfo = new ErrorInfo();
+                                                    }
+                                                    ifdoco.OcoOtherErrorInfo.ErrorTitle = ord2.Err.ErrorTitle;
+                                                    ifdoco.OcoOtherErrorInfo.ErrorDescription = ord2.Err.ErrorDescription;
+                                                    ifdoco.OcoOtherErrorInfo.ErrorCode = ord2.Err.ErrorCode;
+
+                                                    System.Diagnostics.Debug.WriteLine("UpdateIfdocos - OcoOther MakeOrder API failed");
+                                                }
+
                                             }
                                             else
                                             {
@@ -14049,26 +14101,13 @@ namespace BitDesk.ViewModels
                                                 {
                                                     ifdoco.OcoOtherErrorInfo = new ErrorInfo();
                                                 }
-                                                ifdoco.OcoOtherErrorInfo.ErrorTitle = ord2.Err.ErrorTitle;
-                                                ifdoco.OcoOtherErrorInfo.ErrorDescription = ord2.Err.ErrorDescription;
-                                                ifdoco.OcoOtherErrorInfo.ErrorCode = ord2.Err.ErrorCode;
+                                                ifdoco.OcoOtherErrorInfo.ErrorTitle = "注文時にエラーが起きました。";
+                                                ifdoco.OcoOtherErrorInfo.ErrorDescription = "priApi.MakeOrder is null.";
+                                                ifdoco.OcoOtherErrorInfo.ErrorCode = -1;
 
-                                                System.Diagnostics.Debug.WriteLine("UpdateIfdocos - OcoOther MakeOrder API failed");
+                                                System.Diagnostics.Debug.WriteLine("UpdateIfdocos - OcoOther MakeOrder returened NULL");
                                             }
 
-                                        }
-                                        else
-                                        {
-                                            ifdoco.OcoOtherHasError = true;
-                                            if (ifdoco.OcoOtherErrorInfo == null)
-                                            {
-                                                ifdoco.OcoOtherErrorInfo = new ErrorInfo();
-                                            }
-                                            ifdoco.OcoOtherErrorInfo.ErrorTitle = "注文時にエラーが起きました。";
-                                            ifdoco.OcoOtherErrorInfo.ErrorDescription = "priApi.MakeOrder is null.";
-                                            ifdoco.OcoOtherErrorInfo.ErrorCode = -1;
-
-                                            System.Diagnostics.Debug.WriteLine("UpdateIfdocos - OcoOther MakeOrder returened NULL");
                                         }
 
                                     }
@@ -14103,30 +14142,18 @@ namespace BitDesk.ViewModels
                                                     // good
                                                     isTriggered = true;
                                                 }
-                                                else
-                                                {
-                                                    //continue;
-                                                }
 
                                             }
                                             else if (ifdoco.OcoOneTriggerUpDown == 1)
                                             {
                                                 //System.Diagnostics.Debug.WriteLine("■以下");
                                                 // 以下
-                                                if (ltp >= ifdoco.OcoOneTriggerPrice)
+                                                if (ltp <= ifdoco.OcoOneTriggerPrice)
                                                 {
                                                     System.Diagnostics.Debug.WriteLine("■Oco One 以下: Ltp = " + ltp.ToString() + " Trigger = " + ifdoco.OcoOneTriggerPrice.ToString());
                                                     // good
                                                     isTriggered = true;
                                                 }
-                                                else
-                                                {
-                                                    //continue;
-                                                }
-                                            }
-                                            else
-                                            {
-                                                //continue;
                                             }
 
                                             if (ifdoco.OcoOneTriggerPrice <= 0)
@@ -14160,7 +14187,6 @@ namespace BitDesk.ViewModels
                                                         {
                                                             // フラグをセット
                                                             ifdoco.OcoOneIsDone = true;
-
 
                                                         }
                                                     }
@@ -14217,10 +14243,6 @@ namespace BitDesk.ViewModels
                                                     // good
                                                     isTriggered = true;
                                                 }
-                                                else
-                                                {
-                                                    //continue;
-                                                }
 
                                             }
                                             else if (ifdoco.OcoOtherTriggerUpDown == 1)
@@ -14233,14 +14255,6 @@ namespace BitDesk.ViewModels
                                                     // good
                                                     isTriggered = true;
                                                 }
-                                                else
-                                                {
-                                                    //continue;
-                                                }
-                                            }
-                                            else
-                                            {
-                                                //continue;
                                             }
 
                                             if (ifdoco.OcoOtherTriggerPrice <= 0)
@@ -14271,10 +14285,8 @@ namespace BitDesk.ViewModels
                                                         if (ord2.Status == "FULLY_FILLED")
                                                         {
 
-
                                                             // フラグをセット
                                                             ifdoco.OcoOtherIsDone = true;
-
 
                                                         }
                                                     }
@@ -14310,11 +14322,6 @@ namespace BitDesk.ViewModels
 
                                             }
 
-                                        }
-                                        else
-                                        {
-                                            // TODO
-                                            //Debug.WriteLine("□ UpdateIfdocos IFDOCO @OCOが未発注 ELSE OcoOtherHasError");
                                         }
 
                                     }
@@ -15639,9 +15646,7 @@ namespace BitDesk.ViewModels
 
                 if (ct == CandleTypes.OneHour)
                 {
-                    // TODO 取得中フラグセット。
-
-                    Debug.WriteLine("今日の1hour取得開始 " + pair.ToString());
+                    //Debug.WriteLine("今日の1hour取得開始 " + pair.ToString());
 
                     // 一時間のロウソク足タイプなら今日、昨日、一昨日、その前の１週間分の1hourデータを取得する必要あり。
                     ListOhlcvsOneHour = await GetCandlestick(pair, CandleTypes.OneHour, dtToday);
@@ -15650,7 +15655,7 @@ namespace BitDesk.ViewModels
                         // 逆順にする
                         ListOhlcvsOneHour.Reverse();
 
-                        Debug.WriteLine("昨日の1hour取得開始 " + pair.ToString());
+                        //Debug.WriteLine("昨日の1hour取得開始 " + pair.ToString());
                         await Task.Delay(200);
                         // 昨日
                         DateTime dtTarget = dtToday.AddDays(-1);
@@ -15666,7 +15671,7 @@ namespace BitDesk.ViewModels
                                 ListOhlcvsOneHour.Add(r);
                             }
 
-                            Debug.WriteLine("一昨日の1hour取得開始 " + pair.ToString());
+                            //Debug.WriteLine("一昨日の1hour取得開始 " + pair.ToString());
                             await Task.Delay(200);
                             // 一昨日
                             dtTarget = dtTarget.AddDays(-1);
@@ -15681,7 +15686,7 @@ namespace BitDesk.ViewModels
                                     ListOhlcvsOneHour.Add(l);
                                 }
 
-                                Debug.WriteLine("３日前の1hour取得開始 " + pair.ToString());
+                                //Debug.WriteLine("３日前の1hour取得開始 " + pair.ToString());
                                 await Task.Delay(200);
                                 // ３日前
                                 dtTarget = dtTarget.AddDays(-1);
@@ -15697,7 +15702,7 @@ namespace BitDesk.ViewModels
                                     }
 
 
-                                    Debug.WriteLine("４日前の1hour取得開始 " + pair.ToString());
+                                    //Debug.WriteLine("４日前の1hour取得開始 " + pair.ToString());
                                     await Task.Delay(300);
                                     // 4日前
                                     dtTarget = dtTarget.AddDays(-1);
@@ -15783,9 +15788,7 @@ namespace BitDesk.ViewModels
 
                 if (ct == CandleTypes.OneMin)
                 {
-                    // TODO 取得中フラグセット。
-
-                    Debug.WriteLine("今日の1min取得開始 " + pair.ToString());
+                    //Debug.WriteLine("今日の1min取得開始 " + pair.ToString());
 
                     // 一分毎のロウソク足タイプなら今日と昨日の1minデータを取得する必要あり。
                     ListOhlcvsOneMin = await GetCandlestick(pair, CandleTypes.OneMin, dtToday);
@@ -15794,11 +15797,10 @@ namespace BitDesk.ViewModels
                         // 逆順にする
                         ListOhlcvsOneMin.Reverse();
 
-
                         // 00:00:00から23:59:59分までしか取れないので、 3時間分取るには、00:00:00から3:00までは 最新のデータとるには日付を１日マイナスする
                         if (dtToday.Hour <= 1) // BitWallpaper は一時間で良いので。// < 3
                         {
-                            Debug.WriteLine("昨日の1min取得開始");
+                            //Debug.WriteLine("昨日の1min取得開始");
 
                             await Task.Delay(200);
 
@@ -15823,7 +15825,7 @@ namespace BitDesk.ViewModels
                         }
                         else
                         {
-                            Debug.WriteLine("昨日の1min取得スキップ " + dtToday.Hour.ToString());
+                            //Debug.WriteLine("昨日の1min取得スキップ " + dtToday.Hour.ToString());
                         }
                     }
                     else
@@ -15831,7 +15833,6 @@ namespace BitDesk.ViewModels
                         Debug.WriteLine("■■■■■ " + pair.ToString() + " GetCandlesticks error: 今日の1min取得 null");
                     }
 
-                    // TODO 取得中フラグ解除。
                 }
 
                 #endregion
@@ -15844,11 +15845,9 @@ namespace BitDesk.ViewModels
 
                 if (ct == CandleTypes.OneDay)
                 {
-                    // TODO 取得中フラグセット。
-
                     // 1日のロウソク足タイプなら今年、去年、２年前、３年前、４年前、５年前の1hourデータを取得する必要あり。(５年前は止めた)
 
-                    Debug.WriteLine("今年のOneDay取得開始 " + pair.ToString());
+                    //Debug.WriteLine("今年のOneDay取得開始 " + pair.ToString());
 
                     ListOhlcvsOneDay = await GetCandlestick(pair, CandleTypes.OneDay, dtToday);
                     if (ListOhlcvsOneDay != null)
@@ -15859,7 +15858,7 @@ namespace BitDesk.ViewModels
                         // 
                         //if (dtToday.Month <= 3)
                         //{
-                        Debug.WriteLine("去年のOneDay取得開始 " + pair.ToString());
+                        //Debug.WriteLine("去年のOneDay取得開始 " + pair.ToString());
 
                         await Task.Delay(300);
                         // 去年
@@ -15905,7 +15904,6 @@ namespace BitDesk.ViewModels
 
                     }
 
-                    // TODO 取得中フラグ解除。
                 }
 
                 #endregion
@@ -15993,7 +15991,7 @@ namespace BitDesk.ViewModels
         private void LoadChart(Pairs pair, CandleTypes ct)
         {
             ChartLoadingInfo = "チャートをロード中....";
-            Debug.WriteLine("LoadChart... " + pair.ToString());
+            //Debug.WriteLine("LoadChart... " + pair.ToString());
 
             try
             {
@@ -16201,11 +16199,11 @@ namespace BitDesk.ViewModels
 
                 if (lst.Count < span - 1)
                 {
-                    Debug.WriteLine("ロード中？ " + pair.ToString() + " " + lst.Count.ToString() + " " + span.ToString());
+                    Debug.WriteLine("チャートのデータロード中？ " + pair.ToString() + " " + lst.Count.ToString() + " " + span.ToString());
                     return;
                 }
 
-                Debug.WriteLine("ロード中  " + pair.ToString() + " " + lst.Count.ToString() + " " + span.ToString());
+                Debug.WriteLine("チャートのロード中  " + pair.ToString() + " " + lst.Count.ToString() + " " + span.ToString());
 
                 try
                 {
@@ -16396,7 +16394,7 @@ namespace BitDesk.ViewModels
                     Debug.WriteLine("■■■■■ Chart loading error: " + ex.ToString());
                 }
 
-                Debug.WriteLine("ロード終わり  " + pair.ToString() + " " + lst.Count.ToString() + " " + span.ToString());
+                Debug.WriteLine("チャートのロード終わり  " + pair.ToString() + " " + lst.Count.ToString() + " " + span.ToString());
                 ChartLoadingInfo = "";
 
             }
@@ -16554,9 +16552,6 @@ namespace BitDesk.ViewModels
                     DisplayChart(pair);
                 }
             }
-
-
-            Debug.WriteLine("ChangeChartSpan");
 
         }
 

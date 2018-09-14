@@ -26,14 +26,16 @@
     <Color x:Key="NormalTextColor">#333631</Color>
     <Color x:Key="TitleTextColor">#000000</Color>
 
-    <Color x:Key="NormalTextBoxBackgroundColor">whitesmoke</Color>
+    <Color x:Key="NormalTextBoxBackgroundColor">WhiteSmoke</Color>
 
     <Color x:Key="BoardBackgroundColor">#f3f3f3</Color>
 
     <Color x:Key="ListviewAlt0Color">#e6e6e6</Color>
     <Color x:Key="ListviewAlt1Color">#efefef</Color>
 
-    <Color x:Key="ChartVolumeColor">#e0815e</Color>
+    <Color x:Key="ChartVolumeColor">DimGray</Color>
+
+    <Color x:Key="ShadowColor">Silver</Color>
 
     <!-- クール系のアクセントカラー 明るい -->
     <Color x:Key="AccentCoolLightColor">Green</Color>

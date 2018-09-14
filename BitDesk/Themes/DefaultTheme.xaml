@@ -31,8 +31,10 @@
 
     <Color x:Key="ListviewAlt0Color">#212121</Color>
     <Color x:Key="ListviewAlt1Color">#1a1a1a</Color>
-    
+
     <Color x:Key="ChartVolumeColor">Yellow</Color>
+
+    <Color x:Key="ShadowColor">#1c1c1c</Color>
 
     <!-- クール系のアクセントカラー 明るい -->
     <Color x:Key="AccentCoolLightColor">Green</Color>
@@ -54,8 +56,8 @@
     <!-- 警告　Yellow系 -->
     <SolidColorBrush x:Key="WarningColorBrush" Color="#FFDFD991"/>
 
-    <!-- スクロールバーの色 #66ffffff -->
-    <SolidColorBrush x:Key="ScrollBarColorBrush" Color="#212121" />
+    <!-- スクロールバーの色 #66ffffff #212121 -->
+    <SolidColorBrush x:Key="ScrollBarColorBrush" Color="#ccc" Opacity="0.1"/>
     <!-- ボーダーの色 #66ffffff -->
     <SolidColorBrush x:Key="ScrollBarBorderBrush" Color="Transparent" />
     <!-- トラック（レーン）の色 #33ffffff -->

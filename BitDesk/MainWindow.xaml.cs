@@ -517,8 +517,8 @@ namespace BitDesk
             Main3Grid.Height = 420;
 
             Middle.Width = 357;
-            Middle.Height = 417;
-            Middle.Margin = new Thickness(3, 0, 3, 0);
+            Middle.Height = 416;
+            Middle.Margin = new Thickness(3, 1, 3, 0);
 
             Main2Colum.Width = new GridLength(360, GridUnitType.Pixel);
             Main3Colum.Width = new GridLength(0, GridUnitType.Pixel);
@@ -590,15 +590,15 @@ namespace BitDesk
 
             // 中央のサイズ
             //Middle.Width = 487;
-            Middle.Width = this.ActualWidth - 643;
+            Middle.Width = this.ActualWidth - 645;
 
-            Middle.Height = 417;
-            Middle.Margin = new Thickness(3, 0, 0, 3);
+            Middle.Height = 416;
+            Middle.Margin = new Thickness(3, 1, 0, 3);
 
             //Main3Grid.Width = 504;
-            Main3Grid.Width = this.ActualWidth - 626;
+            Main3Grid.Width = this.ActualWidth - 628;
 
-            var test = this.ActualWidth - 410.5;
+            var test = this.ActualWidth - 412;
             //Main2Colum.Width = new GridLength(360, GridUnitType.Pixel);
             //Main3Colum.Width = new GridLength(360, GridUnitType.Pixel);
             Main2Colum.Width = new GridLength(test, GridUnitType.Pixel);
@@ -607,9 +607,9 @@ namespace BitDesk
 
             BottomContents.Margin = new Thickness(3, 0, 3, 0);
 
-            Transaction.Height = 417;
+            Transaction.Height = 416;
             Transaction.Width = 213;
-            Transaction.Margin = new Thickness(3, 0, 3, 3);
+            Transaction.Margin = new Thickness(3, 1, 3, 3);
 
             RightSide1Colum.Width = new GridLength(0, GridUnitType.Pixel);
             RightSide2Colum.Width = new GridLength(0, GridUnitType.Pixel);
@@ -676,14 +676,14 @@ namespace BitDesk
             Main3Grid.Height = 420;
 
             Middle.Width = 740;
-            Middle.Height = 417;
-            Middle.Margin = new Thickness(3, 0, 0, 3);
+            Middle.Height = 416;
+            Middle.Margin = new Thickness(3, 1, 0, 3);
 
             Main3Grid.Width = 757;
 
-            Transaction.Height = 417;
+            Transaction.Height = 416;
             Transaction.Width = 213;
-            Transaction.Margin = new Thickness(3, 0, 3, 3);
+            Transaction.Margin = new Thickness(3, 1, 3, 3);
 
             Main2Colum.Width = new GridLength(380, GridUnitType.Pixel);
             Main3Colum.Width = new GridLength(380, GridUnitType.Pixel);
@@ -746,14 +746,14 @@ namespace BitDesk
             Main3Grid.Height = 420;
 
             Middle.Width = 743;
-            Middle.Height = 417;
-            Middle.Margin = new Thickness(3, 0, 0, 3);
+            Middle.Height = 416;
+            Middle.Margin = new Thickness(3, 1, 0, 3);
 
             Main3Grid.Width = 760;
 
-            Transaction.Height = 417;
+            Transaction.Height = 416;
             Transaction.Width = 210;
-            Transaction.Margin = new Thickness(3, 0, 0, 3);
+            Transaction.Margin = new Thickness(3, 1, 0, 3);
 
             Main2Colum.Width = new GridLength(380, GridUnitType.Pixel);
             Main3Colum.Width = new GridLength(380, GridUnitType.Pixel);

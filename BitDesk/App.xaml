@@ -159,16 +159,16 @@
                         x:Key="DropShadowDepth"
                         BlurRadius="4"
                         Direction="315"
-                        Opacity="0.8"
-                        ShadowDepth="1.2"
-                        Color="{DynamicResource BoardBackgroundColor}" />
+                        Opacity="1"
+                        ShadowDepth="0.8"
+                        Color="{DynamicResource ShadowColor}" />
                     <DropShadowEffect
                         x:Key="DropShadowDepthTabHeader"
                         BlurRadius="2"
                         Direction="300"
-                        Opacity="1"
+                        Opacity="0.6"
                         ShadowDepth="1.2"
-                        Color="{DynamicResource BoardBackgroundColor}" />
+                        Color="{DynamicResource ShadowColor}" />
 
                     <!-- ボード・タイルのスタイル -->
                     <Style x:Key="BoardStyle" TargetType="Border">
@@ -339,9 +339,6 @@
                 <ResourceDictionary>
 
                     <SolidColorBrush x:Key="RadioButton.Static.Background" Color="Transparent"/>
-                    <!--
-                    <SolidColorBrush x:Key="RadioButton.Static.CheckedBorder" Color="#db8449"/>
-                    -->
                     <SolidColorBrush x:Key="RadioButton.Static.UncheckedBorder" Color="Gainsboro"/>
 
                     <Style x:Key="RadioButtonFocusVisual">
@@ -397,6 +394,7 @@
                                         <Border x:Name="radioButtonContentBorder" Grid.Column="1" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Padding="3">
                                             <ContentPresenter x:Name="contentPresenter" Focusable="False" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                                         </Border>
+                                        
                                     </Grid>
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="HasContent" Value="true">
@@ -531,20 +529,8 @@
                             <Setter.Value>
                                 <ControlTemplate TargetType="GridViewColumnHeader">
                                     <Grid>
-                                        <Border
-                                                                        Name="HeaderBorder"
-                                                                        Padding="0"
-                                                                        Background="Transparent"
-                                                                        BorderBrush="Gray"
-                                                                        BorderThickness="0,0,0,0.5">
-                                            <ContentPresenter
-                                                                            Name="HeaderContent"
-                                                Margin="0,0,0,0"
-                                                                            RecognizesAccessKey="True"
-                                                                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                                                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                                                            Content="{TemplateBinding Content}"
-                                                                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                        <Border Name="HeaderBorder" Padding="0" Background="Transparent" BorderBrush="Gray" BorderThickness="0,0,0,0.5">
+                                            <ContentPresenter Name="HeaderContent" Margin="0,0,0,0" RecognizesAccessKey="True" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Content="{TemplateBinding Content}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                                         </Border>
                                         <!-- Simple disable colum header resize by removing this. -->
                                         <!--
@@ -553,7 +539,6 @@
                                                HorizontalAlignment="Right" 
                                                Margin="0,0,-9,0" />
                                         -->
-
                                     </Grid>
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="IsPressed" Value="true">
@@ -573,9 +558,7 @@
                                     <Setter.Value>
                                         <ControlTemplate TargetType="GridViewColumnHeader">
                                             <Canvas Name="PART_FloatingHeaderCanvas">
-                                                <Rectangle Fill="#60000000" 
-                                                           Width="{TemplateBinding ActualWidth}" 
-                                                           Height="{TemplateBinding ActualHeight}"/>
+                                                <Rectangle Fill="#60000000" Width="{TemplateBinding ActualWidth}" Height="{TemplateBinding ActualHeight}"/>
                                             </Canvas>
                                         </ControlTemplate>
                                     </Setter.Value>
@@ -585,10 +568,7 @@
                                 <Setter Property="Template">
                                     <Setter.Value>
                                         <ControlTemplate TargetType="GridViewColumnHeader">
-                                            <Border Name="HeaderBorder"
-              BorderThickness="0,1,0,1"
-              BorderBrush="Transparent"
-              Background="Transparent"/>
+                                            <Border Name="HeaderBorder" BorderThickness="0,1,0,1" BorderBrush="Transparent" Background="Transparent"/>
                                         </ControlTemplate>
                                     </Setter.Value>
                                 </Setter>
@@ -605,7 +585,7 @@
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type Thumb}">
-                                    <Rectangle x:Name="Rect" Width="24">
+                                    <Rectangle x:Name="Rect" Width="13">
                                         <Rectangle.Fill>
                                             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                                 <GradientStop Color="Gainsboro" Offset="1" />
@@ -617,47 +597,36 @@
                                                 <VisualState x:Name="Normal">
                                                     <Storyboard>
                                                         <!--
-                                                        <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).
-                    (GradientBrush.GradientStops)[0].(GradientStop.Color)"
-                                                Storyboard.TargetName="Rect">
-                                                            <EasingColorKeyFrame KeyTime="0"
-                                         Value="#CCC" />
+                                                        <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(GradientBrush.GradientStops)[0].(GradientStop.Color)" Storyboard.TargetName="Rect">
+                                                            <EasingColorKeyFrame KeyTime="0" Value="#CCC" />
                                                         </ColorAnimationUsingKeyFrames>
                                                         -->
-                                                        <DoubleAnimationUsingKeyFrames  Storyboard.TargetProperty="Opacity"
-                                                Storyboard.TargetName="Rect" >
+                                                        <DoubleAnimationUsingKeyFrames  Storyboard.TargetProperty="Opacity" Storyboard.TargetName="Rect" >
                                                             <EasingDoubleKeyFrame KeyTime="0" Value="0.1"/>
                                                         </DoubleAnimationUsingKeyFrames>
                                                     </Storyboard>
                                                 </VisualState>
                                                 <VisualState x:Name="MouseOver">
                                                     <Storyboard>
-                                                        <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(GradientBrush.GradientStops)[0].(GradientStop.Color)"
-                                                Storyboard.TargetName="Rect">
-                                                            <EasingColorKeyFrame KeyTime="0"
-                                         Value="#CCC" />
+                                                        <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(GradientBrush.GradientStops)[0].(GradientStop.Color)" Storyboard.TargetName="Rect">
+                                                            <EasingColorKeyFrame KeyTime="0" Value="#CCC" />
                                                         </ColorAnimationUsingKeyFrames>
-                                                        <DoubleAnimationUsingKeyFrames  Storyboard.TargetProperty="Opacity"
-                                                Storyboard.TargetName="Rect" >
+                                                        <DoubleAnimationUsingKeyFrames  Storyboard.TargetProperty="Opacity" Storyboard.TargetName="Rect" >
                                                             <EasingDoubleKeyFrame KeyTime="0" Value="0.6"/>
                                                         </DoubleAnimationUsingKeyFrames>
                                                     </Storyboard>
                                                 </VisualState>
                                                 <VisualState x:Name="Pressed">
                                                     <Storyboard>
-                                                        <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(GradientBrush.GradientStops)[0].(GradientStop.Color)"
-                                                Storyboard.TargetName="Rect">
-                                                            <EasingColorKeyFrame KeyTime="0"
-                                         Value="Gray" />
+                                                        <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(GradientBrush.GradientStops)[0].(GradientStop.Color)" Storyboard.TargetName="Rect">
+                                                            <EasingColorKeyFrame KeyTime="0" Value="Gray" />
                                                         </ColorAnimationUsingKeyFrames>
                                                     </Storyboard>
                                                 </VisualState>
                                                 <VisualState x:Name="Disabled">
                                                     <Storyboard>
-                                                        <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(GradientBrush.GradientStops)[0].(GradientStop.Color)"
-                                                Storyboard.TargetName="Rect">
-                                                            <EasingColorKeyFrame KeyTime="0"
-                                         Value="#eee" />
+                                                        <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(GradientBrush.GradientStops)[0].(GradientStop.Color)" Storyboard.TargetName="Rect">
+                                                            <EasingColorKeyFrame KeyTime="0" Value="#eee" />
                                                         </ColorAnimationUsingKeyFrames>
                                                     </Storyboard>
                                                 </VisualState>
@@ -744,7 +713,6 @@
                                 </ControlTemplate>
                             </Setter.Value>
                         </Setter>
-
                     </Style>
 
                     <Style x:Key="RepeatButtonStyleDec" TargetType="{x:Type RepeatButton}">
@@ -816,7 +784,6 @@
                                 </ControlTemplate>
                             </Setter.Value>
                         </Setter>
-
                     </Style>
 
                     <ControlTemplate x:Key="VerticalScrollBar" TargetType="{x:Type ScrollBar}">
@@ -827,25 +794,19 @@
                                 <RowDefinition MaxHeight="18" />
                             </Grid.RowDefinitions>
                             <Border Grid.RowSpan="3" CornerRadius="0" Background="Transparent" />
-                            <RepeatButton Grid.Row="0" Height="18" Command="ScrollBar.LineUpCommand"
-                                          Content="M 0 4 L 8 4 L 4 0 Z" 
-                                          Style="{StaticResource RepeatButtonStyleInc}"/>
+                            <RepeatButton Grid.Row="0" Height="18" Command="ScrollBar.LineUpCommand" Content="M 0 4 L 8 4 L 4 0 Z" Style="{StaticResource RepeatButtonStyleInc}"/>
                             <Track x:Name="PART_Track" Grid.Row="1" IsDirectionReversed="true">
                                 <Track.DecreaseRepeatButton>
-                                    <RepeatButton Command="ScrollBar.PageUpCommand" 
-                                                  Style="{StaticResource RepeatButtonStyleDec}"/>
+                                    <RepeatButton Command="ScrollBar.PageUpCommand" Style="{StaticResource RepeatButtonStyleDec}"/>
                                 </Track.DecreaseRepeatButton>
                                 <Track.Thumb>
                                     <Thumb Style="{StaticResource ThumbStyle}"></Thumb>
                                 </Track.Thumb>
                                 <Track.IncreaseRepeatButton>
-                                    <RepeatButton Command="ScrollBar.PageDownCommand" 
-                                                  Style="{StaticResource RepeatButtonStyleInc}"/>
+                                    <RepeatButton Command="ScrollBar.PageDownCommand" Style="{StaticResource RepeatButtonStyleInc}"/>
                                 </Track.IncreaseRepeatButton>
                             </Track>
-                            <RepeatButton Grid.Row="3" Height="18" Command="ScrollBar.LineDownCommand" 
-                                          Content="M 0 0 L 4 4 L 8 0 Z" 
-                                          Style="{StaticResource RepeatButtonStyleDec}"/>
+                            <RepeatButton Grid.Row="3" Height="18" Command="ScrollBar.LineDownCommand" Content="M 0 0 L 4 4 L 8 0 Z" Style="{StaticResource RepeatButtonStyleDec}"/>
                         </Grid>
                     </ControlTemplate>
 
@@ -854,10 +815,7 @@
                             <Setter.Value>
                                 <ControlTemplate>
                                     <Border>
-                                        <Rectangle Margin="2"
-                     StrokeThickness="1"
-                     Stroke="#CCCCCC"
-                     StrokeDashArray="1 2" />
+                                        <Rectangle Margin="2" StrokeThickness="1" Stroke="#CCCCCC" StrokeDashArray="1 2" />
                                     </Border>
                                 </ControlTemplate>
                             </Setter.Value>
@@ -870,19 +828,13 @@
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type ListViewItem}">
-                                    <Border Name="Border"
-                                            Margin="{TemplateBinding Margin}"
-                                            Padding="{TemplateBinding Padding}"
-                                            Background="{TemplateBinding Background}"
-                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                    <Border Name="Border" Margin="{TemplateBinding Margin}" Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
                                             BorderThickness="{TemplateBinding BorderThickness}"
                                             ClipToBounds="{TemplateBinding ClipToBounds}"
                                             CornerRadius="0"
                                             SnapsToDevicePixels="true">
 
-                                        <GridViewRowPresenter
-                                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
-                                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                        <GridViewRowPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                                         <!--
                                         <Border.InputBindings>
                                             <MouseBinding
@@ -891,7 +843,6 @@
                                                     Gesture="LeftDoubleClick" />
                                         </Border.InputBindings>
                                         -->
-
                                     </Border>
 
                                 </ControlTemplate>
@@ -899,19 +850,19 @@
                         </Setter>
                         <Style.Triggers>
                             <Trigger Property="ItemsControl.AlternationIndex" Value="0">
-                                <Setter Property="Background" Value="#212121" />
+                                <Setter Property="Background" Value="{DynamicResource ListviewAlt0ColorBrush}" />
                                 <Setter Property="BorderBrush" Value="Transparent" />
-                                <Setter Property="BorderThickness" Value="0,0,0,0.1" />
+                                <Setter Property="BorderThickness" Value="0" />
                             </Trigger>
                             <Trigger Property="ItemsControl.AlternationIndex" Value="1">
-                                <Setter Property="Background" Value="#1a1a1a" />
+                                <Setter Property="Background" Value="{DynamicResource ListviewAlt1ColorBrush}" />
                                 <Setter Property="BorderBrush" Value="Transparent" />
-                                <Setter Property="BorderThickness" Value="0,0,0,0.1" />
+                                <Setter Property="BorderThickness" Value="0" />
                             </Trigger>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter Property="Foreground" Value="White" />
                                 <Setter Property="BorderBrush" Value="WhiteSmoke" />
-                                <Setter Property="BorderThickness" Value="0,0,0,0.1" />
+                                <Setter Property="BorderThickness" Value="0" />
                             </Trigger>
                             <Trigger Property="IsSelected" Value="True">
                                 <Setter Property="Background" Value="{StaticResource AccentCoolDarkColorBrush}" />
@@ -919,7 +870,7 @@
                                 <Setter Property="TextElement.FontWeight" Value="Bold"/>
                                 <Setter Property="BorderBrush" Value="WhiteSmoke" />
                                 <!-- Or Gray -->
-                                <Setter Property="BorderThickness" Value="0,0,0,0.1" />
+                                <Setter Property="BorderThickness" Value="0" />
                             </Trigger>
                         </Style.Triggers>
                     </Style>
@@ -1684,7 +1635,7 @@
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type RepeatButton}">
-                                    <Border x:Name="Border" Margin="0" CornerRadius="0"  Background="{DynamicResource ScrollBarColorBrush}" BorderBrush="{DynamicResource ScrollBarBorderBrush}" BorderThickness="1">
+                                    <Border x:Name="Border" Margin="0" CornerRadius="0" BorderBrush="{DynamicResource ScrollBarBorderBrush}" BorderThickness="1">
                                         <Path HorizontalAlignment="Center" VerticalAlignment="Center" Fill="{DynamicResource ScrollBarHilightBrush}" Data="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}" />
                                     </Border>
                                     <ControlTemplate.Triggers>
@@ -1717,7 +1668,7 @@
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type Thumb}">
-                                    <Border x:Name="CustamThumb" CornerRadius="0" Background="{DynamicResource ScrollBarColorBrush}" BorderBrush="{DynamicResource ScrollBarBorderBrush}" BorderThickness="1" Margin="2"/>
+                                    <Border x:Name="CustamThumb" CornerRadius="0" Background="{DynamicResource ScrollBarColorBrush}" BorderBrush="{DynamicResource ScrollBarBorderBrush}" BorderThickness="1" Margin="1"/>
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="IsMouseOver" Value="True">
                                             <Setter TargetName="CustamThumb" Property="Background" Value="{DynamicResource ControlDarkColorBrush}"/>
@@ -2175,8 +2126,8 @@
 
                         <Setter Property="FocusVisualStyle" Value="{StaticResource ComboBoxFlatFocusVisualStyle}"/>
 
-                        <Setter Property="TextElement.Foreground" Value="{DynamicResource ControlForegroundColorBrush}"/>
-                        <Setter Property="Foreground" Value="{DynamicResource ControlForegroundColorBrush}"/>
+                        <Setter Property="TextElement.Foreground" Value="{DynamicResource NormalTextColorBrush}"/>
+                        <Setter Property="Foreground" Value="{DynamicResource NormalTextColorBrush}"/>
 
                         <Setter Property="Control.Template">
                             <Setter.Value>
