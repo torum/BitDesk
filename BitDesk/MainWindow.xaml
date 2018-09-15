@@ -2369,6 +2369,7 @@
                                                             <RowDefinition Height="Auto"/>
                                                             <RowDefinition Height="Auto"/>
                                                             <RowDefinition Height="Auto"/>
+                                                            <RowDefinition Height="Auto"/>
                                                         </Grid.RowDefinitions>
                                                         <Grid.ColumnDefinitions>
                                                             <ColumnDefinition Width="50*"/>
@@ -2420,7 +2421,14 @@
                                                                 <TextBox Text="{Binding ActivePair.AutoTradeSlots}" Width="80" Style="{DynamicResource DefaultTextBoxStyle}"></TextBox>
                                                             </StackPanel>
                                                         </Border>
-                                                        <Border Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Padding="3">
+
+                                                        <Border Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="3" Padding="3">
+                                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0">
+                                                                <Button Padding="3" TextElement.FontWeight="DemiBold" Width="120" Command="{Binding AutoTradeAddCommand}" IsEnabled="{Binding ActivePair.StopButtonEnable}" Content="追加"/>
+                                                            </StackPanel>
+                                                        </Border>
+                                                        
+                                                        <Border Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2" Padding="3">
                                                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0 24 0 0">
                                                                 <Label Content="損益： " FontSize="24" Style="{DynamicResource DefaultLabelStyle}"></Label>
                                                                 <TextBlock Text="{Binding ActivePair.AutoTradeProfit, Mode=OneWay, StringFormat=0.#############################}" FontSize="24" Style="{StaticResource DefaultTextBlockStyle}"></TextBlock>
