@@ -2144,6 +2144,7 @@ namespace BitDesk.ViewModels
         public int Id { get; set; }
         public string Name { get; set; }
         public string Label { get; set; }
+        public string IconData { get; set; }
     }
 
     #endregion
@@ -2157,886 +2158,6 @@ namespace BitDesk.ViewModels
     {
         // テスト用
         private decimal _initPrice = 81800M;
-
-        #region == 通貨ペアクラス ==
-
-        /// <summary>
-        /// 各通貨ペア毎の情報を保持するクラス
-        /// </summary>
-        public class Pair : ViewModelBase
-        {
-            #region == カラー定義 ==
-
-            // TODO
-            // Make them style or binding. 
-
-            public Color PriceUpColor = (Color)ColorConverter.ConvertFromString("#a0d8ef");//Colors.Aqua;
-            public Color PriceDownColor = (Color)ColorConverter.ConvertFromString("#e597b2");//Colors.Pink;
-            public static Color PriceNeutralColor = Colors.Gray;
-
-            private Color _priceWarningColor = (Color)ColorConverter.ConvertFromString("#FFDFD991");
-
-            private Color _accentCoolColor = (Color)ColorConverter.ConvertFromString("#2c4f54");
-            private Color _accentWarmColor = (Color)ColorConverter.ConvertFromString("#e0815e");
-
-            //private Color _chartStrokeColor = System.Windows.Media.Brushes.WhiteSmoke.Color;
-
-            #endregion
-            
-            // 通貨フォーマット用
-            private string _ltpFormstString = "{0:#,0}";
-            // 通貨ペア
-            private Pairs _p;
-
-            public Pairs ThisPair
-            {
-                get
-                {
-                    return _p;
-                }
-            }
-
-            // 表示用 通貨ペア名 "BTC/JPY";
-            public string PairString
-            {
-                get
-                {
-                    return PairStrings[_p];
-                }
-            }
-
-            public Dictionary<Pairs, string> PairStrings { get; set; } = new Dictionary<Pairs, string>()
-        {
-            {Pairs.btc_jpy, "BTC/JPY"},
-            {Pairs.xrp_jpy, "XRP/JPY"},
-            {Pairs.eth_btc, "ETH/BTC"},
-            {Pairs.ltc_btc, "LTC/BTC"},
-            {Pairs.mona_jpy, "MONA/JPY"},
-            {Pairs.mona_btc, "MONA/BTC"},
-            {Pairs.bcc_jpy, "BCH/JPY"},
-            {Pairs.bcc_btc, "BCH/BTC"},
-        };
-
-            // 最終取引価格
-            private decimal _ltp;
-            public decimal Ltp
-            {
-                get
-                {
-                    return _ltp;
-                }
-                set
-                {
-                    if (_ltp == value)
-                        return;
-
-                    _ltp = value;
-                    this.NotifyPropertyChanged("Ltp");
-                    this.NotifyPropertyChanged("LtpString");
-
-                    this.NotifyPropertyChanged("BasePriceIcon");
-                    this.NotifyPropertyChanged("BasePriceIconColor");
-                }
-            }
-
-            public string LtpString
-            {
-                get
-                {
-                    if (_ltp == 0)
-                    {
-                        return "";
-                    }
-                    else
-                    {
-                        return String.Format(_ltpFormstString, _ltp);
-
-                    }
-                }
-            }
-
-            private bool _ltpUpFlag;
-            public bool LtpUpFlag
-            {
-                get
-                {
-                    return _ltpUpFlag;
-                }
-                set
-                {
-                    if (_ltpUpFlag == value)
-                        return;
-
-                    _ltpUpFlag = value;
-                    this.NotifyPropertyChanged("LtpUpFlag");
-                }
-            }
-
-            private double _ltpFontSize = 45;
-            public double LtpFontSize
-            {
-                get { return _ltpFontSize; }
-            }
-
-            private decimal _bid;
-            public decimal Bid
-            {
-                get
-                {
-                    return _bid;
-                }
-                set
-                {
-                    if (_bid == value)
-                        return;
-
-                    _bid = value;
-                    this.NotifyPropertyChanged("Bid");
-                    this.NotifyPropertyChanged("BidString");
-
-                }
-            }
-            public string BidString
-            {
-                get { return String.Format("{0:#,0}", _bid); }
-            }
-
-            private decimal _ask;
-            public decimal Ask
-            {
-                get
-                {
-                    return _ask;
-                }
-                set
-                {
-                    if (_ask == value)
-                        return;
-
-                    _ask = value;
-                    this.NotifyPropertyChanged("Ask");
-                    this.NotifyPropertyChanged("AskString");
-
-                }
-            }
-            public string AskString
-            {
-                get { return String.Format("{0:#,0}", _ask); }
-            }
-
-            private DateTime _tickTimeStamp;
-            public DateTime TickTimeStamp
-            {
-                get
-                {
-                    return _tickTimeStamp;
-                }
-                set
-                {
-                    if (_tickTimeStamp == value)
-                        return;
-
-                    _tickTimeStamp = value;
-                    this.NotifyPropertyChanged("TickTimeStamp");
-                    this.NotifyPropertyChanged("TickTimeStampString");
-
-                }
-            }
-            public string TickTimeStampString
-            {
-                get { return PairString + " - " + _tickTimeStamp.ToLocalTime().ToString("yyyy/MM/dd/HH:mm:ss"); }
-            }
-
-            #region == アラーム用のプロパティ ==
-
-            // アラーム 警告音再生
-            private decimal _alarmPlus;
-            public decimal AlarmPlus
-            {
-                get
-                {
-                    return _alarmPlus;
-                }
-                set
-                {
-                    if (_alarmPlus == value)
-                        return;
-
-                    _alarmPlus = value;
-                    this.NotifyPropertyChanged("AlarmPlus");
-                    //this.NotifyPropertyChanged(nameof(ChartBlueline));
-                }
-            }
-            private decimal _alarmMinus;
-            public decimal AlarmMinus
-            {
-                get
-                {
-                    return _alarmMinus;
-                }
-                set
-                {
-                    if (_alarmMinus == value)
-                        return;
-
-                    _alarmMinus = value;
-                    this.NotifyPropertyChanged("AlarmMinus");
-                    //this.NotifyPropertyChanged(nameof(ChartRedline));
-                }
-            }
-
-            // 起動後　最安値　最高値　アラーム情報表示
-            private string _highLowInfoText;
-            public string HighLowInfoText
-            {
-                get
-                {
-                    return _highLowInfoText;
-                }
-                set
-                {
-                    if (_highLowInfoText == value)
-                        return;
-
-                    _highLowInfoText = value;
-                    this.NotifyPropertyChanged("HighLowInfoText");
-                }
-            }
-
-            private bool _highLowInfoTextColorFlag;
-            public bool HighLowInfoTextColorFlag
-            {
-                get
-                {
-                    return _highLowInfoTextColorFlag;
-                }
-                set
-                {
-                    if (_highLowInfoTextColorFlag == value)
-                        return;
-
-                    _highLowInfoTextColorFlag = value;
-                    this.NotifyPropertyChanged("HighLowInfoTextColorFlag");
-                }
-            }
-
-            // アラーム音
-            // 起動後
-            private bool _playSoundLowest = false;
-            public bool PlaySoundLowest
-            {
-                get
-                {
-                    return _playSoundLowest;
-                }
-                set
-                {
-                    if (_playSoundLowest == value)
-                        return;
-
-                    _playSoundLowest = value;
-                    this.NotifyPropertyChanged("PlaySoundLowest");
-                }
-            }
-            private bool _playSoundHighest = false;
-            public bool PlaySoundHighest
-            {
-                get
-                {
-                    return _playSoundHighest;
-                }
-                set
-                {
-                    if (_playSoundHighest == value)
-                        return;
-
-                    _playSoundHighest = value;
-                    this.NotifyPropertyChanged("PlaySoundHighest");
-                }
-            }
-            // last 24h
-            private bool _playSoundLowest24h = true;
-            public bool PlaySoundLowest24h
-            {
-                get
-                {
-                    return _playSoundLowest24h;
-                }
-                set
-                {
-                    if (_playSoundLowest24h == value)
-                        return;
-
-                    _playSoundLowest24h = value;
-                    this.NotifyPropertyChanged("PlaySoundLowest24h");
-                }
-            }
-            private bool _playSoundHighest24h = true;
-            public bool PlaySoundHighest24h
-            {
-                get
-                {
-                    return _playSoundHighest24h;
-                }
-                set
-                {
-                    if (_playSoundHighest24h == value)
-                        return;
-
-                    _playSoundHighest24h = value;
-                    this.NotifyPropertyChanged("PlaySoundHighest24h");
-                }
-            }
-
-            #endregion
-
-            #region == 統計情報のプロパティ ==
-
-            // 起動時初期価格
-            private decimal _basePrice = 0;
-            public decimal BasePrice
-            {
-                get
-                {
-                    return _basePrice;
-                }
-                set
-                {
-                    if (_basePrice == value)
-                        return;
-
-                    _basePrice = value;
-
-                    this.NotifyPropertyChanged("BasePrice");
-                    this.NotifyPropertyChanged("BasePriceIcon");
-                    this.NotifyPropertyChanged("BasePriceIconColor");
-                    this.NotifyPropertyChanged("BasePriceString");
-
-                }
-            }
-            public string BasePriceIcon
-            {
-                get
-                {
-                    if (_ltp > BasePrice)
-                    {
-                        return "▲";
-                    }
-                    else if (_ltp < BasePrice)
-                    {
-                        return "▼";
-                    }
-                    else
-                    {
-                        return "＝";
-                    }
-                }
-            }
-            public Color BasePriceIconColor
-            {
-                get
-                {
-                    if (_ltp > BasePrice)
-                    {
-                        return PriceUpColor;//Colors.Aqua;
-                    }
-                    else if (_ltp < BasePrice)
-                    {
-                        return PriceDownColor; //Colors.Pink;
-                    }
-                    else
-                    {
-                        return Colors.Gainsboro;
-                    }
-                }
-            }
-            public string BasePriceString
-            {
-                get
-                {
-                    return String.Format(_ltpFormstString, BasePrice);
-                }
-            }
-
-            // 過去1分間の平均値
-            private decimal _averagePrice;
-            public decimal AveragePrice
-            {
-                get { return _averagePrice; }
-                set
-                {
-                    if (_averagePrice == value)
-                        return;
-
-                    _averagePrice = value;
-                    this.NotifyPropertyChanged("AveragePrice");
-                    this.NotifyPropertyChanged("AveragePriceIcon");
-                    this.NotifyPropertyChanged("AveragePriceIconColor");
-                    this.NotifyPropertyChanged("AveragePriceString");
-                }
-            }
-            public string AveragePriceIcon
-            {
-                get
-                {
-                    if (_ltp > _averagePrice)
-                    {
-                        return "▲";
-                    }
-                    else if (_ltp < _averagePrice)
-                    {
-                        return "▼";
-                    }
-                    else
-                    {
-                        return "＝";
-                    }
-                }
-            }
-            public Color AveragePriceIconColor
-            {
-                get
-                {
-                    if (_ltp > _averagePrice)
-                    {
-                        return PriceUpColor;//Colors.Aqua;
-                    }
-                    else if (_ltp < _averagePrice)
-                    {
-                        return PriceDownColor;//Colors.Pink;
-                    }
-                    else
-                    {
-                        return Colors.Gainsboro;
-                    }
-                }
-            }
-            public string AveragePriceString
-            {
-                get
-                {
-                    return String.Format(_ltpFormstString, _averagePrice); ;
-                }
-            }
-
-            // 過去２４時間の中央値
-            public decimal MiddleLast24Price
-            {
-                get
-                {
-                    return ((_lowestIn24Price + _highestIn24Price) / 2L);
-                }
-            }
-            public string MiddleLast24PriceIcon
-            {
-                get
-                {
-                    if (_ltp > MiddleLast24Price)
-                    {
-                        return "▲";
-                    }
-                    else if (_ltp < MiddleLast24Price)
-                    {
-                        return "▼";
-                    }
-                    else
-                    {
-                        return "＝";
-                    }
-                }
-            }
-            public Color MiddleLast24PriceIconColor
-            {
-                get
-                {
-                    if (_ltp > MiddleLast24Price)
-                    {
-                        return PriceUpColor;//Colors.Aqua;
-                    }
-                    else if (_ltp < MiddleLast24Price)
-                    {
-                        return PriceDownColor;//Colors.Pink;
-                    }
-                    else
-                    {
-                        return Colors.Gainsboro;
-                    }
-                }
-            }
-            public string MiddleLast24PriceString
-            {
-                get
-                {
-                    return String.Format(_ltpFormstString, MiddleLast24Price); ;
-                }
-            }
-
-            // 起動後の中央値
-            public decimal MiddleInitPrice
-            {
-                get
-                {
-                    return ((_lowestPrice + _highestPrice) / 2L);
-                }
-            }
-            public string MiddleInitPriceIcon
-            {
-                get
-                {
-                    if (_ltp > MiddleInitPrice)
-                    {
-                        return "▲";
-                    }
-                    else if (_ltp < MiddleInitPrice)
-                    {
-                        return "▼";
-                    }
-                    else
-                    {
-                        return "＝";
-                    }
-                }
-            }
-            public Color MiddleInitPriceIconColor
-            {
-                get
-                {
-                    if (_ltp > MiddleInitPrice)
-                    {
-                        return PriceUpColor;//Colors.Aqua;
-                    }
-                    else if (_ltp < MiddleInitPrice)
-                    {
-                        return PriceDownColor;//Colors.Pink;
-                    }
-                    else
-                    {
-                        return Colors.Gainsboro;
-                    }
-                }
-            }
-            public string MiddleInitPriceString
-            {
-                get
-                {
-                    return String.Format(_ltpFormstString, MiddleInitPrice); ;
-                }
-            }
-
-            //high 過去24時間の最高値取引価格
-            private decimal _highestIn24Price;
-            public decimal HighestIn24Price
-            {
-                get { return _highestIn24Price; }
-                set
-                {
-                    if (_highestIn24Price == value)
-                        return;
-
-                    _highestIn24Price = value;
-                    this.NotifyPropertyChanged("HighestIn24Price");
-                    this.NotifyPropertyChanged("High24String");
-                    //this.NotifyPropertyChanged("ChartMaxValue");
-
-
-                    this.NotifyPropertyChanged("MiddleLast24Price");
-                    this.NotifyPropertyChanged("MiddleLast24PriceIcon");
-                    this.NotifyPropertyChanged("MiddleLast24PriceIconColor");
-                    this.NotifyPropertyChanged("MiddleLast24PriceString");
-
-                    //if (MinMode) return;
-                    // チャートの最高値をセット
-                    //ChartAxisY[0].MaxValue = (double)_highestIn24Price + 3000;
-                    // チャートの２４最高値ポイントを更新
-                    //(ChartSeries[1].Values[0] as ObservableValue).Value = (double)_highestIn24Price;
-
-                }
-            }
-            public string High24String
-            {
-                get { return String.Format(_ltpFormstString, _highestIn24Price); }
-            }
-
-            //low 過去24時間の最安値取引価格
-            private decimal _lowestIn24Price;
-            public decimal LowestIn24Price
-            {
-                get { return _lowestIn24Price; }
-                set
-                {
-                    if (_lowestIn24Price == value)
-                        return;
-
-                    _lowestIn24Price = value;
-                    this.NotifyPropertyChanged("LowestIn24Price");
-                    this.NotifyPropertyChanged("Low24String");
-                    //this.NotifyPropertyChanged("ChartMinValue");
-
-                    this.NotifyPropertyChanged("MiddleLast24Price");
-                    this.NotifyPropertyChanged("MiddleLast24PriceIcon");
-                    this.NotifyPropertyChanged("MiddleLast24PriceIconColor");
-                    this.NotifyPropertyChanged("MiddleLast24PriceString");
-
-                    //if (MinMode) return;
-                    // チャートの最低値をセット
-                    //ChartAxisY[0].MinValue = (double)_lowestIn24Price - 3000;
-                    // チャートの２４最低値ポイントを更新
-                    //(ChartSeries[2].Values[0] as ObservableValue).Value = (double)_lowestIn24Price;
-                }
-            }
-            public string Low24String
-            {
-                get { return String.Format(_ltpFormstString, _lowestIn24Price); }
-            }
-
-            // 起動後 最高値
-            private decimal _highestPrice;
-            public decimal HighestPrice
-            {
-                get { return _highestPrice; }
-                set
-                {
-                    if (_highestPrice == value)
-                        return;
-
-                    _highestPrice = value;
-                    this.NotifyPropertyChanged("HighestPrice");
-                    this.NotifyPropertyChanged("HighestPriceString");
-
-                    this.NotifyPropertyChanged("MiddleInitPrice");
-                    this.NotifyPropertyChanged("MiddleInitPriceString");
-                    this.NotifyPropertyChanged("MiddleInitPriceIcon");
-                    this.NotifyPropertyChanged("MiddleInitPriceIconColor");
-
-                    //if (MinMode) return;
-                    //(ChartSeries[1].Values[0] as ObservableValue).Value = (double)_highestPrice;
-                }
-            }
-            public string HighestPriceString
-            {
-                get
-                {
-                    return String.Format(_ltpFormstString, _highestPrice); ;
-                }
-            }
-
-            // 起動後 最低 値
-            private decimal _lowestPrice;
-            public decimal LowestPrice
-            {
-                get { return _lowestPrice; }
-                set
-                {
-                    if (_lowestPrice == value)
-                        return;
-
-                    _lowestPrice = value;
-                    this.NotifyPropertyChanged("LowestPrice");
-                    this.NotifyPropertyChanged("LowestPriceString");
-
-                    this.NotifyPropertyChanged("MiddleInitPrice");
-                    this.NotifyPropertyChanged("MiddleInitPriceString");
-                    this.NotifyPropertyChanged("MiddleInitPriceIcon");
-                    this.NotifyPropertyChanged("MiddleInitPriceIconColor");
-
-                    //if (MinMode) return;
-                    // (ChartSeries[2].Values[0] as ObservableValue).Value = (double)_lowestPrice;
-                }
-            }
-            public string LowestPriceString
-            {
-                get
-                {
-                    return String.Format(_ltpFormstString, _lowestPrice); ;
-                }
-            }
-
-            #endregion
-
-            #region == 板情報のプロパティ ==
-
-            private decimal _depthGrouping = 0;
-            public decimal DepthGrouping
-            {
-                get
-                {
-                    return _depthGrouping;
-                }
-                set
-                {
-                    if (_depthGrouping == value)
-                        return;
-
-                    _depthGrouping = value;
-
-                    if (DepthGrouping100 == _depthGrouping)
-                    {
-                        IsDepthGrouping100 = true;
-                        IsDepthGrouping1000 = false;
-                        IsDepthGroupingOff = false;
-                    }
-                    if (DepthGrouping1000 == _depthGrouping)
-                    {
-                        IsDepthGrouping100 = false;
-                        IsDepthGrouping1000 = true;
-                        IsDepthGroupingOff = false;
-                    }
-
-                    if (0 == _depthGrouping)
-                    {
-                        IsDepthGrouping100 = false;
-                        IsDepthGrouping1000 = false;
-                        IsDepthGroupingOff = true;
-                    }
-
-                    this.NotifyPropertyChanged("DepthGrouping");
-
-                }
-            }
-
-            private bool _isDepthGroupingOff = true;
-            public bool IsDepthGroupingOff
-            {
-                get
-                {
-                    return _isDepthGroupingOff;
-                }
-                set
-                {
-                    if (_isDepthGroupingOff == value)
-                        return;
-
-                    _isDepthGroupingOff = value;
-                    this.NotifyPropertyChanged("IsDepthGroupingOff");
-                }
-            }
-
-            private decimal _depthGrouping100 = 100;
-            public decimal DepthGrouping100
-            {
-                get
-                {
-                    return _depthGrouping100;
-                }
-                set
-                {
-                    if (_depthGrouping100 == value)
-                        return;
-
-                    _depthGrouping100 = value;
-                    this.NotifyPropertyChanged("DepthGrouping100");
-
-                }
-            }
-
-            private bool _isDepthGrouping100;
-            public bool IsDepthGrouping100
-            {
-                get
-                {
-                    return _isDepthGrouping100;
-                }
-                set
-                {
-                    if (_isDepthGrouping100 == value)
-                        return;
-
-                    _isDepthGrouping100 = value;
-                    this.NotifyPropertyChanged("IsDepthGrouping100");
-                }
-            }
-
-            private decimal _depthGrouping1000 = 1000;
-            public decimal DepthGrouping1000
-            {
-                get
-                {
-                    return _depthGrouping1000;
-                }
-                set
-                {
-                    if (_depthGrouping1000 == value)
-                        return;
-
-                    _depthGrouping1000 = value;
-                    this.NotifyPropertyChanged("DepthGrouping1000");
-
-                }
-            }
-
-            private bool _isDepthGrouping1000;
-            public bool IsDepthGrouping1000
-            {
-                get
-                {
-                    return _isDepthGrouping1000;
-                }
-                set
-                {
-                    if (_isDepthGrouping1000 == value)
-                        return;
-
-                    _isDepthGrouping1000 = value;
-                    this.NotifyPropertyChanged("IsDepthGrouping1000");
-                }
-            }
-
-            #endregion
-
-            // TickHistoryクラス リスト
-            private ObservableCollection<TickHistory> _tickHistory = new ObservableCollection<TickHistory>();
-            public ObservableCollection<TickHistory> TickHistories
-            {
-                get { return this._tickHistory; }
-            }
-
-            // アクティブな注文一覧
-            private ObservableCollection<Order> _activeOrders = new ObservableCollection<Order>();
-            public ObservableCollection<Order> ActiveOrders
-            {
-                get { return this._activeOrders; }
-            }
-
-            // 取引履歴 trade list
-            private ObservableCollection<Trade> _trades = new ObservableCollection<Trade>();
-            public ObservableCollection<Trade> Trades
-            {
-                get { return this._trades; }
-            }
-
-            // 特殊注文IFDOCO注文一覧 Ifdoco order list
-            private ObservableCollection<Ifdoco> _ifdocos = new ObservableCollection<Ifdoco>();
-            public ObservableCollection<Ifdoco> Ifdocos
-            {
-                get { return this._ifdocos; }
-            }
-
-            // 自動取引
-            private ObservableCollection<AutoTrade> _autoTrades = new ObservableCollection<AutoTrade>();
-            public ObservableCollection<AutoTrade> AutoTrades
-            {
-                get { return this._autoTrades; }
-            }
-
-            // コンストラクタ
-            public Pair(Pairs p, double fontSize, string ltpFormstString, decimal grouping100, decimal grouping1000)
-            {
-                this._p = p;
-                _ltpFontSize = fontSize;
-                _ltpFormstString = ltpFormstString;
-
-                _depthGrouping100 = grouping100;
-                _depthGrouping1000 = grouping1000;
-
-                BindingOperations.EnableCollectionSynchronization(this._tickHistory, new object());
-                BindingOperations.EnableCollectionSynchronization(this._activeOrders, new object());
-                BindingOperations.EnableCollectionSynchronization(this._trades, new object());
-                BindingOperations.EnableCollectionSynchronization(this._autoTrades, new object());
-            }
-
-        }
-
-        #endregion
 
         #region == 基本 ==
 
@@ -3067,7 +2188,7 @@ namespace BitDesk.ViewModels
         {
             get
             {
-                return true;
+                return false;
             }
         }
 
@@ -4626,7 +3747,7 @@ namespace BitDesk.ViewModels
         {
             get
             {
-                if (AutoTradeStart)
+                if (ActivePair.AutoTradeStart)
                 {
                     return "自動取引(_Z) (On)";
                 }
@@ -5626,229 +4747,6 @@ namespace BitDesk.ViewModels
 
         System.Windows.Threading.DispatcherTimer dispatcherTimerTickAllPairs = new System.Windows.Threading.DispatcherTimer();
         System.Windows.Threading.DispatcherTimer dispatcherChartTimer = new System.Windows.Threading.DispatcherTimer();
-
-        #endregion
-
-        #region == 自動取引用のプロパティ ==
-
-        // 自動取引開始停止フラグ
-        private bool _autoTradeStart = false;
-        public bool AutoTradeStart
-        {
-            get
-            {
-                return _autoTradeStart;
-            }
-            set
-            {
-                if (_autoTradeStart == value)
-                    return;
-
-                _autoTradeStart = value;
-
-                this.NotifyPropertyChanged("AutoTradeStart");
-                this.NotifyPropertyChanged("StartButtonEnable");
-                this.NotifyPropertyChanged("StopButtonEnable");
-                this.NotifyPropertyChanged("AutoTradeTitle");
-
-                // 自動取引ループスタート
-                //if (_autoTradeStart) UpdateAutoTrade();
-
-            }
-        }
-
-        // 開始ボタン有効
-        public bool StartButtonEnable
-        {
-            get
-            {
-                if (_autoTradeStart)
-                {
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
-            }
-        }
-
-        // 停止ボタン有効
-        public bool StopButtonEnable
-        {
-            get
-            {
-                if (_autoTradeStart)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-        }
-
-        private decimal _autoTradeProfit;
-        public decimal AutoTradeProfit
-        {
-            get
-            {
-                return _autoTradeProfit;
-            }
-            set
-            {
-                if (_autoTradeProfit == value)
-                    return;
-
-                _autoTradeProfit = value;
-                this.NotifyPropertyChanged("AutoTradeProfit");
-            }
-        }
-
-        // 取引単位
-        private decimal _autoTradeTama = 0.001M;
-        public decimal AutoTradeTama
-        {
-            get
-            {
-                return _autoTradeTama;
-            }
-            set
-            {
-                if (_autoTradeTama == value)
-                    return;
-
-                _autoTradeTama = value;
-                this.NotifyPropertyChanged("AutoTradeTama");
-            }
-        }
-
-        // アッパーリミット
-        private decimal _autoTradeUpperLimit;
-        public decimal AutoTradeUpperLimit
-        {
-            get
-            {
-                return _autoTradeUpperLimit;
-            }
-            set
-            {
-                if (_autoTradeUpperLimit == value)
-                    return;
-
-                _autoTradeUpperLimit = value;
-                this.NotifyPropertyChanged("AutoTradeUpperLimit");
-            }
-        }
-
-        // ローワーリミット
-        private decimal _autoTradeLowerLimit;
-        public decimal AutoTradeLowerLimit
-        {
-            get
-            {
-                return _autoTradeLowerLimit;
-            }
-            set
-            {
-                if (_autoTradeLowerLimit == value)
-                    return;
-
-                _autoTradeLowerLimit = value;
-                this.NotifyPropertyChanged("AutoTradeLowerLimit");
-            }
-        }
-
-        // 損切値幅
-        private decimal _autoTradeLostCut = 20000M;
-        public decimal AutoTradeLostCut
-        {
-            get
-            {
-                return _autoTradeLostCut;
-            }
-            set
-            {
-                if (_autoTradeLostCut == value)
-                    return;
-
-                _autoTradeLostCut = value;
-                this.NotifyPropertyChanged("AutoTradeLostCut");
-            }
-        }
-
-        // アクティブ注文数
-        private int _autoTradeActiveOrders;
-        public int AutoTradeActiveOrders
-        {
-            get
-            {
-                return _autoTradeActiveOrders;
-            }
-            set
-            {
-                if (_autoTradeActiveOrders == value)
-                    return;
-
-                _autoTradeActiveOrders = value;
-                this.NotifyPropertyChanged("AutoTradeActiveOrders");
-            }
-        }
-
-        // 売り未約定の注文数
-        private int _autoTradeSellOrders;
-        public int AutoTradeSellOrders
-        {
-            get
-            {
-                return _autoTradeSellOrders;
-            }
-            set
-            {
-                if (_autoTradeSellOrders == value)
-                    return;
-
-                _autoTradeSellOrders = value;
-                this.NotifyPropertyChanged("AutoTradeSellOrders");
-            }
-        }
-
-        // 買い未約定の注文数
-        private int _autoTradeBuyOrders;
-        public int AutoTradeBuyOrders
-        {
-            get
-            {
-                return _autoTradeBuyOrders;
-            }
-            set
-            {
-                if (_autoTradeBuyOrders == value)
-                    return;
-
-                _autoTradeBuyOrders = value;
-                this.NotifyPropertyChanged("AutoTradeBuyOrders");
-            }
-        }
-
-        // エラーの注文数
-        private int _autoTradeErrOrders;
-        public int AutoTradeErrOrders
-        {
-            get
-            {
-                return _autoTradeErrOrders;
-            }
-            set
-            {
-                if (_autoTradeErrOrders == value)
-                    return;
-
-                _autoTradeErrOrders = value;
-                this.NotifyPropertyChanged("AutoTradeErrOrders");
-            }
-        }
 
         #endregion
 
@@ -7980,6 +6878,1125 @@ namespace BitDesk.ViewModels
         #endregion
 
 
+        #region == 通貨ペアクラス ==
+
+        /// <summary>
+        /// 各通貨ペア毎の情報を保持するクラス
+        /// </summary>
+        public class Pair : ViewModelBase
+        {
+            #region == カラー定義 ==
+
+            // TODO
+            // Make them style or binding. 
+
+            public Color PriceUpColor = (Color)ColorConverter.ConvertFromString("#a0d8ef");//Colors.Aqua;
+            public Color PriceDownColor = (Color)ColorConverter.ConvertFromString("#e597b2");//Colors.Pink;
+            public static Color PriceNeutralColor = Colors.Gray;
+
+            private Color _priceWarningColor = (Color)ColorConverter.ConvertFromString("#FFDFD991");
+
+            private Color _accentCoolColor = (Color)ColorConverter.ConvertFromString("#2c4f54");
+            private Color _accentWarmColor = (Color)ColorConverter.ConvertFromString("#e0815e");
+
+            //private Color _chartStrokeColor = System.Windows.Media.Brushes.WhiteSmoke.Color;
+
+            #endregion
+
+            // 通貨フォーマット用
+            private string _ltpFormstString = "{0:#,0}";
+            // 通貨ペア
+            private Pairs _p;
+
+            public Pairs ThisPair
+            {
+                get
+                {
+                    return _p;
+                }
+            }
+
+            // 表示用 通貨ペア名 "BTC/JPY";
+            public string PairString
+            {
+                get
+                {
+                    return PairStrings[_p];
+                }
+            }
+
+            public Dictionary<Pairs, string> PairStrings { get; set; } = new Dictionary<Pairs, string>()
+        {
+            {Pairs.btc_jpy, "BTC/JPY"},
+            {Pairs.xrp_jpy, "XRP/JPY"},
+            {Pairs.eth_btc, "ETH/BTC"},
+            {Pairs.ltc_btc, "LTC/BTC"},
+            {Pairs.mona_jpy, "MONA/JPY"},
+            {Pairs.mona_btc, "MONA/BTC"},
+            {Pairs.bcc_jpy, "BCH/JPY"},
+            {Pairs.bcc_btc, "BCH/BTC"},
+        };
+
+            // 最終取引価格
+            private decimal _ltp;
+            public decimal Ltp
+            {
+                get
+                {
+                    return _ltp;
+                }
+                set
+                {
+                    if (_ltp == value)
+                        return;
+
+                    _ltp = value;
+                    this.NotifyPropertyChanged("Ltp");
+                    this.NotifyPropertyChanged("LtpString");
+
+                    this.NotifyPropertyChanged("BasePriceIcon");
+                    this.NotifyPropertyChanged("BasePriceIconColor");
+                }
+            }
+
+            public string LtpString
+            {
+                get
+                {
+                    if (_ltp == 0)
+                    {
+                        return "";
+                    }
+                    else
+                    {
+                        return String.Format(_ltpFormstString, _ltp);
+
+                    }
+                }
+            }
+
+            private bool _ltpUpFlag;
+            public bool LtpUpFlag
+            {
+                get
+                {
+                    return _ltpUpFlag;
+                }
+                set
+                {
+                    if (_ltpUpFlag == value)
+                        return;
+
+                    _ltpUpFlag = value;
+                    this.NotifyPropertyChanged("LtpUpFlag");
+                }
+            }
+
+            private double _ltpFontSize = 45;
+            public double LtpFontSize
+            {
+                get { return _ltpFontSize; }
+            }
+
+            private decimal _bid;
+            public decimal Bid
+            {
+                get
+                {
+                    return _bid;
+                }
+                set
+                {
+                    if (_bid == value)
+                        return;
+
+                    _bid = value;
+                    this.NotifyPropertyChanged("Bid");
+                    this.NotifyPropertyChanged("BidString");
+
+                }
+            }
+            public string BidString
+            {
+                get { return String.Format("{0:#,0}", _bid); }
+            }
+
+            private decimal _ask;
+            public decimal Ask
+            {
+                get
+                {
+                    return _ask;
+                }
+                set
+                {
+                    if (_ask == value)
+                        return;
+
+                    _ask = value;
+                    this.NotifyPropertyChanged("Ask");
+                    this.NotifyPropertyChanged("AskString");
+
+                }
+            }
+            public string AskString
+            {
+                get { return String.Format("{0:#,0}", _ask); }
+            }
+
+            private DateTime _tickTimeStamp;
+            public DateTime TickTimeStamp
+            {
+                get
+                {
+                    return _tickTimeStamp;
+                }
+                set
+                {
+                    if (_tickTimeStamp == value)
+                        return;
+
+                    _tickTimeStamp = value;
+                    this.NotifyPropertyChanged("TickTimeStamp");
+                    this.NotifyPropertyChanged("TickTimeStampString");
+
+                }
+            }
+            public string TickTimeStampString
+            {
+                get { return PairString + " - " + _tickTimeStamp.ToLocalTime().ToString("yyyy/MM/dd/HH:mm:ss"); }
+            }
+
+            #region == アラーム用のプロパティ ==
+
+            // アラーム 警告音再生
+            private decimal _alarmPlus;
+            public decimal AlarmPlus
+            {
+                get
+                {
+                    return _alarmPlus;
+                }
+                set
+                {
+                    if (_alarmPlus == value)
+                        return;
+
+                    _alarmPlus = value;
+                    this.NotifyPropertyChanged("AlarmPlus");
+                    //this.NotifyPropertyChanged(nameof(ChartBlueline));
+                }
+            }
+            private decimal _alarmMinus;
+            public decimal AlarmMinus
+            {
+                get
+                {
+                    return _alarmMinus;
+                }
+                set
+                {
+                    if (_alarmMinus == value)
+                        return;
+
+                    _alarmMinus = value;
+                    this.NotifyPropertyChanged("AlarmMinus");
+                    //this.NotifyPropertyChanged(nameof(ChartRedline));
+                }
+            }
+
+            // 起動後　最安値　最高値　アラーム情報表示
+            private string _highLowInfoText;
+            public string HighLowInfoText
+            {
+                get
+                {
+                    return _highLowInfoText;
+                }
+                set
+                {
+                    if (_highLowInfoText == value)
+                        return;
+
+                    _highLowInfoText = value;
+                    this.NotifyPropertyChanged("HighLowInfoText");
+                }
+            }
+
+            private bool _highLowInfoTextColorFlag;
+            public bool HighLowInfoTextColorFlag
+            {
+                get
+                {
+                    return _highLowInfoTextColorFlag;
+                }
+                set
+                {
+                    if (_highLowInfoTextColorFlag == value)
+                        return;
+
+                    _highLowInfoTextColorFlag = value;
+                    this.NotifyPropertyChanged("HighLowInfoTextColorFlag");
+                }
+            }
+
+            // アラーム音
+            // 起動後
+            private bool _playSoundLowest = false;
+            public bool PlaySoundLowest
+            {
+                get
+                {
+                    return _playSoundLowest;
+                }
+                set
+                {
+                    if (_playSoundLowest == value)
+                        return;
+
+                    _playSoundLowest = value;
+                    this.NotifyPropertyChanged("PlaySoundLowest");
+                }
+            }
+            private bool _playSoundHighest = false;
+            public bool PlaySoundHighest
+            {
+                get
+                {
+                    return _playSoundHighest;
+                }
+                set
+                {
+                    if (_playSoundHighest == value)
+                        return;
+
+                    _playSoundHighest = value;
+                    this.NotifyPropertyChanged("PlaySoundHighest");
+                }
+            }
+            // last 24h
+            private bool _playSoundLowest24h = true;
+            public bool PlaySoundLowest24h
+            {
+                get
+                {
+                    return _playSoundLowest24h;
+                }
+                set
+                {
+                    if (_playSoundLowest24h == value)
+                        return;
+
+                    _playSoundLowest24h = value;
+                    this.NotifyPropertyChanged("PlaySoundLowest24h");
+                }
+            }
+            private bool _playSoundHighest24h = true;
+            public bool PlaySoundHighest24h
+            {
+                get
+                {
+                    return _playSoundHighest24h;
+                }
+                set
+                {
+                    if (_playSoundHighest24h == value)
+                        return;
+
+                    _playSoundHighest24h = value;
+                    this.NotifyPropertyChanged("PlaySoundHighest24h");
+                }
+            }
+
+            #endregion
+
+            #region == 統計情報のプロパティ ==
+
+            // 起動時初期価格
+            private decimal _basePrice = 0;
+            public decimal BasePrice
+            {
+                get
+                {
+                    return _basePrice;
+                }
+                set
+                {
+                    if (_basePrice == value)
+                        return;
+
+                    _basePrice = value;
+
+                    this.NotifyPropertyChanged("BasePrice");
+                    this.NotifyPropertyChanged("BasePriceIcon");
+                    this.NotifyPropertyChanged("BasePriceIconColor");
+                    this.NotifyPropertyChanged("BasePriceString");
+
+                }
+            }
+            public string BasePriceIcon
+            {
+                get
+                {
+                    if (_ltp > BasePrice)
+                    {
+                        return "▲";
+                    }
+                    else if (_ltp < BasePrice)
+                    {
+                        return "▼";
+                    }
+                    else
+                    {
+                        return "＝";
+                    }
+                }
+            }
+            public Color BasePriceIconColor
+            {
+                get
+                {
+                    if (_ltp > BasePrice)
+                    {
+                        return PriceUpColor;//Colors.Aqua;
+                    }
+                    else if (_ltp < BasePrice)
+                    {
+                        return PriceDownColor; //Colors.Pink;
+                    }
+                    else
+                    {
+                        return Colors.Gainsboro;
+                    }
+                }
+            }
+            public string BasePriceString
+            {
+                get
+                {
+                    return String.Format(_ltpFormstString, BasePrice);
+                }
+            }
+
+            // 過去1分間の平均値
+            private decimal _averagePrice;
+            public decimal AveragePrice
+            {
+                get { return _averagePrice; }
+                set
+                {
+                    if (_averagePrice == value)
+                        return;
+
+                    _averagePrice = value;
+                    this.NotifyPropertyChanged("AveragePrice");
+                    this.NotifyPropertyChanged("AveragePriceIcon");
+                    this.NotifyPropertyChanged("AveragePriceIconColor");
+                    this.NotifyPropertyChanged("AveragePriceString");
+                }
+            }
+            public string AveragePriceIcon
+            {
+                get
+                {
+                    if (_ltp > _averagePrice)
+                    {
+                        return "▲";
+                    }
+                    else if (_ltp < _averagePrice)
+                    {
+                        return "▼";
+                    }
+                    else
+                    {
+                        return "＝";
+                    }
+                }
+            }
+            public Color AveragePriceIconColor
+            {
+                get
+                {
+                    if (_ltp > _averagePrice)
+                    {
+                        return PriceUpColor;//Colors.Aqua;
+                    }
+                    else if (_ltp < _averagePrice)
+                    {
+                        return PriceDownColor;//Colors.Pink;
+                    }
+                    else
+                    {
+                        return Colors.Gainsboro;
+                    }
+                }
+            }
+            public string AveragePriceString
+            {
+                get
+                {
+                    return String.Format(_ltpFormstString, _averagePrice); ;
+                }
+            }
+
+            // 過去２４時間の中央値
+            public decimal MiddleLast24Price
+            {
+                get
+                {
+                    return ((_lowestIn24Price + _highestIn24Price) / 2L);
+                }
+            }
+            public string MiddleLast24PriceIcon
+            {
+                get
+                {
+                    if (_ltp > MiddleLast24Price)
+                    {
+                        return "▲";
+                    }
+                    else if (_ltp < MiddleLast24Price)
+                    {
+                        return "▼";
+                    }
+                    else
+                    {
+                        return "＝";
+                    }
+                }
+            }
+            public Color MiddleLast24PriceIconColor
+            {
+                get
+                {
+                    if (_ltp > MiddleLast24Price)
+                    {
+                        return PriceUpColor;//Colors.Aqua;
+                    }
+                    else if (_ltp < MiddleLast24Price)
+                    {
+                        return PriceDownColor;//Colors.Pink;
+                    }
+                    else
+                    {
+                        return Colors.Gainsboro;
+                    }
+                }
+            }
+            public string MiddleLast24PriceString
+            {
+                get
+                {
+                    return String.Format(_ltpFormstString, MiddleLast24Price); ;
+                }
+            }
+
+            // 起動後の中央値
+            public decimal MiddleInitPrice
+            {
+                get
+                {
+                    return ((_lowestPrice + _highestPrice) / 2L);
+                }
+            }
+            public string MiddleInitPriceIcon
+            {
+                get
+                {
+                    if (_ltp > MiddleInitPrice)
+                    {
+                        return "▲";
+                    }
+                    else if (_ltp < MiddleInitPrice)
+                    {
+                        return "▼";
+                    }
+                    else
+                    {
+                        return "＝";
+                    }
+                }
+            }
+            public Color MiddleInitPriceIconColor
+            {
+                get
+                {
+                    if (_ltp > MiddleInitPrice)
+                    {
+                        return PriceUpColor;//Colors.Aqua;
+                    }
+                    else if (_ltp < MiddleInitPrice)
+                    {
+                        return PriceDownColor;//Colors.Pink;
+                    }
+                    else
+                    {
+                        return Colors.Gainsboro;
+                    }
+                }
+            }
+            public string MiddleInitPriceString
+            {
+                get
+                {
+                    return String.Format(_ltpFormstString, MiddleInitPrice); ;
+                }
+            }
+
+            //high 過去24時間の最高値取引価格
+            private decimal _highestIn24Price;
+            public decimal HighestIn24Price
+            {
+                get { return _highestIn24Price; }
+                set
+                {
+                    if (_highestIn24Price == value)
+                        return;
+
+                    _highestIn24Price = value;
+                    this.NotifyPropertyChanged("HighestIn24Price");
+                    this.NotifyPropertyChanged("High24String");
+                    //this.NotifyPropertyChanged("ChartMaxValue");
+
+
+                    this.NotifyPropertyChanged("MiddleLast24Price");
+                    this.NotifyPropertyChanged("MiddleLast24PriceIcon");
+                    this.NotifyPropertyChanged("MiddleLast24PriceIconColor");
+                    this.NotifyPropertyChanged("MiddleLast24PriceString");
+
+                    //if (MinMode) return;
+                    // チャートの最高値をセット
+                    //ChartAxisY[0].MaxValue = (double)_highestIn24Price + 3000;
+                    // チャートの２４最高値ポイントを更新
+                    //(ChartSeries[1].Values[0] as ObservableValue).Value = (double)_highestIn24Price;
+
+                }
+            }
+            public string High24String
+            {
+                get { return String.Format(_ltpFormstString, _highestIn24Price); }
+            }
+
+            //low 過去24時間の最安値取引価格
+            private decimal _lowestIn24Price;
+            public decimal LowestIn24Price
+            {
+                get { return _lowestIn24Price; }
+                set
+                {
+                    if (_lowestIn24Price == value)
+                        return;
+
+                    _lowestIn24Price = value;
+                    this.NotifyPropertyChanged("LowestIn24Price");
+                    this.NotifyPropertyChanged("Low24String");
+                    //this.NotifyPropertyChanged("ChartMinValue");
+
+                    this.NotifyPropertyChanged("MiddleLast24Price");
+                    this.NotifyPropertyChanged("MiddleLast24PriceIcon");
+                    this.NotifyPropertyChanged("MiddleLast24PriceIconColor");
+                    this.NotifyPropertyChanged("MiddleLast24PriceString");
+
+                    //if (MinMode) return;
+                    // チャートの最低値をセット
+                    //ChartAxisY[0].MinValue = (double)_lowestIn24Price - 3000;
+                    // チャートの２４最低値ポイントを更新
+                    //(ChartSeries[2].Values[0] as ObservableValue).Value = (double)_lowestIn24Price;
+                }
+            }
+            public string Low24String
+            {
+                get { return String.Format(_ltpFormstString, _lowestIn24Price); }
+            }
+
+            // 起動後 最高値
+            private decimal _highestPrice;
+            public decimal HighestPrice
+            {
+                get { return _highestPrice; }
+                set
+                {
+                    if (_highestPrice == value)
+                        return;
+
+                    _highestPrice = value;
+                    this.NotifyPropertyChanged("HighestPrice");
+                    this.NotifyPropertyChanged("HighestPriceString");
+
+                    this.NotifyPropertyChanged("MiddleInitPrice");
+                    this.NotifyPropertyChanged("MiddleInitPriceString");
+                    this.NotifyPropertyChanged("MiddleInitPriceIcon");
+                    this.NotifyPropertyChanged("MiddleInitPriceIconColor");
+
+                    //if (MinMode) return;
+                    //(ChartSeries[1].Values[0] as ObservableValue).Value = (double)_highestPrice;
+                }
+            }
+            public string HighestPriceString
+            {
+                get
+                {
+                    return String.Format(_ltpFormstString, _highestPrice); ;
+                }
+            }
+
+            // 起動後 最低 値
+            private decimal _lowestPrice;
+            public decimal LowestPrice
+            {
+                get { return _lowestPrice; }
+                set
+                {
+                    if (_lowestPrice == value)
+                        return;
+
+                    _lowestPrice = value;
+                    this.NotifyPropertyChanged("LowestPrice");
+                    this.NotifyPropertyChanged("LowestPriceString");
+
+                    this.NotifyPropertyChanged("MiddleInitPrice");
+                    this.NotifyPropertyChanged("MiddleInitPriceString");
+                    this.NotifyPropertyChanged("MiddleInitPriceIcon");
+                    this.NotifyPropertyChanged("MiddleInitPriceIconColor");
+
+                    //if (MinMode) return;
+                    // (ChartSeries[2].Values[0] as ObservableValue).Value = (double)_lowestPrice;
+                }
+            }
+            public string LowestPriceString
+            {
+                get
+                {
+                    return String.Format(_ltpFormstString, _lowestPrice); ;
+                }
+            }
+
+            #endregion
+
+            #region == 板情報のプロパティ ==
+
+            private decimal _depthGrouping = 0;
+            public decimal DepthGrouping
+            {
+                get
+                {
+                    return _depthGrouping;
+                }
+                set
+                {
+                    if (_depthGrouping == value)
+                        return;
+
+                    _depthGrouping = value;
+
+                    if (DepthGrouping100 == _depthGrouping)
+                    {
+                        IsDepthGrouping100 = true;
+                        IsDepthGrouping1000 = false;
+                        IsDepthGroupingOff = false;
+                    }
+                    if (DepthGrouping1000 == _depthGrouping)
+                    {
+                        IsDepthGrouping100 = false;
+                        IsDepthGrouping1000 = true;
+                        IsDepthGroupingOff = false;
+                    }
+
+                    if (0 == _depthGrouping)
+                    {
+                        IsDepthGrouping100 = false;
+                        IsDepthGrouping1000 = false;
+                        IsDepthGroupingOff = true;
+                    }
+
+                    this.NotifyPropertyChanged("DepthGrouping");
+
+                }
+            }
+
+            private bool _isDepthGroupingOff = true;
+            public bool IsDepthGroupingOff
+            {
+                get
+                {
+                    return _isDepthGroupingOff;
+                }
+                set
+                {
+                    if (_isDepthGroupingOff == value)
+                        return;
+
+                    _isDepthGroupingOff = value;
+                    this.NotifyPropertyChanged("IsDepthGroupingOff");
+                }
+            }
+
+            private decimal _depthGrouping100 = 100;
+            public decimal DepthGrouping100
+            {
+                get
+                {
+                    return _depthGrouping100;
+                }
+                set
+                {
+                    if (_depthGrouping100 == value)
+                        return;
+
+                    _depthGrouping100 = value;
+                    this.NotifyPropertyChanged("DepthGrouping100");
+
+                }
+            }
+
+            private bool _isDepthGrouping100;
+            public bool IsDepthGrouping100
+            {
+                get
+                {
+                    return _isDepthGrouping100;
+                }
+                set
+                {
+                    if (_isDepthGrouping100 == value)
+                        return;
+
+                    _isDepthGrouping100 = value;
+                    this.NotifyPropertyChanged("IsDepthGrouping100");
+                }
+            }
+
+            private decimal _depthGrouping1000 = 1000;
+            public decimal DepthGrouping1000
+            {
+                get
+                {
+                    return _depthGrouping1000;
+                }
+                set
+                {
+                    if (_depthGrouping1000 == value)
+                        return;
+
+                    _depthGrouping1000 = value;
+                    this.NotifyPropertyChanged("DepthGrouping1000");
+
+                }
+            }
+
+            private bool _isDepthGrouping1000;
+            public bool IsDepthGrouping1000
+            {
+                get
+                {
+                    return _isDepthGrouping1000;
+                }
+                set
+                {
+                    if (_isDepthGrouping1000 == value)
+                        return;
+
+                    _isDepthGrouping1000 = value;
+                    this.NotifyPropertyChanged("IsDepthGrouping1000");
+                }
+            }
+
+            #endregion
+
+            #region == 自動取引用のプロパティ ==
+
+            // 自動取引開始停止フラグ
+            private bool _autoTradeStart = false;
+            public bool AutoTradeStart
+            {
+                get
+                {
+                    return _autoTradeStart;
+                }
+                set
+                {
+                    if (_autoTradeStart == value)
+                        return;
+
+                    _autoTradeStart = value;
+
+                    this.NotifyPropertyChanged("AutoTradeStart");
+                    this.NotifyPropertyChanged("StartButtonEnable");
+                    this.NotifyPropertyChanged("StopButtonEnable");
+                    this.NotifyPropertyChanged("AutoTradeTitle");
+
+                }
+            }
+
+            // 開始ボタン有効
+            public bool StartButtonEnable
+            {
+                get
+                {
+                    if (_autoTradeStart)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            // 停止ボタン有効
+            public bool StopButtonEnable
+            {
+                get
+                {
+                    if (_autoTradeStart)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            private decimal _autoTradeProfit;
+            public decimal AutoTradeProfit
+            {
+                get
+                {
+                    return _autoTradeProfit;
+                }
+                set
+                {
+                    if (_autoTradeProfit == value)
+                        return;
+
+                    _autoTradeProfit = value;
+                    this.NotifyPropertyChanged("AutoTradeProfit");
+                }
+            }
+
+            // 取引単位
+            private decimal _autoTradeTama = 0.001M;
+            public decimal AutoTradeTama
+            {
+                get
+                {
+                    return _autoTradeTama;
+                }
+                set
+                {
+                    if (_autoTradeTama == value)
+                        return;
+
+                    _autoTradeTama = value;
+                    this.NotifyPropertyChanged("AutoTradeTama");
+                }
+            }
+
+            // アッパーリミット > デフォルトが欲しい。
+            private decimal _autoTradeUpperLimit;
+            public decimal AutoTradeUpperLimit
+            {
+                get
+                {
+                    return _autoTradeUpperLimit;
+                }
+                set
+                {
+                    if (_autoTradeUpperLimit == value)
+                        return;
+
+                    _autoTradeUpperLimit = value;
+                    this.NotifyPropertyChanged("AutoTradeUpperLimit");
+                }
+            }
+
+            // ローワーリミット > デフォルトが欲しい。
+            private decimal _autoTradeLowerLimit;
+            public decimal AutoTradeLowerLimit
+            {
+                get
+                {
+                    return _autoTradeLowerLimit;
+                }
+                set
+                {
+                    if (_autoTradeLowerLimit == value)
+                        return;
+
+                    _autoTradeLowerLimit = value;
+                    this.NotifyPropertyChanged("AutoTradeLowerLimit");
+                }
+            }
+
+            // 損切値幅 > 使ってない。
+            private decimal _autoTradeLostCut = 20000M;
+            public decimal AutoTradeLostCut
+            {
+                get
+                {
+                    return _autoTradeLostCut;
+                }
+                set
+                {
+                    if (_autoTradeLostCut == value)
+                        return;
+
+                    _autoTradeLostCut = value;
+                    this.NotifyPropertyChanged("AutoTradeLostCut");
+                }
+            }
+
+            // スロット数
+            private decimal _autoTradeSlots = 20;
+            public decimal AutoTradeSlots
+            {
+                get
+                {
+                    return _autoTradeSlots;
+                }
+                set
+                {
+                    if (_autoTradeSlots == value)
+                        return;
+
+                    _autoTradeSlots = value;
+                    this.NotifyPropertyChanged("AutoTradeSlots");
+                }
+            }
+
+            // アクティブ注文数
+            private int _autoTradeActiveOrders;
+            public int AutoTradeActiveOrders
+            {
+                get
+                {
+                    return _autoTradeActiveOrders;
+                }
+                set
+                {
+                    if (_autoTradeActiveOrders == value)
+                        return;
+
+                    _autoTradeActiveOrders = value;
+                    this.NotifyPropertyChanged("AutoTradeActiveOrders");
+                }
+            }
+
+            // 売り未約定の注文数
+            private int _autoTradeSellOrders;
+            public int AutoTradeSellOrders
+            {
+                get
+                {
+                    return _autoTradeSellOrders;
+                }
+                set
+                {
+                    if (_autoTradeSellOrders == value)
+                        return;
+
+                    _autoTradeSellOrders = value;
+                    this.NotifyPropertyChanged("AutoTradeSellOrders");
+                }
+            }
+
+            // 買い未約定の注文数
+            private int _autoTradeBuyOrders;
+            public int AutoTradeBuyOrders
+            {
+                get
+                {
+                    return _autoTradeBuyOrders;
+                }
+                set
+                {
+                    if (_autoTradeBuyOrders == value)
+                        return;
+
+                    _autoTradeBuyOrders = value;
+                    this.NotifyPropertyChanged("AutoTradeBuyOrders");
+                }
+            }
+
+            // エラーの注文数
+            private int _autoTradeErrOrders;
+            public int AutoTradeErrOrders
+            {
+                get
+                {
+                    return _autoTradeErrOrders;
+                }
+                set
+                {
+                    if (_autoTradeErrOrders == value)
+                        return;
+
+                    _autoTradeErrOrders = value;
+                    this.NotifyPropertyChanged("AutoTradeErrOrders");
+                }
+            }
+
+            #endregion
+
+            // TickHistoryクラス リスト
+            private ObservableCollection<TickHistory> _tickHistory = new ObservableCollection<TickHistory>();
+            public ObservableCollection<TickHistory> TickHistories
+            {
+                get { return this._tickHistory; }
+            }
+
+            // アクティブな注文一覧
+            private ObservableCollection<Order> _activeOrders = new ObservableCollection<Order>();
+            public ObservableCollection<Order> ActiveOrders
+            {
+                get { return this._activeOrders; }
+            }
+
+            // 取引履歴 trade list
+            private ObservableCollection<Trade> _trades = new ObservableCollection<Trade>();
+            public ObservableCollection<Trade> Trades
+            {
+                get { return this._trades; }
+            }
+
+            // 特殊注文IFDOCO注文一覧 Ifdoco order list
+            private ObservableCollection<Ifdoco> _ifdocos = new ObservableCollection<Ifdoco>();
+            public ObservableCollection<Ifdoco> Ifdocos
+            {
+                get { return this._ifdocos; }
+            }
+
+            // 自動取引
+            private ObservableCollection<AutoTrade> _autoTrades = new ObservableCollection<AutoTrade>();
+            public ObservableCollection<AutoTrade> AutoTrades
+            {
+                get { return this._autoTrades; }
+            }
+
+            // コンストラクタ
+            public Pair(Pairs p, double fontSize, string ltpFormstString, decimal grouping100, decimal grouping1000)
+            {
+                this._p = p;
+                _ltpFontSize = fontSize;
+                _ltpFormstString = ltpFormstString;
+
+                _depthGrouping100 = grouping100;
+                _depthGrouping1000 = grouping1000;
+
+                BindingOperations.EnableCollectionSynchronization(this._tickHistory, new object());
+                BindingOperations.EnableCollectionSynchronization(this._activeOrders, new object());
+                BindingOperations.EnableCollectionSynchronization(this._trades, new object());
+                BindingOperations.EnableCollectionSynchronization(this._autoTrades, new object());
+            }
+
+        }
+
+        #endregion
+
+
         public MainViewModel()
         {
 
@@ -8082,8 +8099,8 @@ namespace BitDesk.ViewModels
             // テーマの選択コンボボックスのイニシャライズ
             _themes = new ObservableCollection<Theme>()
             {
-                new Theme() { Id = 1, Name = "DefaultTheme", Label = "Default"},
-                new Theme() { Id = 2, Name = "LightTheme", Label = "Light"}
+                new Theme() { Id = 1, Name = "DefaultTheme", Label = "Dark", IconData="M17.75,4.09L15.22,6.03L16.13,9.09L13.5,7.28L10.87,9.09L11.78,6.03L9.25,4.09L12.44,4L13.5,1L14.56,4L17.75,4.09M21.25,11L19.61,12.25L20.2,14.23L18.5,13.06L16.8,14.23L17.39,12.25L15.75,11L17.81,10.95L18.5,9L19.19,10.95L21.25,11M18.97,15.95C19.8,15.87 20.69,17.05 20.16,17.8C19.84,18.25 19.5,18.67 19.08,19.07C15.17,23 8.84,23 4.94,19.07C1.03,15.17 1.03,8.83 4.94,4.93C5.34,4.53 5.76,4.17 6.21,3.85C6.96,3.32 8.14,4.21 8.06,5.04C7.79,7.9 8.75,10.87 10.95,13.06C13.14,15.26 16.1,16.22 18.97,15.95M17.33,17.97C14.5,17.81 11.7,16.64 9.53,14.5C7.36,12.31 6.2,9.5 6.04,6.68C3.23,9.82 3.34,14.64 6.35,17.66C9.37,20.67 14.19,20.78 17.33,17.97Z"},
+                new Theme() { Id = 2, Name = "LightTheme", Label = "Light", IconData="M12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M12,2L14.39,5.42C13.65,5.15 12.84,5 12,5C11.16,5 10.35,5.15 9.61,5.42L12,2M3.34,7L7.5,6.65C6.9,7.16 6.36,7.78 5.94,8.5C5.5,9.24 5.25,10 5.11,10.79L3.34,7M3.36,17L5.12,13.23C5.26,14 5.53,14.78 5.95,15.5C6.37,16.24 6.91,16.86 7.5,17.37L3.36,17M20.65,7L18.88,10.79C18.74,10 18.47,9.23 18.05,8.5C17.63,7.78 17.1,7.15 16.5,6.64L20.65,7M20.64,17L16.5,17.36C17.09,16.85 17.62,16.22 18.04,15.5C18.46,14.77 18.73,14 18.87,13.21L20.64,17M12,22L9.59,18.56C10.33,18.83 11.14,19 12,19C12.82,19 13.63,18.83 14.37,18.56L12,22Z"}
             };
             // デフォルトにセット
             _currentTheme = _themes[0];
@@ -11172,11 +11189,15 @@ namespace BitDesk.ViewModels
 
             #endregion
 
+            LoadAutoTrades(PairBtcJpy, AppDataFolder, "BtcJpy");
+
         }
 
         // 終了時の処理
         public void OnWindowClosing(object sender, CancelEventArgs e)
         {
+            // TODO
+            // 注文中ならキャンセル。
 
             // データ保存フォルダの取得
             var AppDataFolder = System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
@@ -11799,6 +11820,8 @@ namespace BitDesk.ViewModels
 
             #endregion
 
+            SaveAutoTrades(PairBtcJpy, AppDataFolder, "BtcJpy");
+
         }
 
         // 特殊注文のデータ保存メソッド
@@ -11855,6 +11878,49 @@ namespace BitDesk.ViewModels
                 if (File.Exists(IFDOCOs_FilePath))
                 {
                     File.Delete(IFDOCOs_FilePath);
+                }
+            }
+        }
+
+        private void SaveAutoTrades(Pair p, string appDataFolder, string fileName)
+        {
+            //BtcJpy
+            var AutoTrades_FilePath = appDataFolder + System.IO.Path.DirectorySeparatorChar + fileName + "_AutoTrades.csv";
+
+            if (p.AutoTrades.Count > 0)
+            {
+                var csv = new StringBuilder();
+
+                foreach (var at in p.AutoTrades)
+                {
+
+                    // 未約定のみ保存する
+                    if (at.IsDone == false)
+                    {
+                        if ((at.SellIsDone == false) && (at.SellOrderId != 0))
+                        {
+                            // side, 注文数、価格、約定価格、ステータス、想定損益
+                            //var newLine = string.Format("{0},{1}", at.SellOrderId.ToString());
+                            var newLine = string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12}", 
+                                at.BuyOrderId.ToString(), at.BuySide, at.BuyAmount.ToString(), at.BuyPrice, at.BuyFilledPrice.ToString(), at.BuyStatus,
+                                at.SellOrderId.ToString(), at.SellSide, at.SellAmount.ToString(), at.SellPrice, at.SellFilledPrice.ToString(), at.SellStatus,
+                                at.ProfitAmount.ToString()
+                                );
+                            csv.AppendLine(newLine);
+                        }
+                    }
+
+                }
+
+                File.WriteAllText(AutoTrades_FilePath, csv.ToString());
+
+            }
+            else
+            {
+                // リストが空なので、ファイルも削除。
+                if (File.Exists(AutoTrades_FilePath))
+                {
+                    File.Delete(AutoTrades_FilePath);
                 }
             }
         }
@@ -11989,6 +12055,58 @@ namespace BitDesk.ViewModels
                 catch (Exception ex)
                 {
                     System.Diagnostics.Debug.WriteLine("■■■■■ Error  特殊注文の保存データロード中: " + ex + " while opening : " + IFDOCOs_FilePath);
+                }
+            }
+
+        }
+
+        private void LoadAutoTrades(Pair p, string appDataFolder, string fileName)
+        {
+            var AutoTrades_FilePath = appDataFolder + System.IO.Path.DirectorySeparatorChar + fileName + "_AutoTrades.csv";
+
+            if (File.Exists(AutoTrades_FilePath))
+            {
+                try
+                {
+                    var contents = File.ReadAllText(AutoTrades_FilePath).Split('\n');
+                    var csv = from line in contents select line.Split(',').ToArray();
+
+                    foreach (var row in csv)
+                    {
+                        if (string.IsNullOrEmpty(row[0]))
+                        {
+                            break;
+                        }
+
+                        AutoTrade asdf = new AutoTrade();
+
+                        //asdf.SellOrderId = int.Parse(row[0]);
+                        // , at..ToString(), at., at.BuyFilledPrice.ToString(), at.BuyStatus,
+                        //        at.SellOrderId.ToString(), at.SellSide, at.SellAmount.ToString(), at.SellPrice, at.SellFilledPrice.ToString(), at.SellStatus
+                        asdf.BuyOrderId = Int32.Parse(row[0]);
+                        asdf.BuySide = row[1];
+                        asdf.BuyAmount = Decimal.Parse(row[2]);
+                        asdf.BuyPrice = Decimal.Parse(row[3]);
+                        asdf.BuyFilledPrice = Decimal.Parse(row[4]);
+                        asdf.BuyStatus = row[5];
+
+                        asdf.SellOrderId = Int32.Parse(row[6]);
+                        asdf.SellSide = row[7];
+                        asdf.SellAmount = Decimal.Parse(row[8]);
+                        asdf.SellPrice = Decimal.Parse(row[9]);
+                        asdf.SellFilledPrice = Decimal.Parse(row[10]);
+                        asdf.SellStatus = row[11];
+
+                        asdf.ProfitAmount = Decimal.Parse(row[12]);
+
+                        p.AutoTrades.Add(asdf);
+
+                    }
+                }
+                catch (System.IO.FileNotFoundException) { }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine("■■■■■ Error  特殊注文の保存データロード中: " + ex + " while opening : " + AutoTrades_FilePath);
                 }
             }
 
@@ -13931,7 +14049,7 @@ namespace BitDesk.ViewModels
                                 }
                                 else
                                 {
-                                    System.Diagnostics.Debug.WriteLine("■OCO どちらも未約定");
+                                    //System.Diagnostics.Debug.WriteLine("■OCO どちらも未約定");
                                     // どちらも未約定
 
                                     // Oco One
@@ -14503,10 +14621,13 @@ namespace BitDesk.ViewModels
                 return;
             }
             */
-
+            // TODO 
             var pair = PairBtcJpy;
             var autoTrades = PairBtcJpy.AutoTrades;
             var ltp = PairBtcJpy.Ltp;
+
+            // 
+
 
 
             // 試し買いの単位
@@ -14514,7 +14635,7 @@ namespace BitDesk.ViewModels
             // 取引単位
             decimal defaultAmount = 0.001M;
 
-            while (AutoTradeStart)
+            while (pair.AutoTradeStart)
             {
                 // ログインしていなかったらスルー。
                 if (LoggedInMode == false)
@@ -14533,12 +14654,19 @@ namespace BitDesk.ViewModels
                 await Task.Delay(1600);
 
                 // 取引単位の変更があった場合に新しい値をセット
-                defaultAmount = AutoTradeTama;
+                defaultAmount = pair.AutoTradeTama;
 
-                AutoTradeActiveOrders = 0;
-                AutoTradeSellOrders = 0;
-                AutoTradeBuyOrders = 0;
-                AutoTradeErrOrders = 0;
+                pair.AutoTradeActiveOrders = 0;
+                pair.AutoTradeSellOrders = 0;
+                pair.AutoTradeBuyOrders = 0;
+                pair.AutoTradeErrOrders = 0;
+
+
+
+                // !!!!!
+                ltp = pair.Ltp;
+
+
 
                 if (Application.Current == null) break;
 
@@ -14546,7 +14674,7 @@ namespace BitDesk.ViewModels
                 List<int> needUpdateIdsList = new List<int>();
 
                 // 全注文数のセット
-                AutoTradeActiveOrders = autoTrades.Count;
+                pair.AutoTradeActiveOrders = autoTrades.Count;
 
                 // 未約定注文のリストを作る。
                 foreach (var pos in autoTrades)
@@ -14558,7 +14686,7 @@ namespace BitDesk.ViewModels
                     if ((pos.BuyHasError == true) || (pos.SellHasError == true))
                     {
                         // エラー注文数をセット
-                        AutoTradeErrOrders = AutoTradeErrOrders + 1;
+                        pair.AutoTradeErrOrders = pair.AutoTradeErrOrders + 1;
 
                         continue;
                     }
@@ -14566,7 +14694,7 @@ namespace BitDesk.ViewModels
                     if ((pos.BuyOrderId != 0) && ((pos.BuyStatus == "UNFILLED") || pos.BuyStatus == "PARTIALLY_FILLED"))
                     {
                         // 買い注文数をセット
-                        AutoTradeBuyOrders = AutoTradeBuyOrders + 1;
+                        pair.AutoTradeBuyOrders = pair.AutoTradeBuyOrders + 1;
 
                         needUpdateIdsList.Add(pos.BuyOrderId);
                     }
@@ -14574,7 +14702,7 @@ namespace BitDesk.ViewModels
                     if ((pos.SellOrderId != 0) && ((pos.SellStatus == "UNFILLED") || pos.SellStatus == "PARTIALLY_FILLED"))
                     {
                         // 売り注文数をセット
-                        AutoTradeSellOrders = AutoTradeSellOrders + 1;
+                        pair.AutoTradeSellOrders = pair.AutoTradeSellOrders + 1;
 
                         needUpdateIdsList.Add(pos.SellOrderId);
                     }
@@ -14774,7 +14902,7 @@ namespace BitDesk.ViewModels
                 }
 
                 // 完了済み注文を、新たに注文し直す。 ただし、アッパーリミット以下なら（暴騰時に買うと、リバウンドですぐ下がる）
-                if ((ltp < AutoTradeUpperLimit) && (ltp > AutoTradeLowerLimit))
+                if ((ltp < pair.AutoTradeUpperLimit) && (ltp > pair.AutoTradeLowerLimit) && (autoTrades.Count < pair.AutoTradeSlots))
                 {
 
                     // 買い価格順でソートしたリスト
@@ -14958,7 +15086,7 @@ namespace BitDesk.ViewModels
 
                             // 損益更新
                             //AutoTradeProfit = AutoTradeProfit + ((SortedList[i].SellFilledPrice - SortedList[i].BuyFilledPrice) * SortedList[i].SellAmount);
-                            AutoTradeProfit = AutoTradeProfit + ((SortedList[i].SellPrice - SortedList[i].BuyPrice) * SortedList[i].SellAmount);
+                            pair.AutoTradeProfit = pair.AutoTradeProfit + ((SortedList[i].SellPrice - SortedList[i].BuyPrice) * SortedList[i].SellAmount);
 
                             // 新規
                             AutoTrade position = new AutoTrade();
@@ -15084,7 +15212,7 @@ namespace BitDesk.ViewModels
                         }
 
                         // SortedList[i].Counter >= 20 とかだったら、停滞中なので、売り待ちの価格より下で、、かつ、現在値よりチョイ下で、買い注文。ただし、全体の数が20を超えない範囲で。
-                        if ((SortedList[i].Counter >= 7) && SortedList.Count < 20)
+                        if ((SortedList[i].Counter >= 7) && SortedList.Count < pair.AutoTradeSlots)
                         {
                             await Task.Delay(200);
 
@@ -15303,7 +15431,7 @@ namespace BitDesk.ViewModels
                     {
                         if (pos.SellStatus == "UNFILLED")
                         {
-                            if ((pos.SellPrice - ltp) > AutoTradeLostCut)
+                            if ((pos.SellPrice - ltp) > pair.AutoTradeLostCut)
                             {
 
 
@@ -15356,7 +15484,6 @@ namespace BitDesk.ViewModels
 
 
                 }
-
 
             }
         }
@@ -17752,7 +17879,7 @@ namespace BitDesk.ViewModels
 
                 Order ord = item as Order;
 
-                System.Diagnostics.Debug.WriteLine("CancelOrderListviewCommand_Execute...: " + ord.OrderID.ToString());
+                //System.Diagnostics.Debug.WriteLine("CancelOrderListviewCommand_Execute...: " + ord.OrderID.ToString());
 
                 OrderResult result = await CancelOrder(pair, ord.OrderID);
 
@@ -18520,20 +18647,20 @@ namespace BitDesk.ViewModels
             //System.Diagnostics.Debug.WriteLine("Start Auto Trading...");
 
             // 情報表示数のリセット。
-            AutoTradeActiveOrders = 0;
-            AutoTradeSellOrders = 0;
-            AutoTradeBuyOrders = 0;
-            AutoTradeErrOrders = 0;
+            pair.AutoTradeActiveOrders = 0;
+            pair.AutoTradeSellOrders = 0;
+            pair.AutoTradeBuyOrders = 0;
+            pair.AutoTradeErrOrders = 0;
 
             // 損益表示リセット
-            AutoTradeProfit = 0;
+            pair.AutoTradeProfit = 0;
 
             // 上値制限セット
-            if (AutoTradeUpperLimit == 0)
-                AutoTradeUpperLimit = ((ltp / 1000) * 1000) + 10000M;
+            if (pair.AutoTradeUpperLimit == 0)
+                pair.AutoTradeUpperLimit = ((ltp / 1000) * 1000) + 10000M;
             // 下値制限セット
-            if (AutoTradeLowerLimit == 0)
-                AutoTradeLowerLimit = ((ltp / 1000) * 1000) - 10000M;
+            if (pair.AutoTradeLowerLimit == 0)
+                pair.AutoTradeLowerLimit = ((ltp / 1000) * 1000) - 10000M;
 
             // ベース価格
             decimal basePrice = ((ltp / 1000) * 1000);
@@ -18712,13 +18839,13 @@ namespace BitDesk.ViewModels
 
 
             // 注文数のセット
-            AutoTradeActiveOrders = autoTrades.Count;
+            pair.AutoTradeActiveOrders = autoTrades.Count;
 
             // 開始フラグセット
-            AutoTradeStart = true;
+            pair.AutoTradeStart = true;
 
             // 自動取引ループの開始
-            //Task.Run(() => UpdateAutoTrade());
+            // TODO
             UpdateAutoTrade();
 
         }
@@ -18745,7 +18872,7 @@ namespace BitDesk.ViewModels
             var autoTrades = ActivePair.AutoTrades;
 
             // 更新ループを止める。
-            AutoTradeStart = false;
+            pair.AutoTradeStart = false;
 
             await Task.Delay(1000);
 
@@ -18777,10 +18904,11 @@ namespace BitDesk.ViewModels
                 {
                     if (ord.OrderList.Count > 0)
                     {
-                        // TODO
+                        // クリアしない。あとで保存するか再開するので。
 
-                        await Task.Delay(3000);
+                        //await Task.Delay(3000);
 
+                        /*
                         try
                         {
                             Application.Current.Dispatcher.Invoke(() =>
@@ -18790,16 +18918,18 @@ namespace BitDesk.ViewModels
                             });
                         }
                         catch { }
+
+                        */
                     }
                 }
 
             }
 
             // 情報表示のリセット
-            AutoTradeActiveOrders = 0;
-            AutoTradeSellOrders = 0;
-            AutoTradeBuyOrders = 0;
-            AutoTradeErrOrders = 0;
+            pair.AutoTradeActiveOrders = 0;
+            pair.AutoTradeSellOrders = 0;
+            pair.AutoTradeBuyOrders = 0;
+            pair.AutoTradeErrOrders = 0;
 
         }
 

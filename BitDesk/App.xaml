@@ -391,6 +391,17 @@
                                             </Grid>
                                         </Border>
                                         -->
+
+                                        <Grid x:Name="radioButtonUncheckedState" Margin="1">
+                                            <Border BorderBrush="#49FFFFFF" BorderThickness="1,1,0,0"/>
+                                            <Border BorderBrush="#49000000" BorderThickness="0,0,1,1"/>
+                                        </Grid>
+
+                                        <Grid x:Name="radioButtonCheckedState" Margin="1" Visibility="Collapsed">
+                                            <Border BorderBrush="#49000000" BorderThickness="1,1,0,0"/>
+                                            <Border BorderBrush="#49FFFFFF" BorderThickness="0,0,1,1"/>
+                                        </Grid>
+                                        
                                         <Border x:Name="radioButtonContentBorder" Grid.Column="1" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Padding="3">
                                             <ContentPresenter x:Name="contentPresenter" Focusable="False" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                                         </Border>
@@ -431,19 +442,18 @@
                                         <Trigger Property="IsChecked" Value="true">
                                             <!--
                                             <Setter Property="Opacity" TargetName="optionMark" Value="1"/>
-                                            -->
-                                            <Setter Property="Background" TargetName="templateRoot" Value="{StaticResource AccentCoolDarkColorBrush}"/>
-
-                                            <Setter Property="BorderBrush" Value="#212121"/>
-                                            <!--
-                                            <Setter Property="BorderBrush" Value="{StaticResource RadioButton.Static.CheckedBorder}"/>
-                                            -->
-                                            <Setter Property="Foreground" Value="#FFFFFF"/>
-                                            <Setter Property="TextElement.FontWeight" Value="Bold"/>
-                                            <!--
-                                            <Setter Property="Background" TargetName="radioButtonBorder" Value="{StaticResource RadioButton.MouseOver.Background}"/>
                                             <Setter Property="Fill" TargetName="optionMark" Value="{StaticResource RadioButton.MouseOver.Glyph}"/>
                                             -->
+
+                                            <Setter Property="BorderBrush" Value="#212121"/>
+                                            <Setter Property="Foreground" Value="#FFFFFF"/>
+                                            <Setter Property="TextElement.FontWeight" Value="Bold"/>
+                             
+                                            <Setter Property="Background" TargetName="templateRoot" Value="#232323"/>
+                                            
+                                            <Setter TargetName="radioButtonCheckedState" Property="Visibility" Value="Visible" />
+                                            <Setter TargetName="radioButtonUncheckedState" Property="Visibility" Value="Collapsed" />
+                                            
                                         </Trigger>
                                         <Trigger Property="IsChecked" Value="{x:Null}">
                                             <!--
@@ -456,20 +466,11 @@
                                             <Setter Property="Foreground" Value="#CCC"/>
                                         </Trigger>
                                         <Trigger Property="IsChecked" Value="false">
-                                            <!--
-                                            <Setter Property="Opacity" TargetName="optionMark" Value="0.56"/>
-                                            -->
-                                            <!--
-                                            <Setter Property="Background" TargetName="templateRoot" Value="{StaticResource RadioButton.Static.Background}"/>
-                                            -->
-                                            <!--
-                                            <Setter Property="BorderBrush" Value="{StaticResource RadioButton.Static.UncheckedBorder}"/>
-                                            -->
-                                            <!--
-                                            <Setter Property="Foreground" Value="#CCC"/>
+
                                             <Setter Property="Background" TargetName="templateRoot" Value="#212121"/>
-                                            <Setter Property="BorderBrush" Value="#212121"/>
-                                            -->
+                                            
+                                            <Setter TargetName="radioButtonCheckedState" Property="Visibility" Value="Collapsed" />
+                                            <Setter TargetName="radioButtonUncheckedState" Property="Visibility" Value="Visible" />
                                         </Trigger>
                                     </ControlTemplate.Triggers>
                                 </ControlTemplate>
@@ -520,7 +521,7 @@
                     <Style x:Key="GridViewColumnHeaderStyle" TargetType="GridViewColumnHeader">
                         <Setter Property="OverridesDefaultStyle" Value="False"/>
                         <Setter Property="Height" Value="32" />
-                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="Background" Value="{DynamicResource BoardBackgroundColorBrush}"/>
                         <Setter Property="TextElement.FontWeight" Value="Normal" />
                         <Setter Property="TextElement.Foreground" Value="LightGray" />
                         <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -823,6 +824,7 @@
                     </Style>
 
                     <Style x:Key="ListViewItemStyle" TargetType="ListViewItem">
+                        <Setter Property="Background" Value="{DynamicResource BoardBackgroundColorBrush}"/>
                         <Setter Property="FocusVisualStyle" Value="{StaticResource ListviewFocusVisual}"/>
                         <Setter Property="Foreground" Value="{Binding Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}"/>
                         <Setter Property="Template">
@@ -833,16 +835,7 @@
                                             ClipToBounds="{TemplateBinding ClipToBounds}"
                                             CornerRadius="0"
                                             SnapsToDevicePixels="true">
-
                                         <GridViewRowPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                                        <!--
-                                        <Border.InputBindings>
-                                            <MouseBinding
-                                                    Command="{Binding Path=DataContext.ListviewLeftDoubleClickCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}"
-                                                    CommandParameter="{Binding Path=SelectedItem, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}"
-                                                    Gesture="LeftDoubleClick" />
-                                        </Border.InputBindings>
-                                        -->
                                     </Border>
 
                                 </ControlTemplate>

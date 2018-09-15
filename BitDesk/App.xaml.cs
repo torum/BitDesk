@@ -18,7 +18,7 @@ namespace BitDesk
         public void ChangeTheme(string themeName)
         {
 
-            System.Diagnostics.Debug.WriteLine(themeName);
+            //System.Diagnostics.Debug.WriteLine(themeName);
 
             ResourceDictionary _themeDict = Application.Current.Resources.MergedDictionaries.FirstOrDefault(x => x.Source == new Uri("pack://application:,,,/Themes/DefaultTheme.xaml"));
             if (_themeDict != null)
