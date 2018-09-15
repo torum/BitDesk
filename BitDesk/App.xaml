@@ -392,12 +392,12 @@
                                         </Border>
                                         -->
 
-                                        <Grid x:Name="radioButtonUncheckedState" Margin="1">
+                                        <Grid x:Name="radioButtonUncheckedState" Grid.Column="1" Margin="1">
                                             <Border BorderBrush="#49FFFFFF" BorderThickness="1,1,0,0"/>
                                             <Border BorderBrush="#49000000" BorderThickness="0,0,1,1"/>
                                         </Grid>
 
-                                        <Grid x:Name="radioButtonCheckedState" Margin="1" Visibility="Collapsed">
+                                        <Grid x:Name="radioButtonCheckedState" Grid.Column="1" Margin="1" Visibility="Collapsed">
                                             <Border BorderBrush="#49000000" BorderThickness="1,1,0,0"/>
                                             <Border BorderBrush="#49FFFFFF" BorderThickness="0,0,1,1"/>
                                         </Grid>

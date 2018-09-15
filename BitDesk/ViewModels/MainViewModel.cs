@@ -2159,30 +2159,6 @@ namespace BitDesk.ViewModels
         // テスト用
         private decimal _initPrice = 81800M;
 
-        #region == 基本 ==
-
-        // Application version
-        private string _appVer = "0.0.0.2";
-
-        // Application name
-        private string _appName = "BitDesk";
-
-        // Application config file folder
-        private string _appDeveloper = "torum";
-
-        // Application Window Title
-        public string AppTitle
-        {
-            get
-            {
-                return _appName + " " + _appVer;
-            }
-        }
-
-        #endregion
-
-        #region == 画面切替関係 ==
-
         // プライベートモード表示切替（自動取引表示）
         public bool ExperimentalMode
         {
@@ -2209,6 +2185,31 @@ namespace BitDesk.ViewModels
                 return true;
             }
         }
+
+
+        #region == 基本 ==
+
+        // Application version
+        private string _appVer = "0.0.0.2";
+
+        // Application name
+        private string _appName = "BitDesk";
+
+        // Application config file folder
+        private string _appDeveloper = "torum";
+
+        // Application Window Title
+        public string AppTitle
+        {
+            get
+            {
+                return _appName + " " + _appVer;
+            }
+        }
+
+        #endregion
+
+        #region == 画面切替関係 ==
 
         // 設定画面表示フラグ
         private bool _showSettings = false;
@@ -2273,6 +2274,7 @@ namespace BitDesk.ViewModels
         }
 
         // チャートの一覧モードフラグ
+        //（設定画面を表示した後、メインかチャート一覧表示に戻るか、覚えておくフラグ）
         private bool _allChartMode = false;
 
         // LiveChartの不明なエクセプションが起きるので、ver 1 が出るまで使わない。
@@ -6877,8 +6879,7 @@ namespace BitDesk.ViewModels
 
         #endregion
 
-
-        #region == 通貨ペアクラス ==
+        #region == 各通貨ペア用のクラス ==
 
         /// <summary>
         /// 各通貨ペア毎の情報を保持するクラス
@@ -6907,7 +6908,6 @@ namespace BitDesk.ViewModels
             private string _ltpFormstString = "{0:#,0}";
             // 通貨ペア
             private Pairs _p;
-
             public Pairs ThisPair
             {
                 get
@@ -7831,7 +7831,7 @@ namespace BitDesk.ViewModels
                 }
             }
 
-            // 損切値幅 > 使ってない。
+            // 損切値幅
             private decimal _autoTradeLostCut = 20000M;
             public decimal AutoTradeLostCut
             {
@@ -7941,6 +7941,8 @@ namespace BitDesk.ViewModels
 
             #endregion
 
+            #region == コレクション ==
+
             // TickHistoryクラス リスト
             private ObservableCollection<TickHistory> _tickHistory = new ObservableCollection<TickHistory>();
             public ObservableCollection<TickHistory> TickHistories
@@ -7975,6 +7977,8 @@ namespace BitDesk.ViewModels
             {
                 get { return this._autoTrades; }
             }
+
+            #endregion
 
             // コンストラクタ
             public Pair(Pairs p, double fontSize, string ltpFormstString, decimal grouping100, decimal grouping1000)
@@ -8321,7 +8325,7 @@ namespace BitDesk.ViewModels
             dispatcherTimerRss.Start();
 
 
-            // TODO TEMP
+            // TODO 初期値
             ActivePairIndex = 0;
             CurrentPair = Pairs.btc_jpy;
             ActivePair = PairBtcJpy;
@@ -12329,7 +12333,7 @@ namespace BitDesk.ViewModels
 
                                     // 一時保存
                                     e = dp.DepthPrice;
-                                    dp.DepthPrice = (c2 * unit);
+                                    dp.DepthPrice = (c * unit);
 
                                     // 一時保存
                                     d = dp.DepthBid;
@@ -14629,7 +14633,6 @@ namespace BitDesk.ViewModels
             // 
 
 
-
             // 試し買いの単位
             decimal sentinelAmount = 0.0001M;
             // 取引単位
@@ -15096,12 +15099,12 @@ namespace BitDesk.ViewModels
                             position.SellAmount = defaultAmount;//SortedList[i].SellAmount;
 
                             // 上半分
-                            if (i <= 7)
+                            if (i <= 5)
                             {
                                 // 同じ条件で、再度注文。ただし、現在値より下の価格で買う。
 
-                                position.BuyPrice = SortedList[i].BuyPrice - 200;
-                                position.SellPrice = SortedList[i].SellPrice - 200;
+                                position.BuyPrice = SortedList[i].BuyPrice;
+                                position.SellPrice = SortedList[i].SellPrice;
 
                                 if (position.BuyPrice > ltp)
                                 {
@@ -15118,8 +15121,8 @@ namespace BitDesk.ViewModels
                             {
                                 // マイナス買い価格で、再度注文。ただし、現在値より下の価格で買う。
 
-                                position.BuyPrice = SortedList[i].BuyPrice - 1000M;
-                                position.SellPrice = SortedList[i].SellPrice - 1000M;
+                                position.BuyPrice = SortedList[i].BuyPrice - 800M;
+                                position.SellPrice = SortedList[i].SellPrice - 800M;
 
                                 if (position.BuyPrice > ltp)
                                 {
@@ -15425,15 +15428,17 @@ namespace BitDesk.ViewModels
 
                     }
 
-
                     // 指定幅　下がったら、損切。
                     if ((pos.SellOrderId != 0) && pos.BuyIsDone && (pos.SellIsDone == false))
                     {
                         if (pos.SellStatus == "UNFILLED")
                         {
+
+                            bool lostcutSell = false;
+
+                            // ロスカットの幅を超えたらキャンセル。（または、同時に、幅が24Hを超えていたら？）
                             if ((pos.SellPrice - ltp) > pair.AutoTradeLostCut)
                             {
-
 
                                 OrderResult ord = await _priApi.CancelOrder(_autoTradeApiKey, _autoTradeSecret, pair.ThisPair.ToString(), pos.SellOrderId);
                                 if (ord != null)
@@ -15443,6 +15448,8 @@ namespace BitDesk.ViewModels
                                         pos.SellStatus = ord.Status;
 
                                         pos.IsCanceled = true;
+
+                                        lostcutSell = true;
                                     }
                                     else
                                     {
@@ -15473,14 +15480,75 @@ namespace BitDesk.ViewModels
                                     System.Diagnostics.Debug.WriteLine("■■■■■ UpdateAutoTrade 損切売りキャンセルで。MakeOrder API returned null.");
                                 }
 
+                                if (lostcutSell)
+                                {
+                                    // 新規売り
+                                    AutoTrade position = new AutoTrade();
+                                    position.BuySide = "buy";
+                                    position.BuyAmount = pos.BuyAmount;
+                                    position.SellSide = "sell";
+                                    position.SellAmount = pos.SellAmount;
 
+                                    position.BuyPrice = pos.BuyPrice;
+                                    position.SellPrice = ltp + 1000M;
+
+                                    // 買いは済んだことにする。
+                                    position.BuyOrderId = pos.BuyOrderId;
+                                    position.BuyStatus = "FULLY_FILLED";
+                                    position.BuyIsDone = true;
+
+                                    // マイナス収支
+                                    position.ShushiAmount = (position.SellPrice * position.SellAmount) - (pos.BuyPrice * pos.BuyAmount);
+
+                                    // 売り発注
+                                    OrderResult ord2 = await _priApi.MakeOrder(_autoTradeApiKey, _autoTradeSecret, pair.ThisPair.ToString(), position.SellAmount, position.SellPrice, position.SellSide, "limit");
+
+                                    if (ord2 != null)
+                                    {
+                                        // 売り成功
+                                        if (ord2.IsSuccess)
+                                        {
+                                            pos.SellHasError = false;
+
+                                            pos.SellOrderId = ord2.OrderID;
+                                            pos.SellStatus = ord2.Status;
+
+                                        }
+                                        else
+                                        {
+                                            pos.SellHasError = true;
+                                            if (pos.SellErrorInfo == null)
+                                            {
+                                                pos.SellErrorInfo = new ErrorInfo();
+                                            }
+                                            pos.SellErrorInfo.ErrorTitle = ord2.Err.ErrorTitle;
+                                            pos.SellErrorInfo.ErrorDescription = ord2.Err.ErrorDescription;
+                                            pos.SellErrorInfo.ErrorCode = ord2.Err.ErrorCode;
+
+                                            System.Diagnostics.Debug.WriteLine("UpdateAutoTrade - 売り　sell MakeOrder API failed");
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        pos.SellHasError = true;
+                                        if (pos.SellErrorInfo == null)
+                                        {
+                                            pos.SellErrorInfo = new ErrorInfo();
+                                        }
+                                        pos.SellErrorInfo.ErrorTitle = "注文時にエラーが起きました。";
+                                        pos.SellErrorInfo.ErrorDescription = "priApi.MakeOrder is null.";
+                                        pos.SellErrorInfo.ErrorCode = -1;
+
+                                        System.Diagnostics.Debug.WriteLine("UpdateAutoTrade - 売り　sell MakeOrder returened NULL");
+                                    }
+                                }
 
 
                             }
+
                         }
                     }
-
-
 
 
                 }
@@ -18657,10 +18725,12 @@ namespace BitDesk.ViewModels
 
             // 上値制限セット
             if (pair.AutoTradeUpperLimit == 0)
-                pair.AutoTradeUpperLimit = ((ltp / 1000) * 1000) + 10000M;
+                // pair.AutoTradeUpperLimit = ((ltp / 1000) * 1000) + 10000M;
+                pair.AutoTradeUpperLimit = pair.HighestIn24Price;
+
             // 下値制限セット
             if (pair.AutoTradeLowerLimit == 0)
-                pair.AutoTradeLowerLimit = ((ltp / 1000) * 1000) - 10000M;
+                pair.AutoTradeLowerLimit = ((ltp / 1000) * 1000) - 50000M;
 
             // ベース価格
             decimal basePrice = ((ltp / 1000) * 1000);

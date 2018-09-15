@@ -2401,7 +2401,7 @@
                                                                 <TextBox Text="{Binding ActivePair.AutoTradeUpperLimit}" Width="80" Style="{DynamicResource DefaultTextBoxStyle}"></TextBox>
                                                             </StackPanel>
                                                         </Border>
-                                                        <Border Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Padding="3" Visibility="Collapsed">
+                                                        <Border Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Padding="3">
                                                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                                                                 <Label Content="損切値幅： " VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"></Label>
                                                                 <TextBox Text="{Binding ActivePair.AutoTradeLostCut}" Width="80" Style="{DynamicResource DefaultTextBoxStyle}"></TextBox>
