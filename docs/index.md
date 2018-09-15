@@ -10,6 +10,8 @@
 
 ### 機能：
 - ビットコイン/円、リップル/円、ライトコイン/ビットコイン、イーサリアム/ビットコイン、モナーコイン/円、ビットコインキャッシュ/円の通貨ペアで取引が出来ます。
+- 特殊注文（IFD, OCO, IFDOCO）
+
   *取引を行うには、ビットバンクのアカウントが必要です。  
   
 ### 必要構成：
@@ -21,6 +23,9 @@
 ### ダウンロード：  
 - ~~マイクロソフト ストアでダウンロード可能予定~~
 マイクロソフトストアで公開しようとしたら、「App Policies: 10.8.3 Collection of Banking and Financial Information - Apps that collect financial data must be Business account type」という事で、「ファインシャル情報を取得するアプリは法人でないとなりません」とあえなく却下。ビットバンクさん、公式アプリとして採用してくれませんか？^^
+
+### 開発プロジェクトページ（GitHub）：
+[https://github.com/torum/BitDesk](https://github.com/torum/BitDesk)
  
 ### 更新情報（Twitter）： 
 [https://twitter.com/torum_apps](https://twitter.com/torum_apps)
