@@ -1,9 +1,6 @@
 
 ---------------------------------------
 
-## ビットバンク向け仮想通貨トレーディングアプリ 
-#### - Cryptocurrency trading app made for Bitbank.cc
-
 ![alt text](https://github.com/torum/BitDesk/blob/master/docs/Images/BitDesk-screenshot.png?raw=true)
 
 ![alt text](https://github.com/torum/BitDesk/blob/master/docs/Images/BitDesk1.gif?raw=true)
