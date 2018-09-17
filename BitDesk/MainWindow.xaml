@@ -1,41 +1,43 @@
 ﻿<fw:AcrylicWindow x:Class="BitDesk.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:BitDesk"
-        xmlns:vms="clr-namespace:BitDesk.ViewModels"
-        xmlns:helpers="clr-namespace:BitDesk.Helpers"
-        xmlns:common="clr-namespace:BitDesk.Common"
-        xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf" 
-        xmlns:fw="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
-        mc:Ignorable="d"
+                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                  xmlns:local="clr-namespace:BitDesk"
+                  xmlns:vms="clr-namespace:BitDesk.ViewModels"
+                  xmlns:helpers="clr-namespace:BitDesk.Helpers"
+                  xmlns:common="clr-namespace:BitDesk.Common"
+                  xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf" 
+                  xmlns:fw="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
+                  mc:Ignorable="d"
                   
-        Title="{Binding AppTitle}" 
+                  Title="{Binding AppTitle}" 
                   
-        Height="450" Width="800"
-        MinWidth="430" MinHeight="474"
+                  Height="450" Width="800"
+                  MinWidth="430" MinHeight="474"
         
-        Background="Transparent"
-        BorderThickness="0"
+                  Background="Transparent"
+                  BorderThickness="1"
         
-        fw:AcrylicWindow.Enabled="True"
-        fw:AcrylicWindow.ShowTitleBar="False"
-        fw:AcrylicWindow.ExtendViewIntoTitleBar="False"
-        fw:AcrylicWindow.TintOpacity="0.5"
-        fw:AcrylicWindow.TintColor="{DynamicResource WindowTintColor}"
-        fw:AcrylicWindow.FallbackColor="{DynamicResource WindowFallbackColor}"
+                  fw:AcrylicWindow.Enabled="True"
+                  fw:AcrylicWindow.ShowTitleBar="False"
+                  fw:AcrylicWindow.ExtendViewIntoTitleBar="False"
+                  fw:AcrylicWindow.TintOpacity="0.5"
+                  fw:AcrylicWindow.TintColor="{DynamicResource WindowTintColor}"
+                  fw:AcrylicWindow.FallbackColor="{DynamicResource WindowFallbackColor}"
         
-        helpers:MaximizeDoubleClickHelper.MaximizeDoubleClick="True" 
+                  helpers:MaximizeDoubleClickHelper.MaximizeDoubleClick="True" 
                   
-        SizeChanged="Window_SizeChanged"
-        StateChanged="Window_StateChanged"
+                  SizeChanged="Window_SizeChanged"
+                  StateChanged="Window_StateChanged"
                   
-        TextOptions.TextFormattingMode="Ideal"
-        TextOptions.TextRenderingMode="Aliased"
-        UseLayoutRounding="true"
+                  TextOptions.TextFormattingMode="Ideal"
+                  TextOptions.TextRenderingMode="Aliased"
+                  UseLayoutRounding="true"
                   
-        DataContext="{StaticResource MainViewModel}">
+                  FocusVisualStyle="{x:Null}"
+
+                  DataContext="{StaticResource MainViewModel}">
 
     <!-- MinWidth="423" MinHeight="554" Width="1636" Height="848" Width="1536" Height="848",  Width="1420" Height="765", Width="1165" Height="690",-->
 
@@ -97,7 +99,7 @@
                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="24 6 3 3" Visibility="{Binding ActivePair.AutoTradeStart, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
 
                                     <!-- [買い 売り (エラー) 総数] -->
-                                    <TextBlock Style="{StaticResource DefaultTextBlockStyle}" VerticalAlignment="Center">
+                                    <TextBlock Style="{DynamicResource DefaultTextBlockStyle}" VerticalAlignment="Center">
                                         <Run Text="["></Run>
                                         <Run Text="{Binding ActivePair.AutoTradeBuyOrders,Mode=OneWay}"></Run>
                                         <Run Text=" "></Run>
@@ -109,7 +111,7 @@
                                         <Run Text="]"></Run>
                                     </TextBlock>
                                     <Label Content=" 損益：" Margin="6 0 0 0" Style="{DynamicResource DefaultLabelStyle}" VerticalAlignment="Center"></Label>
-                                    <TextBlock Text="{Binding ActivePair.AutoTradeProfit, Mode=OneWay, StringFormat=0.#############################}" Style="{StaticResource DefaultTextBlockStyle}" VerticalAlignment="Center"></TextBlock>
+                                    <TextBlock Text="{Binding ActivePair.AutoTradeProfit, Mode=OneWay, StringFormat=0.#############################}" Style="{DynamicResource DefaultTextBlockStyle}" VerticalAlignment="Center"></TextBlock>
                                 
                                 </StackPanel>
                             </Border>
@@ -190,11 +192,11 @@
 18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z">
                         </Button>
                         <!-- アカウント ログイン -->
-                        <Button x:Name="LogInButton" Command="{Binding ShowLogInCommand}" Style="{StaticResource PathButton}" ToolTip="ロック解除(Ctrl+U)" ToolTipService.ToolTip="ロック解除(Ctrl+U)" Height="18" Width="18" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3" Visibility="{Binding PublicApiOnlyMode, Mode=OneWay, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
+                        <Button x:Name="LogInButton" Command="{Binding ShowLogInCommand}" Style="{DynamicResource PathButton}" ToolTip="ロック解除(Ctrl+U)" ToolTipService.ToolTip="ロック解除(Ctrl+U)" Height="18" Width="18" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3" Visibility="{Binding PublicApiOnlyMode, Mode=OneWay, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
                             M18,20V10H6V20H18M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6C4.89,22 4,21.1 4,20V10A2,2 0 0,1 6,8H15V6A3,3 0 0,0 12,3A3,3 0 0,0 9,6H7A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,17A2,2 0 0,1 10,15A2,2 0 0,1 12,13A2,2 0 0,1 14,15A2,2 0 0,1 12,17Z
                         </Button>
                         <!-- アカウント ログアウト -->
-                        <Button x:Name="LogOutButton" Command="{Binding LogOutCommand}" Style="{StaticResource PathButton}" ToolTip="ロック(Ctrl+L)" ToolTipService.ToolTip="ロック(Ctrl+L)" Height="18" Width="18" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3" Visibility="{Binding LoggedInMode, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
+                        <Button x:Name="LogOutButton" Command="{Binding LogOutCommand}" Style="{DynamicResource PathButton}" ToolTip="ロック(Ctrl+L)" ToolTipService.ToolTip="ロック(Ctrl+L)" Height="18" Width="18" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3" Visibility="{Binding LoggedInMode, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
                             M12,17A2,2 0 0,0 14,15C14,13.89 13.1,13 12,13A2,2 0 0,0 10,15A2,2 0 0,0 12,17M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6A2,2 0 0,1 4,20V10C4,8.89 4.9,8 6,8H7V6A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,3A3,3 0 0,0 9,6V8H15V6A3,3 0 0,0 12,3Z
                         </Button>
 
@@ -207,11 +209,11 @@
                             M8,6.2V4H7V2H17V4H16V12L18,14V16H17.8L14,12.2V4H10V8.2L8,6.2M20,20.7L18.7,22L12.8,16.1V22H11.2V16H6V14L8,12V11.3L2,5.3L3.3,4L20,20.7M8.8,14H10.6L9.7,13.1L8.8,14Z
                         </Button>
                         <!-- エコモード -->
-                        <Button x:Name="TopMenuMinimumButton" Command="{Binding ViewMinimumCommand}" Click="TopMenuMinimumButton_Click" Visibility="{Binding NotMinMode,Converter={StaticResource BoolToVisibilityCollapsedConverter}}" Style="{StaticResource PathButton}" ToolTip="ミニマム省エネモード" ToolTipService.ToolTip="ミニマム表示：省エネモード" Height="18" Width="18" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="6 0 6 0">
+                        <Button x:Name="TopMenuMinimumButton" Command="{Binding ViewMinimumCommand}" Click="TopMenuMinimumButton_Click" Visibility="{Binding NotMinMode,Converter={StaticResource BoolToVisibilityCollapsedConverter}}" Style="{DynamicResource PathButton}" ToolTip="ミニマム省エネモード" ToolTipService.ToolTip="ミニマム表示：省エネモード" Height="18" Width="18" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="6 0 6 0">
                             M19.5,3.09L20.91,4.5L16.41,9H20V11H13V4H15V7.59L19.5,3.09M20.91,19.5L19.5,20.91L15,16.41V20H13V13H20V15H16.41L20.91,19.5M4.5,3.09L9,7.59V4H11V11H4V9H7.59L3.09,4.5L4.5,3.09M3.09,19.5L7.59,15H4V13H11V20H9V16.41L4.5,20.91L3.09,19.5Z
                         </Button>
                         <!-- エコモード解除 -->
-                        <Button x:Name="TopMenuRestoreButton" Command="{Binding ViewRestoreCommand}" Click="TopMenuRestoreButton_Click" Visibility="{Binding MinMode,Converter={StaticResource BoolToVisibilityCollapsedConverter}}" Style="{StaticResource PathButton}" ToolTip="通常モードへ戻す" ToolTipService.ToolTip="通常モードへ戻す" Height="18" Width="18" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="6 0 6 0">
+                        <Button x:Name="TopMenuRestoreButton" Command="{Binding ViewRestoreCommand}" Click="TopMenuRestoreButton_Click" Visibility="{Binding MinMode,Converter={StaticResource BoolToVisibilityCollapsedConverter}}" Style="{DynamicResource PathButton}" ToolTip="通常モードへ戻す" ToolTipService.ToolTip="通常モードへ戻す" Height="18" Width="18" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="6 0 6 0">
                             M13,11H18L16.5,9.5L17.92,8.08L21.84,12L17.92,15.92L16.5,14.5L18,13H13V18L14.5,16.5L15.92,17.92L12,21.84L8.08,17.92L9.5,16.5L11,18V13H6L7.5,14.5L6.08,15.92L2.16,12L6.08,8.08L7.5,9.5L6,11H11V6L9.5,7.5L8.08,6.08L12,2.16L15.92,6.08L14.5,7.5L13,6V11Z
                         </Button>
                         <Button x:Name="MinButton" Style="{DynamicResource PathButton}" Width="18" Height="18" Margin="3" Opacity="0.7" Click="MinButton_Click" ToolTip="最小化(Alt+Space, S)">
@@ -430,7 +432,6 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-
                     <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center">
                         <Viewbox Margin="30 0 0 0" HorizontalAlignment="Left" VerticalAlignment="Center" Stretch="Uniform" Width="18" Height="18" ToolTip="ビットコインキャッシュ">
                             <Canvas Name="BCH_1" Width="24" Height="24" HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -459,7 +460,7 @@
         </WrapPanel>
 
         <!-- メインコンテンツ -->
-        <Grid Visibility="{Binding ShowMainContents, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
+        <Grid FocusVisualStyle="{x:Null}" Focusable="False" Visibility="{Binding ShowMainContents, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
             <Grid.RowDefinitions>
                 <!-- Top -->
                 <RowDefinition Height="30"/>
@@ -857,7 +858,7 @@
                             </Grid.ColumnDefinitions>
 
                             <!-- 最新取引価格 -->
-                            <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource BoardStyle}" Height="127" Margin="3 1 0 3" Width="360" HorizontalAlignment="Left" BorderThickness="0">
+                            <Border Grid.Row="0" Grid.Column="0" Style="{DynamicResource BoardStyle}" Height="127" Margin="3 1 0 3" Width="360" HorizontalAlignment="Left" BorderThickness="0">
                                 <StackPanel>
 
                                     <Border BorderBrush="DimGray" BorderThickness="0 0 0 0.5" Margin="3" Padding="3" >
@@ -939,10 +940,10 @@
                                                 <ColumnDefinition Width="*" MinWidth="0"/>
                                             </Grid.ColumnDefinitions>
 
-                                            <Label Grid.Row="1" Grid.Column="0" Padding="0 0 0 3.5" Content="24時間 H" HorizontalContentAlignment="Left" Style="{DynamicResource DarkLabelStyle}"/>
-                                            <Label Grid.Row="2" Grid.Column="0" Padding="0 0 0 3.5" Content="起動後 H" HorizontalContentAlignment="Left" Style="{DynamicResource DarkLabelStyle}"/>
-                                            <Label Grid.Row="3" Grid.Column="0" Padding="0 0 0 3.5" Content="起動後 L" HorizontalContentAlignment="Left" Style="{DynamicResource DarkLabelStyle}"/>
-                                            <Label Grid.Row="4" Grid.Column="0" Padding="0 0 0 0" Content="24時間 L" HorizontalContentAlignment="Left" Style="{DynamicResource DarkLabelStyle}"/>
+                                            <Label Grid.Row="1" Grid.Column="0" Padding="0 0 0 3.5" Content="24時間 H" HorizontalContentAlignment="Left" Style="{DynamicResource DefaultLabelStyle}"/>
+                                            <Label Grid.Row="2" Grid.Column="0" Padding="0 0 0 3.5" Content="起動後 H" HorizontalContentAlignment="Left" Style="{DynamicResource DefaultLabelStyle}"/>
+                                            <Label Grid.Row="3" Grid.Column="0" Padding="0 0 0 3.5" Content="起動後 L" HorizontalContentAlignment="Left" Style="{DynamicResource DefaultLabelStyle}"/>
+                                            <Label Grid.Row="4" Grid.Column="0" Padding="0 0 0 0" Content="24時間 L" HorizontalContentAlignment="Left" Style="{DynamicResource DefaultLabelStyle}"/>
 
                                             <Label Grid.Row="1" Grid.Column="1" Padding="6 0 0 3.5" Content="{Binding Path=ActivePair.High24String, Mode=OneWay}" HorizontalContentAlignment="Left" Foreground="DarkTurquoise"/>
                                             <Label Grid.Row="2" Grid.Column="1" Padding="6 0 0 3.5" Content="{Binding Path=ActivePair.HighestPriceString, Mode=OneWay}" HorizontalContentAlignment="Left" Foreground="{DynamicResource PriceUpColorBrush}"/>
@@ -956,13 +957,13 @@
                             </Border>
 
                             <!-- アラーム設定 -->
-                            <Border Grid.Row="1" Grid.Column="0" Style="{StaticResource BoardStyle}" Height="88" Margin="3 1 0 3" Width="360" HorizontalAlignment="Left" BorderThickness="0">
+                            <Border Grid.Row="1" Grid.Column="0" Style="{DynamicResource BoardStyle}" Height="88" Margin="3 1 0 3" Width="360" HorizontalAlignment="Left" BorderThickness="0">
                                 <StackPanel>
 
                                     <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" BorderBrush="DimGray" BorderThickness="0 0 0 0.5" Margin="3" Padding="3">
-                                        <Label Padding="0" Content="アラーム設定" Style="{StaticResource SectionTitle}"/>
+                                        <Label Padding="0" Content="アラーム設定" Style="{DynamicResource SectionTitle}"/>
                                     </Border>
-                                    <Border Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" BorderBrush="Gainsboro" BorderThickness="0" Margin="3 3 3 3" Padding="3" >
+                                    <Border Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="3 3 3 3" Padding="3" >
                                         <Grid Margin="0">
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="Auto"/>
@@ -1033,10 +1034,10 @@
                             </Border>
 
                             <!-- 保有資産 API キー設定画面 -->
-                            <Border Grid.Row="2" Grid.Column="0" Style="{StaticResource BoardStyle}" Height="101" Margin="3 1 0 3" Width="360" HorizontalAlignment="Left" Visibility="{Binding ShowAssetApiSet, Converter={StaticResource BoolToVisibilityCollapsedConverter}}" BorderThickness="0">
+                            <Border Grid.Row="2" Grid.Column="0" Style="{DynamicResource BoardStyle}" Height="101" Margin="3 1 0 3" Width="360" HorizontalAlignment="Left" Visibility="{Binding ShowAssetApiSet, Converter={StaticResource BoolToVisibilityCollapsedConverter}}" BorderThickness="0">
                                 <StackPanel>
                                     <Border BorderBrush="DimGray" BorderThickness="0 0 0 0.5" Margin="3" Padding="3">
-                                        <Label Padding="0" Content="保有資産情報の取得用APIキー設定" Style="{StaticResource SectionTitle}"/>
+                                        <Label Padding="0" Content="保有資産情報の取得用APIキー設定" Style="{DynamicResource SectionTitle}"/>
                                     </Border>
                                     <Popup IsOpen="{Binding IsChecked, ElementName=AssetsAPIKeyInfoButton}" StaysOpen="False" PlacementTarget="{Binding ElementName=AssetsAPIKeyInfoButton}" AllowsTransparency="True" PopupAnimation="Slide">
                                         <Border Background="WhiteSmoke" CornerRadius="4" Padding="6" Width="330" Height="210">
@@ -1093,21 +1094,21 @@
                                 </StackPanel>
                             </Border>
                             <!-- 保有資産 未ログイン画面 -->
-                            <Border Grid.Row="2" Grid.Column="0" Style="{StaticResource BoardStyle}" Height="101" Margin="3 1 0 3" Width="360" HorizontalAlignment="Left" Visibility="{Binding PublicApiOnlyMode, Converter={StaticResource BoolToVisibilityCollapsedConverter}}" BorderThickness="0">
+                            <Border Grid.Row="2" Grid.Column="0" Style="{DynamicResource BoardStyle}" Height="101" Margin="3 1 0 3" Width="360" HorizontalAlignment="Left" Visibility="{Binding PublicApiOnlyMode, Converter={StaticResource BoolToVisibilityCollapsedConverter}}" BorderThickness="0">
                                 <StackPanel>
                                     <Border BorderBrush="DimGray" BorderThickness="0 0 0 0.5" Margin="3" Padding="3">
-                                        <Label Padding="0" Content="保有資産" Style="{StaticResource SectionTitle}"/>
+                                        <Label Padding="0" Content="保有資産" Style="{DynamicResource SectionTitle}"/>
                                     </Border>
 
                                     <!-- アカウント ログイン ロック解除 -->
-                                    <Button Command="{Binding ShowLogInCommand}" Foreground="Gray" Background="Transparent" Style="{StaticResource PathButton}" ToolTip="ロック解除(Ctrl+U)" ToolTipService.ToolTip="ロック解除(Ctrl+U)" Height="36" Width="36" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="6 12 0 0" Visibility="{Binding PublicApiOnlyMode, Mode=OneWay, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
+                                    <Button Command="{Binding ShowLogInCommand}" Foreground="Gray" Background="Transparent" Style="{DynamicResource PathButton}" ToolTip="ロック解除(Ctrl+U)" ToolTipService.ToolTip="ロック解除(Ctrl+U)" Height="36" Width="36" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="6 12 0 0" Visibility="{Binding PublicApiOnlyMode, Mode=OneWay, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
                                         M18,20V10H6V20H18M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6C4.89,22 4,21.1 4,20V10A2,2 0 0,1 6,8H15V6A3,3 0 0,0 12,3A3,3 0 0,0 9,6H7A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,17A2,2 0 0,1 10,15A2,2 0 0,1 12,13A2,2 0 0,1 14,15A2,2 0 0,1 12,17Z
                                     </Button>
 
                                 </StackPanel>
                             </Border>
                             <!-- 保有資産 -->
-                            <Border Grid.Row="2" Grid.Column="0" Style="{StaticResource BoardStyle}" Height="101" Margin="3 1 0 3" Width="360" HorizontalAlignment="Left" Visibility="{Binding ShowAsset, Converter={StaticResource BoolToVisibilityCollapsedConverter}}" BorderThickness="0">
+                            <Border Grid.Row="2" Grid.Column="0" Style="{DynamicResource BoardStyle}" Height="101" Margin="3 1 0 3" Width="360" HorizontalAlignment="Left" Visibility="{Binding ShowAsset, Converter={StaticResource BoolToVisibilityCollapsedConverter}}" BorderThickness="0">
 
                                 <StackPanel>
                                     <Border Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" BorderBrush="DimGray" BorderThickness="0 0 0 0.5" Margin="3" Padding="3">
@@ -1177,7 +1178,7 @@
 
                                         <StackPanel Grid.Row="2" Grid.Column="2" Orientation="Horizontal" Margin="3 0 3 3" VerticalAlignment="Bottom" HorizontalAlignment="Right" Visibility="{Binding IsBtcJpyAssetVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
                                             <Label Margin="0" Padding="0" Content="(" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"></Label>
-                                            <TextBlock Margin="0" Padding="0" VerticalAlignment="Bottom" Text="{Binding AssetBTCEstimateAmount, Mode=OneWay, StringFormat={}{0:N0}}" Style="{StaticResource DefaultTextBlockStyle}"></TextBlock>
+                                            <TextBlock Margin="0" Padding="0" VerticalAlignment="Bottom" Text="{Binding AssetBTCEstimateAmount, Mode=OneWay, StringFormat={}{0:N0}}" Style="{DynamicResource DefaultTextBlockStyle}"></TextBlock>
                                             <Label Margin="0" Padding="0" Content=" 円) " VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"></Label>
 
                                             <TextBlock Margin="0" Padding="0" Text="{Binding AssetBTCAmount, Mode=OneWay, StringFormat={}{0:N5}}" VerticalAlignment="Bottom" Style="{DynamicResource DefaultTextBlockStyle}"/>
@@ -1196,7 +1197,7 @@
 
                                         <StackPanel Grid.Row="2" Grid.Column="2" Orientation="Horizontal" Margin="3 0 3 0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Visibility="{Binding IsXrpJpyAssetVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
                                             <Label Margin="0" Padding="0" Content="(" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"></Label>
-                                            <TextBlock Margin="0" Padding="0" VerticalAlignment="Bottom" Text="{Binding AssetXRPEstimateAmount, Mode=OneWay, StringFormat={}{0:N0}}" Style="{StaticResource DefaultTextBlockStyle}"></TextBlock>
+                                            <TextBlock Margin="0" Padding="0" VerticalAlignment="Bottom" Text="{Binding AssetXRPEstimateAmount, Mode=OneWay, StringFormat={}{0:N0}}" Style="{DynamicResource DefaultTextBlockStyle}"></TextBlock>
                                             <Label Margin="0" Padding="0" Content=" 円) " VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"></Label>
 
                                             <TextBlock Margin="0" Padding="0" Text="{Binding AssetXRPAmount, Mode=OneWay, StringFormat={}{0:N5}}" VerticalAlignment="Bottom" Style="{DynamicResource DefaultTextBlockStyle}"/>
@@ -1215,7 +1216,7 @@
 
                                         <StackPanel Grid.Row="2" Grid.Column="2" Orientation="Horizontal" Margin="3 0 3 0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Visibility="{Binding IsMonaJpyAssetVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
                                             <Label Margin="0" Padding="0" Content="(" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"></Label>
-                                            <TextBlock Margin="0" Padding="0" VerticalAlignment="Bottom" Text="{Binding AssetMonaEstimateAmount, Mode=OneWay, StringFormat={}{0:N0}}" Style="{StaticResource DefaultTextBlockStyle}"></TextBlock>
+                                            <TextBlock Margin="0" Padding="0" VerticalAlignment="Bottom" Text="{Binding AssetMonaEstimateAmount, Mode=OneWay, StringFormat={}{0:N0}}" Style="{DynamicResource DefaultTextBlockStyle}"></TextBlock>
                                             <Label Margin="0" Padding="0" Content=" 円) " VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"></Label>
 
                                             <TextBlock Margin="0" Padding="0" Text="{Binding AssetMonaAmount, Mode=OneWay, StringFormat={}{0:N5}}" VerticalAlignment="Bottom" Style="{DynamicResource DefaultTextBlockStyle}"/>
@@ -1234,7 +1235,7 @@
 
                                         <StackPanel Grid.Row="2" Grid.Column="2" Orientation="Horizontal" Margin="3 0 3 0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Visibility="{Binding IsBchJpyAssetVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
                                             <Label Margin="0" Padding="0" Content="(" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"></Label>
-                                            <TextBlock Margin="0" Padding="0" VerticalAlignment="Bottom" Text="{Binding AssetBchEstimateAmount, Mode=OneWay, StringFormat={}{0:N0}}" Style="{StaticResource DefaultTextBlockStyle}"></TextBlock>
+                                            <TextBlock Margin="0" Padding="0" VerticalAlignment="Bottom" Text="{Binding AssetBchEstimateAmount, Mode=OneWay, StringFormat={}{0:N0}}" Style="{DynamicResource DefaultTextBlockStyle}"></TextBlock>
                                             <Label Margin="0" Padding="0" Content=" 円) " VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"></Label>
 
                                             <TextBlock Margin="0" Padding="0" Text="{Binding AssetBchAmount, Mode=OneWay, StringFormat={}{0:N5}}" VerticalAlignment="Bottom" Style="{DynamicResource DefaultTextBlockStyle}"/>
@@ -1253,7 +1254,7 @@
 
                                         <StackPanel Grid.Row="3" Grid.Column="2" Orientation="Horizontal" Margin="3 0 3 0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Visibility="{Binding IsEthBtcAssetVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
                                             <Label Margin="0" Padding="0" Content="(" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"></Label>
-                                            <TextBlock Margin="0" Padding="0" VerticalAlignment="Bottom" Text="{Binding AssetEthEstimateAmount, Mode=OneWay, StringFormat={}{0:N0}}" Style="{StaticResource DefaultTextBlockStyle}"></TextBlock>
+                                            <TextBlock Margin="0" Padding="0" VerticalAlignment="Bottom" Text="{Binding AssetEthEstimateAmount, Mode=OneWay, StringFormat={}{0:N0}}" Style="{DynamicResource DefaultTextBlockStyle}"></TextBlock>
                                             <Label Margin="0" Padding="0" Content=" 円) " VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"></Label>
 
                                             <TextBlock Margin="0" Padding="0" Text="{Binding AssetEthAmount, Mode=OneWay, StringFormat={}{0:N5}}" VerticalAlignment="Bottom" Style="{DynamicResource DefaultTextBlockStyle}"/>
@@ -1272,7 +1273,7 @@
 
                                         <StackPanel Grid.Row="3" Grid.Column="2" Orientation="Horizontal" Margin="3 0 3 0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Visibility="{Binding IsLtcBtcAssetVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
                                             <Label Margin="0" Padding="0" Content="(" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"></Label>
-                                            <TextBlock Margin="0" Padding="0" VerticalAlignment="Bottom" Text="{Binding AssetLtcEstimateAmount, Mode=OneWay, StringFormat={}{0:N0}}" Style="{StaticResource DefaultTextBlockStyle}"></TextBlock>
+                                            <TextBlock Margin="0" Padding="0" VerticalAlignment="Bottom" Text="{Binding AssetLtcEstimateAmount, Mode=OneWay, StringFormat={}{0:N0}}" Style="{DynamicResource DefaultTextBlockStyle}"></TextBlock>
                                             <Label Margin="0" Padding="0" Content=" 円) " VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"></Label>
 
                                             <TextBlock Margin="0" Padding="0" Text="{Binding AssetLtcAmount, Mode=OneWay, StringFormat={}{0:N5}}" VerticalAlignment="Bottom" Style="{DynamicResource DefaultTextBlockStyle}"/>
@@ -1285,10 +1286,10 @@
                             </Border>
 
                             <!-- 統計情報 --> <!-- Height="89" -->
-                            <Border Grid.Row="3" Grid.Column="0" Style="{StaticResource BoardStyle}" Height="88" Margin="3 1 0 3" Width="360" HorizontalAlignment="Left" BorderThickness="0">
+                            <Border Grid.Row="3" Grid.Column="0" Style="{DynamicResource BoardStyle}" Height="88" Margin="3 1 0 3" Width="360" HorizontalAlignment="Left" BorderThickness="0">
                                 <StackPanel>
                                     <Border BorderBrush="DimGray" BorderThickness="0 0 0 0.5" Margin="3" Padding="3">
-                                        <Label Padding="0" Content="統計" Style="{StaticResource SectionTitle}"/>
+                                        <Label Padding="0" Content="統計" Style="{DynamicResource SectionTitle}"/>
                                     </Border>
                                     <Grid Margin="6">
                                         <Grid.RowDefinitions>
@@ -1316,21 +1317,44 @@
                                                 <TextBlock Text="{Binding Path=ActivePair.MiddleLast24PriceString, Mode=OneWay, StringFormat={}{0:N0}}" Style="{DynamicResource DefaultTextBlockStyle}"></TextBlock>
                                                 <Label  Margin="3 0 3 0" Content="{Binding CurrentPairUnitString,Mode=OneWay}" Style="{DynamicResource DefaultLabelStyle}" Visibility="Collapsed"/>
                                                 <TextBlock Text="{Binding Path=ActivePair.MiddleLast24PriceIcon, Mode=OneWay}" Margin="3 0 0 0">
-                                                    <TextBlock.Foreground>
-                                                        <SolidColorBrush Color="{Binding Path=ActivePair.MiddleLast24PriceIconColor, Mode=OneWay}"/>
-                                                    </TextBlock.Foreground>
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="{x:Type TextBlock}">
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding ActivePair.MiddleLast24PriceUpFlag, Mode=OneWay}" Value="True">
+                                                                    <Setter Property="Foreground" Value="{DynamicResource PriceUpColorBrush}"/>
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding ActivePair.MiddleLast24PriceUpFlag, Mode=OneWay}" Value="False">
+                                                                    <Setter Property="Foreground" Value="{DynamicResource PriceDownColorBrush}"/>
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding ActivePair.MiddleLast24PriceIcon, Mode=OneWay}" Value="＝">
+                                                                    <Setter Property="Foreground" Value="{DynamicResource ControlMediumColorBrush}"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
                                                 </TextBlock>
                                             </StackPanel>
-
 
                                             <Label Grid.Row="1" Grid.Column="0" Padding="3" Content="起動後中央値：" Style="{DynamicResource DefaultLabelStyle}"></Label>
                                             <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Margin="0 3 0 3">
                                                 <TextBlock Text="{Binding Path=ActivePair.MiddleInitPriceString, Mode=OneWay, StringFormat={}{0:N0}}" Style="{DynamicResource DefaultTextBlockStyle}"></TextBlock>
                                                 <Label  Margin="3 0 3 0" Content="{Binding CurrentPairUnitString,Mode=OneWay}" Style="{DynamicResource DefaultLabelStyle}" Visibility="Collapsed"/>
                                                 <TextBlock Text="{Binding Path=ActivePair.MiddleInitPriceIcon, Mode=OneWay}" Margin="3 0 0 0">
-                                                    <TextBlock.Foreground>
-                                                        <SolidColorBrush Color="{Binding Path=ActivePair.MiddleInitPriceIconColor, Mode=OneWay}"/>
-                                                    </TextBlock.Foreground>
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="{x:Type TextBlock}">
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding ActivePair.MiddleInitPriceUpFlag, Mode=OneWay}" Value="True">
+                                                                    <Setter Property="Foreground" Value="{DynamicResource PriceUpColorBrush}"/>
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding ActivePair.MiddleInitPriceUpFlag, Mode=OneWay}" Value="False">
+                                                                    <Setter Property="Foreground" Value="{DynamicResource PriceDownColorBrush}"/>
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding ActivePair.MiddleInitPriceIcon, Mode=OneWay}" Value="＝">
+                                                                    <Setter Property="Foreground" Value="{DynamicResource ControlMediumColorBrush}"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
                                                 </TextBlock>
                                             </StackPanel>
                                         </Grid>
@@ -1347,26 +1371,54 @@
                                                 <ColumnDefinition Width="50*"/>
                                             </Grid.ColumnDefinitions>
 
-
                                             <Label Grid.Row="0" Grid.Column="0" Padding="6 3 3 3" Content="起動時の値：" Style="{DynamicResource DefaultLabelStyle}"></Label>
                                             <StackPanel Grid.Row="0"  Grid.Column="1" Orientation="Horizontal" Margin="0 3 0 3">
                                                 <TextBlock Text="{Binding Path=ActivePair.BasePriceString, Mode=OneWay, StringFormat={}{0:N0}}" Style="{DynamicResource DefaultTextBlockStyle}"></TextBlock>
                                                 <Label Margin="3 0 3 0" Content="{Binding CurrentPairUnitString,Mode=OneWay}" Style="{DynamicResource DefaultLabelStyle}" Visibility="Collapsed"/>
                                                 <TextBlock Text="{Binding Path=ActivePair.BasePriceIcon, Mode=OneWay}" Margin="3 0 0 0">
-                                                    <TextBlock.Foreground>
-                                                        <SolidColorBrush Color="{Binding Path=ActivePair.BasePriceIconColor, Mode=OneWay}"/>
-                                                    </TextBlock.Foreground>
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="{x:Type TextBlock}">
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding ActivePair.BasePriceUpFlag, Mode=OneWay}" Value="True">
+                                                                    <Setter Property="Foreground" Value="{DynamicResource PriceUpColorBrush}"/>
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding ActivePair.BasePriceUpFlag, Mode=OneWay}" Value="False">
+                                                                    <Setter Property="Foreground" Value="{DynamicResource PriceDownColorBrush}"/>
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding ActivePair.BasePriceIcon, Mode=OneWay}" Value="＝">
+                                                                    <Setter Property="Foreground" Value="{DynamicResource ControlMediumColorBrush}"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
                                                 </TextBlock>
                                             </StackPanel>
 
                                             <Label Grid.Row="1" Grid.Column="0" Padding="6 3 3 3" Content="1分の平均値：" Style="{DynamicResource DefaultLabelStyle}"></Label>
                                             <StackPanel Grid.Row="1"  Grid.Column="1" Orientation="Horizontal" Margin="0 3 0 3">
-                                                <TextBlock Text="{Binding Path=ActivePair.AveragePriceString, Mode=OneWay, StringFormat={}{0:N0}}" Style="{DynamicResource DefaultTextBlockStyle}"></TextBlock>
+                                                <TextBlock Text="{Binding Path=ActivePair.AveragePriceString, Mode=OneWay, StringFormat={}{0:N0}}" Style="{DynamicResource DefaultTextBlockStyle}"/>
                                                 <Label Margin="3 0 3 0" Content="{Binding CurrentPairUnitString,Mode=OneWay}" Style="{DynamicResource DefaultLabelStyle}" Visibility="Collapsed"/>
                                                 <TextBlock Text="{Binding Path=ActivePair.AveragePriceIcon, Mode=OneWay}" Margin="3 0 0 0">
+                                                    <!--
                                                     <TextBlock.Foreground>
                                                         <SolidColorBrush Color="{Binding Path=ActivePair.AveragePriceIconColor, Mode=OneWay}"/>
                                                     </TextBlock.Foreground>
+                                                    -->
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="{x:Type TextBlock}">
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding ActivePair.AveragePriceUpFlag, Mode=OneWay}" Value="True">
+                                                                    <Setter Property="Foreground" Value="{DynamicResource PriceUpColorBrush}"/>
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding ActivePair.AveragePriceUpFlag, Mode=OneWay}" Value="False">
+                                                                    <Setter Property="Foreground" Value="{DynamicResource PriceDownColorBrush}"/>
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding ActivePair.AveragePriceIcon, Mode=OneWay}" Value="＝">
+                                                                    <Setter Property="Foreground" Value="{DynamicResource ControlMediumColorBrush}"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
                                                 </TextBlock>
                                             </StackPanel>
                                         </Grid>
@@ -1388,7 +1440,7 @@
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
 
-                                <Border x:Name="Middle" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="1" Style="{StaticResource BoardStyle}" HorizontalAlignment="Left" VerticalAlignment="Top">
+                                <Border x:Name="Middle" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="1" Style="{DynamicResource BoardStyle}" HorizontalAlignment="Left" VerticalAlignment="Top">
 
                                     <TabControl Style="{StaticResource NoChromeTabControl}" Margin="0 0 0 0" BorderThickness="0">
 
@@ -1501,7 +1553,7 @@
                                                 <Border Width="360" Margin="3 0 0 6" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="{Binding ShowManualTradeApiSet, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
                                                     <StackPanel>
                                                         <Border BorderBrush="DimGray" BorderThickness="0 0 0 0.5" Margin="3" Padding="3">
-                                                            <Label Padding="0" Content="売買注文用APIキー設定" Style="{StaticResource SectionTitle}"/>
+                                                            <Label Padding="0" Content="売買注文用APIキー設定" Style="{DynamicResource SectionTitle}"/>
                                                         </Border>
                                                         <Popup IsOpen="{Binding IsChecked, ElementName=ManualOrderAPIKeyInfoButton}" StaysOpen="False" PlacementTarget="{Binding ElementName=ManualOrderAPIKeyInfoButton}" AllowsTransparency="True" PopupAnimation="Slide">
                                                             <Border Background="WhiteSmoke" CornerRadius="4" Padding="6" Width="330" Height="210">
@@ -1563,7 +1615,7 @@
                                                     <StackPanel>
 
                                                         <!-- アカウント ログイン ロック解除 -->
-                                                        <Button Command="{Binding ShowLogInCommand}" Foreground="Gray" Background="Transparent" Style="{StaticResource PathButton}" ToolTip="ロック解除(Ctrl+U)" ToolTipService.ToolTip="ロック解除(Ctrl+U)" Height="36" Width="36" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="6 24 0 0" Visibility="{Binding PublicApiOnlyMode, Mode=OneWay, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
+                                                        <Button Command="{Binding ShowLogInCommand}" Foreground="Gray" Background="Transparent" Style="{DynamicResource PathButton}" ToolTip="ロック解除(Ctrl+U)" ToolTipService.ToolTip="ロック解除(Ctrl+U)" Height="36" Width="36" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="6 24 0 0" Visibility="{Binding PublicApiOnlyMode, Mode=OneWay, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
                                                             M18,20V10H6V20H18M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6C4.89,22 4,21.1 4,20V10A2,2 0 0,1 6,8H15V6A3,3 0 0,0 12,3A3,3 0 0,0 9,6H7A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,17A2,2 0 0,1 10,15A2,2 0 0,1 12,13A2,2 0 0,1 14,15A2,2 0 0,1 12,17Z
                                                         </Button>
 
@@ -1581,7 +1633,7 @@
                                                                 <StackPanel>
 
                                                                     <Border BorderBrush="Gainsboro" BorderThickness="0 0 0 0.5" Margin="3 0 3 3" Padding="3">
-                                                                        <Label Padding="0" Content="[買い注文]" Style="{StaticResource SectionTitle}" Foreground="{StaticResource PriceUpColorBrush}"/>
+                                                                        <Label Padding="0" Content="[買い注文]" Style="{DynamicResource SectionTitle}" Foreground="{DynamicResource PriceUpColorBrush}"/>
                                                                     </Border>
 
                                                                     <Grid Margin="3">
@@ -1611,7 +1663,7 @@
                                                                             <Label Margin="3 0 12 0" Content="{Binding CurrentPairUnitString,Mode=OneWay}" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
 
                                                                             <Label Margin="6 0 0 0" Content="予想金額：" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
-                                                                            <TextBlock Text="{Binding BuyEstimatePrice}" Style="{StaticResource DefaultTextBlockStyle}"/>
+                                                                            <TextBlock Text="{Binding BuyEstimatePrice}" Style="{DynamicResource DefaultTextBlockStyle}"/>
                                                                             <Label Margin="3 0 12 0" Content="{Binding CurrentPairUnitString, Mode=OneWay}" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
 
                                                                         </StackPanel>
@@ -1641,7 +1693,7 @@
                                                                 <StackPanel>
 
                                                                     <Border BorderBrush="Gainsboro" BorderThickness="0 0 0 0.5" Margin="3 0 3 3" Padding="3">
-                                                                        <Label Padding="0" Content="[売り注文]" Style="{StaticResource SectionTitle}" Foreground="{StaticResource PriceDownColorBrush}"/>
+                                                                        <Label Padding="0" Content="[売り注文]" Style="{DynamicResource SectionTitle}" Foreground="{DynamicResource PriceDownColorBrush}"/>
                                                                     </Border>
 
                                                                     <Grid Margin="3">
@@ -1671,7 +1723,7 @@
                                                                             <Label Margin="3 0 12 0" Content="{Binding CurrentPairUnitString,Mode=OneWay}" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
 
                                                                             <Label Margin="6 0 0 0" Content="予想金額：" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
-                                                                            <TextBlock Text="{Binding SellEstimatePrice}" Style="{StaticResource DefaultTextBlockStyle}"/>
+                                                                            <TextBlock Text="{Binding SellEstimatePrice}" Style="{DynamicResource DefaultTextBlockStyle}"/>
                                                                             <Label Margin="3 0 12 0" Content="{Binding CurrentPairUnitString,Mode=OneWay}" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
 
                                                                         </StackPanel>
@@ -1708,7 +1760,7 @@
                                                 <Border Width="360" Margin="3 0 0 6" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="{Binding ShowIfdocoTradeApiSet, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
                                                     <StackPanel>
                                                         <Border BorderBrush="DimGray" BorderThickness="0 0 0 0.5" Margin="3" Padding="3">
-                                                            <Label Padding="0" Content="特殊注文用APIキー設定" Style="{StaticResource SectionTitle}"/>
+                                                            <Label Padding="0" Content="特殊注文用APIキー設定" Style="{DynamicResource SectionTitle}"/>
                                                         </Border>
                                                         <Popup IsOpen="{Binding IsChecked, ElementName=IfdocoTradeAPIKeyInfoButton}" StaysOpen="False" PlacementTarget="{Binding ElementName=IfdocoTradeAPIKeyInfoButton}" AllowsTransparency="True" PopupAnimation="Slide">
                                                             <Border Background="WhiteSmoke" CornerRadius="4" Padding="6" Width="330" Height="210">
@@ -1770,7 +1822,7 @@
                                                     <StackPanel>
 
                                                         <!-- アカウント ログイン ロック解除 -->
-                                                        <Button Command="{Binding ShowLogInCommand}" Foreground="Gray" Background="Transparent" Style="{StaticResource PathButton}" ToolTip="ロック解除(Ctrl+U)" ToolTipService.ToolTip="ロック解除(Ctrl+U)" Height="36" Width="36" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="6 24 0 0" Visibility="{Binding PublicApiOnlyMode, Mode=OneWay, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
+                                                        <Button Command="{Binding ShowLogInCommand}" Foreground="Gray" Background="Transparent" Style="{DynamicResource PathButton}" ToolTip="ロック解除(Ctrl+U)" ToolTipService.ToolTip="ロック解除(Ctrl+U)" Height="36" Width="36" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="6 24 0 0" Visibility="{Binding PublicApiOnlyMode, Mode=OneWay, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
                                                             M18,20V10H6V20H18M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6C4.89,22 4,21.1 4,20V10A2,2 0 0,1 6,8H15V6A3,3 0 0,0 12,3A3,3 0 0,0 9,6H7A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,17A2,2 0 0,1 10,15A2,2 0 0,1 12,13A2,2 0 0,1 14,15A2,2 0 0,1 12,17Z
                                                         </Button>
 
@@ -1817,17 +1869,17 @@
 
                                                                         <StackPanel Orientation="Horizontal" Margin="0 6 0 3" VerticalAlignment="Bottom">
                                                                             <Label Content="数量：" Margin="0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
-                                                                            <TextBox x:Name="IfdAmountTextbox" Width="80" Text="{Binding IFD_IfdAmount}" GotFocus="Textbox_GotFocus" VerticalAlignment="Bottom"/>
+                                                                            <TextBox x:Name="IfdAmountTextbox" Width="80" Text="{Binding IFD_IfdAmount}" GotFocus="Textbox_GotFocus" VerticalAlignment="Bottom" Style="{DynamicResource DefaultTextBoxStyle}"/>
                                                                             <Label Content="{Binding CurrentCoinString, Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                         </StackPanel>
 
                                                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3" VerticalAlignment="Bottom">
                                                                             <Label Content="価格：" Margin="0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
-                                                                            <TextBox x:Name="IfdPriceTextbox" Width="80" VerticalAlignment="Bottom" IsEnabled="{Binding IsChecked, ElementName=IfdTypeLimitRadioButton}" Text="{Binding IFD_IfdPrice,UpdateSourceTrigger=PropertyChanged}" GotFocus="Textbox_GotFocus"/>
+                                                                            <TextBox x:Name="IfdPriceTextbox" Width="80" VerticalAlignment="Bottom" IsEnabled="{Binding IsChecked, ElementName=IfdTypeLimitRadioButton}" Text="{Binding IFD_IfdPrice,UpdateSourceTrigger=PropertyChanged}" GotFocus="Textbox_GotFocus" Style="{DynamicResource DefaultTextBoxStyle}"/>
                                                                             <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
 
                                                                             <Label Content="予想金額：" Margin="12 0 0 0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
-                                                                            <TextBlock Text="{Binding IFD_IfdEstimatePrice, StringFormat={}{0:N0},Mode=OneWay}" Style="{StaticResource DefaultTextBlockStyle}" VerticalAlignment="Bottom"/>
+                                                                            <TextBlock Text="{Binding IFD_IfdEstimatePrice, StringFormat={}{0:N0},Mode=OneWay}" Style="{DynamicResource DefaultTextBlockStyle}" VerticalAlignment="Bottom"/>
                                                                             <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
 
                                                                         </StackPanel>
@@ -1868,27 +1920,27 @@
 
                                                                         <StackPanel Orientation="Horizontal" Margin="0 6 0 3" VerticalAlignment="Bottom">
                                                                             <Label Content="数量：" Margin="0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
-                                                                            <TextBox x:Name="IfdDoneAmountTextbox" Width="80" Text="{Binding IFD_DoAmount}" GotFocus="Textbox_GotFocus" VerticalAlignment="Bottom"/>
+                                                                            <TextBox x:Name="IfdDoneAmountTextbox" Width="80" Text="{Binding IFD_DoAmount}" GotFocus="Textbox_GotFocus" VerticalAlignment="Bottom" Style="{DynamicResource DefaultTextBoxStyle}"/>
                                                                             <Label Content="{Binding CurrentCoinString, Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                         </StackPanel>
 
                                                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3" VerticalAlignment="Bottom">
                                                                             <Label Content="価格：" Margin="0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
-                                                                            <TextBox x:Name="IfdDonePriceTextbox" Width="80" VerticalAlignment="Bottom" IsEnabled="{Binding IsChecked, ElementName=IfdDoneTypeLimitRadioButton}" Text="{Binding IFD_DoPrice,UpdateSourceTrigger=PropertyChanged}" GotFocus="Textbox_GotFocus"/>
+                                                                            <TextBox x:Name="IfdDonePriceTextbox" Width="80" VerticalAlignment="Bottom" IsEnabled="{Binding IsChecked, ElementName=IfdDoneTypeLimitRadioButton}" Text="{Binding IFD_DoPrice,UpdateSourceTrigger=PropertyChanged}" GotFocus="Textbox_GotFocus" Style="{DynamicResource DefaultTextBoxStyle}"/>
                                                                             <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
 
                                                                             <Label Content="予想金額：" Margin="12 0 0 0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
-                                                                            <TextBlock Text="{Binding IFD_DoEstimatePrice, StringFormat={}{0:N0},Mode=OneWay}" Style="{StaticResource DefaultTextBlockStyle}" VerticalAlignment="Bottom"/>
+                                                                            <TextBlock Text="{Binding IFD_DoEstimatePrice, StringFormat={}{0:N0},Mode=OneWay}" Style="{DynamicResource DefaultTextBlockStyle}" VerticalAlignment="Bottom"/>
                                                                             <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                         </StackPanel>
 
                                                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3" VerticalAlignment="Bottom">
                                                                             <Label Content="トリガー：" Margin="0" Padding="0" VerticalAlignment="Center" Style="{DynamicResource DefaultLabelStyle}"/>
-                                                                            <TextBox Width="80" Text="{Binding IFD_DoTriggerPrice}" GotFocus="Textbox_GotFocus" VerticalAlignment="Center"/>
+                                                                            <TextBox Width="80" Text="{Binding IFD_DoTriggerPrice}" GotFocus="Textbox_GotFocus" VerticalAlignment="Center" Style="{DynamicResource DefaultTextBoxStyle}"/>
 
                                                                             <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Center" Style="{DynamicResource DefaultLabelStyle}"/>
 
-                                                                            <ComboBox SelectedIndex="{Binding IFD_DoTriggerUpDown}" VerticalAlignment="Center" Margin="0 0 0 0" Padding="0 0 0 0" Background="Transparent" Style="{StaticResource ComboBoxFlatStyle}">
+                                                                            <ComboBox SelectedIndex="{Binding IFD_DoTriggerUpDown}" VerticalAlignment="Center" Margin="0 0 0 0" Padding="0 0 0 0" Background="Transparent" Style="{DynamicResource ComboBoxFlatStyle}">
                                                                                 <ComboBoxItem Content="以上" Foreground="White"></ComboBoxItem>
                                                                                 <ComboBoxItem Content="以下" Foreground="White"></ComboBoxItem>
                                                                             </ComboBox>
@@ -1958,27 +2010,27 @@
 
                                                                         <StackPanel Orientation="Horizontal" Margin="0 6 0 3" VerticalAlignment="Bottom">
                                                                             <Label Content="数量：" Margin="0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
-                                                                            <TextBox x:Name="OcoAmountTextbox" Width="80" Text="{Binding OCO_OneAmount}" GotFocus="Textbox_GotFocus" VerticalAlignment="Bottom"/>
+                                                                            <TextBox x:Name="OcoAmountTextbox" Width="80" Text="{Binding OCO_OneAmount}" GotFocus="Textbox_GotFocus" VerticalAlignment="Bottom" Style="{DynamicResource DefaultTextBoxStyle}"/>
                                                                             <Label Content="{Binding CurrentCoinString, Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                         </StackPanel>
 
                                                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3" VerticalAlignment="Bottom">
                                                                             <Label Content="価格：" Margin="0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
-                                                                            <TextBox x:Name="OcoPriceTextbox" Width="80" VerticalAlignment="Bottom" IsEnabled="{Binding IsChecked, ElementName=OcoTypeLimitRadioButton}" Text="{Binding OCO_OnePrice,UpdateSourceTrigger=PropertyChanged}" GotFocus="Textbox_GotFocus"/>
+                                                                            <TextBox x:Name="OcoPriceTextbox" Width="80" VerticalAlignment="Bottom" IsEnabled="{Binding IsChecked, ElementName=OcoTypeLimitRadioButton}" Text="{Binding OCO_OnePrice,UpdateSourceTrigger=PropertyChanged}" GotFocus="Textbox_GotFocus" Style="{DynamicResource DefaultTextBoxStyle}"/>
                                                                             <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
 
                                                                             <Label Content="予想金額：" Margin="12 0 0 0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
-                                                                            <TextBlock Text="{Binding OCO_OneEstimatePrice, StringFormat={}{0:N0},Mode=OneWay}" Style="{StaticResource DefaultTextBlockStyle}" VerticalAlignment="Bottom"/>
+                                                                            <TextBlock Text="{Binding OCO_OneEstimatePrice, StringFormat={}{0:N0},Mode=OneWay}" Style="{DynamicResource DefaultTextBlockStyle}" VerticalAlignment="Bottom"/>
                                                                             <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                         </StackPanel>
 
                                                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3" VerticalAlignment="Bottom">
                                                                             <Label Content="トリガー：" Margin="0" Padding="0" VerticalAlignment="Center" Style="{DynamicResource DefaultLabelStyle}"/>
-                                                                            <TextBox Width="80" Text="{Binding OCO_OneTriggerPrice}" GotFocus="Textbox_GotFocus" VerticalAlignment="Center"/>
+                                                                            <TextBox Width="80" Text="{Binding OCO_OneTriggerPrice}" GotFocus="Textbox_GotFocus" VerticalAlignment="Center" Style="{DynamicResource DefaultTextBoxStyle}"/>
 
                                                                             <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Center" Style="{DynamicResource DefaultLabelStyle}"/>
 
-                                                                            <ComboBox SelectedIndex="{Binding OCO_OneTriggerUpDown}" VerticalAlignment="Center" Margin="0 0 0 0" Padding="0 0 0 0" Background="Transparent" Style="{StaticResource ComboBoxFlatStyle}">
+                                                                            <ComboBox SelectedIndex="{Binding OCO_OneTriggerUpDown}" VerticalAlignment="Center" Margin="0 0 0 0" Padding="0 0 0 0" Background="Transparent" Style="{DynamicResource ComboBoxFlatStyle}">
                                                                                 <ComboBoxItem Content="以上" Foreground="White"></ComboBoxItem>
                                                                                 <ComboBoxItem Content="以下" Foreground="White"></ComboBoxItem>
                                                                             </ComboBox>
@@ -2021,27 +2073,27 @@
 
                                                                         <StackPanel Orientation="Horizontal" Margin="0 6 0 3" VerticalAlignment="Bottom">
                                                                             <Label Content="数量：" Margin="0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
-                                                                            <TextBox x:Name="OcoDoneAmountTextbox" Width="80" Text="{Binding OCO_OtherAmount}" GotFocus="Textbox_GotFocus" VerticalAlignment="Bottom"/>
+                                                                            <TextBox x:Name="OcoDoneAmountTextbox" Width="80" Text="{Binding OCO_OtherAmount}" GotFocus="Textbox_GotFocus" VerticalAlignment="Bottom" Style="{DynamicResource DefaultTextBoxStyle}"/>
                                                                             <Label Content="{Binding CurrentCoinString, Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                         </StackPanel>
 
                                                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3" VerticalAlignment="Bottom">
                                                                             <Label Content="価格：" Margin="0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
-                                                                            <TextBox x:Name="OcoDonePriceTextbox" Width="80" VerticalAlignment="Bottom" IsEnabled="{Binding IsChecked, ElementName=OcoDoneTypeLimitRadioButton}" Text="{Binding OCO_OtherPrice,UpdateSourceTrigger=PropertyChanged}" GotFocus="Textbox_GotFocus"/>
+                                                                            <TextBox x:Name="OcoDonePriceTextbox" Width="80" VerticalAlignment="Bottom" IsEnabled="{Binding IsChecked, ElementName=OcoDoneTypeLimitRadioButton}" Text="{Binding OCO_OtherPrice,UpdateSourceTrigger=PropertyChanged}" GotFocus="Textbox_GotFocus" Style="{DynamicResource DefaultTextBoxStyle}"/>
                                                                             <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
 
                                                                             <Label Content="予想金額：" Margin="12 0 0 0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
-                                                                            <TextBlock Text="{Binding OCO_OtherEstimatePrice, StringFormat={}{0:N0},Mode=OneWay}" Style="{StaticResource DefaultTextBlockStyle}" VerticalAlignment="Bottom"/>
+                                                                            <TextBlock Text="{Binding OCO_OtherEstimatePrice, StringFormat={}{0:N0},Mode=OneWay}" Style="{DynamicResource DefaultTextBlockStyle}" VerticalAlignment="Bottom"/>
                                                                             <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="0 0 0 0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                         </StackPanel>
 
                                                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3" VerticalAlignment="Bottom">
                                                                             <Label Content="トリガー：" Margin="0" Padding="0" VerticalAlignment="Center" Style="{DynamicResource DefaultLabelStyle}"/>
-                                                                            <TextBox Width="80" Text="{Binding OCO_OtherTriggerPrice}" GotFocus="Textbox_GotFocus" VerticalAlignment="Center"/>
+                                                                            <TextBox Width="80" Text="{Binding OCO_OtherTriggerPrice}" GotFocus="Textbox_GotFocus" VerticalAlignment="Center" Style="{DynamicResource DefaultTextBoxStyle}"/>
 
                                                                             <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="0 0 0 0" Padding="0" VerticalAlignment="Center" Style="{DynamicResource DefaultLabelStyle}"/>
 
-                                                                            <ComboBox SelectedIndex="{Binding OCO_OtherTriggerUpDown}" VerticalAlignment="Center" Margin="0 0 0 0" Padding="0 0 0 0" Background="Transparent" Style="{StaticResource ComboBoxFlatStyle}">
+                                                                            <ComboBox SelectedIndex="{Binding OCO_OtherTriggerUpDown}" VerticalAlignment="Center" Margin="0 0 0 0" Padding="0 0 0 0" Background="Transparent" Style="{DynamicResource ComboBoxFlatStyle}">
                                                                                 <ComboBoxItem Content="以上" Foreground="White"></ComboBoxItem>
                                                                                 <ComboBoxItem Content="以下" Foreground="White"></ComboBoxItem>
                                                                             </ComboBox>
@@ -2111,17 +2163,17 @@
 
                                                                         <StackPanel Orientation="Horizontal" Margin="0 6 0 3" VerticalAlignment="Bottom">
                                                                             <Label Content="数量：" Margin="0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
-                                                                            <TextBox x:Name="IFDOCOAmountTextbox" Width="80" Text="{Binding IFDOCO_IfdAmount}" GotFocus="Textbox_GotFocus" VerticalAlignment="Bottom"/>
+                                                                            <TextBox x:Name="IFDOCOAmountTextbox" Width="80" Text="{Binding IFDOCO_IfdAmount}" GotFocus="Textbox_GotFocus" VerticalAlignment="Bottom" Style="{DynamicResource DefaultTextBoxStyle}"/>
                                                                             <Label Content="{Binding CurrentCoinString, Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                         </StackPanel>
 
                                                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3" VerticalAlignment="Bottom">
                                                                             <Label Content="価格：" Margin="0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
-                                                                            <TextBox x:Name="IFDOCOPriceTextbox" Width="80" VerticalAlignment="Bottom" IsEnabled="{Binding IsChecked, ElementName=IFDOCOTypeLimitRadioButton}" Text="{Binding IFDOCO_IfdPrice,UpdateSourceTrigger=PropertyChanged}" GotFocus="Textbox_GotFocus"/>
+                                                                            <TextBox x:Name="IFDOCOPriceTextbox" Width="80" VerticalAlignment="Bottom" IsEnabled="{Binding IsChecked, ElementName=IFDOCOTypeLimitRadioButton}" Text="{Binding IFDOCO_IfdPrice,UpdateSourceTrigger=PropertyChanged}" GotFocus="Textbox_GotFocus" Style="{DynamicResource DefaultTextBoxStyle}"/>
                                                                             <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
 
                                                                             <Label Content="(" Margin="6 0 0 0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
-                                                                            <TextBlock Text="{Binding IFDOCO_IfdEstimatePrice, StringFormat={}{0:N0},Mode=OneWay}" Style="{StaticResource DefaultTextBlockStyle}" VerticalAlignment="Bottom"/>
+                                                                            <TextBlock Text="{Binding IFDOCO_IfdEstimatePrice, StringFormat={}{0:N0},Mode=OneWay}" Style="{DynamicResource DefaultTextBlockStyle}" VerticalAlignment="Bottom"/>
                                                                             <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                             <Label Content=")" Margin="0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                         </StackPanel>
@@ -2161,27 +2213,27 @@
 
                                                                         <StackPanel Orientation="Horizontal" Margin="0 6 0 3" VerticalAlignment="Bottom">
                                                                             <Label Content="数量：" Margin="0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
-                                                                            <TextBox x:Name="IFDOCOOcoAmountTextbox" Width="80" Text="{Binding IFDOCO_OneAmount}" GotFocus="Textbox_GotFocus" VerticalAlignment="Bottom"/>
+                                                                            <TextBox x:Name="IFDOCOOcoAmountTextbox" Width="80" Text="{Binding IFDOCO_OneAmount}" GotFocus="Textbox_GotFocus" VerticalAlignment="Bottom" Style="{DynamicResource DefaultTextBoxStyle}"/>
                                                                             <Label Content="{Binding CurrentCoinString, Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                         </StackPanel>
 
                                                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3" VerticalAlignment="Bottom">
                                                                             <Label Content="価格：" Margin="0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
-                                                                            <TextBox x:Name="IFDOCOOcoPriceTextbox" Width="80" VerticalAlignment="Bottom" IsEnabled="{Binding IsChecked, ElementName=IFDOCOOcoTypeLimitRadioButton}" Text="{Binding IFDOCO_OnePrice,UpdateSourceTrigger=PropertyChanged}" GotFocus="Textbox_GotFocus"/>
+                                                                            <TextBox x:Name="IFDOCOOcoPriceTextbox" Width="80" VerticalAlignment="Bottom" IsEnabled="{Binding IsChecked, ElementName=IFDOCOOcoTypeLimitRadioButton}" Text="{Binding IFDOCO_OnePrice,UpdateSourceTrigger=PropertyChanged}" GotFocus="Textbox_GotFocus" Style="{DynamicResource DefaultTextBoxStyle}"/>
                                                                             <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
 
                                                                             <Label Content="(" Margin="6 0 0 0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
-                                                                            <TextBlock Text="{Binding IFDOCO_OneEstimatePrice, StringFormat={}{0:N0},Mode=OneWay}" Style="{StaticResource DefaultTextBlockStyle}" VerticalAlignment="Bottom"/>
+                                                                            <TextBlock Text="{Binding IFDOCO_OneEstimatePrice, StringFormat={}{0:N0},Mode=OneWay}" Style="{DynamicResource DefaultTextBlockStyle}" VerticalAlignment="Bottom"/>
                                                                             <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                             <Label Content=")" Margin="0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                         </StackPanel>
 
                                                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3" VerticalAlignment="Bottom">
                                                                             <Label Content="トリガー：" Margin="0" Padding="0" VerticalAlignment="Center" Style="{DynamicResource DefaultLabelStyle}"/>
-                                                                            <TextBox Width="80" Text="{Binding IFDOCO_OneTriggerPrice}" GotFocus="Textbox_GotFocus" VerticalAlignment="Center"/>
+                                                                            <TextBox Width="80" Text="{Binding IFDOCO_OneTriggerPrice}" GotFocus="Textbox_GotFocus" VerticalAlignment="Center" Style="{DynamicResource DefaultTextBoxStyle}"/>
                                                                             <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Center" Style="{DynamicResource DefaultLabelStyle}"/>
 
-                                                                            <ComboBox SelectedIndex="{Binding IFDOCO_OneTriggerUpDown}" VerticalAlignment="Center" Margin="0 0 0 0" Padding="0 0 0 0" Background="Transparent" Style="{StaticResource ComboBoxFlatStyle}">
+                                                                            <ComboBox SelectedIndex="{Binding IFDOCO_OneTriggerUpDown}" VerticalAlignment="Center" Margin="0 0 0 0" Padding="0 0 0 0" Background="Transparent" Style="{DynamicResource ComboBoxFlatStyle}">
                                                                                 <ComboBoxItem Content="以上" Foreground="White"></ComboBoxItem>
                                                                                 <ComboBoxItem Content="以下" Foreground="White"></ComboBoxItem>
                                                                             </ComboBox>
@@ -2223,27 +2275,27 @@
 
                                                                         <StackPanel Orientation="Horizontal" Margin="0 6 0 3" VerticalAlignment="Bottom">
                                                                             <Label Content="数量：" Margin="0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
-                                                                            <TextBox x:Name="IFDOCOOcoDoneAmountTextbox" Width="80" Text="{Binding IFDOCO_OtherAmount}" GotFocus="Textbox_GotFocus" VerticalAlignment="Bottom"/>
+                                                                            <TextBox x:Name="IFDOCOOcoDoneAmountTextbox" Width="80" Text="{Binding IFDOCO_OtherAmount}" GotFocus="Textbox_GotFocus" VerticalAlignment="Bottom" Style="{DynamicResource DefaultTextBoxStyle}"/>
                                                                             <Label Content="{Binding CurrentCoinString, Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                         </StackPanel>
 
                                                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3" VerticalAlignment="Bottom">
                                                                             <Label Content="価格：" Margin="0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
-                                                                            <TextBox x:Name="IFDOCOOcoDonePriceTextbox" Width="80" VerticalAlignment="Bottom" IsEnabled="{Binding IsChecked, ElementName=IFDOCOOcoDoneTypeLimitRadioButton}" Text="{Binding IFDOCO_OtherPrice,UpdateSourceTrigger=PropertyChanged}" GotFocus="Textbox_GotFocus"/>
+                                                                            <TextBox x:Name="IFDOCOOcoDonePriceTextbox" Width="80" VerticalAlignment="Bottom" IsEnabled="{Binding IsChecked, ElementName=IFDOCOOcoDoneTypeLimitRadioButton}" Text="{Binding IFDOCO_OtherPrice,UpdateSourceTrigger=PropertyChanged}" GotFocus="Textbox_GotFocus" Style="{DynamicResource DefaultTextBoxStyle}"/>
                                                                             <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
 
                                                                             <Label Content="(" Margin="6 0 0 0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
-                                                                            <TextBlock Text="{Binding IFDOCO_OtherEstimatePrice, StringFormat={}{0:N0},Mode=OneWay}" Style="{StaticResource DefaultTextBlockStyle}" VerticalAlignment="Bottom"/>
+                                                                            <TextBlock Text="{Binding IFDOCO_OtherEstimatePrice, StringFormat={}{0:N0},Mode=OneWay}" Style="{DynamicResource DefaultTextBlockStyle}" VerticalAlignment="Bottom"/>
                                                                             <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                             <Label Content=")" Margin="0" Padding="0" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                                                         </StackPanel>
 
                                                                         <StackPanel Orientation="Horizontal" Margin="0 3 0 3" VerticalAlignment="Bottom">
                                                                             <Label Content="トリガー：" Margin="0" Padding="0" VerticalAlignment="Center" Style="{DynamicResource DefaultLabelStyle}"/>
-                                                                            <TextBox Width="80" Text="{Binding IFDOCO_OtherTriggerPrice}" GotFocus="Textbox_GotFocus" VerticalAlignment="Center"/>
+                                                                            <TextBox Width="80" Text="{Binding IFDOCO_OtherTriggerPrice}" GotFocus="Textbox_GotFocus" VerticalAlignment="Center" Style="{DynamicResource DefaultTextBoxStyle}"/>
                                                                             <Label Content="{Binding CurrentPairUnitString,Mode=OneWay}" Margin="3 0 0 0" Padding="0" VerticalAlignment="Center" Style="{DynamicResource DefaultLabelStyle}"/>
 
-                                                                            <ComboBox SelectedIndex="{Binding IFDOCO_OtherTriggerUpDown}" VerticalAlignment="Center" Margin="0 0 0 0" Padding="0 0 0 0" Background="Transparent" Style="{StaticResource ComboBoxFlatStyle}">
+                                                                            <ComboBox SelectedIndex="{Binding IFDOCO_OtherTriggerUpDown}" VerticalAlignment="Center" Margin="0 0 0 0" Padding="0 0 0 0" Background="Transparent" Style="{DynamicResource ComboBoxFlatStyle}">
                                                                                 <ComboBoxItem Content="以上" Foreground="White"></ComboBoxItem>
                                                                                 <ComboBoxItem Content="以下" Foreground="White"></ComboBoxItem>
                                                                             </ComboBox>
@@ -2287,7 +2339,7 @@
                                                 <Border Width="360" Margin="3 0 0 6" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="{Binding ShowAutoTradeApiSet, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
                                                     <StackPanel>
                                                         <Border BorderBrush="DimGray" BorderThickness="0 0 0 0.5" Margin="3" Padding="3">
-                                                            <Label Padding="0" Content="自動取引用APIキー設定" Style="{StaticResource SectionTitle}"/>
+                                                            <Label Padding="0" Content="自動取引用APIキー設定" Style="{DynamicResource SectionTitle}"/>
                                                         </Border>
                                                         <Popup IsOpen="{Binding IsChecked, ElementName=AutoTradeAPIKeyInfoButton}" StaysOpen="False" PlacementTarget="{Binding ElementName=AutoTradeAPIKeyInfoButton}" AllowsTransparency="True" PopupAnimation="Slide">
                                                             <Border Background="WhiteSmoke" CornerRadius="4" Padding="6" Width="330" Height="210">
@@ -2349,7 +2401,7 @@
                                                     <StackPanel>
 
                                                         <!-- アカウント ログイン ロック解除 -->
-                                                        <Button Command="{Binding ShowLogInCommand}" Foreground="Gray" Background="Transparent" Style="{StaticResource PathButton}" ToolTip="ロック解除(Ctrl+U)" ToolTipService.ToolTip="ロック解除(Ctrl+U)" Height="36" Width="36" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="6 24 0 0" Visibility="{Binding PublicApiOnlyMode, Mode=OneWay, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
+                                                        <Button Command="{Binding ShowLogInCommand}" Foreground="Gray" Background="Transparent" Style="{DynamicResource PathButton}" ToolTip="ロック解除(Ctrl+U)" ToolTipService.ToolTip="ロック解除(Ctrl+U)" Height="36" Width="36" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="6 24 0 0" Visibility="{Binding PublicApiOnlyMode, Mode=OneWay, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
                                                             M18,20V10H6V20H18M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6C4.89,22 4,21.1 4,20V10A2,2 0 0,1 6,8H15V6A3,3 0 0,0 12,3A3,3 0 0,0 9,6H7A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,17A2,2 0 0,1 10,15A2,2 0 0,1 12,13A2,2 0 0,1 14,15A2,2 0 0,1 12,17Z
                                                         </Button>
 
@@ -2431,7 +2483,7 @@
                                                         <Border Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2" Padding="3">
                                                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0 24 0 0">
                                                                 <Label Content="損益： " FontSize="24" Style="{DynamicResource DefaultLabelStyle}"></Label>
-                                                                <TextBlock Text="{Binding ActivePair.AutoTradeProfit, Mode=OneWay, StringFormat=0.#############################}" FontSize="24" Style="{StaticResource DefaultTextBlockStyle}"></TextBlock>
+                                                                <TextBlock Text="{Binding ActivePair.AutoTradeProfit, Mode=OneWay, StringFormat=0.#############################}" FontSize="24" Style="{DynamicResource DefaultTextBlockStyle}"></TextBlock>
                                                             </StackPanel>
                                                         </Border>
 
@@ -2452,7 +2504,7 @@
                     </Grid>
 
                     <!-- 板情報 | 歩み値 -->
-                    <Border x:Name="Transaction" Grid.Row="1" Grid.Column="0" Grid.RowSpan="1" Grid.ColumnSpan="1" Style="{StaticResource BoardStyle}" Visibility="Collapsed" HorizontalAlignment="Left">
+                    <Border x:Name="Transaction" Grid.Row="1" Grid.Column="0" Grid.RowSpan="1" Grid.ColumnSpan="1" Style="{DynamicResource BoardStyle}" Visibility="Collapsed" HorizontalAlignment="Left">
 
                         <TabControl x:Name="DepthAyumiTab" Style="{StaticResource NoChromeTabControl}" Margin="0" BorderThickness="0" Background="Transparent" MaxHeight="414" VerticalAlignment="Top" SelectionChanged="DepthAyumiTab_SelectionChanged">
 
@@ -2494,25 +2546,24 @@
                                                     <ColumnDefinition Width="62" />
                                                 </Grid.ColumnDefinitions>
                                                 <!-- 値は左寄せ。小数点以下がはみ出しても問題ないが、逆はまずい -->
-                                                <TextBlock Grid.Column="0" x:Name="DepthAskBest" Text="{Binding Path=DepthAsk, Mode=OneWay}" Margin="0" Padding="0 0 0 0" Foreground="{StaticResource PriceUpColorBrush}" HorizontalAlignment="Left"/>
-                                                <TextBlock Grid.Column="1" x:Name="DepthPrice" Text="{Binding Path=DepthPrice, Mode=OneWay}" Margin="0" Padding="0 0 0 0" Foreground="DarkGray" HorizontalAlignment="Left"/>
-                                                <TextBlock Grid.Column="2" x:Name="DepthBidBest" Text="{Binding Path=DepthBid, Mode=OneWay}" Margin="0" Padding="0 0 0 0" Foreground="{StaticResource PriceDownColorBrush}"  HorizontalAlignment="Left"/>
+                                                <TextBlock Grid.Column="0" x:Name="DepthAskBest" Text="{Binding Path=DepthAsk, Mode=OneWay}" Margin="0" Padding="0 0 0 0" Foreground="{DynamicResource PriceUpColorBrush}" HorizontalAlignment="Left"/>
+                                                <TextBlock Grid.Column="1" x:Name="DepthPrice" Text="{Binding Path=DepthPrice, Mode=OneWay}" Margin="0" Padding="0 0 0 0" Foreground="{DynamicResource ControlMediumColorBrush}" HorizontalAlignment="Left"/>
+                                                <TextBlock Grid.Column="2" x:Name="DepthBidBest" Text="{Binding Path=DepthBid, Mode=OneWay}" Margin="0" Padding="0 0 0 0" Foreground="{DynamicResource PriceDownColorBrush}"  HorizontalAlignment="Left"/>
                                             </Grid>
                                             <DataTemplate.Triggers>
                                                 <DataTrigger Binding="{Binding IsLTP}" Value="true">
                                                     <Setter Property="TextBlock.FontWeight" TargetName="DepthPrice" Value="Bold"/>
-                                                    <Setter Property="TextBlock.FontSize" TargetName="DepthPrice" Value="12"/>
-                                                    <Setter Property="TextBlock.Foreground" TargetName="DepthPrice" Value="{StaticResource AccentWarmDarkColorBrush}"/>
+                                                    <Setter Property="TextBlock.FontSize" TargetName="DepthPrice" Value="14"/>
+                                                    <Setter Property="TextBlock.Foreground" TargetName="DepthPrice" Value="{DynamicResource NormalTextColorBrush}"/>
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding IsAskBest}" Value="true">
                                                     <Setter Property="TextBlock.FontWeight" TargetName="DepthAskBest" Value="Bold"/>
-                                                    <Setter Property="TextBlock.Foreground" TargetName="DepthAskBest" Value="{StaticResource PriceUpColorBrush}"/>
+                                                    <Setter Property="TextBlock.Foreground" TargetName="DepthAskBest" Value="{DynamicResource PriceUpColorBrush}"/>
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding IsBidBest}" Value="true">
                                                     <Setter Property="TextBlock.FontWeight" TargetName="DepthBidBest" Value="Bold"/>
-                                                    <Setter Property="TextBlock.Foreground" TargetName="DepthBidBest" Value="{StaticResource PriceDownColorBrush}"/>
+                                                    <Setter Property="TextBlock.Foreground" TargetName="DepthBidBest" Value="{DynamicResource PriceDownColorBrush}"/>
                                                 </DataTrigger>
-
 
                                                 <DataTrigger Binding="{Binding DepthBid}" Value="0">
                                                     <Setter Property="TextBlock.Text" TargetName="DepthBidBest" Value=""/>
@@ -2547,17 +2598,17 @@
                                                     <ColumnDefinition Width="66" />
                                                     <ColumnDefinition Width="66" />
                                                 </Grid.ColumnDefinitions>
-                                                <TextBlock Grid.Column="0" x:Name="TransExecutedAt" Text="{Binding Path=ExecutedAt, Mode=OneWay, StringFormat=HH:mm:ss}" Margin="0" Padding="3 0 3 0" Foreground="DarkGray" HorizontalAlignment="Center"/>
-                                                <TextBlock Grid.Column="1" x:Name="TransPrice" Text="{Binding Path=Price, Mode=OneWay}" Margin="0" Padding="3 0 3 0" Foreground="DarkGray"  HorizontalAlignment="Center"/>
-                                                <TextBlock Grid.Column="2" x:Name="TransAmount" Text="{Binding Path=Amount, Mode=OneWay}" Margin="0" Padding="3 0 3 0" Foreground="DarkGray"  HorizontalAlignment="Left"/>
+                                                <TextBlock Grid.Column="0" x:Name="TransExecutedAt" Text="{Binding Path=ExecutedAt, Mode=OneWay, StringFormat=HH:mm:ss}" Margin="0" Padding="3 0 3 0" Foreground="{DynamicResource ControlMediumColorBrush}" HorizontalAlignment="Center"/>
+                                                <TextBlock Grid.Column="1" x:Name="TransPrice" Text="{Binding Path=Price, Mode=OneWay}" Margin="0" Padding="3 0 3 0" Foreground="{DynamicResource ControlMediumColorBrush}"  HorizontalAlignment="Center"/>
+                                                <TextBlock Grid.Column="2" x:Name="TransAmount" Text="{Binding Path=Amount, Mode=OneWay}" Margin="0" Padding="3 0 3 0" Foreground="{DynamicResource ControlMediumColorBrush}"  HorizontalAlignment="Left"/>
 
                                             </Grid>
                                             <DataTemplate.Triggers>
                                                 <DataTrigger Binding="{Binding Side}" Value="buy">
-                                                    <Setter Property="TextBlock.Foreground" TargetName="TransPrice" Value="{StaticResource PriceUpColorBrush}"/>
+                                                    <Setter Property="TextBlock.Foreground" TargetName="TransPrice" Value="{DynamicResource PriceUpColorBrush}"/>
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding Side}" Value="sell">
-                                                    <Setter Property="TextBlock.Foreground" TargetName="TransPrice" Value="{StaticResource PriceDownColorBrush}"/>
+                                                    <Setter Property="TextBlock.Foreground" TargetName="TransPrice" Value="{DynamicResource PriceDownColorBrush}"/>
                                                 </DataTrigger>
 
                                             </DataTemplate.Triggers>
@@ -2576,7 +2627,7 @@
             </ScrollViewer>
 
             <!-- 最右コラム 板情報 | 歩み値 | 日本語ニュース | 英語ニュース -->
-            <Border x:Name="Depth" Grid.Row="1" Grid.Column="6" Grid.RowSpan="3" Grid.ColumnSpan="1" Style="{StaticResource BoardStyle}" Visibility="Collapsed" Margin="16 0 0 0">
+            <Border x:Name="Depth" Grid.Row="1" Grid.Column="6" Grid.RowSpan="3" Grid.ColumnSpan="1" Style="{DynamicResource BoardStyle}" Visibility="Collapsed" Margin="16 0 0 0">
                 <TabControl x:Name="Depth2AyumiTab" Style="{StaticResource NoChromeTabControl}" Margin="0" BorderThickness="0" Background="Transparent" VerticalAlignment="Top" SelectionChanged="Depth2AyumiTab_SelectionChanged">
 
                     <TabItem Header="板情報" FontWeight="Normal" Style="{StaticResource NoChromeTabHeader}" Background="Transparent" BorderThickness="0" Width="100" Padding="4">
@@ -2616,21 +2667,23 @@
                                             <ColumnDefinition Width="66" />
                                             <ColumnDefinition Width="62" />
                                         </Grid.ColumnDefinitions>
-                                        <TextBlock Grid.Column="0" x:Name="DepthAskBest" Text="{Binding Path=DepthAsk, Mode=OneWay}" Margin="0" Padding="0" Foreground="{StaticResource PriceUpColorBrush}" HorizontalAlignment="Left"/>
+                                        <TextBlock Grid.Column="0" x:Name="DepthAskBest" Text="{Binding Path=DepthAsk, Mode=OneWay}" Margin="0" Padding="0" Foreground="{DynamicResource PriceUpColorBrush}" HorizontalAlignment="Left"/>
                                         <TextBlock Grid.Column="1" x:Name="DepthPrice" Text="{Binding Path=DepthPrice, Mode=OneWay}" Margin="0" Padding="0" Foreground="DarkGray" HorizontalAlignment="Left"/>
-                                        <TextBlock Grid.Column="2" x:Name="DepthBidBest" Text="{Binding Path=DepthBid, Mode=OneWay}" Margin="0" Padding="0" Foreground="{StaticResource PriceDownColorBrush}"  HorizontalAlignment="Left"/>
+                                        <TextBlock Grid.Column="2" x:Name="DepthBidBest" Text="{Binding Path=DepthBid, Mode=OneWay}" Margin="0" Padding="0" Foreground="{DynamicResource PriceDownColorBrush}"  HorizontalAlignment="Left"/>
                                     </Grid>
                                     <DataTemplate.Triggers>
                                         <DataTrigger Binding="{Binding IsLTP}" Value="true">
                                             <Setter Property="TextBlock.FontWeight" TargetName="DepthPrice" Value="Bold"/>
-                                            <Setter Property="TextBlock.FontSize" TargetName="DepthPrice" Value="12"/>
-                                            <Setter Property="TextBlock.Foreground" TargetName="DepthPrice" Value="{StaticResource AccentWarmDarkColorBrush}"/>
+                                            <Setter Property="TextBlock.FontSize" TargetName="DepthPrice" Value="13"/>
+                                            <Setter Property="TextBlock.Foreground" TargetName="DepthPrice" Value="{DynamicResource NormalTextColorBrush}"/>
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding IsAskBest}" Value="true">
-                                            <Setter Property="TextBlock.Foreground" TargetName="DepthAskBest" Value="{StaticResource PriceUpColorBrush}"/>
+                                            <Setter Property="TextBlock.FontWeight" TargetName="DepthAskBest" Value="Bold"/>
+                                            <Setter Property="TextBlock.Foreground" TargetName="DepthAskBest" Value="{DynamicResource PriceUpColorBrush}"/>
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding IsBidBest}" Value="true">
-                                            <Setter Property="TextBlock.Foreground" TargetName="DepthBidBest" Value="{StaticResource PriceDownColorBrush}"/>
+                                            <Setter Property="TextBlock.FontWeight" TargetName="DepthBidBest" Value="Bold"/>
+                                            <Setter Property="TextBlock.Foreground" TargetName="DepthBidBest" Value="{DynamicResource PriceDownColorBrush}"/>
                                         </DataTrigger>
 
                                         <DataTrigger Binding="{Binding DepthBid}" Value="0">
@@ -2673,10 +2726,10 @@
                                     </Grid>
                                     <DataTemplate.Triggers>
                                         <DataTrigger Binding="{Binding Side}" Value="buy">
-                                            <Setter Property="TextBlock.Foreground" TargetName="TransPrice" Value="{StaticResource PriceUpColorBrush}"/>
+                                            <Setter Property="TextBlock.Foreground" TargetName="TransPrice" Value="{DynamicResource PriceUpColorBrush}"/>
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding Side}" Value="sell">
-                                            <Setter Property="TextBlock.Foreground" TargetName="TransPrice" Value="{StaticResource PriceDownColorBrush}"/>
+                                            <Setter Property="TextBlock.Foreground" TargetName="TransPrice" Value="{DynamicResource PriceDownColorBrush}"/>
                                         </DataTrigger>
 
 
@@ -2796,7 +2849,7 @@
             <GridSplitter x:Name="Split" Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="1" ResizeDirection="Rows" Background="Red" Height="8" Style="{StaticResource GridSplitterStyle}" Visibility="Collapsed"/>
 
             <!-- Bottom Contents -->
-            <Border x:Name="BottomContents" Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="1" Style="{StaticResource BoardStyle}" Margin="6 0 0 0" Visibility="Collapsed">
+            <Border x:Name="BottomContents" Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="1" Style="{DynamicResource BoardStyle}" Margin="6 0 0 0" Visibility="Collapsed">
 
                 <TabControl x:Name="ListviewTab" Style="{StaticResource NoChromeTabControl}" Margin="0 0 0 3" BorderThickness="0" Background="{DynamicResource BoardBackgroundColorBrush}">
 
@@ -2809,7 +2862,7 @@
                             <Border Width="360" Margin="3 0 0 6" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="{Binding ShowOrdersApiSet, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
                                 <StackPanel>
                                     <Border BorderBrush="DimGray" BorderThickness="0 0 0 0.5" Margin="3" Padding="3">
-                                        <Label Padding="0" Content="注文一覧取得用APIキー設定" Style="{StaticResource SectionTitle}"/>
+                                        <Label Padding="0" Content="注文一覧取得用APIキー設定" Style="{DynamicResource SectionTitle}"/>
                                     </Border>
                                     <Popup IsOpen="{Binding IsChecked, ElementName=OrdersAPIKeyInfoButton}" StaysOpen="False" PlacementTarget="{Binding ElementName=OrdersAPIKeyInfoButton}" AllowsTransparency="True" PopupAnimation="Slide">
                                         <Border Background="WhiteSmoke" CornerRadius="4" Padding="6" Width="330" Height="210">
@@ -2871,7 +2924,7 @@
                                 <StackPanel>
 
                                     <!-- ロック解除ボタン -->
-                                    <Button Command="{Binding ShowLogInCommand}" Foreground="Gray" Background="Transparent" Style="{StaticResource PathButton}" ToolTip="ロック解除(Ctrl+U)" ToolTipService.ToolTip="ロック解除(Ctrl+U)" Height="36" Width="36" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="6 24 0 0" Visibility="{Binding PublicApiOnlyMode, Mode=OneWay, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
+                                    <Button Command="{Binding ShowLogInCommand}" Foreground="Gray" Background="Transparent" Style="{DynamicResource PathButton}" ToolTip="ロック解除(Ctrl+U)" ToolTipService.ToolTip="ロック解除(Ctrl+U)" Height="36" Width="36" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="6 24 0 0" Visibility="{Binding PublicApiOnlyMode, Mode=OneWay, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
                                         M18,20V10H6V20H18M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6C4.89,22 4,21.1 4,20V10A2,2 0 0,1 6,8H15V6A3,3 0 0,0 12,3A3,3 0 0,0 9,6H7A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,17A2,2 0 0,1 10,15A2,2 0 0,1 12,13A2,2 0 0,1 14,15A2,2 0 0,1 12,17Z
                                     </Button>
 
@@ -3025,10 +3078,10 @@
                                                                 <Setter TargetName="TBSideText" Property="TextBlock.Foreground" Value="Gray"/>
                                                             </DataTrigger>
                                                             <DataTrigger Binding="{Binding Side}" Value="buy">
-                                                                <Setter TargetName="TBSideText" Property="TextBlock.Foreground" Value="{StaticResource PriceUpColorBrush}"/>
+                                                                <Setter TargetName="TBSideText" Property="TextBlock.Foreground" Value="{DynamicResource PriceUpColorBrush}"/>
                                                             </DataTrigger>
                                                             <DataTrigger Binding="{Binding Side}" Value="sell">
-                                                                <Setter TargetName="TBSideText" Property="TextBlock.Foreground" Value="{StaticResource PriceDownColorBrush}"/>
+                                                                <Setter TargetName="TBSideText" Property="TextBlock.Foreground" Value="{DynamicResource PriceDownColorBrush}"/>
                                                             </DataTrigger>
                                                         </DataTemplate.Triggers>
                                                     </DataTemplate>
@@ -3134,7 +3187,7 @@
                                                 <GridViewColumn.CellTemplate>
                                                     <DataTemplate>
                                                         <StackPanel>
-                                                            <ToggleButton x:Name="OrderListInfoButton" Content="!!!" Style="{StaticResource ErrorInfoToggleButtonStyle}" Foreground="{StaticResource WarningColorBrush}"/>
+                                                            <ToggleButton x:Name="OrderListInfoButton" Content="!!!" Style="{StaticResource ErrorInfoToggleButtonStyle}" Foreground="{DynamicResource WarningColorBrush}"/>
                                                             <Popup IsOpen="{Binding IsChecked, ElementName=OrderListInfoButton}" StaysOpen="False">
                                                                 <Border Background="Red" CornerRadius="4" Padding="6" Width="250">
                                                                     <StackPanel>
@@ -3178,7 +3231,7 @@
                             <Border Width="360" Margin="3 0 0 6" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="{Binding ShowIfdocoTradeApiSet, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
                                 <StackPanel>
                                     <Border BorderBrush="DimGray" BorderThickness="0 0 0 0.5" Margin="3" Padding="3">
-                                        <Label Padding="0" Content="特殊注文用APIキー設定" Style="{StaticResource SectionTitle}"/>
+                                        <Label Padding="0" Content="特殊注文用APIキー設定" Style="{DynamicResource SectionTitle}"/>
                                     </Border>
                                     <Popup IsOpen="{Binding IsChecked, ElementName=IfdocoTradeListAPIKeyInfoButton}" StaysOpen="False" PlacementTarget="{Binding ElementName=IfdocoTradeListAPIKeyInfoButton}" AllowsTransparency="True" PopupAnimation="Slide">
                                         <Border Background="WhiteSmoke" CornerRadius="4" Padding="6" Width="330" Height="210">
@@ -3240,7 +3293,7 @@
                                 <StackPanel>
 
                                     <!-- ロック解除ボタン -->
-                                    <Button Command="{Binding ShowLogInCommand}" Foreground="Gray" Background="Transparent" Style="{StaticResource PathButton}" ToolTip="ロック解除(Ctrl+U)" ToolTipService.ToolTip="ロック解除(Ctrl+U)" Height="36" Width="36" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="6 24 0 0" Visibility="{Binding PublicApiOnlyMode, Mode=OneWay, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
+                                    <Button Command="{Binding ShowLogInCommand}" Foreground="Gray" Background="Transparent" Style="{DynamicResource PathButton}" ToolTip="ロック解除(Ctrl+U)" ToolTipService.ToolTip="ロック解除(Ctrl+U)" Height="36" Width="36" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="6 24 0 0" Visibility="{Binding PublicApiOnlyMode, Mode=OneWay, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
                                         M18,20V10H6V20H18M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6C4.89,22 4,21.1 4,20V10A2,2 0 0,1 6,8H15V6A3,3 0 0,0 12,3A3,3 0 0,0 9,6H7A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,17A2,2 0 0,1 10,15A2,2 0 0,1 12,13A2,2 0 0,1 14,15A2,2 0 0,1 12,17Z
                                     </Button>
 
@@ -3258,7 +3311,7 @@
 
                                 <Grid x:Name="AIfdocoDummy" Grid.Row="0" Grid.Column="0" Visibility="Hidden" Margin="0 0 27 0">
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="5*" />
+                                        <ColumnDefinition Width="4*" />
 
                                         <ColumnDefinition Width="2*"/>
                                         <ColumnDefinition Width="3*" />
@@ -3451,17 +3504,17 @@
                                                             </DataTrigger>
 
                                                             <DataTrigger Binding="{Binding IfdoneSide}" Value="buy">
-                                                                <Setter TargetName="IfdoneSide" Property="TextBlock.Foreground" Value="{StaticResource PriceUpColorBrush}"/>
+                                                                <Setter TargetName="IfdoneSide" Property="TextBlock.Foreground" Value="{DynamicResource PriceUpColorBrush}"/>
                                                             </DataTrigger>
                                                             <DataTrigger Binding="{Binding IfdoneSide}" Value="sell">
-                                                                <Setter TargetName="IfdoneSide" Property="TextBlock.Foreground" Value="{StaticResource PriceDownColorBrush}"/>
+                                                                <Setter TargetName="IfdoneSide" Property="TextBlock.Foreground" Value="{DynamicResource PriceDownColorBrush}"/>
                                                             </DataTrigger>
 
                                                             <DataTrigger Binding="{Binding OcoOneSideText}" Value="buy">
-                                                                <Setter TargetName="OcoOneSide" Property="TextBlock.Foreground" Value="{StaticResource PriceUpColorBrush}"/>
+                                                                <Setter TargetName="OcoOneSide" Property="TextBlock.Foreground" Value="{DynamicResource PriceUpColorBrush}"/>
                                                             </DataTrigger>
                                                             <DataTrigger Binding="{Binding OcoOneSideText}" Value="sell">
-                                                                <Setter TargetName="OcoOneSide" Property="TextBlock.Foreground" Value="{StaticResource PriceDownColorBrush}"/>
+                                                                <Setter TargetName="OcoOneSide" Property="TextBlock.Foreground" Value="{DynamicResource PriceDownColorBrush}"/>
                                                             </DataTrigger>
 
                                                             <DataTrigger Binding="{Binding OcoOneOrderID}" Value="0">
@@ -3546,15 +3599,12 @@
                                                 <GridViewColumn.CellTemplate>
                                                     <DataTemplate>
                                                         <StackPanel>
-                                                            <!--
-                                                            <TextBlock x:Name="IfdoneTriggerPrice" Text="{Binding IfdoneTriggerPrice, Mode=OneWay, StringFormat=0.#############################}" Padding="3" />
-                                                            -->
-                                                            <TextBlock x:Name="IfdoneTriggerPrice" Text=""/>
+                                                            <TextBlock x:Name="IfdoneTriggerPrice" Text="-" Padding="3" />
                                                             <TextBlock x:Name="OcoOneTriggerPrice" Text="{Binding OcoOneTriggerPriceString, Mode=OneWay}" Padding="3" />
                                                         </StackPanel>
                                                         <DataTemplate.Triggers>
                                                             <DataTrigger Binding="{Binding KindString}" Value="IFD">
-                                                                <Setter TargetName="IfdoneTriggerPrice" Property="Visibility" Value="Visible"/>
+                                                                <Setter TargetName="IfdoneTriggerPrice" Property="Visibility" Value="Hidden"/>
                                                                 <Setter TargetName="OcoOneTriggerPrice" Property="Visibility" Value="Collapsed"/>
                                                             </DataTrigger>
                                                             <DataTrigger Binding="{Binding KindString}" Value="OCO">
@@ -3562,7 +3612,7 @@
                                                                 <Setter TargetName="OcoOneTriggerPrice" Property="Visibility" Value="Visible"/>
                                                             </DataTrigger>
                                                             <DataTrigger Binding="{Binding KindString}" Value="IFDOCO">
-                                                                <Setter TargetName="IfdoneTriggerPrice" Property="Visibility" Value="Visible"/>
+                                                                <Setter TargetName="IfdoneTriggerPrice" Property="Visibility" Value="Hidden"/>
                                                                 <Setter TargetName="OcoOneTriggerPrice" Property="Visibility" Value="Visible"/>
                                                             </DataTrigger>
 
@@ -3723,7 +3773,7 @@
                                                 <GridViewColumn.CellTemplate>
                                                     <DataTemplate>
                                                         <StackPanel>
-                                                            <ToggleButton x:Name="IfdOrderListInfoButton" Content="!!!" Style="{StaticResource ErrorInfoToggleButtonStyle}" Foreground="{StaticResource WarningColorBrush}"/>
+                                                            <ToggleButton x:Name="IfdOrderListInfoButton" Content="!!!" Style="{StaticResource ErrorInfoToggleButtonStyle}" Foreground="{DynamicResource WarningColorBrush}"/>
                                                             <Popup IsOpen="{Binding IsChecked, ElementName=IfdOrderListInfoButton}" StaysOpen="False">
                                                                 <Border Background="Red" CornerRadius="4" Padding="6" Width="250">
                                                                     <StackPanel>
@@ -3736,7 +3786,7 @@
                                                                 </Border>
                                                             </Popup>
 
-                                                            <ToggleButton x:Name="OcoOneOrderListInfoButton" Content="!!!" Style="{StaticResource ErrorInfoToggleButtonStyle}" Foreground="{StaticResource WarningColorBrush}"/>
+                                                            <ToggleButton x:Name="OcoOneOrderListInfoButton" Content="!!!" Style="{StaticResource ErrorInfoToggleButtonStyle}" Foreground="{DynamicResource WarningColorBrush}"/>
                                                             <Popup IsOpen="{Binding IsChecked, ElementName=OcoOneOrderListInfoButton}" StaysOpen="False">
                                                                 <Border Background="Red" CornerRadius="4" Padding="6" Width="250">
                                                                     <StackPanel>
@@ -3828,16 +3878,16 @@
                                                             </DataTrigger>
 
                                                             <DataTrigger Binding="{Binding IfdDoSide}" Value="buy">
-                                                                <Setter TargetName="IfdDoSide" Property="TextBlock.Foreground" Value="{StaticResource PriceUpColorBrush}"/>
+                                                                <Setter TargetName="IfdDoSide" Property="TextBlock.Foreground" Value="{DynamicResource PriceUpColorBrush}"/>
                                                             </DataTrigger>
                                                             <DataTrigger Binding="{Binding IfdDoSide}" Value="sell">
-                                                                <Setter TargetName="IfdDoSide" Property="TextBlock.Foreground" Value="{StaticResource PriceDownColorBrush}"/>
+                                                                <Setter TargetName="IfdDoSide" Property="TextBlock.Foreground" Value="{DynamicResource PriceDownColorBrush}"/>
                                                             </DataTrigger>
                                                             <DataTrigger Binding="{Binding OcoOtherSideText}" Value="buy">
-                                                                <Setter TargetName="OcoOtherSide" Property="TextBlock.Foreground" Value="{StaticResource PriceUpColorBrush}"/>
+                                                                <Setter TargetName="OcoOtherSide" Property="TextBlock.Foreground" Value="{DynamicResource PriceUpColorBrush}"/>
                                                             </DataTrigger>
                                                             <DataTrigger Binding="{Binding OcoOtherSideText}" Value="sell">
-                                                                <Setter TargetName="OcoOtherSide" Property="TextBlock.Foreground" Value="{StaticResource PriceDownColorBrush}"/>
+                                                                <Setter TargetName="OcoOtherSide" Property="TextBlock.Foreground" Value="{DynamicResource PriceDownColorBrush}"/>
                                                             </DataTrigger>
 
                                                             <DataTrigger Binding="{Binding IfdDoOrderID}" Value="0">
@@ -3946,7 +3996,7 @@
                                                                 <Setter TargetName="OcoOtherTriggerPrice" Property="Visibility" Value="Visible"/>
                                                             </DataTrigger>
                                                             <DataTrigger Binding="{Binding KindString}" Value="IFDOCO">
-                                                                <Setter TargetName="IfdDoTriggerPrice" Property="Visibility" Value="Visible"/>
+                                                                <Setter TargetName="IfdDoTriggerPrice" Property="Visibility" Value="Hidden"/>
                                                                 <Setter TargetName="OcoOtherTriggerPrice" Property="Visibility" Value="Visible"/>
                                                             </DataTrigger>
 
@@ -4124,7 +4174,7 @@
                                                 <GridViewColumn.CellTemplate>
                                                     <DataTemplate>
                                                         <StackPanel>
-                                                            <ToggleButton x:Name="IfdDoOrderListInfoButton" Content="!!!" Style="{StaticResource ErrorInfoToggleButtonStyle}" Foreground="{StaticResource WarningColorBrush}"/>
+                                                            <ToggleButton x:Name="IfdDoOrderListInfoButton" Content="!!!" Style="{StaticResource ErrorInfoToggleButtonStyle}" Foreground="{DynamicResource WarningColorBrush}"/>
                                                             <Popup IsOpen="{Binding IsChecked, ElementName=IfdDoOrderListInfoButton}" StaysOpen="False">
                                                                 <Border Background="Red" CornerRadius="4" Padding="6" Width="250">
                                                                     <StackPanel>
@@ -4137,7 +4187,7 @@
                                                                 </Border>
                                                             </Popup>
 
-                                                            <ToggleButton x:Name="OcoOtherOrderListInfoButton" Content="!!!" Style="{StaticResource ErrorInfoToggleButtonStyle}" Foreground="{StaticResource WarningColorBrush}"/>
+                                                            <ToggleButton x:Name="OcoOtherOrderListInfoButton" Content="!!!" Style="{StaticResource ErrorInfoToggleButtonStyle}" Foreground="{DynamicResource WarningColorBrush}"/>
                                                             <Popup IsOpen="{Binding IsChecked, ElementName=OcoOtherOrderListInfoButton}" StaysOpen="False">
                                                                 <Border Background="Red" CornerRadius="4" Padding="6" Width="250">
                                                                     <StackPanel>
@@ -4192,7 +4242,7 @@
                             <Border Width="360" Margin="3 0 0 6" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="{Binding ShowAutoTradeApiSet, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
                                 <StackPanel>
                                     <Border BorderBrush="DimGray" BorderThickness="0 0 0 0.5" Margin="3" Padding="3">
-                                        <Label Padding="0" Content="自動取引用APIキー設定" Style="{StaticResource SectionTitle}"/>
+                                        <Label Padding="0" Content="自動取引用APIキー設定" Style="{DynamicResource SectionTitle}"/>
                                     </Border>
                                     <Popup IsOpen="{Binding IsChecked, ElementName=AutoTradeListAPIKeyInfoButton}" StaysOpen="False" PlacementTarget="{Binding ElementName=AutoTradeListAPIKeyInfoButton}" AllowsTransparency="True" PopupAnimation="Slide">
                                         <Border Background="WhiteSmoke" CornerRadius="4" Padding="6" Width="330" Height="210">
@@ -4254,7 +4304,7 @@
                                 <StackPanel>
 
                                     <!-- ロック解除ボタン -->
-                                    <Button Command="{Binding ShowLogInCommand}" Foreground="Gray" Background="Transparent" Style="{StaticResource PathButton}" ToolTip="ロック解除(Ctrl+U)" ToolTipService.ToolTip="ロック解除(Ctrl+U)" Height="36" Width="36" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="6 24 0 0" Visibility="{Binding PublicApiOnlyMode, Mode=OneWay, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
+                                    <Button Command="{Binding ShowLogInCommand}" Foreground="Gray" Background="Transparent" Style="{DynamicResource PathButton}" ToolTip="ロック解除(Ctrl+U)" ToolTipService.ToolTip="ロック解除(Ctrl+U)" Height="36" Width="36" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="6 24 0 0" Visibility="{Binding PublicApiOnlyMode, Mode=OneWay, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
                                         M18,20V10H6V20H18M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6C4.89,22 4,21.1 4,20V10A2,2 0 0,1 6,8H15V6A3,3 0 0,0 12,3A3,3 0 0,0 9,6H7A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,17A2,2 0 0,1 10,15A2,2 0 0,1 12,13A2,2 0 0,1 14,15A2,2 0 0,1 12,17Z
                                     </Button>
 
@@ -4312,10 +4362,7 @@
                                     <ListView.Resources>
                                         <ContextMenu x:Key="ATItemContextMenu">
                                             <MenuItem Header="選択アイテム">
-                                                <MenuItem Header="発注キャンセル" 
-                                                  Command="{Binding Path=DataContext.AutoTradeCancelListviewCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}"
-                                                  CommandParameter="{Binding Path=SelectedItems, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}">
-
+                                                <MenuItem Header="発注キャンセル" Command="{Binding Path=DataContext.AutoTradeCancelListviewCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}" CommandParameter="{Binding Path=SelectedItems, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}">
                                                     <MenuItem.Resources>
                                                         <ControlTemplate x:Key="CancelIcon">
                                                             <Canvas Background="Transparent" >
@@ -4328,6 +4375,11 @@
                                                     </MenuItem.Icon>
                                                 </MenuItem>
 
+                                                <MenuItem Header="リストから削除" 
+                                                  Command="{Binding Path=DataContext.AutoTradeDeleteItemListviewCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}"
+                                                  CommandParameter="{Binding Path=SelectedItems, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}">
+                                                </MenuItem>
+                                                
                                                 <Separator />
 
                                                 <MenuItem Header="エラーをリセット" 
@@ -4335,10 +4387,7 @@
                                                   CommandParameter="{Binding Path=SelectedItems, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}">
                                                 </MenuItem>
 
-                                                <MenuItem Header="エラーのアイテムを削除" 
-                                                  Command="{Binding Path=DataContext.AutoTradeDeleteErrorItemListviewCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}"
-                                                  CommandParameter="{Binding Path=SelectedItems, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}">
-                                                </MenuItem>
+ 
 
                                             </MenuItem>
 
@@ -4409,10 +4458,10 @@
                                                             </DataTrigger>
 
                                                             <DataTrigger Binding="{Binding BuySide}" Value="buy">
-                                                                <Setter TargetName="AutoBuySide" Property="TextBlock.Foreground" Value="{StaticResource PriceUpColorBrush}"/>
+                                                                <Setter TargetName="AutoBuySide" Property="TextBlock.Foreground" Value="{DynamicResource PriceUpColorBrush}"/>
                                                             </DataTrigger>
                                                             <DataTrigger Binding="{Binding BuySide}" Value="sell">
-                                                                <Setter TargetName="AutoBuySide" Property="TextBlock.Foreground" Value="{StaticResource PriceDownColorBrush}"/>
+                                                                <Setter TargetName="AutoBuySide" Property="TextBlock.Foreground" Value="{DynamicResource PriceDownColorBrush}"/>
                                                             </DataTrigger>
                                                             
                                                         </DataTemplate.Triggers>
@@ -4495,7 +4544,7 @@
                                                 <GridViewColumn.CellTemplate>
                                                     <DataTemplate>
                                                         <StackPanel>
-                                                            <ToggleButton x:Name="AutoListBuyInfoButton" Content="!!!" Style="{StaticResource ErrorInfoToggleButtonStyle}" Foreground="{StaticResource WarningColorBrush}"/>
+                                                            <ToggleButton x:Name="AutoListBuyInfoButton" Content="!!!" Style="{StaticResource ErrorInfoToggleButtonStyle}" Foreground="{DynamicResource WarningColorBrush}"/>
                                                             <Popup IsOpen="{Binding IsChecked, ElementName=AutoListBuyInfoButton}" StaysOpen="False">
                                                                 <Border Background="Red" CornerRadius="4" Padding="6" Width="250">
                                                                     <StackPanel>
@@ -4537,10 +4586,10 @@
                                                             </DataTrigger>
 
                                                             <DataTrigger Binding="{Binding SellSide}" Value="buy">
-                                                                <Setter TargetName="AutoSellSide" Property="TextBlock.Foreground" Value="{StaticResource PriceUpColorBrush}"/>
+                                                                <Setter TargetName="AutoSellSide" Property="TextBlock.Foreground" Value="{DynamicResource PriceUpColorBrush}"/>
                                                             </DataTrigger>
                                                             <DataTrigger Binding="{Binding SellSide}" Value="sell">
-                                                                <Setter TargetName="AutoSellSide" Property="TextBlock.Foreground" Value="{StaticResource PriceDownColorBrush}"/>
+                                                                <Setter TargetName="AutoSellSide" Property="TextBlock.Foreground" Value="{DynamicResource PriceDownColorBrush}"/>
                                                             </DataTrigger>
                                                         </DataTemplate.Triggers>
 
@@ -4623,7 +4672,7 @@
                                                 <GridViewColumn.CellTemplate>
                                                     <DataTemplate>
                                                         <StackPanel>
-                                                            <ToggleButton x:Name="AutoListSellInfoButton" Content="!!!" Style="{StaticResource ErrorInfoToggleButtonStyle}" Foreground="{StaticResource WarningColorBrush}"/>
+                                                            <ToggleButton x:Name="AutoListSellInfoButton" Content="!!!" Style="{StaticResource ErrorInfoToggleButtonStyle}" Foreground="{DynamicResource WarningColorBrush}"/>
                                                             <Popup IsOpen="{Binding IsChecked, ElementName=AutoListSellInfoButton}" StaysOpen="False">
                                                                 <Border Background="Red" CornerRadius="4" Padding="6" Width="250">
                                                                     <StackPanel>
@@ -4683,7 +4732,7 @@
                             <Border Width="360" Margin="3 0 0 6" HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="{Binding ShowTradeHistoryApiSet, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
                                 <StackPanel>
                                     <Border BorderBrush="DimGray" BorderThickness="0 0 0 0.5" Margin="3" Padding="3">
-                                        <Label Padding="0" Content="取引履歴取得用APIキー設定" Style="{StaticResource SectionTitle}"/>
+                                        <Label Padding="0" Content="取引履歴取得用APIキー設定" Style="{DynamicResource SectionTitle}"/>
                                     </Border>
                                     <Popup IsOpen="{Binding IsChecked, ElementName=TradeHistoryAPIKeyInfoButton}" StaysOpen="False" PlacementTarget="{Binding ElementName=TradeHistoryAPIKeyInfoButton}" AllowsTransparency="True" PopupAnimation="Slide">
                                         <Border Background="WhiteSmoke" CornerRadius="4" Padding="6" Width="330" Height="210">
@@ -4745,7 +4794,7 @@
                                 <StackPanel>
 
                                     <!-- ロック解除ボタン -->
-                                    <Button Command="{Binding ShowLogInCommand}" Foreground="Gray" Background="Transparent" Style="{StaticResource PathButton}" ToolTip="ロック解除(Ctrl+U)" ToolTipService.ToolTip="ロック解除(Ctrl+U)" Height="36" Width="36" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="6 24 0 0" Visibility="{Binding PublicApiOnlyMode, Mode=OneWay, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
+                                    <Button Command="{Binding ShowLogInCommand}" Foreground="Gray" Background="Transparent" Style="{DynamicResource PathButton}" ToolTip="ロック解除(Ctrl+U)" ToolTipService.ToolTip="ロック解除(Ctrl+U)" Height="36" Width="36" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="6 24 0 0" Visibility="{Binding PublicApiOnlyMode, Mode=OneWay, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
                                         M18,20V10H6V20H18M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6C4.89,22 4,21.1 4,20V10A2,2 0 0,1 6,8H15V6A3,3 0 0,0 12,3A3,3 0 0,0 9,6H7A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,17A2,2 0 0,1 10,15A2,2 0 0,1 12,13A2,2 0 0,1 14,15A2,2 0 0,1 12,17Z
                                     </Button>
 
@@ -4857,10 +4906,10 @@
                                                         <TextBlock x:Name="HistorySideText" Text="{Binding SideText, Mode=OneWay}" Padding="3"/>
                                                         <DataTemplate.Triggers>
                                                             <DataTrigger Binding="{Binding Side}" Value="buy">
-                                                                <Setter TargetName="HistorySideText" Property="TextBlock.Foreground" Value="{StaticResource PriceUpColorBrush}"/>
+                                                                <Setter TargetName="HistorySideText" Property="TextBlock.Foreground" Value="{DynamicResource PriceUpColorBrush}"/>
                                                             </DataTrigger>
                                                             <DataTrigger Binding="{Binding Side}" Value="sell">
-                                                                <Setter TargetName="HistorySideText" Property="TextBlock.Foreground" Value="{StaticResource PriceDownColorBrush}"/>
+                                                                <Setter TargetName="HistorySideText" Property="TextBlock.Foreground" Value="{DynamicResource PriceDownColorBrush}"/>
                                                             </DataTrigger>
                                                         </DataTemplate.Triggers>
                                                     </DataTemplate>
@@ -5219,7 +5268,7 @@
                     <Grid Margin="12">
                         <StackPanel>
                             <Border BorderBrush="DimGray" BorderThickness="0 0 0 0.5" Margin="3" Padding="3">
-                                <Label Padding="0" Content="アラーム音の設定" Style="{StaticResource SectionTitle}"/>
+                                <Label Padding="0" Content="アラーム音の設定" Style="{DynamicResource SectionTitle}"/>
                             </Border>
 
                             <Grid Margin="12">
@@ -5248,7 +5297,7 @@
                         <Border Grid.Row="0" Grid.Column="0" Margin="3 0 0 6" Visibility="{Binding PublicApiOnlyMode, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
                             <StackPanel>
                                 <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" BorderBrush="DimGray" BorderThickness="0 0 0 0.5" Margin="3" Padding="3">
-                                    <Label Padding="0" Content="パスワードロックの変更" Style="{StaticResource SectionTitle}"/>
+                                    <Label Padding="0" Content="パスワードロックの変更" Style="{DynamicResource SectionTitle}"/>
                                 </Border>
 
                                 <TextBlock Padding="6" TextWrapping="Wrap" Style="{DynamicResource DefaultTextBlockStyle}">
@@ -5257,7 +5306,7 @@
                                 <TextBlock Padding="6" TextWrapping="Wrap" Style="{DynamicResource DefaultTextBlockStyle}">
                                 下記の鍵ボタンを押し、ロックを解除してから再度お試しください。
                                 </TextBlock>
-                                <Button Command="{Binding ShowLogInCommand}" Foreground="Gray" Background="Transparent" Style="{StaticResource PathButton}" ToolTip="ロック解除(Ctrl+U)" ToolTipService.ToolTip="ロック解除(Ctrl+U)" Height="48" Width="48" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="6 24 0 0" Visibility="{Binding PublicApiOnlyMode, Mode=OneWay, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
+                                <Button Command="{Binding ShowLogInCommand}" Foreground="Gray" Background="Transparent" Style="{DynamicResource PathButton}" ToolTip="ロック解除(Ctrl+U)" ToolTipService.ToolTip="ロック解除(Ctrl+U)" Height="48" Width="48" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="6 24 0 0" Visibility="{Binding PublicApiOnlyMode, Mode=OneWay, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
                                     M18,20V10H6V20H18M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6C4.89,22 4,21.1 4,20V10A2,2 0 0,1 6,8H15V6A3,3 0 0,0 12,3A3,3 0 0,0 9,6H7A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,17A2,2 0 0,1 10,15A2,2 0 0,1 12,13A2,2 0 0,1 14,15A2,2 0 0,1 12,17Z
                                 </Button>
 
@@ -5267,7 +5316,7 @@
                         <Border Grid.Row="0" Grid.Column="0" Margin="3 0 0 6" Visibility="{Binding LoggedInMode, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
                             <StackPanel>
                                 <Border BorderBrush="DimGray" BorderThickness="0 0 0 0.5" Margin="3" Padding="3">
-                                    <Label Padding="0" Content="パスワードロックの変更" Style="{StaticResource SectionTitle}"/>
+                                    <Label Padding="0" Content="パスワードロックの変更" Style="{DynamicResource SectionTitle}"/>
                                 </Border>
 
                                 <Grid Margin="6 6 9 0" Width="240" HorizontalAlignment="Left">
@@ -5339,7 +5388,7 @@
                         <Border Grid.Row="0" Grid.Column="0" Margin="3 0 0 6" Visibility="{Binding PublicApiOnlyMode, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
                             <StackPanel>
                                 <Border BorderBrush="DimGray" BorderThickness="0 0 0 0.5" Margin="3" Padding="3">
-                                    <Label Padding="0" Content="APIキーの設定・変更" Style="{StaticResource SectionTitle}"/>
+                                    <Label Padding="0" Content="APIキーの設定・変更" Style="{DynamicResource SectionTitle}"/>
                                 </Border>
 
                                 <TextBlock Padding="6" TextWrapping="Wrap">
@@ -5348,7 +5397,7 @@
                                 <TextBlock Padding="6" TextWrapping="Wrap">
                                 下記の鍵ボタンを押し、ロックを解除してから再度お試しください。
                                 </TextBlock>
-                                <Button Command="{Binding ShowLogInCommand}" Foreground="Gray" Background="Transparent" Style="{StaticResource PathButton}" ToolTip="ロック解除(Ctrl+U)" ToolTipService.ToolTip="ロック解除(Ctrl+U)" Height="48" Width="48" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="6 24 0 0" Visibility="{Binding PublicApiOnlyMode, Mode=OneWay, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
+                                <Button Command="{Binding ShowLogInCommand}" Foreground="Gray" Background="Transparent" Style="{DynamicResource PathButton}" ToolTip="ロック解除(Ctrl+U)" ToolTipService.ToolTip="ロック解除(Ctrl+U)" Height="48" Width="48" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="6 24 0 0" Visibility="{Binding PublicApiOnlyMode, Mode=OneWay, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
                                     M18,20V10H6V20H18M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6C4.89,22 4,21.1 4,20V10A2,2 0 0,1 6,8H15V6A3,3 0 0,0 12,3A3,3 0 0,0 9,6H7A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,17A2,2 0 0,1 10,15A2,2 0 0,1 12,13A2,2 0 0,1 14,15A2,2 0 0,1 12,17Z
                                 </Button>
 
@@ -5359,7 +5408,7 @@
                         <Border Grid.Row="0" Grid.Column="0" Margin="3 0 0 6" Visibility="{Binding ShowApiKeyLock, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
                             <StackPanel>
                                 <Border BorderBrush="DimGray" BorderThickness="0 0 0 0.5" Margin="3" Padding="3">
-                                    <Label Padding="0" Content="APIキーの設定・変更" Style="{StaticResource SectionTitle}"/>
+                                    <Label Padding="0" Content="APIキーの設定・変更" Style="{DynamicResource SectionTitle}"/>
                                 </Border>
 
                                 <TextBlock Padding="6" TextWrapping="Wrap" Style="{DynamicResource DefaultTextBlockStyle}">
@@ -5398,7 +5447,7 @@
 
                                 <StackPanel>
                                     <Border BorderBrush="DimGray" BorderThickness="0 0 0 0.5" Margin="3" Padding="3">
-                                        <Label Padding="0" Content="APIキーの設定・変更" Style="{StaticResource SectionTitle}"/>
+                                        <Label Padding="0" Content="APIキーの設定・変更" Style="{DynamicResource SectionTitle}"/>
                                     </Border>
 
                                     <TextBlock Padding="6" TextWrapping="Wrap" Style="{DynamicResource DefaultTextBlockStyle}">
@@ -5435,9 +5484,9 @@
                                         </Grid.ColumnDefinitions>
 
                                         <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
-                                            <Label Content="保有資産情報の取得用：" Style="{StaticResource SectionTitle}"></Label>
-                                            <Label Content="権限" Style="{StaticResource SectionTitle}"></Label>
-                                            <TextBlock Style="{StaticResource DefaultTextBlockStyle}" VerticalAlignment="Center"><Run Foreground="Orange" FontWeight="Bold" Style="{StaticResource DefaultRunStyle}">[参照]</Run></TextBlock>
+                                            <Label Content="保有資産情報の取得用：" Style="{DynamicResource SectionTitle}"></Label>
+                                            <Label Content="権限" Style="{DynamicResource SectionTitle}"></Label>
+                                            <TextBlock Style="{DynamicResource DefaultTextBlockStyle}" VerticalAlignment="Center"><Run Foreground="Orange" FontWeight="Bold" Style="{DynamicResource DefaultRunStyle}">[参照]</Run></TextBlock>
                                         </StackPanel>
 
 
@@ -5465,9 +5514,9 @@
                                         </Grid.ColumnDefinitions>
 
                                         <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
-                                            <Label Content="注文用：" Style="{StaticResource SectionTitle}"></Label>
-                                            <Label Content="権限" Style="{StaticResource SectionTitle}"></Label>
-                                            <TextBlock Style="{StaticResource DefaultTextBlockStyle}" VerticalAlignment="Center"><Run Foreground="Orange" FontWeight="Bold" Style="{StaticResource DefaultRunStyle}">[参照] [取引]</Run></TextBlock>
+                                            <Label Content="注文用：" Style="{DynamicResource SectionTitle}"></Label>
+                                            <Label Content="権限" Style="{DynamicResource SectionTitle}"></Label>
+                                            <TextBlock Style="{DynamicResource DefaultTextBlockStyle}" VerticalAlignment="Center"><Run Foreground="Orange" FontWeight="Bold" Style="{DynamicResource DefaultRunStyle}">[参照] [取引]</Run></TextBlock>
                                         </StackPanel>
 
                                         <Label Grid.Row="1" Grid.Column="0" Content="APIキー：" Style="{DynamicResource DefaultLabelStyle}"></Label>
@@ -5494,9 +5543,9 @@
                                         </Grid.ColumnDefinitions>
 
                                         <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
-                                            <Label Content="注文一覧取得用：" Style="{StaticResource SectionTitle}"></Label>
-                                            <Label Content="権限" Style="{StaticResource SectionTitle}"></Label>
-                                            <TextBlock Style="{StaticResource DefaultTextBlockStyle}" VerticalAlignment="Center"><Run Foreground="Orange" FontWeight="Bold" Style="{StaticResource DefaultRunStyle}">[参照]</Run></TextBlock>
+                                            <Label Content="注文一覧取得用：" Style="{DynamicResource SectionTitle}"></Label>
+                                            <Label Content="権限" Style="{DynamicResource SectionTitle}"></Label>
+                                            <TextBlock Style="{DynamicResource DefaultTextBlockStyle}" VerticalAlignment="Center"><Run Foreground="Orange" FontWeight="Bold" Style="{DynamicResource DefaultRunStyle}">[参照]</Run></TextBlock>
                                         </StackPanel>
 
                                         <Label Grid.Row="1" Grid.Column="0" Content="APIキー：" Style="{DynamicResource DefaultLabelStyle}"></Label>
@@ -5523,9 +5572,9 @@
                                         </Grid.ColumnDefinitions>
 
                                         <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
-                                            <Label Content="特殊注文用：" Style="{StaticResource SectionTitle}"></Label>
-                                            <Label Content="権限" Style="{StaticResource SectionTitle}"></Label>
-                                            <TextBlock Style="{StaticResource DefaultTextBlockStyle}" VerticalAlignment="Center"><Run Foreground="Orange" FontWeight="Bold" Style="{StaticResource DefaultRunStyle}">[参照] [取引]</Run></TextBlock>
+                                            <Label Content="特殊注文用：" Style="{DynamicResource SectionTitle}"></Label>
+                                            <Label Content="権限" Style="{DynamicResource SectionTitle}"></Label>
+                                            <TextBlock Style="{DynamicResource DefaultTextBlockStyle}" VerticalAlignment="Center"><Run Foreground="Orange" FontWeight="Bold" Style="{DynamicResource DefaultRunStyle}">[参照] [取引]</Run></TextBlock>
                                         </StackPanel>
 
                                         <Label Grid.Row="1" Grid.Column="0" Content="APIキー：" Style="{DynamicResource DefaultLabelStyle}"></Label>
@@ -5552,9 +5601,9 @@
                                         </Grid.ColumnDefinitions>
 
                                         <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
-                                            <Label Content="取引履歴取得用：" Style="{StaticResource SectionTitle}"></Label>
-                                            <Label Content="権限" Style="{StaticResource SectionTitle}"></Label>
-                                            <TextBlock Style="{StaticResource DefaultTextBlockStyle}" VerticalAlignment="Center"><Run Foreground="Orange" FontWeight="Bold" Style="{StaticResource DefaultRunStyle}">[参照]</Run></TextBlock>
+                                            <Label Content="取引履歴取得用：" Style="{DynamicResource SectionTitle}"></Label>
+                                            <Label Content="権限" Style="{DynamicResource SectionTitle}"></Label>
+                                            <TextBlock Style="{DynamicResource DefaultTextBlockStyle}" VerticalAlignment="Center"><Run Foreground="Orange" FontWeight="Bold" Style="{DynamicResource DefaultRunStyle}">[参照]</Run></TextBlock>
                                         </StackPanel>
 
                                         <Label Grid.Row="1" Grid.Column="0" Content="APIキー：" Style="{DynamicResource DefaultLabelStyle}"></Label>
@@ -5581,9 +5630,9 @@
                                         </Grid.ColumnDefinitions>
 
                                         <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
-                                            <Label Content="自動取引用：" Style="{StaticResource SectionTitle}"></Label>
-                                            <Label Content="権限" Style="{StaticResource SectionTitle}"></Label>
-                                            <TextBlock Style="{StaticResource DefaultTextBlockStyle}" VerticalAlignment="Center"><Run Foreground="Orange" FontWeight="Bold" Style="{StaticResource DefaultRunStyle}">[参照] [取引]</Run></TextBlock>
+                                            <Label Content="自動取引用：" Style="{DynamicResource SectionTitle}"></Label>
+                                            <Label Content="権限" Style="{DynamicResource SectionTitle}"></Label>
+                                            <TextBlock Style="{DynamicResource DefaultTextBlockStyle}" VerticalAlignment="Center"><Run Foreground="Orange" FontWeight="Bold" Style="{DynamicResource DefaultRunStyle}">[参照] [取引]</Run></TextBlock>
                                         </StackPanel>
 
                                         <Label Grid.Row="1" Grid.Column="0" Content="APIキー：" Style="{DynamicResource DefaultLabelStyle}"></Label>

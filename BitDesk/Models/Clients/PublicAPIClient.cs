@@ -46,8 +46,7 @@ namespace BitDesk.Models.Clients
         [JsonProperty("timestamp")]
         public long Timestamp { get; set; }
     }
-
-
+    
     #region == JsonTickerClass Json デシリアライズ用 ==
 
     // Ticker
@@ -543,15 +542,12 @@ namespace BitDesk.Models.Clients
         // コンストラクタ
         public PublicAPIClient()
         {
-            //_endpoint = endpoint;
-
             _HTTPConn.Client.BaseAddress = PublicAPIUri;
         }
 
         // Ticker取得メソッド
         public async Task<Ticker> GetTicker(string pair)
         {
-            //Uri _endpoint = new Uri ((_HTTPConn.Client.BaseAddress).ToString() + "btc_jpy/ticker");
             Uri _endpoint = new Uri((_HTTPConn.Client.BaseAddress).ToString() + pair + "/ticker");
 
             //System.Diagnostics.Debug.WriteLine("GettingTicker..." + _endpoint.ToString());
@@ -560,7 +556,6 @@ namespace BitDesk.Models.Clients
             {
                 Method = HttpMethod.Get,
                 RequestUri = _endpoint,
-
             };
 
             //System.Diagnostics.Debug.WriteLine("GettingTicker...");
@@ -587,34 +582,6 @@ namespace BitDesk.Models.Clients
                         ticker.Ask = decimal.Parse(deserialized.data.sell);
                         ticker.Low = decimal.Parse(deserialized.data.low);
                         ticker.High = decimal.Parse(deserialized.data.high);
-
-                        /*
-                        long l;
-                        if (Int64.TryParse(deserialized.data.last, out l))
-                        {
-                            ticker.LTP = l;
-                        }
-
-                        if (Int64.TryParse(deserialized.data.buy, out l))
-                        {
-                            ticker.Bid = l;
-                        }
-
-                        if (Int64.TryParse(deserialized.data.sell, out l))
-                        {
-                            ticker.Ask = l;
-                        }
-
-                        if (Int64.TryParse(deserialized.data.low, out l))
-                        {
-                            ticker.Low = l;
-                        }
-
-                        if (Int64.TryParse(deserialized.data.high, out l))
-                        {
-                            ticker.High = l;
-                        }
-                        */
 
                         DateTime start = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
                         DateTime date = start.AddMilliseconds(deserialized.data.timestamp).ToLocalTime();
@@ -655,7 +622,6 @@ namespace BitDesk.Models.Clients
             {
                 Method = HttpMethod.Get,
                 RequestUri = _endpoint,
-
             };
 
             try
@@ -680,12 +646,11 @@ namespace BitDesk.Models.Clients
                             {
 
                                 Depth dd = new Depth();
-                                dd.DepthPrice = Decimal.Parse(dp[0]);//dp[0];
-                                dd.DepthBid = Decimal.Parse(dp[1]);//dp[1];//
+                                dd.DepthPrice = Decimal.Parse(dp[0]);
+                                dd.DepthBid = Decimal.Parse(dp[1]);
                                 dd.DepthAsk = 0;
                                 dpr.DepthBidList.Add(dd);
-
-
+                                
                             }
                         }
 
@@ -695,9 +660,9 @@ namespace BitDesk.Models.Clients
                             {
 
                                 Depth dd = new Depth();
-                                dd.DepthPrice = Decimal.Parse(dp[0]); //dp[0];
+                                dd.DepthPrice = Decimal.Parse(dp[0]);
                                 dd.DepthBid = 0;
-                                dd.DepthAsk = Decimal.Parse(dp[1]); //dp[1];//
+                                dd.DepthAsk = Decimal.Parse(dp[1]);
                                 dpr.DepthAskList.Add(dd);
 
                             }
@@ -705,38 +670,6 @@ namespace BitDesk.Models.Clients
 
                         dpr.ErrorCode = 0;
                         dpr.IsSuccess = true;
-
-
-                        /*
-                        long l;
-                        if (Int64.TryParse(deserialized.Data.last, out l))
-                        {
-                            ticker.LTP = l;
-                        }
-
-                        if (Int64.TryParse(deserialized.data.buy, out l))
-                        {
-                            ticker.Bid = l;
-                        }
-
-                        if (Int64.TryParse(deserialized.data.sell, out l))
-                        {
-                            ticker.Ask = l;
-                        }
-
-                        if (Int64.TryParse(deserialized.data.low, out l))
-                        {
-                            ticker.Low = l;
-                        }
-
-                        if (Int64.TryParse(deserialized.data.high, out l))
-                        {
-                            ticker.High = l;
-                        }
-
-
-
-                        */
 
                         return dpr;
                     }
@@ -777,7 +710,6 @@ namespace BitDesk.Models.Clients
             {
                 Method = HttpMethod.Get,
                 RequestUri = _endpoint,
-
             };
 
             try
@@ -795,7 +727,6 @@ namespace BitDesk.Models.Clients
                     {
                         TransactionsResult trs = new TransactionsResult();
 
-
                         foreach (var tr in deserialized.Data.Transactions)
                         {
                             Transactions dd = new Transactions();
@@ -809,13 +740,8 @@ namespace BitDesk.Models.Clients
                             trs.Trans.Add(dd);
                         }
 
-
-
                         trs.ErrorCode = 0;
                         trs.IsSuccess = true;
-
-
-
 
                         return trs;
                     }
@@ -941,7 +867,6 @@ namespace BitDesk.Models.Clients
                                         oh.Volume = decimal.Parse(jcs[4].String);
                                         oh.TimeStamp = (new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).AddMilliseconds((long)jcs[5].Integer).ToLocalTime();
                                     }
-                                    //dd.ExecutedAt = (new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).AddMilliseconds(tr.ExecutedAt).ToLocalTime();
 
                                     //System.Diagnostics.Debug.WriteLine("GetCandlestick: " + oh.TimeStamp.ToString("dd日 hh:mm:ss"));
                                     //System.Diagnostics.Debug.WriteLine(jcs[4].String);
@@ -952,11 +877,9 @@ namespace BitDesk.Models.Clients
                                 csr.Candlesticks.Add(cs);
 
                             }
-
-
+                            
                         }
-
-
+                        
                         csr.ErrorCode = 0;
                         csr.IsSuccess = true;
 

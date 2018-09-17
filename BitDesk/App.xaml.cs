@@ -14,31 +14,7 @@ namespace BitDesk
     /// </summary>
     public partial class App : Application
     {
-        // テーマ切替
-        public void ChangeTheme(string themeName)
-        {
-
-            //System.Diagnostics.Debug.WriteLine(themeName);
-
-            ResourceDictionary _themeDict = Application.Current.Resources.MergedDictionaries.FirstOrDefault(x => x.Source == new Uri("pack://application:,,,/Themes/DefaultTheme.xaml"));
-            if (_themeDict != null)
-            {
-                _themeDict.Clear();
-            }
-            else
-            {
-                // 新しいリソース・ディクショナリを追加
-                _themeDict = new ResourceDictionary();
-                Application.Current.Resources.MergedDictionaries.Add(_themeDict);
-            }
-
-            // テーマをリソース・ディクショナリのソースに指定
-            string themeUri = String.Format("pack://application:,,,/Themes/{0}.xaml", themeName);
-            _themeDict.Source = new Uri(themeUri);
-
-        }
-
-        // 二重起動防止 on/off
+        // 二重起動防止 on/offフラグ
         private bool _mutexOn = true;
 
         /// <summary>The event mutex name.</summary>
@@ -95,6 +71,29 @@ namespace BitDesk
 
             }
 
+
+        }
+
+        // テーマ切替メソッド
+        public void ChangeTheme(string themeName)
+        {
+            //System.Diagnostics.Debug.WriteLine(themeName);
+
+            ResourceDictionary _themeDict = Application.Current.Resources.MergedDictionaries.FirstOrDefault(x => x.Source == new Uri("pack://application:,,,/Themes/DefaultTheme.xaml"));
+            if (_themeDict != null)
+            {
+                _themeDict.Clear();
+            }
+            else
+            {
+                // 新しいリソース・ディクショナリを追加
+                _themeDict = new ResourceDictionary();
+                Application.Current.Resources.MergedDictionaries.Add(_themeDict);
+            }
+
+            // テーマをリソース・ディクショナリのソースに指定
+            string themeUri = String.Format("pack://application:,,,/Themes/{0}.xaml", themeName);
+            _themeDict.Source = new Uri(themeUri);
 
         }
 

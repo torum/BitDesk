@@ -12,6 +12,7 @@
     <Color x:Key="ControlLightColor">LightGray</Color>
     <Color x:Key="ControlMediumColor">DarkGray</Color>
     <Color x:Key="ControlDarkColor">DimGray</Color>
+    
     <Color x:Key="ControlMouseOverColor">White</Color>
     <Color x:Key="ControlPressedColor">Gainsboro</Color>
     
@@ -32,9 +33,13 @@
     <Color x:Key="ListviewAlt0Color">#212121</Color>
     <Color x:Key="ListviewAlt1Color">#1a1a1a</Color>
 
+    <Color x:Key="RadioButtonCheckedBackgroundColor">#232323</Color>
+    <Color x:Key="RadioButtonUnCheckedBackgroundColor">#212121</Color>
+
     <Color x:Key="ChartVolumeColor">Yellow</Color>
 
-    <Color x:Key="ShadowColor">#1c1c1c</Color>
+    <Color x:Key="ShadowTabColor">#1c1c1c</Color>
+    <Color x:Key="ShadowBoardColor">#1c1c1c</Color>
 
     <!-- クール系のアクセントカラー 明るい -->
     <Color x:Key="AccentCoolLightColor">Green</Color>
@@ -46,9 +51,9 @@
     <!-- 暖系のアクセントカラー 暗め -->
     <Color x:Key="AccentWarmDarkColor">#e0815e</Color>
 
-    <!-- Green Blue系 元Aqua -->
+    <!-- PriceUp Green Blue系 元Aqua -->
     <SolidColorBrush x:Key="PriceUpColorBrush" Color="#a0d8ef"/>
-    <!-- Red Orange系 元Pink -->
+    <!-- PriceDown Red Orange系 元Pink -->
     <SolidColorBrush x:Key="PriceDownColorBrush" Color="#e597b2"/>
     <!-- White系 -->
     <SolidColorBrush x:Key="PriceNeutralColorBrush" Color="Gainsboro"/>
@@ -98,6 +103,8 @@
     <SolidColorBrush x:Key="ListviewAlt1ColorBrush" Color="{DynamicResource ListviewAlt1Color}"/>
 
     <SolidColorBrush x:Key="ChartVolumeColorBrush" Color="{DynamicResource ChartVolumeColor}" Opacity="0.1"/>
-    
+
+    <SolidColorBrush x:Key="RadioButtonCheckedBackgroundColorBrush" Color="{DynamicResource RadioButtonCheckedBackgroundColor}"/>
+    <SolidColorBrush x:Key="RadioButtonUnCheckedBackgroundColorBrush" Color="{DynamicResource RadioButtonUnCheckedBackgroundColor}"/>
 
 </ResourceDictionary>

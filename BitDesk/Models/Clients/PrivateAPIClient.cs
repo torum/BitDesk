@@ -31,8 +31,8 @@ namespace BitDesk.Models.Clients
             }
             set
             {
+                if (_errorTitle == value) return;
                 _errorTitle = value;
-
                 this.NotifyPropertyChanged("ErrorTitle");
             }
         }
@@ -46,8 +46,8 @@ namespace BitDesk.Models.Clients
             }
             set
             {
+                if (_errorCode == value) return;
                 _errorCode = value;
-
                 this.NotifyPropertyChanged("ErrorCode");
             }
         }
@@ -61,8 +61,8 @@ namespace BitDesk.Models.Clients
             }
             set
             {
+                if (_errorDescription == value) return;
                 _errorDescription = value;
-
                 this.NotifyPropertyChanged("ErrorDescription");
             }
         }
@@ -170,8 +170,8 @@ namespace BitDesk.Models.Clients
             }
             set
             {
+                if (_side == value) return;
                 _side = value;
-
                 this.NotifyPropertyChanged("Side");
                 this.NotifyPropertyChanged("SideText");
             }
@@ -204,8 +204,8 @@ namespace BitDesk.Models.Clients
             }
             set
             {
+                if (_type == value) return;
                 _type = value;
-
                 this.NotifyPropertyChanged("Type");
                 this.NotifyPropertyChanged("TypeText");
             }
@@ -240,8 +240,8 @@ namespace BitDesk.Models.Clients
             }
             set
             {
+                if (_remainingAmount == value) return;
                 _remainingAmount = value;
-
                 this.NotifyPropertyChanged("RemainingAmount");
             }
         }
@@ -255,8 +255,8 @@ namespace BitDesk.Models.Clients
             }
             set
             {
+                if (_executedAmount == value) return;
                 _executedAmount = value;
-
                 this.NotifyPropertyChanged("ExecutedAmount");
             }
         }
@@ -270,8 +270,8 @@ namespace BitDesk.Models.Clients
             }
             set
             {
+                if (_price == value) return;
                 _price = value;
-
                 this.NotifyPropertyChanged("Price");
             }
         }
@@ -285,8 +285,8 @@ namespace BitDesk.Models.Clients
             }
             set
             {
+                if (_averagePrice == value) return;
                 _averagePrice = value;
-
                 this.NotifyPropertyChanged("AveragePrice");
             }
         }
@@ -300,8 +300,8 @@ namespace BitDesk.Models.Clients
             }
             set
             {
+                if (_orderedAt == value) return;
                 _orderedAt = value;
-
                 this.NotifyPropertyChanged("OrderedAt");
             }
         }
@@ -315,6 +315,7 @@ namespace BitDesk.Models.Clients
             }
             set
             {
+                if (_status == value) return;
                 _status = value;
 
                 this.NotifyPropertyChanged("Status");
@@ -364,8 +365,8 @@ namespace BitDesk.Models.Clients
             }
             set
             {
+                if (_shushi == value) return;
                 _shushi = value;
-
                 this.NotifyPropertyChanged("Shushi");
             }
         }
@@ -380,8 +381,8 @@ namespace BitDesk.Models.Clients
             }
             set
             {
-                _actualPrice = value;
-
+                if (_shushi == value) return;
+                _shushi = value;
                 this.NotifyPropertyChanged("ActualPrice");
             }
         }
@@ -411,6 +412,7 @@ namespace BitDesk.Models.Clients
             }
             set
             {
+                if (_err == value) return;
                 _err = value;
                 this.NotifyPropertyChanged("Err");
             }
@@ -425,6 +427,7 @@ namespace BitDesk.Models.Clients
             }
             set
             {
+                if (_hasErrorInfo == value) return;
                 _hasErrorInfo = value;
                 this.NotifyPropertyChanged("HasErrorInfo");
             }
@@ -1072,8 +1075,6 @@ namespace BitDesk.Models.Clients
                     ord.IsSuccess = false;
                     ord.ErrorCode = jsonResult.data.code;
 
-                    System.Diagnostics.Debug.WriteLine("■■■■■ CancelOrder: API error code - " + jsonResult.data.code.ToString() + " ■■■■■");
-
                     // ユーザに表示するエラー情報
                     ord.HasErrorInfo = true;
                     ord.Err.ErrorCode = ord.ErrorCode;
@@ -1098,6 +1099,8 @@ namespace BitDesk.Models.Clients
                     er.ErrPlace = path.ToString();
 
                     ErrorOccured?.Invoke(this, er);
+
+                    System.Diagnostics.Debug.WriteLine("■■■■■ CancelOrder: API error code - " + jsonResult.data.code.ToString() + " ■■■■■");
 
                     return ord;
                 }

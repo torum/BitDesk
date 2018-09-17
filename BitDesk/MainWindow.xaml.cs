@@ -17,7 +17,6 @@ using System.Windows.Automation.Peers;
 using System.Windows.Automation.Provider; // UIAutomationProvider
 using BitDesk.ViewModels;
 using System.Diagnostics;
-using Microsoft.Win32;
 
 namespace BitDesk
 {
@@ -52,25 +51,6 @@ namespace BitDesk
             RestoreButton.Visibility = Visibility.Collapsed;
             MaxButton.Visibility = Visibility.Visible;
             TopMenuUnPinButton.Visibility = Visibility.Collapsed;
-
-
-            // サスペンド検知　復帰時に、変な価格で購入してしまわないように。
-            SystemEvents.PowerModeChanged += (sender, e) =>
-            {
-                switch (e.Mode)
-                {
-                    case PowerModes.Suspend:
-                        // スリープ直前
-                        (this.DataContext as MainViewModel).StopAutoTradeCommand_Execute();
-                        break;
-                    case PowerModes.Resume:
-                        // 復帰直後
-                        break;
-                    case PowerModes.StatusChange:
-                        // バッテリーや電源に関する通知があった
-                        break;
-                }
-            };
 
         }
 
@@ -277,7 +257,6 @@ namespace BitDesk
 
         #region == レイアウト変更 ==
 
-        // レイアウト変更 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             LayoutChange();

@@ -22,6 +22,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Media;
 using System.Text;
+using Microsoft.Win32;
 
 namespace BitDesk.ViewModels
 {
@@ -2156,6 +2157,9 @@ namespace BitDesk.ViewModels
     /// </summary>
     public class MainViewModel : ViewModelBase
     {
+
+        #region == 基本 ==
+
         // テスト用
         private decimal _initPrice = 81800M;
 
@@ -2186,9 +2190,6 @@ namespace BitDesk.ViewModels
             }
         }
 
-
-        #region == 基本 ==
-
         // Application version
         private string _appVer = "0.0.0.2";
 
@@ -2206,8 +2207,6 @@ namespace BitDesk.ViewModels
                 return _appName + " " + _appVer;
             }
         }
-
-        private string _appDataFolder;
 
         #endregion
 
@@ -4754,6 +4753,7 @@ namespace BitDesk.ViewModels
 
         System.Windows.Threading.DispatcherTimer dispatcherTimerTickAllPairs = new System.Windows.Threading.DispatcherTimer();
         System.Windows.Threading.DispatcherTimer dispatcherChartTimer = new System.Windows.Threading.DispatcherTimer();
+        System.Windows.Threading.DispatcherTimer dispatcherTimerRss = new System.Windows.Threading.DispatcherTimer();
 
         #endregion
 
@@ -6891,23 +6891,6 @@ namespace BitDesk.ViewModels
         /// </summary>
         public class Pair : ViewModelBase
         {
-            #region == カラー定義 ==
-
-            // TODO
-            // Make them style or binding. 
-
-            public Color PriceUpColor = (Color)ColorConverter.ConvertFromString("#a0d8ef");//Colors.Aqua;
-            public Color PriceDownColor = (Color)ColorConverter.ConvertFromString("#e597b2");//Colors.Pink;
-            public static Color PriceNeutralColor = Colors.Gray;
-
-            private Color _priceWarningColor = (Color)ColorConverter.ConvertFromString("#FFDFD991");
-
-            private Color _accentCoolColor = (Color)ColorConverter.ConvertFromString("#2c4f54");
-            private Color _accentWarmColor = (Color)ColorConverter.ConvertFromString("#e0815e");
-
-            //private Color _chartStrokeColor = System.Windows.Media.Brushes.WhiteSmoke.Color;
-
-            #endregion
 
             // 通貨フォーマット用
             private string _ltpFormstString = "{0:#,0}";
@@ -6959,8 +6942,46 @@ namespace BitDesk.ViewModels
                     this.NotifyPropertyChanged("Ltp");
                     this.NotifyPropertyChanged("LtpString");
 
+                    if (_ltp > BasePrice)
+                    {
+                        BasePriceUpFlag = true;
+                    }
+                    else if (_ltp < BasePrice)
+                    {
+                        BasePriceUpFlag = false;
+                    }
                     this.NotifyPropertyChanged("BasePriceIcon");
-                    this.NotifyPropertyChanged("BasePriceIconColor");
+
+                    if (_ltp > MiddleInitPrice)
+                    {
+                        MiddleInitPriceUpFlag = true;
+                    }
+                    else if (_ltp < MiddleInitPrice)
+                    {
+                        MiddleInitPriceUpFlag = false;
+                    }
+                    this.NotifyPropertyChanged("MiddleInitPriceIcon");
+
+                    if (_ltp > MiddleLast24Price)
+                    {
+                        MiddleLast24PriceUpFlag = true;
+                    }
+                    else if (_ltp < MiddleLast24Price)
+                    {
+                        MiddleLast24PriceUpFlag = false;
+                    }
+                    this.NotifyPropertyChanged("MiddleLast24PriceIcon");
+
+                    if (_ltp > AveragePrice)
+                    {
+                        AveragePriceUpFlag = true;
+                    }
+                    else if (_ltp < AveragePrice)
+                    {
+                        AveragePriceUpFlag = false;
+                    }
+                    this.NotifyPropertyChanged("AveragePriceIcon");
+
                 }
             }
 
@@ -7234,11 +7255,18 @@ namespace BitDesk.ViewModels
 
                     this.NotifyPropertyChanged("BasePrice");
                     this.NotifyPropertyChanged("BasePriceIcon");
-                    this.NotifyPropertyChanged("BasePriceIconColor");
                     this.NotifyPropertyChanged("BasePriceString");
 
                 }
             }
+            public string BasePriceString
+            {
+                get
+                {
+                    return String.Format(_ltpFormstString, BasePrice);
+                }
+            }
+
             public string BasePriceIcon
             {
                 get
@@ -7257,29 +7285,22 @@ namespace BitDesk.ViewModels
                     }
                 }
             }
-            public Color BasePriceIconColor
+
+            private bool _basePriceUpFlag;
+            public bool BasePriceUpFlag
             {
                 get
                 {
-                    if (_ltp > BasePrice)
-                    {
-                        return PriceUpColor;//Colors.Aqua;
-                    }
-                    else if (_ltp < BasePrice)
-                    {
-                        return PriceDownColor; //Colors.Pink;
-                    }
-                    else
-                    {
-                        return Colors.Gainsboro;
-                    }
+                    return _basePriceUpFlag;
                 }
-            }
-            public string BasePriceString
-            {
-                get
+                set
                 {
-                    return String.Format(_ltpFormstString, BasePrice);
+                    if (_basePriceUpFlag == value)
+                        return;
+
+                    _basePriceUpFlag = value;
+                    this.NotifyPropertyChanged("BasePriceUpFlag");
+                    this.NotifyPropertyChanged("BasePriceIcon");
                 }
             }
 
@@ -7296,10 +7317,18 @@ namespace BitDesk.ViewModels
                     _averagePrice = value;
                     this.NotifyPropertyChanged("AveragePrice");
                     this.NotifyPropertyChanged("AveragePriceIcon");
-                    this.NotifyPropertyChanged("AveragePriceIconColor");
+                    //this.NotifyPropertyChanged("AveragePriceIconColor");
                     this.NotifyPropertyChanged("AveragePriceString");
                 }
             }
+            public string AveragePriceString
+            {
+                get
+                {
+                    return String.Format(_ltpFormstString, _averagePrice); ;
+                }
+            }
+
             public string AveragePriceIcon
             {
                 get
@@ -7318,29 +7347,22 @@ namespace BitDesk.ViewModels
                     }
                 }
             }
-            public Color AveragePriceIconColor
+
+            private bool _averagePriceUpFlag;
+            public bool AveragePriceUpFlag
             {
                 get
                 {
-                    if (_ltp > _averagePrice)
-                    {
-                        return PriceUpColor;//Colors.Aqua;
-                    }
-                    else if (_ltp < _averagePrice)
-                    {
-                        return PriceDownColor;//Colors.Pink;
-                    }
-                    else
-                    {
-                        return Colors.Gainsboro;
-                    }
+                    return _averagePriceUpFlag;
                 }
-            }
-            public string AveragePriceString
-            {
-                get
+                set
                 {
-                    return String.Format(_ltpFormstString, _averagePrice); ;
+                    if (_averagePriceUpFlag == value)
+                        return;
+
+                    _averagePriceUpFlag = value;
+                    this.NotifyPropertyChanged("AveragePriceUpFlag");
+                    this.NotifyPropertyChanged("AveragePriceIcon");
                 }
             }
 
@@ -7349,9 +7371,17 @@ namespace BitDesk.ViewModels
             {
                 get
                 {
-                    return ((_lowestIn24Price + _highestIn24Price) / 2L);
+                    return ((_lowestIn24Price + _highestIn24Price) / 2);
                 }
             }
+            public string MiddleLast24PriceString
+            {
+                get
+                {
+                    return String.Format(_ltpFormstString, MiddleLast24Price); ;
+                }
+            }
+
             public string MiddleLast24PriceIcon
             {
                 get
@@ -7370,40 +7400,41 @@ namespace BitDesk.ViewModels
                     }
                 }
             }
-            public Color MiddleLast24PriceIconColor
-            {
-                get
-                {
-                    if (_ltp > MiddleLast24Price)
-                    {
-                        return PriceUpColor;//Colors.Aqua;
-                    }
-                    else if (_ltp < MiddleLast24Price)
-                    {
-                        return PriceDownColor;//Colors.Pink;
-                    }
-                    else
-                    {
-                        return Colors.Gainsboro;
-                    }
-                }
-            }
-            public string MiddleLast24PriceString
-            {
-                get
-                {
-                    return String.Format(_ltpFormstString, MiddleLast24Price); ;
-                }
-            }
 
+            private bool _middleLast24PriceUpFlag;
+            public bool MiddleLast24PriceUpFlag
+            {
+                get
+                {
+                    return _middleLast24PriceUpFlag;
+                }
+                set
+                {
+                    if (_middleLast24PriceUpFlag == value)
+                        return;
+
+                    _middleLast24PriceUpFlag = value;
+                    this.NotifyPropertyChanged("MiddleLast24PriceUpFlag");
+                    this.NotifyPropertyChanged("MiddleLast24PriceIcon");
+                }
+            }
+            
             // 起動後の中央値
             public decimal MiddleInitPrice
             {
                 get
                 {
-                    return ((_lowestPrice + _highestPrice) / 2L);
+                    return ((_lowestPrice + _highestPrice) / 2);
                 }
             }
+            public string MiddleInitPriceString
+            {
+                get
+                {
+                    return String.Format(_ltpFormstString, MiddleInitPrice); ;
+                }
+            }
+
             public string MiddleInitPriceIcon
             {
                 get
@@ -7422,29 +7453,22 @@ namespace BitDesk.ViewModels
                     }
                 }
             }
-            public Color MiddleInitPriceIconColor
+
+            private bool _middleInitPriceUpFlag;
+            public bool MiddleInitPriceUpFlag
             {
                 get
                 {
-                    if (_ltp > MiddleInitPrice)
-                    {
-                        return PriceUpColor;//Colors.Aqua;
-                    }
-                    else if (_ltp < MiddleInitPrice)
-                    {
-                        return PriceDownColor;//Colors.Pink;
-                    }
-                    else
-                    {
-                        return Colors.Gainsboro;
-                    }
+                    return _middleInitPriceUpFlag;
                 }
-            }
-            public string MiddleInitPriceString
-            {
-                get
+                set
                 {
-                    return String.Format(_ltpFormstString, MiddleInitPrice); ;
+                    if (_middleInitPriceUpFlag == value)
+                        return;
+
+                    _middleInitPriceUpFlag = value;
+                    this.NotifyPropertyChanged("MiddleInitPriceUpFlag");
+                    this.NotifyPropertyChanged("MiddleInitPriceIcon");
                 }
             }
 
@@ -7461,12 +7485,8 @@ namespace BitDesk.ViewModels
                     _highestIn24Price = value;
                     this.NotifyPropertyChanged("HighestIn24Price");
                     this.NotifyPropertyChanged("High24String");
-                    //this.NotifyPropertyChanged("ChartMaxValue");
-
 
                     this.NotifyPropertyChanged("MiddleLast24Price");
-                    this.NotifyPropertyChanged("MiddleLast24PriceIcon");
-                    this.NotifyPropertyChanged("MiddleLast24PriceIconColor");
                     this.NotifyPropertyChanged("MiddleLast24PriceString");
 
                     //if (MinMode) return;
@@ -7495,11 +7515,8 @@ namespace BitDesk.ViewModels
                     _lowestIn24Price = value;
                     this.NotifyPropertyChanged("LowestIn24Price");
                     this.NotifyPropertyChanged("Low24String");
-                    //this.NotifyPropertyChanged("ChartMinValue");
 
                     this.NotifyPropertyChanged("MiddleLast24Price");
-                    this.NotifyPropertyChanged("MiddleLast24PriceIcon");
-                    this.NotifyPropertyChanged("MiddleLast24PriceIconColor");
                     this.NotifyPropertyChanged("MiddleLast24PriceString");
 
                     //if (MinMode) return;
@@ -7531,7 +7548,6 @@ namespace BitDesk.ViewModels
                     this.NotifyPropertyChanged("MiddleInitPrice");
                     this.NotifyPropertyChanged("MiddleInitPriceString");
                     this.NotifyPropertyChanged("MiddleInitPriceIcon");
-                    this.NotifyPropertyChanged("MiddleInitPriceIconColor");
 
                     //if (MinMode) return;
                     //(ChartSeries[1].Values[0] as ObservableValue).Value = (double)_highestPrice;
@@ -7562,7 +7578,6 @@ namespace BitDesk.ViewModels
                     this.NotifyPropertyChanged("MiddleInitPrice");
                     this.NotifyPropertyChanged("MiddleInitPriceString");
                     this.NotifyPropertyChanged("MiddleInitPriceIcon");
-                    this.NotifyPropertyChanged("MiddleInitPriceIconColor");
 
                     //if (MinMode) return;
                     // (ChartSeries[2].Values[0] as ObservableValue).Value = (double)_lowestPrice;
@@ -8005,7 +8020,6 @@ namespace BitDesk.ViewModels
 
         #endregion
 
-
         public MainViewModel()
         {
 
@@ -8094,9 +8108,9 @@ namespace BitDesk.ViewModels
                 param => AutoTradeCancelListviewCommand_Execute(param),
                 param => AutoTradeCancelListviewCommand_CanExecute());
 
-            AutoTradeDeleteErrorItemListviewCommand = new GenericRelayCommand<object>(
-                param => AutoTradeDeleteErrorItemListviewCommand_Execute(param),
-                param => AutoTradeDeleteErrorItemListviewCommand_CanExecute());
+            AutoTradeDeleteItemListviewCommand = new GenericRelayCommand<object>(
+                param => AutoTradeDeleteItemListviewCommand_Execute(param),
+                param => AutoTradeDeleteItemListviewCommand_CanExecute());
 
             AutoTradeResetErrorListviewCommand = new GenericRelayCommand<object>(
                 param => AutoTradeResetErrorListviewCommand_Execute(param),
@@ -8155,15 +8169,15 @@ namespace BitDesk.ViewModels
                 caX.MaxValue = 60;
                 caX.MinValue = 0;
                 caX.Labels = new List<string>();
-                //caX.Separator.StrokeThickness = 0.1;
-                //caX.Separator.StrokeDashArray = new DoubleCollection { 4 };
-                caX.Separator.IsEnabled = false;
+                caX.Separator.StrokeThickness = 0.1;
+                caX.Separator.StrokeDashArray = new DoubleCollection { 4 };
+                caX.Separator.IsEnabled = true;
+                Style styleXSec = Application.Current.FindResource("ChartSeparatorStyle") as Style;
+                caX.Separator.Style = styleXSec;
                 caX.IsMerged = false;
-
                 //caX.Foreground = new SolidColorBrush(_chartStrokeColor);
                 Style styleX = Application.Current.FindResource("ChartAxisStyle") as Style;
                 caX.Style = styleX;
-
                 caX.DisableAnimations = true;
 
                 //ChartAxisX.Add(caX);
@@ -8179,15 +8193,12 @@ namespace BitDesk.ViewModels
                 caY.Separator.StrokeThickness = 0.1;
                 caY.Separator.StrokeDashArray = new DoubleCollection { 4 };
                 caY.IsMerged = false;
-
                 //caY.Separator.Stroke = new SolidColorBrush(_chartStrokeColor);//System.Windows.Media.Brushes.WhiteSmoke;
                 Style styleYSec = Application.Current.FindResource("ChartSeparatorStyle") as Style;
                 caY.Separator.Style = styleYSec;
-
                 //caY.Foreground = new SolidColorBrush(_chartStrokeColor);
                 Style styleY = Application.Current.FindResource("ChartAxisStyle") as Style;
                 caY.Style = styleY;
-
                 caY.DisableAnimations = true;
 
                 //ChartAxisY.Add(caY);
@@ -8206,7 +8217,6 @@ namespace BitDesk.ViewModels
                 vaY.Separator.IsEnabled = false;
                 vaY.IsMerged = true;
                 vaY.DisableAnimations = true;
-
                 //ChartAxisY.Add(vaY);
                 chartAxisY.Add(vaY);
 
@@ -8311,8 +8321,10 @@ namespace BitDesk.ViewModels
 
             #endregion
 
+            #region == タイマーのイニシャライズと起動 ==
+
             // Tickerのタイマー起動
-            dispatcherTimerTickAllPairs.Tick += new EventHandler(TickerTimerAllPairs);
+            dispatcherTimerTickAllPairs.Tick += new EventHandler(TickerTimer);
             dispatcherTimerTickAllPairs.Interval = new TimeSpan(0, 0, 1);
             dispatcherTimerTickAllPairs.Start();
             
@@ -8325,13 +8337,13 @@ namespace BitDesk.ViewModels
             Task.Run(() => GetRss());
 
             // RSSのタイマー起動
-            System.Windows.Threading.DispatcherTimer dispatcherTimerRss = new System.Windows.Threading.DispatcherTimer();
             dispatcherTimerRss.Tick += new EventHandler(RssTimer);
             dispatcherTimerRss.Interval = new TimeSpan(0, 15, 0);
             dispatcherTimerRss.Start();
 
+            #endregion
 
-            // TODO 初期値
+            // 初期値
             ActivePairIndex = 0;
             CurrentPair = Pairs.btc_jpy;
             ActivePair = PairBtcJpy;
@@ -8354,18 +8366,13 @@ namespace BitDesk.ViewModels
 
             ShowAllCharts = false;
             ShowMainContents = true;
-            // -------------
 
-
-
-            // ループ再生開始　
-            StartLoop();
         }
 
         #region == イベント・タイマー系 ==
 
         // 現在価格取得 Tickerタイマー
-        private async void TickerTimerAllPairs(object source, EventArgs e)
+        private async void TickerTimer(object source, EventArgs e)
         {
             try
             {
@@ -8402,7 +8409,7 @@ namespace BitDesk.ViewModels
                                 {
                                     //ActivePair.LtpColor = Colors.Gainsboro;
                                 }
-                              
+
                             }
 
                             if (pair == Pairs.btc_jpy)
@@ -8426,7 +8433,6 @@ namespace BitDesk.ViewModels
                                 }
                                 if (tick.LTP < PairBtcJpy.LowestPrice)
                                 {
-                                    //SystemSounds.Beep.Play();
                                     PairBtcJpy.LowestPrice = tick.LTP;
                                 }
 
@@ -8437,7 +8443,6 @@ namespace BitDesk.ViewModels
                                 }
                                 if (tick.LTP > PairBtcJpy.HighestPrice)
                                 {
-                                    //SystemSounds.Asterisk.Play();
                                     PairBtcJpy.HighestPrice = tick.LTP;
                                 }
 
@@ -8450,14 +8455,12 @@ namespace BitDesk.ViewModels
                                 {
                                     if (PairBtcJpy.TickHistories[0].Price > aym.Price)
                                     {
-                                        //aym.TickHistoryPriceColor = _priceUpColor;
                                         aym.TickHistoryPriceUp = true;
                                         PairBtcJpy.TickHistories.Insert(0, aym);
 
                                     }
                                     else if (PairBtcJpy.TickHistories[0].Price < aym.Price)
                                     {
-                                        //aym.TickHistoryPriceColor = _priceDownColor;
                                         aym.TickHistoryPriceUp = false;
                                         PairBtcJpy.TickHistories.Insert(0, aym);
                                     }
@@ -9034,14 +9037,6 @@ namespace BitDesk.ViewModels
                                 // 起動時価格セット
                                 if (PairEthBtc.BasePrice == 0) PairEthBtc.BasePrice = tick.LTP;
 
-                                /*
-                                // ビットコイン時価評価額の計算
-                                if (AssetBTCAmount != 0)
-                                {
-                                    AssetBTCEstimateAmount = _ltp * AssetBTCAmount;
-                                }
-                                */
-
                                 // 最安値登録
                                 if (PairEthBtc.LowestPrice == 0)
                                 {
@@ -9343,14 +9338,6 @@ namespace BitDesk.ViewModels
 
                                 // 起動時価格セット
                                 if (PairMonaJpy.BasePrice == 0) PairMonaJpy.BasePrice = tick.LTP;
-
-                                /*
-                                // ビットコイン時価評価額の計算
-                                if (AssetBTCAmount != 0)
-                                {
-                                    AssetBTCEstimateAmount = _ltp * AssetBTCAmount;
-                                }
-                                */
 
                                 // 最安値登録
                                 if (PairMonaJpy.LowestPrice == 0)
@@ -9964,14 +9951,6 @@ namespace BitDesk.ViewModels
                                 // 起動時価格セット
                                 if (PairBchJpy.BasePrice == 0) PairBchJpy.BasePrice = tick.LTP;
 
-                                /*
-                                // ビットコイン時価評価額の計算
-                                if (AssetBTCAmount != 0)
-                                {
-                                    AssetBTCEstimateAmount = _ltp * AssetBTCAmount;
-                                }
-                                */
-
                                 // 最安値登録
                                 if (PairBchJpy.LowestPrice == 0)
                                 {
@@ -10320,7 +10299,7 @@ namespace BitDesk.ViewModels
             }
         }
 
-        // チャート表示 タイマー
+        // チャートデータ更新 タイマー
         private void ChartTimer(object source, EventArgs e)
         {
             // 省エネモードならスルー。
@@ -10386,7 +10365,7 @@ namespace BitDesk.ViewModels
         {
             // データ保存フォルダの取得
             var appDataFolder = System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            _appDataFolder = appDataFolder + System.IO.Path.DirectorySeparatorChar + _appDeveloper + System.IO.Path.DirectorySeparatorChar + _appName;
+            var _appDataFolder = appDataFolder + System.IO.Path.DirectorySeparatorChar + _appDeveloper + System.IO.Path.DirectorySeparatorChar + _appName;
             // 存在していなかったら作成
             System.IO.Directory.CreateDirectory(_appDataFolder);
 
@@ -11187,7 +11166,6 @@ namespace BitDesk.ViewModels
             // チャート更新のタイマー起動
             dispatcherChartTimer.Start();
 
-
             #region == 特殊注文の保存データのロード ==
 
             LoadIfdocos(PairBtcJpy, _appDataFolder, PairBtcJpy.ThisPair.ToString());
@@ -11199,26 +11177,38 @@ namespace BitDesk.ViewModels
 
             #endregion
 
-            // TODO
+            // TODO test
             LoadAutoTrades(PairBtcJpy, _appDataFolder, PairBtcJpy.ThisPair.ToString());
             if (PairBtcJpy.AutoTrades.Count > 0)
             {
                 StartAutoTradeCommand_Execute();
-                //PairBtcJpy.AutoTradeStart = true;
-                //UpdateAutoTrade(PairBtcJpy);
             }
 
+            // サスペンド検知イベント
+            SystemEvents.PowerModeChanged += SystemEvents_PowerModeChanged;
+
+
+            // ループ再生開始　
+            StartLoop();
         }
 
         // 終了時の処理
-        public void OnWindowClosing(object sender, CancelEventArgs e)
+        public async void OnWindowClosing(object sender, CancelEventArgs e)
         {
             // TODO
-            // 注文中ならキャンセル。
+            // 自動取引、特殊注文で、注文中あるならキャンセルしてダイアログを表示。
+            if (PairBtcJpy.AutoTradeStart)
+            {
+                await StopAutoTrade(PairBtcJpy);
+
+                //e.Cancel = true;
+                //return;
+            }
 
             // データ保存フォルダの取得
-            //var AppDataFolder = System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            //AppDataFolder = AppDataFolder + System.IO.Path.DirectorySeparatorChar + _appDeveloper + System.IO.Path.DirectorySeparatorChar + _appName;
+            var AppDataFolder = System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            var _appDataFolder = AppDataFolder + System.IO.Path.DirectorySeparatorChar + _appDeveloper + System.IO.Path.DirectorySeparatorChar + _appName;
+
             // 存在していなかったら作成
             System.IO.Directory.CreateDirectory(_appDataFolder);
 
@@ -11837,298 +11827,34 @@ namespace BitDesk.ViewModels
 
             #endregion
 
-            // TODO
+            // TODO 自動取引を停止。> Not working.
+            //StopAutoTradeCommand_Execute(); 
+
+            // 売りを保存
             SaveAutoTrades(PairBtcJpy, _appDataFolder, PairBtcJpy.ThisPair.ToString());
 
         }
 
-        // 特殊注文のデータ保存メソッド
-        private void SaveIfdocos(Pair p, string appDataFolder, string fileName)
+        // サスペンド検知
+        private async void SystemEvents_PowerModeChanged(object sender, PowerModeChangedEventArgs e)
         {
-            //BtcJpy
-            var IFDOCOs_FilePath = appDataFolder + System.IO.Path.DirectorySeparatorChar + fileName + "_IFDOCOs.csv";
-
-            if (p.Ifdocos.Count > 0)
+            switch (e.Mode)
             {
-                var csv = new StringBuilder();
+                case PowerModes.Suspend:
+                    // スリープ直前
 
-                foreach (var ifdoco in p.Ifdocos)
-                {
-                    bool test = false;
+                    // 自動取引を止めて買いをキャンセルする。
+                    // TODO
+                    await StopAutoTrade(PairBtcJpy);
 
-                    // 未約定のみ保存する
-                    if (ifdoco.Kind == IfdocoKinds.ifd)
-                    {
-                        if (ifdoco.IfdIsDone == false)
-                        {
-                            test = true;
-                        }
-                    }
-                    else if (ifdoco.Kind == IfdocoKinds.oco)
-                    {
-                        if (ifdoco.OcoIsDone == false)
-                        {
-                            test = true;
-                        }
-                    }
-                    else if (ifdoco.Kind == IfdocoKinds.ifdoco)
-                    {
-                        if (ifdoco.IfdocoIsDone == false)
-                        {
-                            test = true;
-                        }
-                    }
-
-                    if (test)
-                    {
-                        var newLine = string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20},{21},{22}", ifdoco.Kind.ToString(), ifdoco.IfdoneOrderID.ToString(), ifdoco.IfdDoOrderID.ToString(), ifdoco.IfdDoSide, ifdoco.IfdDoType.ToString(), ifdoco.IfdDoStartAmount.ToString(), ifdoco.IfdDoPrice.ToString(), ifdoco.OcoOneOrderID.ToString(), ifdoco.OcoOneSide, ifdoco.OcoOneType.ToString(), ifdoco.OcoOneStartAmount, ifdoco.OcoOnePrice, ifdoco.OcoOtherOrderID.ToString(), ifdoco.OcoOtherSide, ifdoco.OcoOtherType.ToString(), ifdoco.OcoOtherStartAmount.ToString(), ifdoco.OcoOtherPrice.ToString(), ifdoco.IfdDoTriggerPrice.ToString(), ifdoco.OcoOneTriggerPrice.ToString(), ifdoco.OcoOtherTriggerPrice.ToString(), ifdoco.IfdDoTriggerUpDown.ToString(), ifdoco.OcoOneTriggerUpDown.ToString(), ifdoco.OcoOtherTriggerUpDown.ToString());
-                        csv.AppendLine(newLine);
-                    }
-
-                }
-
-                File.WriteAllText(IFDOCOs_FilePath, csv.ToString());
-
+                    break;
+                case PowerModes.Resume:
+                    // 復帰直後
+                    break;
+                case PowerModes.StatusChange:
+                    // バッテリーや電源に関する通知があった
+                    break;
             }
-            else
-            {
-                // リストが空なので、ファイルも削除。
-                if (File.Exists(IFDOCOs_FilePath))
-                {
-                    File.Delete(IFDOCOs_FilePath);
-                }
-            }
-        }
-
-        private void SaveAutoTrades(Pair p, string appDataFolder, string fileName)
-        {
-            //BtcJpy
-            var AutoTrades_FilePath = appDataFolder + System.IO.Path.DirectorySeparatorChar + fileName + "_AutoTrades.csv";
-
-            if (p.AutoTrades.Count > 0)
-            {
-                var csv = new StringBuilder();
-
-                foreach (var at in p.AutoTrades)
-                {
-
-                    // 未約定のみ保存する
-                    if (at.IsDone == false)
-                    {
-                        if ((at.SellIsDone == false) && (at.SellOrderId != 0))
-                        {
-                            // side, 注文数、価格、約定価格、ステータス、想定損益
-                            //var newLine = string.Format("{0},{1}", at.SellOrderId.ToString());
-                            var newLine = string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12}", 
-                                at.BuyOrderId.ToString(), at.BuySide, at.BuyAmount.ToString(), at.BuyPrice, at.BuyFilledPrice.ToString(), at.BuyStatus,
-                                at.SellOrderId.ToString(), at.SellSide, at.SellAmount.ToString(), at.SellPrice, at.SellFilledPrice.ToString(), at.SellStatus,
-                                at.ShushiAmount.ToString()
-                                );
-                            csv.AppendLine(newLine);
-                        }
-                    }
-
-                }
-
-                File.WriteAllText(AutoTrades_FilePath, csv.ToString());
-
-            }
-            else
-            {
-                // リストが空なので、ファイルも削除。
-                if (File.Exists(AutoTrades_FilePath))
-                {
-                    File.Delete(AutoTrades_FilePath);
-                }
-            }
-        }
-
-        // 特殊注文のデータをロードメソッド
-        private void LoadIfdocos(Pair p, string appDataFolder, string fileName)
-        {
-            var IFDOCOs_FilePath = appDataFolder + System.IO.Path.DirectorySeparatorChar + fileName + "_IFDOCOs.csv";
-
-            if (File.Exists(IFDOCOs_FilePath))
-            {
-                try
-                {
-                    var contents = File.ReadAllText(IFDOCOs_FilePath).Split('\n');
-                    var csv = from line in contents select line.Split(',').ToArray();
-
-                    foreach (var row in csv)
-                    {
-                        if (string.IsNullOrEmpty(row[0]))
-                        {
-                            break;
-                        }
-
-                        Ifdoco asdf = new Ifdoco();
-
-                        if (row[0] == "ifd")
-                        {
-                            asdf.Kind = IfdocoKinds.ifd;
-
-                            asdf.IfdoneOrderID = Int32.Parse(row[1]);
-
-                            asdf.IfdDoOrderID = Int32.Parse(row[2]);
-                            asdf.IfdDoSide = row[3];
-
-                            if (row[4] == "limit")
-                            {
-                                asdf.IfdDoType = IfdocoTypes.limit;
-                            }
-                            else if (row[4] == "market")
-                            {
-                                asdf.IfdDoType = IfdocoTypes.market;
-                            }
-
-                            asdf.IfdDoStartAmount = Decimal.Parse(row[5]);
-                            asdf.IfdDoPrice = Decimal.Parse(row[6]);
-
-                            //System.Diagnostics.Debug.WriteLine("■■■■■ "+ row[0]+"-"+ row[1]+"-"+ row[2]);
-                        }
-                        else if (row[0] == "oco")
-                        {
-                            asdf.Kind = IfdocoKinds.oco;
-
-                            asdf.OcoOneOrderID = Int32.Parse(row[7]);
-                            asdf.OcoOneSide = row[8];
-                            if (row[9] == "limit")
-                            {
-                                asdf.OcoOneType = IfdocoTypes.limit;
-                            }
-                            else if (row[9] == "market")
-                            {
-                                asdf.OcoOneType = IfdocoTypes.market;
-                            }
-
-                            asdf.OcoOneStartAmount = Decimal.Parse(row[10]);
-                            asdf.OcoOnePrice = Decimal.Parse(row[11]);
-
-                            asdf.OcoOtherOrderID = Int32.Parse(row[12]);
-                            asdf.OcoOtherSide = row[13];
-                            if (row[14] == "limit")
-                            {
-                                asdf.OcoOtherType = IfdocoTypes.limit;
-                            }
-                            else if (row[14] == "market")
-                            {
-                                asdf.OcoOtherType = IfdocoTypes.market;
-                            }
-
-                            asdf.OcoOtherStartAmount = Decimal.Parse(row[15]);
-                            asdf.OcoOtherPrice = Decimal.Parse(row[16]);
-
-                        }
-                        else if (row[0] == "ifdoco")
-                        {
-                            asdf.Kind = IfdocoKinds.ifdoco;
-
-                            asdf.IfdoneOrderID = Int32.Parse(row[1]);
-
-                            asdf.OcoOneOrderID = Int32.Parse(row[7]);
-                            asdf.OcoOneSide = row[8];
-                            if (row[9] == "limit")
-                            {
-                                asdf.OcoOneType = IfdocoTypes.limit;
-                            }
-                            else if (row[9] == "market")
-                            {
-                                asdf.OcoOneType = IfdocoTypes.market;
-                            }
-
-                            asdf.OcoOneStartAmount = Decimal.Parse(row[10]);
-                            asdf.OcoOnePrice = Decimal.Parse(row[11]);
-
-                            asdf.OcoOtherOrderID = Int32.Parse(row[12]);
-                            asdf.OcoOtherSide = row[13];
-                            if (row[14] == "limit")
-                            {
-                                asdf.OcoOtherType = IfdocoTypes.limit;
-                            }
-                            else if (row[14] == "market")
-                            {
-                                asdf.OcoOtherType = IfdocoTypes.market;
-                            }
-
-                            asdf.OcoOtherStartAmount = Decimal.Parse(row[15]);
-                            asdf.OcoOtherPrice = Decimal.Parse(row[16]);
-
-                        }
-
-                        asdf.IfdDoTriggerPrice = Decimal.Parse(row[17]);
-                        asdf.OcoOneTriggerPrice = Decimal.Parse(row[18]);
-                        asdf.OcoOtherTriggerPrice = Decimal.Parse(row[19]);
-
-                        asdf.IfdDoTriggerUpDown = int.Parse(row[20]);
-                        asdf.OcoOneTriggerUpDown = int.Parse(row[21]);
-                        asdf.OcoOtherTriggerUpDown = int.Parse(row[22]);
-
-                        // リストへ追加
-                        p.Ifdocos.Add(asdf);
-
-                    }
-                }
-                catch (System.IO.FileNotFoundException) { }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Debug.WriteLine("■■■■■ Error  特殊注文の保存データロード中: " + ex + " while opening : " + IFDOCOs_FilePath);
-                }
-            }
-
-        }
-
-        private void LoadAutoTrades(Pair p, string appDataFolder, string fileName)
-        {
-            var AutoTrades_FilePath = appDataFolder + System.IO.Path.DirectorySeparatorChar + fileName + "_AutoTrades.csv";
-
-            if (File.Exists(AutoTrades_FilePath))
-            {
-                try
-                {
-                    var contents = File.ReadAllText(AutoTrades_FilePath).Split('\n');
-                    var csv = from line in contents select line.Split(',').ToArray();
-
-                    foreach (var row in csv)
-                    {
-                        if (string.IsNullOrEmpty(row[0]))
-                        {
-                            break;
-                        }
-
-                        AutoTrade asdf = new AutoTrade();
-
-                        asdf.BuyOrderId = Int32.Parse(row[0]);
-                        asdf.BuySide = row[1];
-                        asdf.BuyAmount = Decimal.Parse(row[2]);
-                        asdf.BuyPrice = Decimal.Parse(row[3]);
-                        asdf.BuyFilledPrice = Decimal.Parse(row[4]);
-                        asdf.BuyStatus = row[5];
-                        if (asdf.BuyStatus == "FULLY_FILLED")
-                        {
-                            asdf.BuyIsDone = true;
-                        }
-
-                        asdf.SellOrderId = Int32.Parse(row[6]);
-                        asdf.SellSide = row[7];
-                        asdf.SellAmount = Decimal.Parse(row[8]);
-                        asdf.SellPrice = Decimal.Parse(row[9]);
-                        asdf.SellFilledPrice = Decimal.Parse(row[10]);
-                        asdf.SellStatus = row[11];
-
-                        asdf.ProfitAmount = Decimal.Parse(row[12]);
-
-                        p.AutoTrades.Add(asdf);
-
-                    }
-                }
-                catch (System.IO.FileNotFoundException) { }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Debug.WriteLine("■■■■■ Error  特殊注文の保存データロード中: " + ex + " while opening : " + AutoTrades_FilePath);
-                }
-            }
-
         }
 
         // エラーイベント
@@ -12224,9 +11950,10 @@ namespace BitDesk.ViewModels
             }
             else
             {
-                //グルーピング単位が変わったので、一旦クリアする。
                 if (DepthGroupingChanged)
                 {
+                    //グルーピング単位が変わったので、一旦クリアする。
+
                     for (int i = 0; i < listCount; i++)
                     {
                         Depth dd = _depth[i];//new Depth();
@@ -12239,6 +11966,14 @@ namespace BitDesk.ViewModels
                     DepthGroupingChanged = false;
                 }
             }
+
+            // LTP を追加
+            //Depth ddd = new Depth();
+            _depth[half].DepthPrice = ActivePair.Ltp;
+            //_depth[half].DepthBid = 0;
+            //_depth[half].DepthAsk = 0;
+            _depth[half].IsLTP = true;
+            //_depth[half] = ddd;
 
             try
             {
@@ -12309,18 +12044,9 @@ namespace BitDesk.ViewModels
 
                         }
 
-                        _depth[i].IsAskBest = true;
+                        _depth[half-1].IsAskBest = true;
 
-                        i = half;
-
-                        Depth dd = new Depth();
-                        dd.DepthPrice = ActivePair.Ltp;
-                        dd.DepthBid = 0;
-                        dd.DepthAsk = 0;
-                        dd.IsLTP = true;
-                        _depth[i] = dd;
-
-                        i++;
+                        i = half+1;
 
                         // 100円単位でまとめる
                         // まとめた時の価格
@@ -12438,7 +12164,6 @@ namespace BitDesk.ViewModels
 
                 if (trs != null)
                 {
-
                     //Debug.WriteLine(trs.Trans.Count.ToString());
 
                     if (_transactions.Count == 0)
@@ -12503,7 +12228,7 @@ namespace BitDesk.ViewModels
                 }
 
                 // 間隔 1/2
-                await Task.Delay(900);
+                await Task.Delay(1300);
 
                 try
                 {
@@ -12523,7 +12248,7 @@ namespace BitDesk.ViewModels
         // RSSの取得
         private async void GetRss()
         {
-            await Task.Delay(2000);
+            await Task.Delay(1000);
 
             try
             {
@@ -12840,6 +12565,7 @@ namespace BitDesk.ViewModels
                                     ord.Shushi = 0;
                                 }
 
+
                                 // リスト追加
                                 orders.Insert(0, ord);
                             }
@@ -12892,8 +12618,8 @@ namespace BitDesk.ViewModels
                                 {
                                     return false;
                                 }
-                                //Application.Current.Dispatcher.Invoke(() =>
-                                //{
+                                Application.Current.Dispatcher.Invoke(() =>
+                                {
                                 try
                                 {
                                     var found = orders.FirstOrDefault(x => x.OrderID == ord.OrderID);
@@ -12934,10 +12660,6 @@ namespace BitDesk.ViewModels
                                                 orders[i].Shushi = 0;
                                             }
 
-
-                                            //TODO
-                                            //　約定！
-
                                         }
                                     }
                                 }
@@ -12946,7 +12668,7 @@ namespace BitDesk.ViewModels
                                     System.Diagnostics.Debug.WriteLine("■■■■■ Order oup: Exception - " + ex.Message);
 
                                 }
-                                //});
+                                });
                             }
                         }
                     }
@@ -13220,13 +12942,7 @@ namespace BitDesk.ViewModels
                                         {
                                             unfilledOrderIDsList.Add(ifdoco.IfdoneOrderID);
                                         }
-                                        else
-                                        {
-                                        }
-
-                                        // アクティブな注文
-                                        actOrd = actOrd + 1;
-
+                                        
                                     }
 
                                 }
@@ -13278,9 +12994,6 @@ namespace BitDesk.ViewModels
 
                                             }
 
-                                            // アクティブな注文
-                                            actOrd = actOrd + 1;
-
                                         }
 
                                     }
@@ -13291,6 +13004,11 @@ namespace BitDesk.ViewModels
                                 }
 
                             }
+
+                            // アクティブな注文
+                            if (ifdoco.IfdDoIsDone == false)
+                                actOrd = actOrd + 1;
+
                         }
                         // OCO
                         else if (ifdoco.Kind == IfdocoKinds.oco)
@@ -13298,6 +13016,7 @@ namespace BitDesk.ViewModels
 
                             if (ifdoco.OcoIsDone == false)
                             {
+
                                 if (ifdoco.OcoOneIsDone && ifdoco.OcoOtherIsDone)
                                 {
                                     // タイミングと価格によっては両方同時に約定で返ってくる可能性。
@@ -13319,6 +13038,9 @@ namespace BitDesk.ViewModels
                                 else
                                 {
                                     // どちらも未約定
+
+                                    // アクティブな注文
+                                    actOrd = actOrd + 1;
 
                                     // 更新リストに追加して後でアップデートする。
                                     // Add to ToBeUpdated List and Update Order info lator.
@@ -13342,8 +13064,6 @@ namespace BitDesk.ViewModels
                                         needToOrderList.Add(ifdoco);
                                     }
 
-                                    // アクティブな注文
-                                    actOrd = actOrd + 1;
 
                                 }
                             }
@@ -13355,11 +13075,6 @@ namespace BitDesk.ViewModels
 
                             if (ifdoco.IfdocoIsDone == false)
                             {
-
-                                // ifd がまだ
-                                //if (ifdoco.IfdoneIsDone == false)
-                                //{
-
                                 if (ifdoco.IfdoneStatus == "FULLY_FILLED")
                                 {
                                     // 発注済みを更新リストに追加して後でアップデートする。
@@ -13367,8 +13082,6 @@ namespace BitDesk.ViewModels
 
                                     // 済みフラグをセット
                                     ifdoco.IfdoneIsDone = true;
-
-                                    //Debug.WriteLine("■IFDOCO ifdoco : 要発注。");
 
                                     // 要発注 IfdoneDo
                                     needToOrderList.Add(ifdoco);
@@ -13397,11 +13110,6 @@ namespace BitDesk.ViewModels
                                     {
                                         unfilledOrderIDsList.Add(ifdoco.IfdoneOrderID);
                                     }
-                                    else
-                                    {
-                                        // 注文IDが0。　本来リストビューに登録されるべきでない。
-                                        //Debug.WriteLine("■IFDOCO ifd unfilledOrderIDsList: 注文IDが０。" + ifdoco.IfdoneOrderID.ToString());
-                                    }
 
 
                                     // TODO:
@@ -13418,22 +13126,7 @@ namespace BitDesk.ViewModels
                                     ifdoco.IfdoneErrorInfo.ErrorDescription = "asdfasdf sadf asdf asdf";
                                     */
 
-                                    if (string.IsNullOrEmpty(ifdoco.IfdoneStatus) == false)
-                                    {
-                                        // アクティブな注文
-                                        actOrd = actOrd + 1;
-
-                                    }
-
                                 }
-
-                                //}
-                                //else
-                                //{
-
-                                // Ifd done の oco
-
-                                //ifdは済み
 
                                 if (ifdoco.OcoIsDone == false)
                                 {
@@ -13442,11 +13135,9 @@ namespace BitDesk.ViewModels
                                     {
                                         // タイミングと価格によっては両方同時に約定で返ってくる可能性がある。。
 
-
-
                                         // OcoIsDone フラグをセット
                                         ifdoco.OcoIsDone = true;
-
+                                        ifdoco.IfdocoIsDone = true;
                                     }
                                     else if (ifdoco.OcoOneIsDone || ifdoco.OcoOtherIsDone)
                                     {
@@ -13456,18 +13147,13 @@ namespace BitDesk.ViewModels
 
                                         needToOrderList.Add(ifdoco);
 
-
-                                        // OcoIsDone フラグをセット
-                                        //ifdoco.OcoIsDone = true;
-
-
-                                        // アクティブな注文
-                                        actOrd = actOrd + 1;
-
                                     }
                                     else
                                     {
                                         // どちらも未約定か、または未発注
+
+                                        // アクティブな注文
+                                        //actOrd = actOrd + 1;
 
                                         // 未発注
                                         if ((ifdoco.OcoOneOrderID == 0) && (ifdoco.OcoOtherOrderID == 0))
@@ -13481,7 +13167,7 @@ namespace BitDesk.ViewModels
 
 
                                             // アクティブな注文
-                                            actOrd = actOrd + 1;
+                                            //actOrd = actOrd + 1;
 
                                         }
                                         else
@@ -13507,25 +13193,18 @@ namespace BitDesk.ViewModels
                                             }
                                         }
 
-                                        if ((string.IsNullOrEmpty(ifdoco.OcoOtherStatus) == false) || (string.IsNullOrEmpty(ifdoco.OcoOneStatus) == false))
-                                        {
-                                            // アクティブな注文
-                                            actOrd = actOrd + 1;
-
-                                        }
 
                                     }
 
                                 }
                                 else
                                 {
-                                    // IFDOCO 済んでるよ！
-
                                     ifdoco.IfdocoIsDone = true;
                                 }
 
-                                //}
-
+                                // アクティブな注文
+                                if (ifdoco.IfdocoIsDone == false)
+                                    actOrd = actOrd + 1;
                             }
 
                         }
@@ -13782,34 +13461,34 @@ namespace BitDesk.ViewModels
                             // IFD
                             if (ifdoco.IfdoneIsDone)
                             {
-                                System.Diagnostics.Debug.WriteLine("■IFD IfdoneIsDone");
+                                //System.Diagnostics.Debug.WriteLine("■IFD IfdoneIsDone");
 
                                 // 条件が揃ったら、IfdDoを発注
                                 if ((ifdoco.IfdDoIsDone == false) && (ifdoco.IfdDoOrderID == 0) && (ifdoco.IfdoneHasError == false))
                                 {
                                     // トリガー
-                                    System.Diagnostics.Debug.WriteLine("■トリガー:" + ifdoco.IfdDoTriggerPrice.ToString());
+                                    //System.Diagnostics.Debug.WriteLine("■トリガー:" + ifdoco.IfdDoTriggerPrice.ToString());
 
                                     bool trigger = false;
 
                                     if (ifdoco.IfdDoTriggerUpDown == 0)
                                     {
-                                        System.Diagnostics.Debug.WriteLine("■以上");
+                                        //System.Diagnostics.Debug.WriteLine("■以上");
                                         // 以上
                                         if (ltp >= ifdoco.IfdDoTriggerPrice)
                                         {
-                                            System.Diagnostics.Debug.WriteLine("■good");
+                                            System.Diagnostics.Debug.WriteLine("□IfdDoTriggerPrice");
                                             trigger = true;
                                         }
 
                                     }
                                     else if (ifdoco.IfdDoTriggerUpDown == 1)
                                     {
-                                        System.Diagnostics.Debug.WriteLine("■以下");
+                                        //System.Diagnostics.Debug.WriteLine("■以下");
                                         // 以下
                                         if (ltp <= ifdoco.IfdDoTriggerPrice)
                                         {
-                                            System.Diagnostics.Debug.WriteLine("■good");
+                                            System.Diagnostics.Debug.WriteLine("□IfdDoTriggerPrice");
                                             trigger = true;
                                         }
                                     }
@@ -14169,7 +13848,7 @@ namespace BitDesk.ViewModels
 
                                         if (ifdoco.OcoOtherTriggerUpDown == 0)
                                         {
-                                            System.Diagnostics.Debug.WriteLine("■ OcoOtherTriggerPrice以上");
+                                            //System.Diagnostics.Debug.WriteLine("■ OcoOther TriggerPrice以上");
                                             // 以上
                                             if (ltp >= ifdoco.OcoOtherTriggerPrice)
                                             {
@@ -14179,7 +13858,7 @@ namespace BitDesk.ViewModels
                                         }
                                         else if (ifdoco.OcoOtherTriggerUpDown == 1)
                                         {
-                                            System.Diagnostics.Debug.WriteLine("■OcoOtherTriggerPrice以上以下");
+                                            //System.Diagnostics.Debug.WriteLine("■OcoOther TriggerPrice以上以下");
                                             // 以下
                                             if (ltp <= ifdoco.OcoOtherTriggerPrice)
                                             {
@@ -14362,11 +14041,6 @@ namespace BitDesk.ViewModels
                                             }
 
                                         }
-                                        else
-                                        {
-                                            // TODO
-                                            //Debug.WriteLine("□ UpdateIfdocos IFDOCO @OCOが未発注 ELSE OcoOneHasError");
-                                        }
 
                                         // OCO Other 発注
                                         if ((ifdoco.OcoOtherOrderID == 0) && (ifdoco.OcoOtherHasError == false))
@@ -14501,13 +14175,12 @@ namespace BitDesk.ViewModels
                                                         // フラグをセット
                                                         ifdoco.OcoOtherIsDone = true;
                                                         ifdoco.OcoIsDone = true;
-
+                                                        ifdoco.IfdocoIsDone = true;
                                                         // 約定！
 
                                                         //System.Diagnostics.Debug.WriteLine("■■■■■ UpdateIfdocos needToOrderList OCO Other cancel 約定！");
 
                                                     }
-
 
                                                 }
                                                 else
@@ -14573,13 +14246,12 @@ namespace BitDesk.ViewModels
                                                         // フラグをセット
                                                         ifdoco.OcoOneIsDone = true;
                                                         ifdoco.OcoIsDone = true;
-
+                                                        ifdoco.IfdocoIsDone = true;
                                                         // 約定！
 
                                                         //System.Diagnostics.Debug.WriteLine("■■■■■ UpdateIfdocos needToOrderList OCO One cancel 約定！");
 
                                                     }
-
 
                                                 }
                                                 else
@@ -14613,6 +14285,7 @@ namespace BitDesk.ViewModels
                                             }
 
                                         }
+
 
                                     }
 
@@ -14848,6 +14521,16 @@ namespace BitDesk.ViewModels
                     // TODO HasError スキップ
                     if ((pos.BuyHasError == true) || (pos.SellHasError == true))
                     {
+                        if (pos.BuyErrorInfo.ErrorCode == 50010)
+                        {
+                            // "ご指定の注文はキャンセルできません"
+                            // エラーをリセット
+                            pos.BuyHasError = false;
+                            //pos.BuyErrorInfo // クリアしなくても大丈夫かな。
+                            // カウンターをリセット
+                            pos.Counter = 0;
+                        }
+
                         continue;
                     }
 
@@ -15585,6 +15268,94 @@ namespace BitDesk.ViewModels
             }
         }
 
+        // 自動取引を止めて、買いをキャンセルするメソッド
+        private async Task<bool> StopAutoTrade(Pair p)
+        {
+            System.Diagnostics.Debug.WriteLine("Stop Auto Trading.");
+
+            if (AutoTradeApiKeyIsSet == false)
+            {
+                // TODO show message?
+                return true;
+            }
+
+            var pair = p;
+            var ltp = p.Ltp;
+            var autoTrades = p.AutoTrades;
+
+            if (pair.AutoTradeStart == false)
+                return true;
+
+            // 更新ループを止める。
+            pair.AutoTradeStart = false;
+
+            if (autoTrades.Count < 1)
+                return true;
+
+            //await Task.Delay(500);
+
+            // 買い注文をすべてキャンセルする。
+
+            List<int> needCancelIdsList = new List<int>();
+            List<AutoTrade> needDeleteList = new List<AutoTrade>();
+
+            foreach (var position in autoTrades)
+            {
+                // 注文中だったらリスト追加
+                if (position.BuyStatus == "UNFILLED" || position.BuyStatus == "PARTIALLY_FILLED")
+                {
+                    if (position.BuyOrderId > 0)
+                    {
+                        needCancelIdsList.Add(position.BuyOrderId);
+                        needDeleteList.Add(position);
+                    }
+                }
+
+            }
+
+            System.Diagnostics.Debug.WriteLine("Cancelling Buy orders....");
+
+            if (needCancelIdsList.Count > 0)
+            {
+                // CancelOrders
+                Orders ord = await _priApi.CancelOrders(_autoTradeApiKey, _autoTradeSecret, pair.ThisPair.ToString(), needCancelIdsList);
+
+                if (ord != null)
+                {
+                    if (ord.OrderList.Count > 0)
+                    {
+
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            // Just clear the list -> クリアしない。あとで保存するか再開するので。
+                            //autoTrades.Clear();
+
+                            for (int i = 0; i < needDeleteList.Count; i++)
+                            {
+                                autoTrades.Remove(needDeleteList[i]);
+                            }
+
+                        });
+
+                    }
+                }
+
+            }
+
+            
+            // 情報表示のリセット
+            pair.AutoTradeActiveOrders = 0;
+            pair.AutoTradeSellOrders = 0;
+            pair.AutoTradeBuyOrders = 0;
+            pair.AutoTradeErrOrders = 0;
+
+            // タブの「自動取引（On）」を更新
+            this.NotifyPropertyChanged("AutoTradeTitle");
+
+            return true;
+
+        }
+
         #region == 注文関係のメソッド ==
 
         // 手動発注から発注。その他は、（priApi）から直に呼び出すこと！
@@ -15678,14 +15449,13 @@ namespace BitDesk.ViewModels
             try
             {
                 // キャンセル注文発注
-                //OrderResult ord = await _priMakeOrderApi.CancelOrder(pair, orderID);
                 OrderResult ord = await _priApi.CancelOrder(_manualTradeApiKey, _manualTradeSecret, p.ThisPair.ToString(), orderID);
 
                 if (ord != null)
                 {
                     if (ord.IsSuccess)
                     {
-
+                        /*
                         Application.Current.Dispatcher.Invoke(() =>
                         {
                             try
@@ -15709,6 +15479,7 @@ namespace BitDesk.ViewModels
 
                             }
                         });
+                        */
 
                         return ord;
                     }
@@ -15855,7 +15626,7 @@ namespace BitDesk.ViewModels
         // 初回に各種Candlestickをまとめて取得
         private async Task<bool> GetCandlesticks(Pairs pair, CandleTypes ct)
         {
-            ChartLoadingInfo = "チャートデータを取得中....";
+            //ChartLoadingInfo = "チャートデータを取得中....";
             
             // 今日の日付セット。UTCで。
             DateTime dtToday = DateTime.Now.ToUniversalTime();
@@ -16267,7 +16038,7 @@ namespace BitDesk.ViewModels
                     }
                     else if (_chartSpan == ChartSpans.ThreeHour)
                     {
-                        span = 60 * 3;
+                        span = (60 * 3) + 1;
                     }
                     else
                     {
@@ -16324,15 +16095,15 @@ namespace BitDesk.ViewModels
                     // １日の期間か3日か１週間の期間
                     if (_chartSpan == ChartSpans.OneDay)
                     {
-                        span = 24;
+                        span = 24 + 1;
                     }
                     else if (_chartSpan == ChartSpans.ThreeDay)
                     {
-                        span = (24 * 3);
+                        span = (24 * 3) + 1;
                     }
                     else if (_chartSpan == ChartSpans.OneWeek)
                     {
-                        span = 24 * 7;
+                        span = (24 * 7) + 1;
                     }
                     else
                     {
@@ -16381,19 +16152,19 @@ namespace BitDesk.ViewModels
                     // 1ヵ月、2ヵ月、１年、５年の期間
                     if (_chartSpan == ChartSpans.OneMonth)
                     {
-                        span = 30;//.44
+                        span = 30 + 1;//.44
                     }
                     else if (_chartSpan == ChartSpans.TwoMonth)
                     {
-                        span = 30 * 2;
+                        span = (30 * 2) + 1;
                     }
                     else if (_chartSpan == ChartSpans.OneYear)
                     {
-                        span = 365;//.2425
+                        span = 365 + 1;//.2425
                     }
                     else if (_chartSpan == ChartSpans.FiveYear)
                     {
-                        span = 365 * 5;
+                        span = (365 * 5) + 1;
                     }
                     else
                     {
@@ -16801,8 +16572,7 @@ namespace BitDesk.ViewModels
         // タイマーで、最新のロウソク足データを取得して追加する。
         private async void UpdateCandlestick(Pairs pair, CandleTypes ct)
         {
-            ChartLoadingInfo = "チャートデータの更新中....";
-            await Task.Delay(600);
+            //ChartLoadingInfo = "チャートデータの更新中....";
 
             // 今日の日付セット。UTCで。
             DateTime dtToday = DateTime.Now.ToUniversalTime();
@@ -17119,6 +16889,7 @@ namespace BitDesk.ViewModels
 
             ChartLoadingInfo = "";
 
+            await Task.Delay(600);
         }
 
         // チャートの最後に最新ポイントを追加して更新表示する。
@@ -17328,6 +17099,297 @@ namespace BitDesk.ViewModels
             {
                 CurrentTheme = test;
             }
+        }
+
+        // 特殊注文のデータ保存メソッド
+        private void SaveIfdocos(Pair p, string appDataFolder, string fileName)
+        {
+            //BtcJpy
+            var IFDOCOs_FilePath = appDataFolder + System.IO.Path.DirectorySeparatorChar + fileName + "_IFDOCOs.csv";
+
+            if (p.Ifdocos.Count > 0)
+            {
+                var csv = new StringBuilder();
+
+                foreach (var ifdoco in p.Ifdocos)
+                {
+                    bool test = false;
+
+                    // 未約定のみ保存する
+                    if (ifdoco.Kind == IfdocoKinds.ifd)
+                    {
+                        if (ifdoco.IfdIsDone == false)
+                        {
+                            test = true;
+                        }
+                    }
+                    else if (ifdoco.Kind == IfdocoKinds.oco)
+                    {
+                        if (ifdoco.OcoIsDone == false)
+                        {
+                            test = true;
+                        }
+                    }
+                    else if (ifdoco.Kind == IfdocoKinds.ifdoco)
+                    {
+                        if (ifdoco.IfdocoIsDone == false)
+                        {
+                            test = true;
+                        }
+                    }
+
+                    if (test)
+                    {
+                        var newLine = string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20},{21},{22}", ifdoco.Kind.ToString(), ifdoco.IfdoneOrderID.ToString(), ifdoco.IfdDoOrderID.ToString(), ifdoco.IfdDoSide, ifdoco.IfdDoType.ToString(), ifdoco.IfdDoStartAmount.ToString(), ifdoco.IfdDoPrice.ToString(), ifdoco.OcoOneOrderID.ToString(), ifdoco.OcoOneSide, ifdoco.OcoOneType.ToString(), ifdoco.OcoOneStartAmount, ifdoco.OcoOnePrice, ifdoco.OcoOtherOrderID.ToString(), ifdoco.OcoOtherSide, ifdoco.OcoOtherType.ToString(), ifdoco.OcoOtherStartAmount.ToString(), ifdoco.OcoOtherPrice.ToString(), ifdoco.IfdDoTriggerPrice.ToString(), ifdoco.OcoOneTriggerPrice.ToString(), ifdoco.OcoOtherTriggerPrice.ToString(), ifdoco.IfdDoTriggerUpDown.ToString(), ifdoco.OcoOneTriggerUpDown.ToString(), ifdoco.OcoOtherTriggerUpDown.ToString());
+                        csv.AppendLine(newLine);
+                    }
+
+                }
+
+                File.WriteAllText(IFDOCOs_FilePath, csv.ToString());
+
+            }
+            else
+            {
+                // リストが空なので、ファイルも削除。
+                if (File.Exists(IFDOCOs_FilePath))
+                {
+                    File.Delete(IFDOCOs_FilePath);
+                }
+            }
+        }
+
+        // 特殊注文のデータをロードするメソッド
+        private void LoadIfdocos(Pair p, string appDataFolder, string fileName)
+        {
+            var IFDOCOs_FilePath = appDataFolder + System.IO.Path.DirectorySeparatorChar + fileName + "_IFDOCOs.csv";
+
+            if (File.Exists(IFDOCOs_FilePath))
+            {
+                try
+                {
+                    var contents = File.ReadAllText(IFDOCOs_FilePath).Split('\n');
+                    var csv = from line in contents select line.Split(',').ToArray();
+
+                    foreach (var row in csv)
+                    {
+                        if (string.IsNullOrEmpty(row[0]))
+                        {
+                            break;
+                        }
+
+                        Ifdoco asdf = new Ifdoco();
+
+                        if (row[0] == "ifd")
+                        {
+                            asdf.Kind = IfdocoKinds.ifd;
+
+                            asdf.IfdoneOrderID = Int32.Parse(row[1]);
+
+                            asdf.IfdDoOrderID = Int32.Parse(row[2]);
+                            asdf.IfdDoSide = row[3];
+
+                            if (row[4] == "limit")
+                            {
+                                asdf.IfdDoType = IfdocoTypes.limit;
+                            }
+                            else if (row[4] == "market")
+                            {
+                                asdf.IfdDoType = IfdocoTypes.market;
+                            }
+
+                            asdf.IfdDoStartAmount = Decimal.Parse(row[5]);
+                            asdf.IfdDoPrice = Decimal.Parse(row[6]);
+
+                            //System.Diagnostics.Debug.WriteLine("■■■■■ "+ row[0]+"-"+ row[1]+"-"+ row[2]);
+                        }
+                        else if (row[0] == "oco")
+                        {
+                            asdf.Kind = IfdocoKinds.oco;
+
+                            asdf.OcoOneOrderID = Int32.Parse(row[7]);
+                            asdf.OcoOneSide = row[8];
+                            if (row[9] == "limit")
+                            {
+                                asdf.OcoOneType = IfdocoTypes.limit;
+                            }
+                            else if (row[9] == "market")
+                            {
+                                asdf.OcoOneType = IfdocoTypes.market;
+                            }
+
+                            asdf.OcoOneStartAmount = Decimal.Parse(row[10]);
+                            asdf.OcoOnePrice = Decimal.Parse(row[11]);
+
+                            asdf.OcoOtherOrderID = Int32.Parse(row[12]);
+                            asdf.OcoOtherSide = row[13];
+                            if (row[14] == "limit")
+                            {
+                                asdf.OcoOtherType = IfdocoTypes.limit;
+                            }
+                            else if (row[14] == "market")
+                            {
+                                asdf.OcoOtherType = IfdocoTypes.market;
+                            }
+
+                            asdf.OcoOtherStartAmount = Decimal.Parse(row[15]);
+                            asdf.OcoOtherPrice = Decimal.Parse(row[16]);
+
+                        }
+                        else if (row[0] == "ifdoco")
+                        {
+                            asdf.Kind = IfdocoKinds.ifdoco;
+
+                            asdf.IfdoneOrderID = Int32.Parse(row[1]);
+
+                            asdf.OcoOneOrderID = Int32.Parse(row[7]);
+                            asdf.OcoOneSide = row[8];
+                            if (row[9] == "limit")
+                            {
+                                asdf.OcoOneType = IfdocoTypes.limit;
+                            }
+                            else if (row[9] == "market")
+                            {
+                                asdf.OcoOneType = IfdocoTypes.market;
+                            }
+
+                            asdf.OcoOneStartAmount = Decimal.Parse(row[10]);
+                            asdf.OcoOnePrice = Decimal.Parse(row[11]);
+
+                            asdf.OcoOtherOrderID = Int32.Parse(row[12]);
+                            asdf.OcoOtherSide = row[13];
+                            if (row[14] == "limit")
+                            {
+                                asdf.OcoOtherType = IfdocoTypes.limit;
+                            }
+                            else if (row[14] == "market")
+                            {
+                                asdf.OcoOtherType = IfdocoTypes.market;
+                            }
+
+                            asdf.OcoOtherStartAmount = Decimal.Parse(row[15]);
+                            asdf.OcoOtherPrice = Decimal.Parse(row[16]);
+
+                        }
+
+                        asdf.IfdDoTriggerPrice = Decimal.Parse(row[17]);
+                        asdf.OcoOneTriggerPrice = Decimal.Parse(row[18]);
+                        asdf.OcoOtherTriggerPrice = Decimal.Parse(row[19]);
+
+                        asdf.IfdDoTriggerUpDown = int.Parse(row[20]);
+                        asdf.OcoOneTriggerUpDown = int.Parse(row[21]);
+                        asdf.OcoOtherTriggerUpDown = int.Parse(row[22]);
+
+                        // リストへ追加
+                        p.Ifdocos.Add(asdf);
+
+                    }
+                }
+                catch (System.IO.FileNotFoundException) { }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine("■■■■■ Error  特殊注文の保存データロード中: " + ex + " while opening : " + IFDOCOs_FilePath);
+                }
+            }
+
+        }
+
+        // 自動取引のデータ保存メソッド
+        private void SaveAutoTrades(Pair p, string appDataFolder, string fileName)
+        {
+            //BtcJpy
+            var AutoTrades_FilePath = appDataFolder + System.IO.Path.DirectorySeparatorChar + fileName + "_AutoTrades.csv";
+
+            if (p.AutoTrades.Count > 0)
+            {
+                var csv = new StringBuilder();
+
+                foreach (var at in p.AutoTrades)
+                {
+
+                    // 未約定のみ保存する
+                    if (at.IsDone == false)
+                    {
+                        if ((at.SellIsDone == false) && (at.SellOrderId != 0))
+                        {
+                            // side, 注文数、価格、約定価格、ステータス、想定損益
+                            //var newLine = string.Format("{0},{1}", at.SellOrderId.ToString());
+                            var newLine = string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12}",
+                                at.BuyOrderId.ToString(), at.BuySide, at.BuyAmount.ToString(), at.BuyPrice, at.BuyFilledPrice.ToString(), at.BuyStatus,
+                                at.SellOrderId.ToString(), at.SellSide, at.SellAmount.ToString(), at.SellPrice, at.SellFilledPrice.ToString(), at.SellStatus,
+                                at.ShushiAmount.ToString()
+                                );
+                            csv.AppendLine(newLine);
+                        }
+                    }
+
+                }
+
+                File.WriteAllText(AutoTrades_FilePath, csv.ToString());
+
+            }
+            else
+            {
+                // リストが空なので、ファイルも削除。
+                if (File.Exists(AutoTrades_FilePath))
+                {
+                    File.Delete(AutoTrades_FilePath);
+                }
+            }
+        }
+
+        // 自動取引のデータをロードするメソッド
+        private void LoadAutoTrades(Pair p, string appDataFolder, string fileName)
+        {
+            var AutoTrades_FilePath = appDataFolder + System.IO.Path.DirectorySeparatorChar + fileName + "_AutoTrades.csv";
+
+            if (File.Exists(AutoTrades_FilePath))
+            {
+                try
+                {
+                    var contents = File.ReadAllText(AutoTrades_FilePath).Split('\n');
+                    var csv = from line in contents select line.Split(',').ToArray();
+
+                    foreach (var row in csv)
+                    {
+                        if (string.IsNullOrEmpty(row[0]))
+                        {
+                            break;
+                        }
+
+                        AutoTrade asdf = new AutoTrade();
+
+                        asdf.BuyOrderId = Int32.Parse(row[0]);
+                        asdf.BuySide = row[1];
+                        asdf.BuyAmount = Decimal.Parse(row[2]);
+                        asdf.BuyPrice = Decimal.Parse(row[3]);
+                        asdf.BuyFilledPrice = Decimal.Parse(row[4]);
+                        asdf.BuyStatus = row[5];
+                        if (asdf.BuyStatus == "FULLY_FILLED")
+                        {
+                            asdf.BuyIsDone = true;
+                        }
+
+                        asdf.SellOrderId = Int32.Parse(row[6]);
+                        asdf.SellSide = row[7];
+                        asdf.SellAmount = Decimal.Parse(row[8]);
+                        asdf.SellPrice = Decimal.Parse(row[9]);
+                        asdf.SellFilledPrice = Decimal.Parse(row[10]);
+                        asdf.SellStatus = row[11];
+
+                        asdf.ShushiAmount = Decimal.Parse(row[12]);
+
+                        p.AutoTrades.Add(asdf);
+
+                    }
+                }
+                catch (System.IO.FileNotFoundException) { }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine("■■■■■ Error  特殊注文の保存データロード中: " + ex + " while opening : " + AutoTrades_FilePath);
+                }
+            }
+
         }
 
         #endregion
@@ -17951,6 +18013,7 @@ namespace BitDesk.ViewModels
         public async void CancelOrderListviewCommand_Execute(object obj)
         {
             var pair = ActivePair;
+            var orders = pair.ActiveOrders;
 
             if (obj == null) return;
 
@@ -17970,7 +18033,6 @@ namespace BitDesk.ViewModels
             // 選択注文アイテムをループして、キャンセル処理
             foreach (var item in ords.OrderList)
             {
-
                 if (item.IsCancelEnabled == false)
                     continue;
 
@@ -17980,22 +18042,65 @@ namespace BitDesk.ViewModels
 
                 OrderResult result = await CancelOrder(pair, ord.OrderID);
 
-                if (result.HasErrorInfo)
+                Application.Current.Dispatcher.Invoke(() =>
                 {
-                    ord.HasErrorInfo = true;
-                    ord.Err.ErrorTitle = result.Err.ErrorTitle;
-                    ord.Err.ErrorDescription = result.Err.ErrorDescription;
-                    ord.Err.ErrorCode = result.Err.ErrorCode;
+                    if (result != null)
+                    {
+                        if (result.IsSuccess)
+                        {
+                            try
+                            {
+                                // 注文リストの中から、同一IDをキャンセル注文結果と入れ替える
+                                var found = orders.FirstOrDefault(x => x.OrderID == ord.OrderID);
+                                int i = orders.IndexOf(found);
+                                if (i > -1)
+                                {
+                                    orders[i] = result as Order;
+                                }
 
-                }
-                else
-                {
-                    ord.HasErrorInfo = false;
-                    ord.Err.ErrorTitle = "";
-                    ord.Err.ErrorDescription = result.Err.ErrorDescription = "";
-                    ord.Err.ErrorCode = 0;
+                            }
+                            catch (Exception ex)
+                            {
+                                System.Diagnostics.Debug.WriteLine("■■■■■ CancelOrderListviewCommand_Execute: Exception - " + ex.Message);
 
-                }
+                            }
+                        }
+                        else
+                        {
+                            if (result.HasErrorInfo)
+                            {
+                                try
+                                {
+                                    
+                                    var found = orders.FirstOrDefault(x => x.OrderID == ord.OrderID);
+                                    int i = orders.IndexOf(found);
+                                    if (i > -1)
+                                    {
+
+                                        if (result.HasErrorInfo)
+                                        {
+                                            orders[i].HasErrorInfo = true;
+                                            orders[i].Err.ErrorTitle = result.Err.ErrorTitle;
+                                            orders[i].Err.ErrorDescription = result.Err.ErrorDescription;
+                                            orders[i].Err.ErrorCode = result.Err.ErrorCode;
+
+                                        }
+                                    }
+
+                                }
+                                catch (Exception ex)
+                                {
+                                    System.Diagnostics.Debug.WriteLine("■■■■■ CancelOrderListviewCommand_Execute: Exception - " + ex.Message);
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                });
 
             }
 
@@ -18758,7 +18863,7 @@ namespace BitDesk.ViewModels
             if (pair.AutoTradeUpperLimit == 0)
                 // pair.AutoTradeUpperLimit = ((ltp / 1000) * 1000) + 10000M;
                 if (pair.HighestIn24Price != 0)
-                    pair.AutoTradeUpperLimit = pair.HighestIn24Price;
+                    pair.AutoTradeUpperLimit = pair.HighestIn24Price - 2000M;
 
             // 下値制限セット
             if (pair.AutoTradeLowerLimit == 0)
@@ -19000,7 +19105,7 @@ namespace BitDesk.ViewModels
             // 上値制限セット
             if (pair.AutoTradeUpperLimit == 0)
                 // pair.AutoTradeUpperLimit = ((ltp / 1000) * 1000) + 10000M;
-                pair.AutoTradeUpperLimit = pair.HighestIn24Price;
+                pair.AutoTradeUpperLimit = pair.HighestIn24Price - 2000M;
 
             // 下値制限セット
             if (pair.AutoTradeLowerLimit == 0)
@@ -19205,84 +19310,8 @@ namespace BitDesk.ViewModels
         {
             //System.Diagnostics.Debug.WriteLine("Stop Auto Trading.");
 
-            if (AutoTradeApiKeyIsSet == false)
-            {
-                // TODO show message?
-                return;
-            }
-
-            var pair = ActivePair;
-            var ltp = ActivePair.Ltp;
-            var autoTrades = ActivePair.AutoTrades;
-
-            // 更新ループを止める。
-            pair.AutoTradeStart = false;
-
-            await Task.Delay(1000);
-
-            // 買い注文をすべてキャンセルする。
-
-            List<int> needCancelIdsList = new List<int>();
-            List<AutoTrade> needDeleteList = new List<AutoTrade>();
-
-            foreach (var position in autoTrades)
-            {
-                // 注文中だったらリスト追加
-                if (position.BuyStatus == "UNFILLED" || position.BuyStatus == "PARTIALLY_FILLED")
-                {
-                    if (position.BuyOrderId > 0)
-                    {
-                        needCancelIdsList.Add(position.BuyOrderId);
-                        needDeleteList.Add(position);
-                    }
-                }
-
-            }
-
-            //System.Diagnostics.Debug.WriteLine("Cancelling Buy orders....");
-
-            if (needCancelIdsList.Count > 0)
-            {
-                // CancelOrders
-                Orders ord = await _priApi.CancelOrders(_autoTradeApiKey, _autoTradeSecret, pair.ThisPair.ToString(), needCancelIdsList);
-
-                if (ord != null)
-                {
-                    if (ord.OrderList.Count > 0)
-                    {
-
-                        Application.Current.Dispatcher.Invoke(() =>
-                        {
-                            // Just clear the list -> クリアしない。あとで保存するか再開するので。
-                            //autoTrades.Clear();
-
-                            for (int i = 0; i < needDeleteList.Count; i++)
-                            {
-                                autoTrades.Remove(needDeleteList[i]);
-                            }
-
-                        });
-
-                    }
-                }
-
-            }
-
-            // TODO
-            // 保存
-            //SaveAutoTrades(pair, _appDataFolder, pair.ThisPair.ToString());
-
-
-            // 情報表示のリセット
-            pair.AutoTradeActiveOrders = 0;
-            pair.AutoTradeSellOrders = 0;
-            pair.AutoTradeBuyOrders = 0;
-            pair.AutoTradeErrOrders = 0;
-
-
-            // タブの「自動取引（On）」を更新
-            this.NotifyPropertyChanged("AutoTradeTitle");
-
+            await StopAutoTrade(ActivePair);
+            
         }
 
         // 自動取引リストビュー内の：買い注文キャンセルコマンド
@@ -19404,14 +19433,14 @@ namespace BitDesk.ViewModels
         }
 
         // 自動取引リストビュー内の：エラーを削除するコマンド
-        public ICommand AutoTradeDeleteErrorItemListviewCommand { get; }
-        public bool AutoTradeDeleteErrorItemListviewCommand_CanExecute()
+        public ICommand AutoTradeDeleteItemListviewCommand { get; }
+        public bool AutoTradeDeleteItemListviewCommand_CanExecute()
         {
             return true;
         }
-        public void AutoTradeDeleteErrorItemListviewCommand_Execute(object obj)
+        public void AutoTradeDeleteItemListviewCommand_Execute(object obj)
         {
-            //Debug.WriteLine("AutoTradeDeleteErrorItemListviewCommand_Execute");
+            //Debug.WriteLine("AutoTradeDeleteItemListviewCommand_Execute");
 
             if (obj == null) return;
 
@@ -19428,7 +19457,7 @@ namespace BitDesk.ViewModels
 
             foreach (var item in collection)
             {
-                // アイテム追加
+                // 削除リストに追加
                 selectedList.Add(item as AutoTrade);
             }
 
@@ -19436,7 +19465,7 @@ namespace BitDesk.ViewModels
             if (Application.Current == null) { return; }
             Application.Current.Dispatcher.Invoke(() =>
             {
-                // 選択注文アイテムをループして、エラーを削除する
+                // 選択注文アイテムをループして、アイテムを削除する
                 foreach (var item in selectedList)
                 {
                     autoTrades.Remove(item);
@@ -19449,7 +19478,6 @@ namespace BitDesk.ViewModels
         #endregion
 
         #endregion
-
 
     }
 

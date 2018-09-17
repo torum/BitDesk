@@ -5,6 +5,7 @@
              xmlns:vms="clr-namespace:BitDesk.ViewModels"
              xmlns:common="clr-namespace:BitDesk.Common"
              xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf" 
+             xmlns:fw="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              StartupUri="MainWindow.xaml"
              Startup="AppOnStartup">
@@ -14,7 +15,6 @@
             <!-- データコンテキスト -->
             <vms:MainViewModel x:Key="MainViewModel" />
 
-            
             <!-- EnumToBoolConverter ラジオボタンとEnumのバインディング用 -->
             <common:EnumToBoolConverter x:Key="EnumBooleanConverter"/>
 
@@ -67,11 +67,11 @@
                     </Style>
 
                     <Style x:Key="ErrorInfoTextBlockStyle" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource DefaultTextBlockStyle}">
-                        <Setter Property="Foreground" Value="{StaticResource WarningColorBrush}" />
+                        <Setter Property="Foreground" Value="{DynamicResource WarningColorBrush}" />
                     </Style>
 
                     <Style x:Key="DefaultRunStyle" TargetType="{x:Type Run}">
-                        <Setter Property="Foreground" Value="{StaticResource NormalTextColorBrush}" />
+                        <Setter Property="Foreground" Value="{DynamicResource NormalTextColorBrush}" />
                         <Setter Property="FontSize" Value="12" />
                         <Setter Property="FontStyle" Value="Normal" />
                     </Style>
@@ -90,7 +90,7 @@
                     </Style>
 
                     <Style x:Key="DefaultRadioButtonStyle" TargetType="{x:Type RadioButton}">
-                        <Setter Property="Foreground" Value="{StaticResource NormalTextColorBrush}" />
+                        <Setter Property="Foreground" Value="{DynamicResource NormalTextColorBrush}" />
                         <Setter Property="Padding" Value="0" />
                         <Setter Property="Margin" Value="3 0 0 0" />
                         <Setter Property="FontStyle" Value="Normal" />
@@ -156,24 +156,21 @@
                     </Style>
 
                     <DropShadowEffect
-                        x:Key="DropShadowDepth"
-                        BlurRadius="4"
-                        Direction="315"
-                        Opacity="1"
-                        ShadowDepth="0.8"
-                        Color="{DynamicResource ShadowColor}" />
-                    <DropShadowEffect
                         x:Key="DropShadowDepthTabHeader"
                         BlurRadius="2"
                         Direction="300"
                         Opacity="0.6"
-                        ShadowDepth="1.2"
-                        Color="{DynamicResource ShadowColor}" />
+                        ShadowDepth="0.9"
+                        Color="{DynamicResource ShadowTabColor}" />
 
                     <!-- ボード・タイルのスタイル -->
                     <Style x:Key="BoardStyle" TargetType="Border">
                         <Setter Property="Background" Value="{DynamicResource BoardBackgroundColorBrush}"/>
-                        <Setter Property="Effect" Value="{DynamicResource DropShadowDepth}"/>
+                        <Setter Property="Effect">
+                            <Setter.Value>
+                                <DropShadowEffect Color="{DynamicResource ShadowBoardColor}" Opacity="1" ShadowDepth="0.8" BlurRadius="3" Direction="315"/>
+                            </Setter.Value>
+                        </Setter>
                     </Style>
 
                     <!-- チャートのスタイル コードから指定 -->
@@ -225,6 +222,28 @@
                                 <BeginStoryboard Storyboard="{StaticResource BlinkStory2}"/>
                             </EventTrigger>
                         </Style.Triggers>
+                    </Style>
+
+                    <Style x:Key="WindowFocusVisual">
+                        <Setter Property="Control.Template">
+                            <Setter.Value>
+                                <ControlTemplate>
+                                    <Rectangle Margin="0" SnapsToDevicePixels="true" Stroke="Red" StrokeThickness="1" StrokeDashArray="1 2"/>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                    <Style TargetType="Window">
+                        <Setter Property="FocusVisualStyle" Value="{DynamicResource WindowFocusVisual}"/>
+                    </Style>
+                    <Style TargetType="fw:AcrylicWindow">
+                        <Setter Property="FocusVisualStyle" Value="{DynamicResource WindowFocusVisual}"/>
+                    </Style>
+                    <Style TargetType="Grid">
+                        <Setter Property="FocusVisualStyle" Value="{DynamicResource WindowFocusVisual}"/>
+                    </Style>
+                    <Style TargetType="Rectangle">
+                        <Setter Property="FocusVisualStyle" Value="{DynamicResource WindowFocusVisual}"/>
                     </Style>
 
                 </ResourceDictionary>
@@ -372,14 +391,14 @@
 
                     <Style x:Key="SelectionRadioButtonStyle" TargetType="{x:Type RadioButton}">
                         <Setter Property="FocusVisualStyle" Value="{StaticResource RadioButtonFocusVisual}"/>
-                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="Background" Value="{DynamicResource ControlLightColorBrush}"/>
                         <Setter Property="BorderBrush" Value="{StaticResource RadioButton.Static.UncheckedBorder}"/>
                         <Setter Property="Foreground" Value="{StaticResource ControlForegroundColorBrush}"/>
                         <Setter Property="BorderThickness" Value="0"/>
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type RadioButton}">
-                                    <Grid x:Name="templateRoot" Background="Transparent" SnapsToDevicePixels="True" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3 0 0 0">
+                                    <Grid x:Name="templateRoot" Background="{DynamicResource DynamicResource RadioButtonUnCheckedBackgroundColorBrush}" SnapsToDevicePixels="True" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="3 0 0 0">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto"/>
                                             <ColumnDefinition Width="*"/>
@@ -402,7 +421,7 @@
                                             <Border BorderBrush="#49FFFFFF" BorderThickness="0,0,1,1"/>
                                         </Grid>
                                         
-                                        <Border x:Name="radioButtonContentBorder" Grid.Column="1" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Padding="3">
+                                        <Border x:Name="radioButtonContentBorder" Grid.Column="1" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Padding="3">
                                             <ContentPresenter x:Name="contentPresenter" Focusable="False" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
                                         </Border>
                                         
@@ -419,11 +438,11 @@
                                             <Setter Property="Fill" TargetName="optionMark" Value="{StaticResource RadioButton.MouseOver.Glyph}"/>
                                             -->
 
-                                            <Setter Property="Foreground" Value="Gray"/>
+                                            <Setter Property="Foreground" Value="{DynamicResource ControlMouseOverColorBrush}"/>
                                             <Setter Property="TextElement.FontWeight" Value="Bold"/>
-
-                                            <Setter Property="Background" Value="{StaticResource AccentCoolDarkColorBrush}"/>
-
+                                            <!--
+                                            <Setter TargetName="radioButtonUncheckedState" Property="Background" Value="{StaticResource ControlForegroundColorBrush}"/>
+                                            -->
                                         </Trigger>
                                         <Trigger Property="IsEnabled" Value="false">
                                             <!--
@@ -446,31 +465,27 @@
                                             -->
 
                                             <Setter Property="BorderBrush" Value="#212121"/>
-                                            <Setter Property="Foreground" Value="#FFFFFF"/>
+                                            <Setter Property="Foreground" Value="{DynamicResource NormalTextColorBrush}"/>
                                             <Setter Property="TextElement.FontWeight" Value="Bold"/>
-                             
-                                            <Setter Property="Background" TargetName="templateRoot" Value="#232323"/>
+
+                                            <Setter Property="Background" TargetName="templateRoot" Value="{DynamicResource RadioButtonCheckedBackgroundColorBrush}"/>
                                             
                                             <Setter TargetName="radioButtonCheckedState" Property="Visibility" Value="Visible" />
                                             <Setter TargetName="radioButtonUncheckedState" Property="Visibility" Value="Collapsed" />
-                                            
+
+                                        </Trigger>
+                                        <Trigger Property="IsChecked" Value="false">
+                                            <Setter Property="Background" TargetName="templateRoot" Value="{DynamicResource RadioButtonUnCheckedBackgroundColorBrush}"/>
+                                            <Setter TargetName="radioButtonCheckedState" Property="Visibility" Value="Collapsed" />
+                                            <Setter TargetName="radioButtonUncheckedState" Property="Visibility" Value="Visible" />
                                         </Trigger>
                                         <Trigger Property="IsChecked" Value="{x:Null}">
                                             <!--
                                             <Setter Property="Opacity" TargetName="optionMark" Value="0.56"/>
                                             -->
                                             <Setter Property="Background" TargetName="templateRoot" Value="{StaticResource RadioButton.Static.Background}"/>
-
                                             <Setter Property="BorderBrush" Value="{StaticResource RadioButton.Static.UncheckedBorder}"/>
-
                                             <Setter Property="Foreground" Value="#CCC"/>
-                                        </Trigger>
-                                        <Trigger Property="IsChecked" Value="false">
-
-                                            <Setter Property="Background" TargetName="templateRoot" Value="#212121"/>
-                                            
-                                            <Setter TargetName="radioButtonCheckedState" Property="Visibility" Value="Collapsed" />
-                                            <Setter TargetName="radioButtonUncheckedState" Property="Visibility" Value="Visible" />
                                         </Trigger>
                                     </ControlTemplate.Triggers>
                                 </ControlTemplate>
@@ -1519,7 +1534,7 @@
                     </Style>
 
                     <Style x:Key="SubNavTabItemStyle" TargetType="{x:Type TabItem}">
-                        <Setter Property="Foreground" Value="{DynamicResource ControlForegroundColorBrush}" />
+                        <Setter Property="Foreground" Value="{DynamicResource ControlMediumColorBrush}" />
                         <Setter Property="Background" Value="Transparent" />
                         <Setter Property="SnapsToDevicePixels" Value="True"/>
                         <Setter Property="Effect" Value="{x:Null}"/>
@@ -1570,26 +1585,21 @@
                                             <Setter Property="Foreground" Value="{DynamicResource ControlForegroundColorBrush}" />
                                         </MultiTrigger>
 
-                                        <MultiTrigger>
-                                            <MultiTrigger.Conditions>
-                                                <Condition Property="IsSelected" Value="True" />
-                                                <Condition Property="TabStripPlacement" Value="Left" />
-                                            </MultiTrigger.Conditions>
-
-                                        </MultiTrigger>
                                         <Trigger Property="IsEnabled" Value="False">
                                             <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
                                         </Trigger>
 
                                         <Trigger Property="IsSelected" Value="True">
                                             <Setter Property="Panel.ZIndex" Value="255" />
-                                            <Setter TargetName="SubContent" Property="Visibility" Value="Visible" />
-                                            <Setter TargetName="SubContent" Property="Opacity" Value="0.4" />
+                                            
                                             <Setter TargetName="HeaderBorder" Property="Background" Value="{DynamicResource BoardBackground}" />
                                             <Setter TargetName="HeaderBorder" Property="BorderBrush" Value="{DynamicResource AccentWarmLightColorBrush}" />
                                             <Setter TargetName="HeaderBorder" Property="BorderThickness" Value="2 0 0 0" />
 
-                                            <Setter Property="Foreground" Value="{DynamicResource ControlDarkColorBrush}" />
+                                            <Setter TargetName="SubContent" Property="Visibility" Value="Visible" />
+                                            <Setter TargetName="SubContent" Property="Opacity" Value="0.4" />
+
+                                            <Setter Property="Foreground" Value="{DynamicResource NormalTextColorBrush}" />
 
                                             <Setter Property="Effect" Value="{StaticResource DropShadowDepthTabHeader}"></Setter>
                                         </Trigger>

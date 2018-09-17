@@ -24,18 +24,22 @@
     <Color x:Key="BorderDarkColor">#CCCCCC</Color>
 
     <Color x:Key="NormalTextColor">#333631</Color>
-    <Color x:Key="TitleTextColor">#000000</Color>
+    <Color x:Key="TitleTextColor">#111111</Color>
 
     <Color x:Key="NormalTextBoxBackgroundColor">WhiteSmoke</Color>
 
-    <Color x:Key="BoardBackgroundColor">#f3f3f3</Color>
+    <Color x:Key="BoardBackgroundColor">#fcfcfc</Color>
 
-    <Color x:Key="ListviewAlt0Color">#e6e6e6</Color>
-    <Color x:Key="ListviewAlt1Color">#efefef</Color>
+    <Color x:Key="ListviewAlt0Color">#fbfbfb</Color>
+    <Color x:Key="ListviewAlt1Color">#f2f2f2</Color>
 
+    <Color x:Key="RadioButtonCheckedBackgroundColor">#fcfcfc</Color>
+    <Color x:Key="RadioButtonUnCheckedBackgroundColor">#fbfbfb</Color>
+    
     <Color x:Key="ChartVolumeColor">DimGray</Color>
 
-    <Color x:Key="ShadowColor">Silver</Color>
+    <Color x:Key="ShadowTabColor">Gainsboro</Color>
+    <Color x:Key="ShadowBoardColor">Gainsboro</Color>
 
     <!-- クール系のアクセントカラー 明るい -->
     <Color x:Key="AccentCoolLightColor">Green</Color>
@@ -47,15 +51,15 @@
     <!-- 暖系のアクセントカラー 暗め -->
     <Color x:Key="AccentWarmDarkColor">#e0815e</Color>
 
-    <!-- Green Blue系 元Aqua -->
-    <SolidColorBrush x:Key="PriceUpColorBrush" Color="#a0d8ef"/>
-    <!-- Red Orange系 元Pink -->
-    <SolidColorBrush x:Key="PriceDownColorBrush" Color="#e597b2"/>
+    <!-- PriceUp Green Blue系 元Aqua -->
+    <SolidColorBrush x:Key="PriceUpColorBrush" Color="#00a1e9"/>
+    <!-- PriceDown Red Orange系 元Pink -->
+    <SolidColorBrush x:Key="PriceDownColorBrush" Color="#e4007f"/>
     <!-- White系 -->
     <SolidColorBrush x:Key="PriceNeutralColorBrush" Color="Gainsboro"/>
 
     <!-- 警告　Yellow系 -->
-    <SolidColorBrush x:Key="WarningColor" Color="#FFDFD991"/>
+    <SolidColorBrush x:Key="WarningColorBrush" Color="#FFFFBF49"/>
 
     <!-- スクロールバーの色 #66ffffff -->
     <SolidColorBrush x:Key="ScrollBarColorBrush" Color="#DDDDDD" />
@@ -99,5 +103,8 @@
     <SolidColorBrush x:Key="ListviewAlt1ColorBrush" Color="{DynamicResource ListviewAlt1Color}"/>
     
     <SolidColorBrush x:Key="ChartVolumeColorBrush" Color="{DynamicResource ChartVolumeColor}" Opacity="0.1"/>
+
+    <SolidColorBrush x:Key="RadioButtonCheckedBackgroundColorBrush" Color="{DynamicResource RadioButtonCheckedBackgroundColor}"/>
+    <SolidColorBrush x:Key="RadioButtonUnCheckedBackgroundColorBrush" Color="{DynamicResource RadioButtonUnCheckedBackgroundColor}"/>
 
 </ResourceDictionary>
