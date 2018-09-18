@@ -2161,14 +2161,14 @@ namespace BitDesk.ViewModels
         #region == 基本 ==
 
         // テスト用
-        private decimal _initPrice = 81800M;
+        private decimal _initPrice = 81800M;//9000 (0.013btc/702830)
 
         // プライベートモード表示切替（自動取引表示）
         public bool ExperimentalMode
         {
             get
             {
-                return true;
+                return false;
             }
         }
 
@@ -7300,7 +7300,6 @@ namespace BitDesk.ViewModels
 
                     _basePriceUpFlag = value;
                     this.NotifyPropertyChanged("BasePriceUpFlag");
-                    this.NotifyPropertyChanged("BasePriceIcon");
                 }
             }
 
@@ -7362,7 +7361,6 @@ namespace BitDesk.ViewModels
 
                     _averagePriceUpFlag = value;
                     this.NotifyPropertyChanged("AveragePriceUpFlag");
-                    this.NotifyPropertyChanged("AveragePriceIcon");
                 }
             }
 
@@ -7415,7 +7413,6 @@ namespace BitDesk.ViewModels
 
                     _middleLast24PriceUpFlag = value;
                     this.NotifyPropertyChanged("MiddleLast24PriceUpFlag");
-                    this.NotifyPropertyChanged("MiddleLast24PriceIcon");
                 }
             }
             
@@ -7468,7 +7465,6 @@ namespace BitDesk.ViewModels
 
                     _middleInitPriceUpFlag = value;
                     this.NotifyPropertyChanged("MiddleInitPriceUpFlag");
-                    this.NotifyPropertyChanged("MiddleInitPriceIcon");
                 }
             }
 
@@ -12530,6 +12526,7 @@ namespace BitDesk.ViewModels
                                 {
                                     found.ActualPrice = (ord.AveragePrice * ord.StartAmount);
                                 }
+
                                 // 現在値との差額
                                 if ((found.Status == "UNFILLED") || (found.Status == "PARTIALLY_FILLED"))
                                 {
@@ -12554,6 +12551,7 @@ namespace BitDesk.ViewModels
                                 {
                                     ord.ActualPrice = (ord.AveragePrice * ord.StartAmount);
                                 }
+
                                 // 現在値との差額
                                 if ((ord.Status == "UNFILLED") || (ord.Status == "PARTIALLY_FILLED"))
                                 {
@@ -12649,6 +12647,7 @@ namespace BitDesk.ViewModels
                                             {
                                                 orders[i].ActualPrice = (ord.AveragePrice * ord.StartAmount);
                                             }
+
                                             // 現在値との差額
                                             if ((orders[i].Status == "UNFILLED") || (orders[i].Status == "PARTIALLY_FILLED"))
                                             {
@@ -12675,7 +12674,6 @@ namespace BitDesk.ViewModels
 
 
                     APIResultActiveOrders = "";
-                    //NotifyPropertyChanged(nameof(APIResultActiveOrders));
 
                     await Task.Delay(1000);
                     return true;
@@ -14521,15 +14519,20 @@ namespace BitDesk.ViewModels
                     // TODO HasError スキップ
                     if ((pos.BuyHasError == true) || (pos.SellHasError == true))
                     {
-                        if (pos.BuyErrorInfo.ErrorCode == 50010)
+                        if (pos.BuyHasError == true)
                         {
-                            // "ご指定の注文はキャンセルできません"
-                            // エラーをリセット
-                            pos.BuyHasError = false;
-                            //pos.BuyErrorInfo // クリアしなくても大丈夫かな。
-                            // カウンターをリセット
-                            pos.Counter = 0;
+                            if (pos.BuyErrorInfo.ErrorCode == 50010)
+                            {
+                                // "ご指定の注文はキャンセルできません"
+                                // エラーをリセット
+                                pos.BuyHasError = false;
+                                //pos.BuyErrorInfo // クリアしなくても大丈夫かな。
+                                // カウンターをリセット
+                                pos.Counter = 0;
+                            }
+
                         }
+
 
                         continue;
                     }
@@ -15289,59 +15292,57 @@ namespace BitDesk.ViewModels
             // 更新ループを止める。
             pair.AutoTradeStart = false;
 
-            if (autoTrades.Count < 1)
-                return true;
-
-            //await Task.Delay(500);
-
-            // 買い注文をすべてキャンセルする。
-
-            List<int> needCancelIdsList = new List<int>();
-            List<AutoTrade> needDeleteList = new List<AutoTrade>();
-
-            foreach (var position in autoTrades)
+            if (autoTrades.Count > 0)
             {
-                // 注文中だったらリスト追加
-                if (position.BuyStatus == "UNFILLED" || position.BuyStatus == "PARTIALLY_FILLED")
+                // 買い注文をすべてキャンセルする。
+
+                List<int> needCancelIdsList = new List<int>();
+                List<AutoTrade> needDeleteList = new List<AutoTrade>();
+
+                foreach (var position in autoTrades)
                 {
-                    if (position.BuyOrderId > 0)
+                    // 注文中だったらリスト追加
+                    if (position.BuyStatus == "UNFILLED" || position.BuyStatus == "PARTIALLY_FILLED")
                     {
-                        needCancelIdsList.Add(position.BuyOrderId);
-                        needDeleteList.Add(position);
-                    }
-                }
-
-            }
-
-            System.Diagnostics.Debug.WriteLine("Cancelling Buy orders....");
-
-            if (needCancelIdsList.Count > 0)
-            {
-                // CancelOrders
-                Orders ord = await _priApi.CancelOrders(_autoTradeApiKey, _autoTradeSecret, pair.ThisPair.ToString(), needCancelIdsList);
-
-                if (ord != null)
-                {
-                    if (ord.OrderList.Count > 0)
-                    {
-
-                        Application.Current.Dispatcher.Invoke(() =>
+                        if (position.BuyOrderId > 0)
                         {
-                            // Just clear the list -> クリアしない。あとで保存するか再開するので。
-                            //autoTrades.Clear();
-
-                            for (int i = 0; i < needDeleteList.Count; i++)
-                            {
-                                autoTrades.Remove(needDeleteList[i]);
-                            }
-
-                        });
-
+                            needCancelIdsList.Add(position.BuyOrderId);
+                            needDeleteList.Add(position);
+                        }
                     }
+
+                }
+
+                System.Diagnostics.Debug.WriteLine("Cancelling Buy orders....");
+
+                if (needCancelIdsList.Count > 0)
+                {
+                    // CancelOrders
+                    Orders ord = await _priApi.CancelOrders(_autoTradeApiKey, _autoTradeSecret, pair.ThisPair.ToString(), needCancelIdsList);
+
+                    if (ord != null)
+                    {
+                        if (ord.OrderList.Count > 0)
+                        {
+
+                            Application.Current.Dispatcher.Invoke(() =>
+                            {
+                                // Just clear the list -> クリアしない。あとで保存するか再開するので。
+                                //autoTrades.Clear();
+
+                                for (int i = 0; i < needDeleteList.Count; i++)
+                                {
+                                    autoTrades.Remove(needDeleteList[i]);
+                                }
+
+                            });
+
+                        }
+                    }
+
                 }
 
             }
-
             
             // 情報表示のリセット
             pair.AutoTradeActiveOrders = 0;

@@ -56,7 +56,11 @@
                     </Style>
 
                     <Style x:Key="DarkLabelStyle" TargetType="{x:Type Label}" BasedOn="{StaticResource DefaultLabelStyle}">
-                        <Setter Property="Foreground" Value="{DynamicResource ControlForegroundColorBrush}"/>
+                        <Setter Property="Foreground" Value="{DynamicResource ControlDarkColorBrush}"/>
+                    </Style>
+                    <Style x:Key="LightLabelStyle" TargetType="{x:Type Label}" BasedOn="{StaticResource DefaultLabelStyle}">
+                        <Setter Property="Foreground" Value="{DynamicResource ControlLightColorBrush}"/>
+                        <Setter Property="FontWeight" Value="Bold" />
                     </Style>
 
                     <Style x:Key="SectionTitle" TargetType="{x:Type Label}">
@@ -114,7 +118,10 @@
                             </Trigger>
                             -->
                             <Trigger Property="IsEnabled" Value="False">
-                                <Setter Property="Text" Value="" />
+                                <Setter Property="Foreground" Value="{DynamicResource NormalTextBoxBackgroundColorBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="true">
+                                <Setter Property="Text" Value="Black" />
                             </Trigger>
                         </Style.Triggers>
                     </Style>
@@ -538,7 +545,7 @@
                         <Setter Property="Height" Value="32" />
                         <Setter Property="Background" Value="{DynamicResource BoardBackgroundColorBrush}"/>
                         <Setter Property="TextElement.FontWeight" Value="Normal" />
-                        <Setter Property="TextElement.Foreground" Value="LightGray" />
+                        <Setter Property="TextElement.Foreground" Value="{DynamicResource ControlLightColorBrush}" />
                         <Setter Property="HorizontalContentAlignment" Value="Center"/>
                         <Setter Property="VerticalContentAlignment" Value="Center"/>
                         <Setter Property="Template">
@@ -841,7 +848,10 @@
                     <Style x:Key="ListViewItemStyle" TargetType="ListViewItem">
                         <Setter Property="Background" Value="{DynamicResource BoardBackgroundColorBrush}"/>
                         <Setter Property="FocusVisualStyle" Value="{StaticResource ListviewFocusVisual}"/>
+                        <!--
                         <Setter Property="Foreground" Value="{Binding Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}"/>
+                        -->
+                        <Setter Property="Foreground" Value="{DynamicResource ListviewItemForegroundColorBrush}"/>
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type ListViewItem}">
@@ -852,7 +862,6 @@
                                             SnapsToDevicePixels="true">
                                         <GridViewRowPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                                     </Border>
-
                                 </ControlTemplate>
                             </Setter.Value>
                         </Setter>
@@ -868,13 +877,13 @@
                                 <Setter Property="BorderThickness" Value="0" />
                             </Trigger>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Foreground" Value="White" />
+                                <Setter Property="Foreground" Value="{DynamicResource ListviewItemSelectedForegroundColorBrush}" />
                                 <Setter Property="BorderBrush" Value="WhiteSmoke" />
                                 <Setter Property="BorderThickness" Value="0" />
                             </Trigger>
                             <Trigger Property="IsSelected" Value="True">
                                 <Setter Property="Background" Value="{StaticResource AccentCoolDarkColorBrush}" />
-                                <Setter Property="Foreground" Value="White" />
+                                <Setter Property="Foreground" Value="{DynamicResource ListviewItemSelectedForegroundColorBrush}" />
                                 <Setter Property="TextElement.FontWeight" Value="Bold"/>
                                 <Setter Property="BorderBrush" Value="WhiteSmoke" />
                                 <!-- Or Gray -->
@@ -1601,7 +1610,11 @@
 
                                             <Setter Property="Foreground" Value="{DynamicResource NormalTextColorBrush}" />
 
-                                            <Setter Property="Effect" Value="{StaticResource DropShadowDepthTabHeader}"></Setter>
+                                            <Setter Property="Effect">
+                                                <Setter.Value>
+                                                    <DropShadowEffect Color="{DynamicResource ShadowTabColor}" Opacity="0.6" ShadowDepth="0.9" BlurRadius="2" Direction="300"/>
+                                                </Setter.Value>
+                                            </Setter>
                                         </Trigger>
                                     </ControlTemplate.Triggers>
                                     
@@ -2408,7 +2421,7 @@
                                         </Trigger>
                                         <Trigger Property="IsMouseOver" Value="False">
                                             <Setter TargetName="Border" Property="BorderBrush" Value="Transparent" />
-                                            <Setter TargetName="ContentSite" Property="TextBlock.Foreground"  Value="{DynamicResource ControlMediumColorBrush}"/>
+                                            <Setter TargetName="ContentSite" Property="TextBlock.Foreground"  Value="{DynamicResource ControlLightColorBrush}"/>
                                             <Setter TargetName="ContentSite" Property="TextBlock.FontWeight" Value="Normal" />
                                         </Trigger>
                                         <Trigger Property="IsSelected" Value="True">

@@ -905,11 +905,6 @@
                                             </StackPanel>
                                             <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Margin="6 0 24 0" HorizontalAlignment="Right" VerticalAlignment="Bottom">
                                                 <TextBlock Text="{Binding Path=ActivePair.LtpString, Mode=OneWay}" FontFamily="Yu Gothic" TextOptions.TextRenderingMode="Auto" FontWeight="SemiBold" Typography.NumeralAlignment="Tabular" Typography.NumeralStyle="Normal" FontSize="{Binding Path=ActivePair.LtpFontSize, Mode=OneWay}" VerticalAlignment="Bottom" Margin="0 0 0 0" Padding="0">
-<!--
-                                                    <TextBlock.Foreground>
-                                                        <SolidColorBrush Color="{Binding Path=ActivePair.LtpColor, Mode=OneWay}"/>
-                                                    </TextBlock.Foreground>
-                                                    -->
                                                     <TextBlock.Style>
                                                         <Style TargetType="{x:Type TextBlock}">
                                                             <Style.Triggers>
@@ -945,10 +940,10 @@
                                             <Label Grid.Row="3" Grid.Column="0" Padding="0 0 0 3.5" Content="起動後 L" HorizontalContentAlignment="Left" Style="{DynamicResource DefaultLabelStyle}"/>
                                             <Label Grid.Row="4" Grid.Column="0" Padding="0 0 0 0" Content="24時間 L" HorizontalContentAlignment="Left" Style="{DynamicResource DefaultLabelStyle}"/>
 
-                                            <Label Grid.Row="1" Grid.Column="1" Padding="6 0 0 3.5" Content="{Binding Path=ActivePair.High24String, Mode=OneWay}" HorizontalContentAlignment="Left" Foreground="DarkTurquoise"/>
-                                            <Label Grid.Row="2" Grid.Column="1" Padding="6 0 0 3.5" Content="{Binding Path=ActivePair.HighestPriceString, Mode=OneWay}" HorizontalContentAlignment="Left" Foreground="{DynamicResource PriceUpColorBrush}"/>
-                                            <Label Grid.Row="3" Grid.Column="1" Padding="6 0 0 3.5" Content="{Binding Path=ActivePair.LowestPriceString, Mode=OneWay}" HorizontalContentAlignment="Left" Foreground="Thistle"/>
-                                            <Label Grid.Row="4" Grid.Column="1" Padding="6 0 0 0" Content="{Binding Path=ActivePair.Low24String, Mode=OneWay}" HorizontalContentAlignment="Left" Foreground="{DynamicResource PriceDownColorBrush}"/>
+                                            <Label Grid.Row="1" Grid.Column="1" Padding="6 0 0 3.5" Content="{Binding Path=ActivePair.High24String, Mode=OneWay}" HorizontalContentAlignment="Left" Foreground="{DynamicResource Price24HColorBrush}"/>
+                                            <Label Grid.Row="2" Grid.Column="1" Padding="6 0 0 3.5" Content="{Binding Path=ActivePair.HighestPriceString, Mode=OneWay}" HorizontalContentAlignment="Left" Foreground="{DynamicResource PriceInitHColorBrush}"/>
+                                            <Label Grid.Row="3" Grid.Column="1" Padding="6 0 0 3.5" Content="{Binding Path=ActivePair.LowestPriceString, Mode=OneWay}" HorizontalContentAlignment="Left" Foreground="{DynamicResource PriceInitLColorBrush}"/>
+                                            <Label Grid.Row="4" Grid.Column="1" Padding="6 0 0 0" Content="{Binding Path=ActivePair.Low24String, Mode=OneWay}" HorizontalContentAlignment="Left" Foreground="{DynamicResource Price24LColorBrush}"/>
                                         </Grid>
 
                                     </Grid>
@@ -1327,7 +1322,7 @@
                                                                     <Setter Property="Foreground" Value="{DynamicResource PriceDownColorBrush}"/>
                                                                 </DataTrigger>
                                                                 <DataTrigger Binding="{Binding ActivePair.MiddleLast24PriceIcon, Mode=OneWay}" Value="＝">
-                                                                    <Setter Property="Foreground" Value="{DynamicResource ControlMediumColorBrush}"/>
+                                                                    <Setter Property="Foreground" Value="{DynamicResource PriceNeutralColorBrush}"/>
                                                                 </DataTrigger>
                                                             </Style.Triggers>
                                                         </Style>
@@ -1350,7 +1345,7 @@
                                                                     <Setter Property="Foreground" Value="{DynamicResource PriceDownColorBrush}"/>
                                                                 </DataTrigger>
                                                                 <DataTrigger Binding="{Binding ActivePair.MiddleInitPriceIcon, Mode=OneWay}" Value="＝">
-                                                                    <Setter Property="Foreground" Value="{DynamicResource ControlMediumColorBrush}"/>
+                                                                    <Setter Property="Foreground" Value="{DynamicResource PriceNeutralColorBrush}"/>
                                                                 </DataTrigger>
                                                             </Style.Triggers>
                                                         </Style>
@@ -1386,7 +1381,7 @@
                                                                     <Setter Property="Foreground" Value="{DynamicResource PriceDownColorBrush}"/>
                                                                 </DataTrigger>
                                                                 <DataTrigger Binding="{Binding ActivePair.BasePriceIcon, Mode=OneWay}" Value="＝">
-                                                                    <Setter Property="Foreground" Value="{DynamicResource ControlMediumColorBrush}"/>
+                                                                    <Setter Property="Foreground" Value="{DynamicResource PriceNeutralColorBrush}"/>
                                                                 </DataTrigger>
                                                             </Style.Triggers>
                                                         </Style>
@@ -1414,7 +1409,7 @@
                                                                     <Setter Property="Foreground" Value="{DynamicResource PriceDownColorBrush}"/>
                                                                 </DataTrigger>
                                                                 <DataTrigger Binding="{Binding ActivePair.AveragePriceIcon, Mode=OneWay}" Value="＝">
-                                                                    <Setter Property="Foreground" Value="{DynamicResource ControlMediumColorBrush}"/>
+                                                                    <Setter Property="Foreground" Value="{DynamicResource PriceNeutralColorBrush}"/>
                                                                 </DataTrigger>
                                                             </Style.Triggers>
                                                         </Style>
@@ -1839,7 +1834,7 @@
                                                                 <Border Width="320" Height="176" Margin="3 0 0 0">
                                                                     <StackPanel Margin="0 6 0 0">
 
-                                                                        <Label Content="[IFDone 注文]" VerticalAlignment="Bottom" BorderBrush="Gainsboro" BorderThickness="0 0 0 0.5" Padding="0" Margin="3 0 0 3" Style="{DynamicResource DefaultLabelStyle}"/>
+                                                                        <Label Content="[IFDone 注文]" VerticalAlignment="Bottom" BorderBrush="Gainsboro" BorderThickness="0 0 0 0.5" Padding="0" Margin="3 0 0 3" Style="{DynamicResource LightLabelStyle}"/>
 
                                                                         <Grid Margin="3">
                                                                             <Grid.RowDefinitions>
@@ -1890,7 +1885,7 @@
                                                                 <Border Width="320" Height="176" Margin="3 0 0 0">
                                                                     <StackPanel Margin="0 6 0 0">
 
-                                                                        <Label Content="[do 注文]" VerticalAlignment="Bottom" BorderBrush="Gainsboro" BorderThickness="0 0 0 0.5" Padding="0" Margin="3 0 0 3" Style="{DynamicResource DefaultLabelStyle}"/>
+                                                                        <Label Content="[do 注文]" VerticalAlignment="Bottom" BorderBrush="Gainsboro" BorderThickness="0 0 0 0.5" Padding="0" Margin="3 0 0 3" Style="{DynamicResource LightLabelStyle}"/>
 
                                                                         <Grid Margin="3">
                                                                             <Grid.RowDefinitions>
@@ -1953,7 +1948,7 @@
                                                                 <Border Width="142" Height="176" Margin="3 0 0 0" VerticalAlignment="Top">
                                                                     <StackPanel Margin="0 6 0 0">
 
-                                                                        <Label Content="発注" VerticalAlignment="Bottom" BorderBrush="Gainsboro" BorderThickness="0 0 0 0.5" Padding="0" Margin="3 0 0 3" Style="{DynamicResource DefaultLabelStyle}"/>
+                                                                        <Label Content="発注" VerticalAlignment="Bottom" BorderBrush="Gainsboro" BorderThickness="0 0 0 0.5" Padding="0" Margin="3 0 0 3" Style="{DynamicResource LightLabelStyle}"/>
 
                                                                         <StackPanel Orientation="Horizontal" Margin="6 6 6 3" VerticalAlignment="Bottom" HorizontalAlignment="Right">
                                                                             <Button Command="{Binding IfdOrderCommand}" Content="IFD 発注" FontWeight="Bold" Margin="0 0 0 0" Padding="3 0 3 0"/>
@@ -1980,7 +1975,7 @@
                                                                 <Border Width="320" Height="176" Margin="3 0 0 0">
                                                                     <StackPanel Margin="0 6 0 0">
 
-                                                                        <Label Content="[One side 注文]" VerticalAlignment="Bottom" BorderBrush="Gainsboro" BorderThickness="0 0 0 0.5" Padding="0" Margin="3 0 0 3" Style="{DynamicResource DefaultLabelStyle}"/>
+                                                                        <Label Content="[One side 注文]" VerticalAlignment="Bottom" BorderBrush="Gainsboro" BorderThickness="0 0 0 0.5" Padding="0" Margin="3 0 0 3" Style="{DynamicResource LightLabelStyle}"/>
 
                                                                         <Grid Margin="3">
                                                                             <Grid.RowDefinitions>
@@ -2043,7 +2038,7 @@
                                                                 <Border Width="320" Height="176" Margin="3 0 0 0">
                                                                     <StackPanel Margin="0 6 0 0">
 
-                                                                        <Label Content="[the Other 注文]" VerticalAlignment="Bottom" BorderBrush="Gainsboro" BorderThickness="0 0 0 0.5" Padding="0" Margin="3 0 0 3" Style="{DynamicResource DefaultLabelStyle}"/>
+                                                                        <Label Content="[the Other 注文]" VerticalAlignment="Bottom" BorderBrush="Gainsboro" BorderThickness="0 0 0 0.5" Padding="0" Margin="3 0 0 3" Style="{DynamicResource LightLabelStyle}"/>
 
                                                                         <Grid Margin="3">
                                                                             <Grid.RowDefinitions>
@@ -2106,7 +2101,7 @@
                                                                 <Border Width="142" Height="176" Margin="3 0 0 0" VerticalAlignment="Top">
                                                                     <StackPanel Margin="0 6 0 0">
 
-                                                                        <Label Content="発注" VerticalAlignment="Bottom" BorderBrush="Gainsboro" BorderThickness="0 0 0 0.5" Padding="0" Margin="3 0 0 3" Style="{DynamicResource DefaultLabelStyle}"/>
+                                                                        <Label Content="発注" VerticalAlignment="Bottom" BorderBrush="Gainsboro" BorderThickness="0 0 0 0.5" Padding="0" Margin="3 0 0 3" Style="{DynamicResource LightLabelStyle}"/>
 
                                                                         <StackPanel Orientation="Horizontal" Margin="6 6 6 3" VerticalAlignment="Bottom" HorizontalAlignment="Right">
                                                                             <Button Command="{Binding OcoOrderCommand}" Content="OCO 発注" FontWeight="Bold" Margin="0 0 0 0" Padding="3 0 3 0"/>
@@ -2133,7 +2128,7 @@
                                                                 <Border Width="230" Height="176" Margin="3 0 0 0">
                                                                     <StackPanel Margin="0 6 0 0">
 
-                                                                        <Label Content="[IFDone 注文]" VerticalAlignment="Bottom" BorderBrush="Gainsboro" BorderThickness="0 0 0 0.5" Padding="0" Margin="3 0 0 3" Style="{DynamicResource DefaultLabelStyle}"/>
+                                                                        <Label Content="[IFDone 注文]" VerticalAlignment="Bottom" BorderBrush="Gainsboro" BorderThickness="0 0 0 0.5" Padding="0" Margin="3 0 0 3" Style="{DynamicResource LightLabelStyle}"/>
 
                                                                         <Grid Margin="3">
                                                                             <Grid.RowDefinitions>
@@ -2183,7 +2178,7 @@
                                                                 <Border Width="230" Height="176" Margin="3 0 0 0">
                                                                     <StackPanel Margin="0 6 0 0">
 
-                                                                        <Label Content="[One side 注文]" VerticalAlignment="Bottom" BorderBrush="Gainsboro" BorderThickness="0 0 0 0.5" Padding="0" Margin="3 0 0 3" Style="{DynamicResource DefaultLabelStyle}"/>
+                                                                        <Label Content="[One side 注文]" VerticalAlignment="Bottom" BorderBrush="Gainsboro" BorderThickness="0 0 0 0.5" Padding="0" Margin="3 0 0 3" Style="{DynamicResource LightLabelStyle}"/>
 
                                                                         <Grid Margin="3">
                                                                             <Grid.RowDefinitions>
@@ -2245,7 +2240,7 @@
                                                                 <Border Width="230" Height="176" Margin="3 0 0 0">
                                                                     <StackPanel Margin="0 6 0 0">
 
-                                                                        <Label Content="[the Other 注文]" VerticalAlignment="Bottom" BorderBrush="Gainsboro" BorderThickness="0 0 0 0.5" Padding="0" Margin="3 0 0 3" Style="{DynamicResource DefaultLabelStyle}"/>
+                                                                        <Label Content="[the Other 注文]" VerticalAlignment="Bottom" BorderBrush="Gainsboro" BorderThickness="0 0 0 0.5" Padding="0" Margin="3 0 0 3" Style="{DynamicResource LightLabelStyle}"/>
 
                                                                         <Grid Margin="3">
                                                                             <Grid.RowDefinitions>
@@ -2307,7 +2302,7 @@
                                                                 <Border Width="230" Height="176" Margin="3 0 0 0" VerticalAlignment="Top">
                                                                     <StackPanel Margin="0 6 0 0">
 
-                                                                        <Label Content="発注" VerticalAlignment="Bottom" BorderBrush="Gainsboro" BorderThickness="0 0 0 0.5" Padding="0" Margin="3 0 0 3" Style="{DynamicResource DefaultLabelStyle}"/>
+                                                                        <Label Content="発注" VerticalAlignment="Bottom" BorderBrush="Gainsboro" BorderThickness="0 0 0 0.5" Padding="0" Margin="3 0 0 3" Style="{DynamicResource LightLabelStyle}"/>
 
                                                                         <StackPanel Orientation="Horizontal" Margin="6 6 6 3" VerticalAlignment="Bottom" HorizontalAlignment="Right">
                                                                             <Button Command="{Binding IfdocoOrderCommand}" Content="IFDOCO 発注" FontWeight="Bold" Margin="0 0 0 0" Padding="3 0 3 0"/>
@@ -2554,7 +2549,7 @@
                                                 <DataTrigger Binding="{Binding IsLTP}" Value="true">
                                                     <Setter Property="TextBlock.FontWeight" TargetName="DepthPrice" Value="Bold"/>
                                                     <Setter Property="TextBlock.FontSize" TargetName="DepthPrice" Value="14"/>
-                                                    <Setter Property="TextBlock.Foreground" TargetName="DepthPrice" Value="{DynamicResource NormalTextColorBrush}"/>
+                                                    <Setter Property="TextBlock.Foreground" TargetName="DepthPrice" Value="{DynamicResource ControlLightColorBrush}"/>
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding IsAskBest}" Value="true">
                                                     <Setter Property="TextBlock.FontWeight" TargetName="DepthAskBest" Value="Bold"/>
@@ -2675,7 +2670,7 @@
                                         <DataTrigger Binding="{Binding IsLTP}" Value="true">
                                             <Setter Property="TextBlock.FontWeight" TargetName="DepthPrice" Value="Bold"/>
                                             <Setter Property="TextBlock.FontSize" TargetName="DepthPrice" Value="13"/>
-                                            <Setter Property="TextBlock.Foreground" TargetName="DepthPrice" Value="{DynamicResource NormalTextColorBrush}"/>
+                                            <Setter Property="TextBlock.Foreground" TargetName="DepthPrice" Value="{DynamicResource ControlLightColorBrush}"/>
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding IsAskBest}" Value="true">
                                             <Setter Property="TextBlock.FontWeight" TargetName="DepthAskBest" Value="Bold"/>
@@ -2781,10 +2776,17 @@
                                             <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
 
-                                        <TextBlock Grid.Row="0" Grid.Column="0" x:Name="NewsSubject" Text="{Binding Path=Subject, Mode=OneWay}" TextWrapping="Wrap" Margin="0" Padding="3 0 3 0" Foreground="LightGray" />
-                                        <TextBlock Grid.Row="1" Grid.Column="0" x:Name="NewsDomain" Text="{Binding Path=Domain, Mode=OneWay}" TextWrapping="Wrap" Margin="0" Padding="3 0 3 0" Foreground="DarkGray"  HorizontalAlignment="Right"/>
-                                        <TextBlock Grid.Row="2" Grid.Column="0" x:Name="NewsTimeStamp" Text="{Binding Path=TimeStamp, Mode=OneWay, StringFormat=dd日 HH:mm:ss}" Margin="0" Padding="3 0 3 0" Foreground="DarkGray" HorizontalAlignment="Right"/>
+                                        <TextBlock Grid.Row="0" Grid.Column="0" x:Name="NewsSubject" Text="{Binding Path=Subject, Mode=OneWay}" TextWrapping="Wrap" Margin="0" Padding="3 0 3 0" Foreground="{DynamicResource ControlLightColorBrush}" />
+                                        <TextBlock Grid.Row="1" Grid.Column="0" x:Name="NewsDomain" Text="{Binding Path=Domain, Mode=OneWay}" TextWrapping="Wrap" Margin="0" Padding="3 0 3 0" Foreground="{DynamicResource ControlMediumColorBrush}"  HorizontalAlignment="Right"/>
+                                        <TextBlock Grid.Row="2" Grid.Column="0" x:Name="NewsTimeStamp" Text="{Binding Path=TimeStamp, Mode=OneWay, StringFormat=dd日 HH:mm:ss}" Margin="0" Padding="3 0 3 0" Foreground="{DynamicResource ControlMediumColorBrush}" HorizontalAlignment="Right"/>
                                     </Grid>
+                                    <DataTemplate.Triggers>
+                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" Value="True">
+                                            <Setter TargetName="NewsSubject" Property="TextElement.Foreground" Value="{DynamicResource NormalTextColorBrush}"/>
+                                            <Setter TargetName="NewsDomain" Property="TextElement.Foreground" Value="{DynamicResource ControlMediumColorBrush}"/>
+                                            <Setter TargetName="NewsTimeStamp" Property="TextElement.Foreground" Value="{DynamicResource ControlMediumColorBrush}"/>
+                                        </DataTrigger>
+                                    </DataTemplate.Triggers>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
@@ -2831,10 +2833,17 @@
                                             <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
 
-                                        <TextBlock Grid.Row="0" Grid.Column="0" x:Name="NewsSubject" Text="{Binding Path=Subject, Mode=OneWay}" TextWrapping="Wrap" Margin="0" Padding="3 0 3 0" Foreground="LightGray" />
-                                        <TextBlock Grid.Row="1" Grid.Column="0" x:Name="NewsDomain" Text="{Binding Path=Domain, Mode=OneWay}" TextWrapping="Wrap" Margin="0" Padding="3 0 3 0" Foreground="DarkGray"  HorizontalAlignment="Right"/>
-                                        <TextBlock Grid.Row="2" Grid.Column="0" x:Name="NewsTimeStamp" Text="{Binding Path=TimeStamp, Mode=OneWay, StringFormat=dd日 HH:mm:ss}" Margin="0" Padding="3 0 3 0" Foreground="DarkGray" HorizontalAlignment="Right" />
+                                        <TextBlock Grid.Row="0" Grid.Column="0" x:Name="NewsSubject" Text="{Binding Path=Subject, Mode=OneWay}" TextWrapping="Wrap" Margin="0" Padding="3 0 3 0" Foreground="{DynamicResource ControlLightColorBrush}" />
+                                        <TextBlock Grid.Row="1" Grid.Column="0" x:Name="NewsDomain" Text="{Binding Path=Domain, Mode=OneWay}" TextWrapping="Wrap" Margin="0" Padding="3 0 3 0" Foreground="{DynamicResource ControlMediumColorBrush}"  HorizontalAlignment="Right"/>
+                                        <TextBlock Grid.Row="2" Grid.Column="0" x:Name="NewsTimeStamp" Text="{Binding Path=TimeStamp, Mode=OneWay, StringFormat=dd日 HH:mm:ss}" Margin="0" Padding="3 0 3 0" Foreground="{DynamicResource ControlMediumColorBrush}" HorizontalAlignment="Right"/>
                                     </Grid>
+                                    <DataTemplate.Triggers>
+                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" Value="True">
+                                            <Setter TargetName="NewsSubject" Property="TextElement.Foreground" Value="{DynamicResource NormalTextColorBrush}"/>
+                                            <Setter TargetName="NewsDomain" Property="TextElement.Foreground" Value="{DynamicResource ControlMediumColorBrush}"/>
+                                            <Setter TargetName="NewsTimeStamp" Property="TextElement.Foreground" Value="{DynamicResource ControlMediumColorBrush}"/>
+                                        </DataTrigger>
+                                    </DataTemplate.Triggers>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
@@ -3030,7 +3039,6 @@
                                         <Style TargetType="ListViewItem" BasedOn="{StaticResource ListViewItemStyle}">
                                             <Setter Property="Margin" Value="1 0 0 0"/>
                                             <Setter Property="Padding" Value="0 1 0 1"/>
-                                            <Setter Property="Foreground" Value="WhiteSmoke"/>
                                             <Setter Property="HorizontalContentAlignment" Value="Center"/>
                                             <Setter Property="ContextMenu" Value="{StaticResource ItemContextMenu}" />
                                         </Style>
@@ -3119,6 +3127,11 @@
                                                             <DataTrigger Binding="{Binding OrderIsDone}" Value="true">
                                                                 <Setter TargetName="TBPrice" Property="TextBlock.Foreground" Value="Gray"/>
                                                             </DataTrigger>
+
+                                                            <DataTrigger Binding="{Binding Type}" Value="market">
+                                                                <Setter TargetName="TBPrice" Property="Visibility" Value="Hidden"/>
+                                                            </DataTrigger>
+
                                                         </DataTemplate.Triggers>
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
@@ -3126,10 +3139,14 @@
                                             <GridViewColumn Header="現在値差"  Width="{Binding ElementName=AOhwidth6, Path=ActualWidth}" common:GridViewSort.PropertyName="Shushi">
                                                 <GridViewColumn.CellTemplate>
                                                     <DataTemplate>
-                                                        <TextBlock x:Name="TBShushi" Text="{Binding Shushi, Mode=OneWay, StringFormat=0.#############################}" Padding="3" />
+                                                        <TextBlock x:Name="TBDiff" Text="{Binding Shushi, Mode=OneWay, StringFormat=0.#############################}" Padding="3" />
                                                         <DataTemplate.Triggers>
                                                             <DataTrigger Binding="{Binding OrderIsDone}" Value="true">
-                                                                <Setter TargetName="TBShushi" Property="TextBlock.Foreground" Value="Gray"/>
+                                                                <Setter TargetName="TBDiff" Property="TextBlock.Foreground" Value="Gray"/>
+                                                            </DataTrigger>
+
+                                                            <DataTrigger Binding="{Binding Type}" Value="market">
+                                                                <Setter TargetName="TBDiff" Property="Visibility" Value="Hidden"/>
                                                             </DataTrigger>
                                                         </DataTemplate.Triggers>
                                                     </DataTemplate>
@@ -3408,7 +3425,6 @@
                                         <Style TargetType="ListViewItem" BasedOn="{StaticResource ListViewItemStyle}">
                                             <Setter Property="Margin" Value="0 0 0 0"/>
                                             <Setter Property="Padding" Value="0 1 0 1"/>
-                                            <Setter Property="Foreground" Value="WhiteSmoke"/>
                                             <Setter Property="HorizontalContentAlignment" Value="Center"/>
                                             <Setter Property="VerticalContentAlignment" Value="Top"/>
 
@@ -4408,7 +4424,6 @@
                                         <Style TargetType="ListViewItem" BasedOn="{StaticResource ListViewItemStyle}">
                                             <Setter Property="Margin" Value="1 0 0 0"/>
                                             <Setter Property="Padding" Value="0 1 0 1"/>
-                                            <Setter Property="Foreground" Value="WhiteSmoke"/>
                                             <Setter Property="HorizontalContentAlignment" Value="Center"/>
 
                                             <Setter Property="ContextMenu" Value="{StaticResource ATItemContextMenu}" />
@@ -4857,7 +4872,6 @@
                                         <Style TargetType="ListViewItem" BasedOn="{StaticResource ListViewItemStyle}">
                                             <Setter Property="Margin" Value="1 0 0 0"/>
                                             <Setter Property="Padding" Value="0 1 0 1"/>
-                                            <Setter Property="Foreground" Value="WhiteSmoke"/>
                                             <Setter Property="HorizontalContentAlignment" Value="Center"/>
                                         </Style>
                                     </ListView.ItemContainerStyle>
@@ -5013,7 +5027,6 @@
                                     <Style TargetType="ListViewItem" BasedOn="{StaticResource ListViewItemStyle}">
                                         <Setter Property="Margin" Value="1 0 0 0"/>
                                         <Setter Property="Padding" Value="0 1 0 1"/>
-                                        <Setter Property="Foreground" Value="WhiteSmoke"/>
                                         <Setter Property="HorizontalContentAlignment" Value="Center"/>
                                     </Style>
                                 </ListView.ItemContainerStyle>

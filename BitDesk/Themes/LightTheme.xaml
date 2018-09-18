@@ -9,9 +9,9 @@
     <Color x:Key="WindowBackgroundColor">#CCCCCC</Color>
 
     <Color x:Key="ControlForegroundColor">DimGray</Color>
-    <Color x:Key="ControlLightColor">DarkGray</Color>
+    <Color x:Key="ControlLightColor">DimGray</Color>
     <Color x:Key="ControlMediumColor">Gray</Color>
-    <Color x:Key="ControlDarkColor">DimGray</Color>
+    <Color x:Key="ControlDarkColor">DarkGray</Color>
     
     <Color x:Key="ControlMouseOverColor">Black</Color>
     <Color x:Key="ControlPressedColor">#7d7d7d</Color>
@@ -26,13 +26,16 @@
     <Color x:Key="NormalTextColor">#333631</Color>
     <Color x:Key="TitleTextColor">#111111</Color>
 
-    <Color x:Key="NormalTextBoxBackgroundColor">WhiteSmoke</Color>
+    <Color x:Key="NormalTextBoxBackgroundColor">#fefefe</Color>
 
     <Color x:Key="BoardBackgroundColor">#fcfcfc</Color>
 
     <Color x:Key="ListviewAlt0Color">#fbfbfb</Color>
     <Color x:Key="ListviewAlt1Color">#f2f2f2</Color>
 
+    <Color x:Key="ListviewItemForegroundColor">#212121</Color>
+    <Color x:Key="ListviewItemSelectedForegroundColor">Black</Color>
+    
     <Color x:Key="RadioButtonCheckedBackgroundColor">#fcfcfc</Color>
     <Color x:Key="RadioButtonUnCheckedBackgroundColor">#fbfbfb</Color>
     
@@ -44,19 +47,24 @@
     <!-- クール系のアクセントカラー 明るい -->
     <Color x:Key="AccentCoolLightColor">Green</Color>
     <!-- クール系のアクセントカラー　暗め （リストビューのコラム選択背景） -->
-    <Color x:Key="AccentCoolDarkColor">#2c4f54</Color>
+    <Color x:Key="AccentCoolDarkColor">#e7e7eb</Color>
 
     <!-- 暖系のアクセントカラー  明るい -->
     <Color x:Key="AccentWarmLightColor">Orange</Color>
     <!-- 暖系のアクセントカラー 暗め -->
     <Color x:Key="AccentWarmDarkColor">#e0815e</Color>
-
+    
     <!-- PriceUp Green Blue系 元Aqua -->
     <SolidColorBrush x:Key="PriceUpColorBrush" Color="#00a1e9"/>
     <!-- PriceDown Red Orange系 元Pink -->
     <SolidColorBrush x:Key="PriceDownColorBrush" Color="#e4007f"/>
     <!-- White系 -->
-    <SolidColorBrush x:Key="PriceNeutralColorBrush" Color="Gainsboro"/>
+    <SolidColorBrush x:Key="PriceNeutralColorBrush" Color="#6c6c6c"/>
+
+    <SolidColorBrush x:Key="Price24HColorBrush" Color="DarkTurquoise"/>
+    <SolidColorBrush x:Key="PriceInitHColorBrush" Color="#a0d8ef"/>
+    <SolidColorBrush x:Key="PriceInitLColorBrush" Color="Thistle"/>
+    <SolidColorBrush x:Key="Price24LColorBrush" Color="#e597b2"/>
 
     <!-- 警告　Yellow系 -->
     <SolidColorBrush x:Key="WarningColorBrush" Color="#FFFFBF49"/>
@@ -106,5 +114,9 @@
 
     <SolidColorBrush x:Key="RadioButtonCheckedBackgroundColorBrush" Color="{DynamicResource RadioButtonCheckedBackgroundColor}"/>
     <SolidColorBrush x:Key="RadioButtonUnCheckedBackgroundColorBrush" Color="{DynamicResource RadioButtonUnCheckedBackgroundColor}"/>
+
+    <SolidColorBrush x:Key="ListviewItemForegroundColorBrush" Color="{DynamicResource ListviewItemForegroundColor}"/>
+    <SolidColorBrush x:Key="ListviewItemSelectedForegroundColorBrush" Color="{DynamicResource ListviewItemSelectedForegroundColor}"/>
+
 
 </ResourceDictionary>

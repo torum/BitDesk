@@ -381,8 +381,8 @@ namespace BitDesk.Models.Clients
             }
             set
             {
-                if (_shushi == value) return;
-                _shushi = value;
+                if (_actualPrice == value) return;
+                _actualPrice = value;
                 this.NotifyPropertyChanged("ActualPrice");
             }
         }

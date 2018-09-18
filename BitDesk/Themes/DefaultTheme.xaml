@@ -28,10 +28,14 @@
 
     <Color x:Key="NormalTextBoxBackgroundColor">DarkGray</Color>
 
-    <Color x:Key="BoardBackgroundColor">#1c1c1c</Color><!-- 121212 or 111111 -->
+    <Color x:Key="BoardBackgroundColor">#191919</Color>
+    <!-- 1c1c1c 191919 121212 or 111111 -->
 
     <Color x:Key="ListviewAlt0Color">#212121</Color>
     <Color x:Key="ListviewAlt1Color">#1a1a1a</Color>
+    
+    <Color x:Key="ListviewItemForegroundColor">WhiteSmoke</Color>
+    <Color x:Key="ListviewItemSelectedForegroundColor">White</Color>
 
     <Color x:Key="RadioButtonCheckedBackgroundColor">#232323</Color>
     <Color x:Key="RadioButtonUnCheckedBackgroundColor">#212121</Color>
@@ -56,7 +60,12 @@
     <!-- PriceDown Red Orange系 元Pink -->
     <SolidColorBrush x:Key="PriceDownColorBrush" Color="#e597b2"/>
     <!-- White系 -->
-    <SolidColorBrush x:Key="PriceNeutralColorBrush" Color="Gainsboro"/>
+    <SolidColorBrush x:Key="PriceNeutralColorBrush" Color="DarkGray"/>
+
+    <SolidColorBrush x:Key="Price24HColorBrush" Color="DarkTurquoise"/>
+    <SolidColorBrush x:Key="PriceInitHColorBrush" Color="#a0d8ef"/>
+    <SolidColorBrush x:Key="PriceInitLColorBrush" Color="Thistle"/>
+    <SolidColorBrush x:Key="Price24LColorBrush" Color="#e597b2"/>
 
     <!-- 警告　Yellow系 -->
     <SolidColorBrush x:Key="WarningColorBrush" Color="#FFDFD991"/>
@@ -107,4 +116,8 @@
     <SolidColorBrush x:Key="RadioButtonCheckedBackgroundColorBrush" Color="{DynamicResource RadioButtonCheckedBackgroundColor}"/>
     <SolidColorBrush x:Key="RadioButtonUnCheckedBackgroundColorBrush" Color="{DynamicResource RadioButtonUnCheckedBackgroundColor}"/>
 
+    <SolidColorBrush x:Key="ListviewItemForegroundColorBrush" Color="{DynamicResource ListviewItemForegroundColor}"/>
+    <SolidColorBrush x:Key="ListviewItemSelectedForegroundColorBrush" Color="{DynamicResource ListviewItemSelectedForegroundColor}"/>
+
+    
 </ResourceDictionary>
