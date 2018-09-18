@@ -1,7 +1,7 @@
 # BitDesk
 ## 仮想通貨取引のデスクトップアプリ  
 
-![BitDesk](BitDesk-Sreenshot-Default-Dark.png?raw=true)
+![BitDesk](https://github.com/torum/BitDesk/blob/master/docs/Images/BitDesk-Sreenshot-Default-Dark.png?raw=true)
 
 ![alt text](https://github.com/torum/BitDesk/blob/master/docs/Images/BitDesk1.gif?raw=true)
 
