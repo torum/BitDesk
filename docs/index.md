@@ -24,6 +24,7 @@
 マイクロソフトストアで公開しようとしたら、「App Policies: 10.8.3 Collection of Banking and Financial Information - Apps that collect financial data must be Business account type」という事で、「ファインシャル情報を取得するアプリは法人でないとなりません」とあえなく却下。ビットバンクさん、公式アプリとして採用してくれませんか？^^
 
 [BitDesk Setup](https://github.com/torum/BitDesk/blob/master/downloads/BitDeskSetup.exe?raw=true)
+
 [BitDesk Zip](https://github.com/torum/BitDesk/blob/master/downloads/BitDesk-v0.0.0.2.zip?raw=true)
 
 ＊実行ファイルに署名していないので、インストール時に警告が出てしまいます。
