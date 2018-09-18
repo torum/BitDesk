@@ -5,7 +5,7 @@
 AppName=BitDesk
 AppVersion=0.0.0.2  
 VersionInfoVersion=0.0.0.2
-DefaultDirName={pf}\My Program
+DefaultDirName={pf}\BitDesk
 DefaultGroupName=BitDesk
 UninstallDisplayIcon={app}\BitDesk.exe
 Compression=lzma2
