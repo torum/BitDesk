@@ -3,13 +3,25 @@
 
 ## ビットバンク向け仮想通貨トレーディングアプリ 
 
-![alt text](https://github.com/torum/BitDesk/blob/master/docs/Images/BitDesk-screenshot.png?raw=true)
+![BitDesk](https://github.com/torum/BitDesk/blob/master/docs/Images/BitDesk-Sreenshot-Default-Dark.png?raw=true)
+
+![BitDesk](https://github.com/torum/BitDesk/blob/master/docs/Images/BitDesk-Sreenshot-Default-Light.png?raw=true)
+
+![BitDesk](https://github.com/torum/BitDesk/blob/master/docs/Images/BitDesk-Sreenshot-DefaultLock-Dark.png?raw=true)
+
+![BitDesk](https://github.com/torum/BitDesk/blob/master/docs/Images/BitDesk-Sreenshot-IFDOCO-Dark.png?raw=true)
+
+![BitDesk](https://github.com/torum/BitDesk/blob/master/docs/Images/BitDesk-Sreenshot-MiddleSize-Dark.png?raw=true)
+
+![BitDesk](https://github.com/torum/BitDesk/blob/master/docs/Images/BitDesk-Sreenshot-SmallSize-Dark.png?raw=true)
 
 ![alt text](https://github.com/torum/BitDesk/blob/master/docs/Images/BitDesk1.gif?raw=true)
 
 ### 機能：
 - ビットコイン/円、リップル/円、ライトコイン/ビットコイン、イーサリアム/ビットコイン、モナーコイン/円、ビットコインキャッシュ/円の通貨ペアで取引が出来ます。
 - 特殊注文（IFD, OCO, IFDOCO）
+- テーマの切替
+- ニュース表示
 
   *取引を行うには、ビットバンクのアカウントが必要です。  
   
