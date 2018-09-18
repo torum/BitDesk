@@ -36,7 +36,7 @@ Source: "..\BitDesk\bin\Release\Newtonsoft.Json.xml"; DestDir: "{app}"
 ;Source: "Readme.txt"; DestDir: "{app}"; Flags: isreadme
 
 [Icons]
-Name: "{group}\BitDes"; Filename: "{app}\BitDes.exe"
+Name: "{group}\BitDesk"; Filename: "{app}\BitDes.exe"
 
 [Languages]
 Name: en; MessagesFile: "compiler:Default.isl"
