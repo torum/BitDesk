@@ -23,7 +23,7 @@
 - テーマの切替
 - ニュース表示
 
-  *取引を行うには、ビットバンクのアカウントが必要です。  
+  *取引を行うには、ビットバンクのアカウントが必要です。  （アカウント不要なツールはこちら [https://torum.github.io/BitWallpaper/](https://torum.github.io/BitWallpaper/)）
   
 ### 必要構成：
 - Windows 10
