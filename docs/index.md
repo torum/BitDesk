@@ -3,6 +3,20 @@
 
 ## ビットバンク向け仮想通貨トレーディングアプリ 
 
+### 機能：
+- ビットコイン/円、リップル/円、ライトコイン/ビットコイン、イーサリアム/ビットコイン、モナーコイン/円、ビットコインキャッシュ/円の通貨ペアで取引が出来ます。
+- 特殊注文（IFD, OCO, IFDOCO）
+- 統計情報の表示
+- 気配値（板）の表示（グルーピング機能付き）
+- 歩み値の表示
+- 背景の透過率変更
+- テーマの切り替え
+- アラームの設定
+- ニュース表示
+
+  *取引を行うには、ビットバンクのアカウントが必要です。  （アカウント不要なツールはこちら [https://torum.github.io/BitWallpaper/](https://torum.github.io/BitWallpaper/)）
+  
+
 ![BitDesk](https://github.com/torum/BitDesk/blob/master/docs/Images/BitDesk-Sreenshot-Default-Dark.png?raw=true)
 
 ![BitDesk](https://github.com/torum/BitDesk/blob/master/docs/Images/BitDesk-Sreenshot-Default-Light.png?raw=true)
@@ -17,14 +31,6 @@
 
 ![alt text](https://github.com/torum/BitDesk/blob/master/docs/Images/BitDesk1.gif?raw=true)
 
-### 機能：
-- ビットコイン/円、リップル/円、ライトコイン/ビットコイン、イーサリアム/ビットコイン、モナーコイン/円、ビットコインキャッシュ/円の通貨ペアで取引が出来ます。
-- 特殊注文（IFD, OCO, IFDOCO）
-- テーマの切替
-- ニュース表示
-
-  *取引を行うには、ビットバンクのアカウントが必要です。  
-  
 ### 必要構成：
 - Windows 10
 
