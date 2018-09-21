@@ -1002,6 +1002,8 @@ namespace BitDesk.Models.Clients
                         }
                         er.ErrDatetime = DateTime.Now;
                         er.ErrPlace = path.ToString();
+                        er.ErrPlaceParent = "GetOrderListByIDs";
+                        er.ErrEx = "注文情報を更新出来ませんでした";
 
                         ErrorOccured?.Invoke(this, er);
 

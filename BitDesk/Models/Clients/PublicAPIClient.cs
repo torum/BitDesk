@@ -10,7 +10,6 @@ using Newtonsoft.Json.Converters;
 using System.Globalization;
 using BitDesk.ViewModels;
 
-
 namespace BitDesk.Models.Clients
 {
 
@@ -146,7 +145,7 @@ namespace BitDesk.Models.Clients
 
     #region == ティック ==
 
-    class Ticker
+    public class Ticker
     {
         private decimal _ltp;
         public decimal LTP
@@ -535,7 +534,7 @@ namespace BitDesk.Models.Clients
 
     #region == パブリックAPIクラス ==
 
-    class PublicAPIClient : BaseClient
+    public class PublicAPIClient : BaseClient
     {
         private readonly Uri PublicAPIUri = new Uri("https://public.bitbank.cc");
 

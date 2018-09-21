@@ -419,7 +419,7 @@
                                         -->
 
                                         <Grid x:Name="radioButtonUncheckedState" Grid.Column="1" Margin="1">
-                                            <Border BorderBrush="#49FFFFFF" BorderThickness="1,1,0,0"/>
+                                            <Border BorderBrush="#49FFFFFF" BorderThickness="0.1,0.1,0,0"/>
                                             <Border BorderBrush="#49000000" BorderThickness="0,0,1,1"/>
                                         </Grid>
 
@@ -502,7 +502,7 @@
                     
                 </ResourceDictionary>
 
-                <!-- Bottom ListView -->
+                <!-- ListView -->
                 <ResourceDictionary>
                     <!--
                     https://msdn.microsoft.com/en-us/library/ms788747(v=vs.85).aspx
@@ -619,11 +619,6 @@
                                             <VisualStateGroup x:Name="CommonStates">
                                                 <VisualState x:Name="Normal">
                                                     <Storyboard>
-                                                        <!--
-                                                        <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(GradientBrush.GradientStops)[0].(GradientStop.Color)" Storyboard.TargetName="Rect">
-                                                            <EasingColorKeyFrame KeyTime="0" Value="#CCC" />
-                                                        </ColorAnimationUsingKeyFrames>
-                                                        -->
                                                         <DoubleAnimationUsingKeyFrames  Storyboard.TargetProperty="Opacity" Storyboard.TargetName="Rect" >
                                                             <EasingDoubleKeyFrame KeyTime="0" Value="0.1"/>
                                                         </DoubleAnimationUsingKeyFrames>
@@ -817,6 +812,7 @@
                                 <RowDefinition MaxHeight="18" />
                             </Grid.RowDefinitions>
                             <Border Grid.RowSpan="3" CornerRadius="0" Background="Transparent" />
+                            
                             <RepeatButton Grid.Row="0" Height="18" Command="ScrollBar.LineUpCommand" Content="M 0 4 L 8 4 L 4 0 Z" Style="{StaticResource RepeatButtonStyleInc}"/>
                             <Track x:Name="PART_Track" Grid.Row="1" IsDirectionReversed="true">
                                 <Track.DecreaseRepeatButton>
@@ -1274,7 +1270,6 @@
                         </Setter>
                     </Style>
 
-
                     <Style x:Key="DepthListBoxScrollBarStyle" TargetType="{x:Type ScrollBar}">
                         <Setter Property="Background" Value="Transparent"/>
                         <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false"/>
@@ -1287,8 +1282,10 @@
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type ScrollBar}">
                                     <Grid x:Name="Bg" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                                        
                                         <Border Width="1" Background="Gray" HorizontalAlignment="Center" 
-                                                Margin="0 1 0 0"/>
+                                                Margin="0 0 0 0"/>
+                                        
                                         <Track x:Name="PART_Track" IsDirectionReversed="true" IsEnabled="{TemplateBinding IsMouseOver}">
                                             <Track.Thumb>
                                                 <Thumb Style="{StaticResource DepthListBoxScrollBarThumbStyle}"/>

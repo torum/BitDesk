@@ -3,9 +3,9 @@
                     xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf" >
 
 
-    <Color x:Key="WindowTintColor">#FFFFFF</Color>
+    <Color x:Key="WindowTintColor">#CCCCCC</Color>
     <Color x:Key="WindowFallbackColor">#dddddd</Color>
-    <Color x:Key="WindowBackgroundBaseColor">#FFFFFF</Color>
+    <Color x:Key="WindowBackgroundBaseColor">#CCCCCC</Color>
     <Color x:Key="WindowBackgroundColor">#CCCCCC</Color>
 
     <Color x:Key="ControlForegroundColor">DimGray</Color>
