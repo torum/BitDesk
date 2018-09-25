@@ -16,7 +16,7 @@
                   Height="450" Width="800"
                   MinWidth="430" MinHeight="474"
         
-                  Background="Transparent"
+                  Background="{DynamicResource WindowBackgroundColor}"
                   BorderThickness="0.1"
         
                   fw:AcrylicWindow.Enabled="True"
@@ -770,13 +770,13 @@
                                                     <ColumnDefinition Width="70*"/>
                                                 </Grid.ColumnDefinitions>
 
-                                                <Label Grid.Row="0" Grid.Column="0" Padding="3 3 3 3" VerticalAlignment="Bottom" Content="高値時：_H" ToolTip="(H)" Target="{Binding ElementName=TextBoxAlarmPlus}" Style="{DynamicResource DefaultLabelStyle}"></Label>
-                                                <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Margin="0 3 0 3">
-                                                    <TextBox x:Name="TextBoxAlarmPlus" Width="66" Text="{Binding ActivePair.AlarmPlus}" Style="{DynamicResource DefaultTextBoxStyle}"/>
+                                                    <Label Grid.Row="0" Grid.Column="0" Padding="3 3 3 3" VerticalAlignment="Bottom" Content="高値時：_H" ToolTip="(H)" Target="{Binding ElementName=TextBoxAlarmPlus}" Style="{DynamicResource DefaultLabelStyle}"></Label>
+                                                    <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Margin="0 3 0 3">
+                                                        <TextBox x:Name="TextBoxAlarmPlus" Width="66" Text="{Binding ActivePair.AlarmPlus}" Style="{DynamicResource DefaultTextBoxStyle}"/>
                                                     
-                                                    <Label Margin="3 0 0 0" VerticalAlignment="Bottom" Content="{Binding CurrentPairUnitString,Mode=OneWay}" Style="{DynamicResource DefaultLabelStyle}"></Label>
-                                                    <Label Padding="0" VerticalAlignment="Bottom" Content="以上" Style="{DynamicResource DefaultLabelStyle}"></Label>
-                                                </StackPanel>
+                                                        <Label Margin="3 0 0 0" VerticalAlignment="Bottom" Content="{Binding CurrentPairUnitString,Mode=OneWay}" Style="{DynamicResource DefaultLabelStyle}"></Label>
+                                                        <Label Padding="0" VerticalAlignment="Bottom" Content="以上" Style="{DynamicResource DefaultLabelStyle}"></Label>
+                                                    </StackPanel>
 
                                                 <Label Grid.Row="1" Grid.Column="0" Padding="3 3 3 3" VerticalAlignment="Bottom" Content="最高値：_E" ToolTip="(E)" Target="{Binding ElementName=CheckHighest}" Style="{DynamicResource DefaultLabelStyle}"></Label>
                                                 <StackPanel Grid.Row="1"  Grid.Column="1" Orientation="Horizontal" Margin="0 3 0 3">
@@ -2179,6 +2179,7 @@
                                                             <RowDefinition Height="Auto"/>
                                                             <RowDefinition Height="Auto"/>
                                                             <RowDefinition Height="Auto"/>
+                                                            <RowDefinition Height="Auto"/>
                                                         </Grid.RowDefinitions>
                                                         <Grid.ColumnDefinitions>
                                                             <ColumnDefinition Width="50*"/>
@@ -2214,7 +2215,7 @@
                                                         <Border Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Padding="3">
                                                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                                                                 <Label Content="損切値幅： " VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"></Label>
-                                                                <TextBox Text="{Binding ActivePair.AutoTradeLostCut}" Width="80" Style="{DynamicResource DefaultTextBoxStyle}"></TextBox>
+                                                                <TextBox Text="{Binding ActivePair.AutoTradeLossCut}" Width="80" Style="{DynamicResource DefaultTextBoxStyle}"></TextBox>
                                                             </StackPanel>
                                                         </Border>
                                                         <Border Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Padding="3">
@@ -2223,21 +2224,26 @@
                                                                 <TextBox Text="{Binding ActivePair.AutoTradeTama}" Width="80" Style="{DynamicResource DefaultTextBoxStyle}"></TextBox>
                                                             </StackPanel>
                                                         </Border>
-
                                                         <Border Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Padding="3">
                                                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                                                                <Label Content="スロット数： " VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"></Label>
+                                                                <Label Content="取引幅： " VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"></Label>
+                                                                <TextBox Text="{Binding ActivePair.AutoTradeDefaultHaba}" Width="80" Style="{DynamicResource DefaultTextBoxStyle}"></TextBox>
+                                                            </StackPanel>
+                                                        </Border>
+                                                        <Border Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Padding="3">
+                                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                                                <Label Content="ロット数： " VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"></Label>
                                                                 <TextBox Text="{Binding ActivePair.AutoTradeSlots}" Width="80" Style="{DynamicResource DefaultTextBoxStyle}"></TextBox>
                                                             </StackPanel>
                                                         </Border>
 
-                                                        <Border Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="3" Padding="3">
+                                                        <Border Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="3" Padding="3">
                                                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0">
                                                                 <Button Padding="3" TextElement.FontWeight="DemiBold" Width="120" Command="{Binding AutoTradeAddCommand}" IsEnabled="{Binding ActivePair.StopButtonEnable}" Content="追加"/>
                                                             </StackPanel>
                                                         </Border>
                                                         
-                                                        <Border Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2" Padding="3">
+                                                        <Border Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="2" Padding="3">
                                                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0 24 0 0">
                                                                 <Label Content="損益： " FontSize="24" Style="{DynamicResource DefaultLabelStyle}"></Label>
                                                                 <TextBlock Text="{Binding ActivePair.AutoTradeProfit, Mode=OneWay, StringFormat=0.#############################}" FontSize="24" Style="{DynamicResource DefaultTextBlockStyle}"></TextBlock>

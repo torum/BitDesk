@@ -1616,6 +1616,25 @@ namespace BitDesk.ViewModels
             }
         }
 
+        // ロスカットカウンター
+        private int _lossCutCounter;
+        public int LossCutCounter
+        {
+            get
+            {
+                return _lossCutCounter;
+            }
+            set
+            {
+                if (_lossCutCounter == value)
+                    return;
+
+                _lossCutCounter = value;
+                this.NotifyPropertyChanged("LossCutCounter");
+            }
+        }
+
+
         // 売り買い
         private string _buySide;
         public string BuySide
@@ -3179,9 +3198,9 @@ namespace BitDesk.ViewModels
                 if (_activePairIndex == 0)
                 {
                     CurrentPair = Pairs.btc_jpy;
+                    ActivePair = PairBtcJpy;
                     Application.Current.Dispatcher.Invoke(() =>
                     {
-                        ActivePair = PairBtcJpy;
                     });
 
                     DepthGroupingChanged = true;
@@ -3207,9 +3226,9 @@ namespace BitDesk.ViewModels
                 else if (_activePairIndex == 1)
                 {
                     CurrentPair = Pairs.xrp_jpy;
+                    ActivePair = PairXrpJpy;
                     Application.Current.Dispatcher.Invoke(() =>
                     {
-                        ActivePair = PairXrpJpy;
                     });
 
                     DepthGroupingChanged = true;
@@ -3233,9 +3252,9 @@ namespace BitDesk.ViewModels
                 else if (_activePairIndex == 2)
                 {
                     CurrentPair = Pairs.ltc_btc;
+                    ActivePair = PairLtcBtc;
                     Application.Current.Dispatcher.Invoke(() =>
                     {
-                        ActivePair = PairLtcBtc;
                     });
 
                     DepthGroupingChanged = true;
@@ -3259,9 +3278,9 @@ namespace BitDesk.ViewModels
                 else if (_activePairIndex == 3)
                 {
                     CurrentPair = Pairs.eth_btc;
+                    ActivePair = PairEthBtc;
                     Application.Current.Dispatcher.Invoke(() =>
                     {
-                        ActivePair = PairEthBtc;
                     });
 
                     DepthGroupingChanged = true;
@@ -3285,9 +3304,9 @@ namespace BitDesk.ViewModels
                 else if (_activePairIndex == 4)
                 {
                     CurrentPair = Pairs.mona_jpy;
+                    ActivePair = PairMonaJpy;
                     Application.Current.Dispatcher.Invoke(() =>
                     {
-                        ActivePair = PairMonaJpy;
                     });
 
                     DepthGroupingChanged = true;
@@ -3311,9 +3330,9 @@ namespace BitDesk.ViewModels
                 else if (_activePairIndex == 5)
                 {
                     CurrentPair = Pairs.bcc_jpy;
+                    ActivePair = PairBchJpy;
                     Application.Current.Dispatcher.Invoke(() =>
                     {
-                        ActivePair = PairBchJpy;
                     });
 
                     DepthGroupingChanged = true;
@@ -7822,6 +7841,24 @@ namespace BitDesk.ViewModels
                 }
             }
 
+            // 初期価格幅
+            private decimal _autoTradeDefaultHaba = 500;
+            public decimal AutoTradeDefaultHaba
+            {
+                get
+                {
+                    return _autoTradeDefaultHaba;
+                }
+                set
+                {
+                    if (_autoTradeDefaultHaba == value)
+                        return;
+
+                    _autoTradeDefaultHaba = value;
+                    this.NotifyPropertyChanged("AutoTradeDefaultHaba");
+                }
+            }
+
             // アッパーリミット > デフォルトが欲しい。
             private decimal _autoTradeUpperLimit;
             public decimal AutoTradeUpperLimit
@@ -7859,27 +7896,27 @@ namespace BitDesk.ViewModels
             }
 
             // 損切値幅
-            private decimal _autoTradeLostCut = 10000M;
-            public decimal AutoTradeLostCut
+            private decimal _autoTradeLossCut = 10000M;
+            public decimal AutoTradeLossCut
             {
                 get
                 {
-                    return _autoTradeLostCut;
+                    return _autoTradeLossCut;
                 }
                 set
                 {
-                    if (_autoTradeLostCut == value)
+                    if (_autoTradeLossCut == value)
                         return;
 
                     // 最低リミット（これないと、永久ループに入る）
-                    if (value < 2000)
+                    if (value < 1000)
                     {
-                        value = 2000;
+                        value = 1001;
                         return;
                     }
 
-                    _autoTradeLostCut = value;
-                    this.NotifyPropertyChanged("AutoTradeLostCut");
+                    _autoTradeLossCut = value;
+                    this.NotifyPropertyChanged("AutoTradeLossCut");
                 }
             }
 
@@ -10388,334 +10425,717 @@ namespace BitDesk.ViewModels
             // 設定ファイルのパス
             var AppConfigFilePath = _appDataFolder + System.IO.Path.DirectorySeparatorChar + _appName + ".config";
 
-            // アプリ設定情報の読み込み
-            if (File.Exists(AppConfigFilePath))
+            try
             {
-                XDocument xdoc = XDocument.Load(AppConfigFilePath);
-
-                #region == ウィンドウ関連 ==
-
-                if (sender is Window)
+                // アプリ設定情報の読み込み
+                if (File.Exists(AppConfigFilePath))
                 {
-                    // Main Window element
-                    var mainWindow = xdoc.Root.Element("MainWindow");
-                    if (mainWindow != null)
+                    XDocument xdoc = XDocument.Load(AppConfigFilePath);
+
+                    #region == ウィンドウ関連 ==
+
+                    if (sender is Window)
                     {
-                        var hoge = mainWindow.Attribute("top");
-                        if (hoge != null)
+                        // Main Window element
+                        var mainWindow = xdoc.Root.Element("MainWindow");
+                        if (mainWindow != null)
                         {
-                            (sender as Window).Top = double.Parse(hoge.Value);
-                        }
-
-                        hoge = mainWindow.Attribute("left");
-                        if (hoge != null)
-                        {
-                            (sender as Window).Left = double.Parse(hoge.Value);
-                        }
-
-                        hoge = mainWindow.Attribute("height");
-                        if (hoge != null)
-                        {
-                            (sender as Window).Height = double.Parse(hoge.Value);
-                        }
-
-                        hoge = mainWindow.Attribute("width");
-                        if (hoge != null)
-                        {
-                            (sender as Window).Width = double.Parse(hoge.Value);
-                        }
-
-                        hoge = mainWindow.Attribute("state");
-                        if (hoge != null)
-                        {
-                            if (hoge.Value == "Maximized")
+                            var hoge = mainWindow.Attribute("top");
+                            if (hoge != null)
                             {
-                                (sender as Window).WindowState = WindowState.Maximized;
+                                (sender as Window).Top = double.Parse(hoge.Value);
                             }
-                            else if (hoge.Value == "Normal")
+
+                            hoge = mainWindow.Attribute("left");
+                            if (hoge != null)
                             {
-                                (sender as Window).WindowState = WindowState.Normal;
+                                (sender as Window).Left = double.Parse(hoge.Value);
                             }
-                            else if (hoge.Value == "Minimized")
+
+                            hoge = mainWindow.Attribute("height");
+                            if (hoge != null)
                             {
-                                (sender as Window).WindowState = WindowState.Normal;
+                                (sender as Window).Height = double.Parse(hoge.Value);
                             }
-                        }
 
-                        hoge = mainWindow.Attribute("opacity");
-                        if (hoge != null)
-                        {
-                            WindowOpacity = double.Parse(hoge.Value);
-                        }
-
-                        hoge = mainWindow.Attribute("theme");
-                        if (hoge != null)
-                        {
-                            // テーマをセット
-                            SetCurrentTheme(hoge.Value);
-                        }
-
-                    }
-
-                }
-
-                #endregion
-
-                #region == 認証関連・APIキー ==
-
-                // 認証
-
-                // User element
-                var user = xdoc.Root.Element("User");
-                if (user != null)
-                {
-                    var pass = user.Attribute("password");
-                    if (pass != null)
-                    {
-                        _realPassword = Decrypt(pass.Value);
-
-                        if (string.IsNullOrEmpty(_realPassword) == false)
-                        {
-                            IsPasswordSet = true;
-                        }
-                        else
-                        {
-                            IsPasswordSet = false;
-                        }
-
-                    }
-
-                    // APIキー
-
-                    // Orders
-                    var orders = user.Element("Orders");
-                    if (orders != null)
-                    {
-                        var attr = orders.Attribute("key");
-                        if (attr != null)
-                        {
-                            OrdersApiKey = Decrypt(attr.Value);
-                        }
-                        attr = orders.Attribute("secret");
-                        if (attr != null)
-                        {
-                            OrdersSecret = Decrypt(attr.Value);
-                        }
-
-                        if (string.IsNullOrEmpty(_getOrdersApiKey) == false)
-                        {
-                            OrdersApiKeyIsSet = true;
-                        }
-                    }
-
-                    // Assets
-                    var assets = user.Element("Assets");
-                    if (assets != null)
-                    {
-                        var attr = assets.Attribute("key");
-                        if (attr != null)
-                        {
-                            AssetsApiKey = Decrypt(attr.Value);
-                        }
-                        attr = assets.Attribute("secret");
-                        if (attr != null)
-                        {
-                            AssetsApiSecret = Decrypt(attr.Value);
-                        }
-                        //Debug.WriteLine(_getAssetsApiKey);
-                        if (string.IsNullOrEmpty(_getAssetsApiKey) == false)
-                        {
-                            AssetsApiKeyIsSet = true;
-                        }
-                    }
-
-                    // TradeHistory
-                    var history = user.Element("TradeHistory");
-                    if (history != null)
-                    {
-                        var attr = history.Attribute("key");
-                        if (attr != null)
-                        {
-                            TradeHistoryApiKey = Decrypt(attr.Value);
-                        }
-                        attr = history.Attribute("secret");
-                        if (attr != null)
-                        {
-                            TradeHistorySecret = Decrypt(attr.Value);
-                        }
-
-                        if (string.IsNullOrEmpty(_getTradeHistoryApiKey) == false)
-                        {
-                            TradeHistoryApiKeyIsSet = true;
-                        }
-                    }
-
-                    // TradeHistory
-                    var auto = user.Element("AutoTrade");
-                    if (auto != null)
-                    {
-                        var attr = auto.Attribute("key");
-                        if (attr != null)
-                        {
-                            AutoTradeApiKey = Decrypt(attr.Value);
-                        }
-                        attr = auto.Attribute("secret");
-                        if (attr != null)
-                        {
-                            AutoTradeSecret = Decrypt(attr.Value);
-                        }
-
-                        if (string.IsNullOrEmpty(_autoTradeApiKey) == false)
-                        {
-                            AutoTradeApiKeyIsSet = true;
-                        }
-                    }
-
-                    // ManualTrade
-                    var manual = user.Element("ManualTrade");
-                    if (manual != null)
-                    {
-                        var attr = manual.Attribute("key");
-                        if (attr != null)
-                        {
-                            ManualTradeApiKey = Decrypt(attr.Value);
-                        }
-                        attr = manual.Attribute("secret");
-                        if (attr != null)
-                        {
-                            ManualTradeSecret = Decrypt(attr.Value);
-                        }
-
-                        if (string.IsNullOrEmpty(_manualTradeApiKey) == false)
-                        {
-                            ManualTradeApiKeyIsSet = true;
-                        }
-                    }
-
-                    // IFDOCO
-                    var ifdocoOrd = user.Element("IFDOCO");
-                    if (ifdocoOrd != null)
-                    {
-                        var attr = ifdocoOrd.Attribute("key");
-                        if (attr != null)
-                        {
-                            IfdocoTradeApiKey = Decrypt(attr.Value);
-                        }
-                        attr = ifdocoOrd.Attribute("secret");
-                        if (attr != null)
-                        {
-                            IfdocoTradeSecret = Decrypt(attr.Value);
-                        }
-
-                        if (string.IsNullOrEmpty(_ifdocoTradeApiKey) == false)
-                        {
-                            IfdocoTradeApiKeyIsSet = true;
-                        }
-                    }
-
-
-
-                }
-
-                #endregion
-
-                #region == アラーム音設定 ==
-
-                var alarmSetting = xdoc.Root.Element("Alarm");
-                if (alarmSetting != null)
-                {
-                    var hoge = alarmSetting.Attribute("playSound");
-                    if (hoge != null)
-                    {
-                        if (hoge.Value == "true")
-                        {
-                            PlaySound = true;
-                        }
-                        else
-                        {
-                            PlaySound = false;
-                        }
-                    }
-                }
-
-                #endregion
-
-                #region == 各通貨毎の設定 ==
-
-                var pairs = xdoc.Root.Element("Pairs");
-                if (pairs != null)
-                {
-                    // PairBtcJpy
-                    var pair = pairs.Element("BtcJpy");
-                    if (pair != null)
-                    {
-                        var hoge = pair.Attribute("playSoundLowest");
-                        if (hoge != null)
-                        {
-                            if (hoge.Value == "true")
+                            hoge = mainWindow.Attribute("width");
+                            if (hoge != null)
                             {
-                                PairBtcJpy.PlaySoundLowest = true;
+                                (sender as Window).Width = double.Parse(hoge.Value);
                             }
-                            else
-                            {
-                                PairBtcJpy.PlaySoundLowest = false;
-                            }
-                        }
 
-                        hoge = pair.Attribute("playSoundHighest");
-                        if (hoge != null)
-                        {
-                            if (hoge.Value == "true")
+                            hoge = mainWindow.Attribute("state");
+                            if (hoge != null)
                             {
-                                PairBtcJpy.PlaySoundHighest = true;
-                            }
-                            else
-                            {
-                                PairBtcJpy.PlaySoundHighest = false;
-                            }
-                        }
-
-                        hoge = pair.Attribute("playSoundLowest24h");
-                        if (hoge != null)
-                        {
-                            if (hoge.Value == "true")
-                            {
-                                PairBtcJpy.PlaySoundLowest24h = true;
-                            }
-                            else
-                            {
-                                PairBtcJpy.PlaySoundLowest24h = false;
-                            }
-                        }
-
-                        hoge = pair.Attribute("playSoundHighest24h");
-                        if (hoge != null)
-                        {
-                            if (hoge.Value == "true")
-                            {
-                                PairBtcJpy.PlaySoundHighest24h = true;
-                            }
-                            else
-                            {
-                                PairBtcJpy.PlaySoundHighest24h = false;
-                            }
-                        }
-
-                        // 板グルーピング
-                        hoge = pair.Attribute("depthGrouping");
-                        if (hoge != null)
-                        {
-                            if (!string.IsNullOrEmpty(hoge.Value))
-                            {
-                                try
+                                if (hoge.Value == "Maximized")
                                 {
-                                    PairBtcJpy.DepthGrouping = Decimal.Parse(hoge.Value);
+                                    (sender as Window).WindowState = WindowState.Maximized;
                                 }
-                                catch
+                                else if (hoge.Value == "Normal")
                                 {
-                                    PairBtcJpy.DepthGrouping = 0;
+                                    (sender as Window).WindowState = WindowState.Normal;
                                 }
-                                
+                                else if (hoge.Value == "Minimized")
+                                {
+                                    (sender as Window).WindowState = WindowState.Normal;
+                                }
+                            }
+
+                            hoge = mainWindow.Attribute("opacity");
+                            if (hoge != null)
+                            {
+                                WindowOpacity = double.Parse(hoge.Value);
+                            }
+
+                            hoge = mainWindow.Attribute("theme");
+                            if (hoge != null)
+                            {
+                                // テーマをセット
+                                SetCurrentTheme(hoge.Value);
+                            }
+
+                        }
+
+                    }
+
+                    #endregion
+
+                    #region == 認証関連・APIキー ==
+
+                    // 認証
+
+                    // User element
+                    var user = xdoc.Root.Element("User");
+                    if (user != null)
+                    {
+                        var pass = user.Attribute("password");
+                        if (pass != null)
+                        {
+                            _realPassword = Decrypt(pass.Value);
+
+                            if (string.IsNullOrEmpty(_realPassword) == false)
+                            {
+                                IsPasswordSet = true;
+                            }
+                            else
+                            {
+                                IsPasswordSet = false;
+                            }
+
+                        }
+
+                        // APIキー
+
+                        // Orders
+                        var orders = user.Element("Orders");
+                        if (orders != null)
+                        {
+                            var attr = orders.Attribute("key");
+                            if (attr != null)
+                            {
+                                OrdersApiKey = Decrypt(attr.Value);
+                            }
+                            attr = orders.Attribute("secret");
+                            if (attr != null)
+                            {
+                                OrdersSecret = Decrypt(attr.Value);
+                            }
+
+                            if (string.IsNullOrEmpty(_getOrdersApiKey) == false)
+                            {
+                                OrdersApiKeyIsSet = true;
+                            }
+                        }
+
+                        // Assets
+                        var assets = user.Element("Assets");
+                        if (assets != null)
+                        {
+                            var attr = assets.Attribute("key");
+                            if (attr != null)
+                            {
+                                AssetsApiKey = Decrypt(attr.Value);
+                            }
+                            attr = assets.Attribute("secret");
+                            if (attr != null)
+                            {
+                                AssetsApiSecret = Decrypt(attr.Value);
+                            }
+                            //Debug.WriteLine(_getAssetsApiKey);
+                            if (string.IsNullOrEmpty(_getAssetsApiKey) == false)
+                            {
+                                AssetsApiKeyIsSet = true;
+                            }
+                        }
+
+                        // TradeHistory
+                        var history = user.Element("TradeHistory");
+                        if (history != null)
+                        {
+                            var attr = history.Attribute("key");
+                            if (attr != null)
+                            {
+                                TradeHistoryApiKey = Decrypt(attr.Value);
+                            }
+                            attr = history.Attribute("secret");
+                            if (attr != null)
+                            {
+                                TradeHistorySecret = Decrypt(attr.Value);
+                            }
+
+                            if (string.IsNullOrEmpty(_getTradeHistoryApiKey) == false)
+                            {
+                                TradeHistoryApiKeyIsSet = true;
+                            }
+                        }
+
+                        // TradeHistory
+                        var auto = user.Element("AutoTrade");
+                        if (auto != null)
+                        {
+                            var attr = auto.Attribute("key");
+                            if (attr != null)
+                            {
+                                AutoTradeApiKey = Decrypt(attr.Value);
+                            }
+                            attr = auto.Attribute("secret");
+                            if (attr != null)
+                            {
+                                AutoTradeSecret = Decrypt(attr.Value);
+                            }
+
+                            if (string.IsNullOrEmpty(_autoTradeApiKey) == false)
+                            {
+                                AutoTradeApiKeyIsSet = true;
+                            }
+                        }
+
+                        // ManualTrade
+                        var manual = user.Element("ManualTrade");
+                        if (manual != null)
+                        {
+                            var attr = manual.Attribute("key");
+                            if (attr != null)
+                            {
+                                ManualTradeApiKey = Decrypt(attr.Value);
+                            }
+                            attr = manual.Attribute("secret");
+                            if (attr != null)
+                            {
+                                ManualTradeSecret = Decrypt(attr.Value);
+                            }
+
+                            if (string.IsNullOrEmpty(_manualTradeApiKey) == false)
+                            {
+                                ManualTradeApiKeyIsSet = true;
+                            }
+                        }
+
+                        // IFDOCO
+                        var ifdocoOrd = user.Element("IFDOCO");
+                        if (ifdocoOrd != null)
+                        {
+                            var attr = ifdocoOrd.Attribute("key");
+                            if (attr != null)
+                            {
+                                IfdocoTradeApiKey = Decrypt(attr.Value);
+                            }
+                            attr = ifdocoOrd.Attribute("secret");
+                            if (attr != null)
+                            {
+                                IfdocoTradeSecret = Decrypt(attr.Value);
+                            }
+
+                            if (string.IsNullOrEmpty(_ifdocoTradeApiKey) == false)
+                            {
+                                IfdocoTradeApiKeyIsSet = true;
+                            }
+                        }
+
+
+
+                    }
+
+                    #endregion
+
+                    #region == アラーム音設定 ==
+
+                    var alarmSetting = xdoc.Root.Element("Alarm");
+                    if (alarmSetting != null)
+                    {
+                        var hoge = alarmSetting.Attribute("playSound");
+                        if (hoge != null)
+                        {
+                            if (hoge.Value == "true")
+                            {
+                                PlaySound = true;
+                            }
+                            else
+                            {
+                                PlaySound = false;
+                            }
+                        }
+                    }
+
+                    #endregion
+
+                    #region == 各通貨毎の設定 ==
+
+                    var pairs = xdoc.Root.Element("Pairs");
+                    if (pairs != null)
+                    {
+                        // PairBtcJpy
+                        var pair = pairs.Element("BtcJpy");
+                        if (pair != null)
+                        {
+                            var hoge = pair.Attribute("playSoundLowest");
+                            if (hoge != null)
+                            {
+                                if (hoge.Value == "true")
+                                {
+                                    PairBtcJpy.PlaySoundLowest = true;
+                                }
+                                else
+                                {
+                                    PairBtcJpy.PlaySoundLowest = false;
+                                }
+                            }
+
+                            hoge = pair.Attribute("playSoundHighest");
+                            if (hoge != null)
+                            {
+                                if (hoge.Value == "true")
+                                {
+                                    PairBtcJpy.PlaySoundHighest = true;
+                                }
+                                else
+                                {
+                                    PairBtcJpy.PlaySoundHighest = false;
+                                }
+                            }
+
+                            hoge = pair.Attribute("playSoundLowest24h");
+                            if (hoge != null)
+                            {
+                                if (hoge.Value == "true")
+                                {
+                                    PairBtcJpy.PlaySoundLowest24h = true;
+                                }
+                                else
+                                {
+                                    PairBtcJpy.PlaySoundLowest24h = false;
+                                }
+                            }
+
+                            hoge = pair.Attribute("playSoundHighest24h");
+                            if (hoge != null)
+                            {
+                                if (hoge.Value == "true")
+                                {
+                                    PairBtcJpy.PlaySoundHighest24h = true;
+                                }
+                                else
+                                {
+                                    PairBtcJpy.PlaySoundHighest24h = false;
+                                }
+                            }
+
+                            // 板グルーピング
+                            hoge = pair.Attribute("depthGrouping");
+                            if (hoge != null)
+                            {
+                                if (!string.IsNullOrEmpty(hoge.Value))
+                                {
+                                    try
+                                    {
+                                        PairBtcJpy.DepthGrouping = Decimal.Parse(hoge.Value);
+                                    }
+                                    catch
+                                    {
+                                        PairBtcJpy.DepthGrouping = 0;
+                                    }
+
+                                }
+                            }
+
+
+                        }
+
+
+                        // PairXrpJpy
+                        pair = pairs.Element("XrpJpy");
+                        if (pair != null)
+                        {
+                            var hoge = pair.Attribute("playSoundLowest");
+                            if (hoge != null)
+                            {
+                                if (hoge.Value == "true")
+                                {
+                                    PairXrpJpy.PlaySoundLowest = true;
+                                }
+                                else
+                                {
+                                    PairXrpJpy.PlaySoundLowest = false;
+                                }
+                            }
+
+                            hoge = pair.Attribute("playSoundHighest");
+                            if (hoge != null)
+                            {
+                                if (hoge.Value == "true")
+                                {
+                                    PairXrpJpy.PlaySoundHighest = true;
+                                }
+                                else
+                                {
+                                    PairXrpJpy.PlaySoundHighest = false;
+                                }
+                            }
+
+                            hoge = pair.Attribute("playSoundLowest24h");
+                            if (hoge != null)
+                            {
+                                if (hoge.Value == "true")
+                                {
+                                    PairXrpJpy.PlaySoundLowest24h = true;
+                                }
+                                else
+                                {
+                                    PairXrpJpy.PlaySoundLowest24h = false;
+                                }
+                            }
+
+                            hoge = pair.Attribute("playSoundHighest24h");
+                            if (hoge != null)
+                            {
+                                if (hoge.Value == "true")
+                                {
+                                    PairXrpJpy.PlaySoundHighest24h = true;
+                                }
+                                else
+                                {
+                                    PairXrpJpy.PlaySoundHighest24h = false;
+                                }
+                            }
+
+                            // 板グルーピング
+                            hoge = pair.Attribute("depthGrouping");
+                            if (hoge != null)
+                            {
+                                if (!string.IsNullOrEmpty(hoge.Value))
+                                {
+                                    try
+                                    {
+                                        PairXrpJpy.DepthGrouping = Decimal.Parse(hoge.Value);
+                                    }
+                                    catch
+                                    {
+                                        PairXrpJpy.DepthGrouping = 0;
+                                    }
+
+                                }
+                            }
+
+                        }
+
+                        // PairEthBtc
+                        pair = pairs.Element("EthBtc");
+                        if (pair != null)
+                        {
+                            var hoge = pair.Attribute("playSoundLowest");
+                            if (hoge != null)
+                            {
+                                if (hoge.Value == "true")
+                                {
+                                    PairEthBtc.PlaySoundLowest = true;
+                                }
+                                else
+                                {
+                                    PairEthBtc.PlaySoundLowest = false;
+                                }
+                            }
+
+                            hoge = pair.Attribute("playSoundHighest");
+                            if (hoge != null)
+                            {
+                                if (hoge.Value == "true")
+                                {
+                                    PairEthBtc.PlaySoundHighest = true;
+                                }
+                                else
+                                {
+                                    PairEthBtc.PlaySoundHighest = false;
+                                }
+                            }
+
+                            hoge = pair.Attribute("playSoundLowest24h");
+                            if (hoge != null)
+                            {
+                                if (hoge.Value == "true")
+                                {
+                                    PairEthBtc.PlaySoundLowest24h = true;
+                                }
+                                else
+                                {
+                                    PairEthBtc.PlaySoundLowest24h = false;
+                                }
+                            }
+
+                            hoge = pair.Attribute("playSoundHighest24h");
+                            if (hoge != null)
+                            {
+                                if (hoge.Value == "true")
+                                {
+                                    PairEthBtc.PlaySoundHighest24h = true;
+                                }
+                                else
+                                {
+                                    PairEthBtc.PlaySoundHighest24h = false;
+                                }
+                            }
+
+                            // 板グルーピング
+                            hoge = pair.Attribute("depthGrouping");
+                            if (hoge != null)
+                            {
+                                if (!string.IsNullOrEmpty(hoge.Value))
+                                {
+                                    try
+                                    {
+                                        PairEthBtc.DepthGrouping = Decimal.Parse(hoge.Value);
+                                    }
+                                    catch
+                                    {
+                                        PairEthBtc.DepthGrouping = 0;
+                                    }
+
+                                }
+                            }
+
+                        }
+
+                        // PairLtcBtc
+                        pair = pairs.Element("LtcBtc");
+                        if (pair != null)
+                        {
+                            var hoge = pair.Attribute("playSoundLowest");
+                            if (hoge != null)
+                            {
+                                if (hoge.Value == "true")
+                                {
+                                    PairLtcBtc.PlaySoundLowest = true;
+                                }
+                                else
+                                {
+                                    PairLtcBtc.PlaySoundLowest = false;
+                                }
+                            }
+
+                            hoge = pair.Attribute("playSoundHighest");
+                            if (hoge != null)
+                            {
+                                if (hoge.Value == "true")
+                                {
+                                    PairLtcBtc.PlaySoundHighest = true;
+                                }
+                                else
+                                {
+                                    PairLtcBtc.PlaySoundHighest = false;
+                                }
+                            }
+
+                            hoge = pair.Attribute("playSoundLowest24h");
+                            if (hoge != null)
+                            {
+                                if (hoge.Value == "true")
+                                {
+                                    PairLtcBtc.PlaySoundLowest24h = true;
+                                }
+                                else
+                                {
+                                    PairLtcBtc.PlaySoundLowest24h = false;
+                                }
+                            }
+
+                            hoge = pair.Attribute("playSoundHighest24h");
+                            if (hoge != null)
+                            {
+                                if (hoge.Value == "true")
+                                {
+                                    PairLtcBtc.PlaySoundHighest24h = true;
+                                }
+                                else
+                                {
+                                    PairLtcBtc.PlaySoundHighest24h = false;
+                                }
+                            }
+
+                            // 板グルーピング
+                            hoge = pair.Attribute("depthGrouping");
+                            if (hoge != null)
+                            {
+                                if (!string.IsNullOrEmpty(hoge.Value))
+                                {
+                                    try
+                                    {
+                                        PairLtcBtc.DepthGrouping = Decimal.Parse(hoge.Value);
+                                    }
+                                    catch
+                                    {
+                                        PairLtcBtc.DepthGrouping = 0;
+                                    }
+
+                                }
+                            }
+                        }
+
+                        // PairMonaJpy
+                        pair = pairs.Element("MonaJpy");
+                        if (pair != null)
+                        {
+                            var hoge = pair.Attribute("playSoundLowest");
+                            if (hoge != null)
+                            {
+                                if (hoge.Value == "true")
+                                {
+                                    PairMonaJpy.PlaySoundLowest = true;
+                                }
+                                else
+                                {
+                                    PairMonaJpy.PlaySoundLowest = false;
+                                }
+                            }
+
+                            hoge = pair.Attribute("playSoundHighest");
+                            if (hoge != null)
+                            {
+                                if (hoge.Value == "true")
+                                {
+                                    PairMonaJpy.PlaySoundHighest = true;
+                                }
+                                else
+                                {
+                                    PairMonaJpy.PlaySoundHighest = false;
+                                }
+                            }
+
+                            hoge = pair.Attribute("playSoundLowest24h");
+                            if (hoge != null)
+                            {
+                                if (hoge.Value == "true")
+                                {
+                                    PairMonaJpy.PlaySoundLowest24h = true;
+                                }
+                                else
+                                {
+                                    PairMonaJpy.PlaySoundLowest24h = false;
+                                }
+                            }
+
+                            hoge = pair.Attribute("playSoundHighest24h");
+                            if (hoge != null)
+                            {
+                                if (hoge.Value == "true")
+                                {
+                                    PairMonaJpy.PlaySoundHighest24h = true;
+                                }
+                                else
+                                {
+                                    PairMonaJpy.PlaySoundHighest24h = false;
+                                }
+                            }
+
+                            // 板グルーピング
+                            hoge = pair.Attribute("depthGrouping");
+                            if (hoge != null)
+                            {
+                                if (!string.IsNullOrEmpty(hoge.Value))
+                                {
+                                    try
+                                    {
+                                        PairMonaJpy.DepthGrouping = Decimal.Parse(hoge.Value);
+                                    }
+                                    catch
+                                    {
+                                        PairMonaJpy.DepthGrouping = 0;
+                                    }
+
+                                }
+                            }
+                        }
+
+                        // PairBchJpy
+                        pair = pairs.Element("BchJpy");
+                        if (pair != null)
+                        {
+                            var hoge = pair.Attribute("playSoundLowest");
+                            if (hoge != null)
+                            {
+                                if (hoge.Value == "true")
+                                {
+                                    PairBchJpy.PlaySoundLowest = true;
+                                }
+                                else
+                                {
+                                    PairBchJpy.PlaySoundLowest = false;
+                                }
+                            }
+
+                            hoge = pair.Attribute("playSoundHighest");
+                            if (hoge != null)
+                            {
+                                if (hoge.Value == "true")
+                                {
+                                    PairBchJpy.PlaySoundHighest = true;
+                                }
+                                else
+                                {
+                                    PairBchJpy.PlaySoundHighest = false;
+                                }
+                            }
+
+                            hoge = pair.Attribute("playSoundLowest24h");
+                            if (hoge != null)
+                            {
+                                if (hoge.Value == "true")
+                                {
+                                    PairBchJpy.PlaySoundLowest24h = true;
+                                }
+                                else
+                                {
+                                    PairBchJpy.PlaySoundLowest24h = false;
+                                }
+                            }
+
+                            hoge = pair.Attribute("playSoundHighest24h");
+                            if (hoge != null)
+                            {
+                                if (hoge.Value == "true")
+                                {
+                                    PairBchJpy.PlaySoundHighest24h = true;
+                                }
+                                else
+                                {
+                                    PairBchJpy.PlaySoundHighest24h = false;
+                                }
+                            }
+
+                            // 板グルーピング
+                            hoge = pair.Attribute("depthGrouping");
+                            if (hoge != null)
+                            {
+                                if (!string.IsNullOrEmpty(hoge.Value))
+                                {
+                                    try
+                                    {
+                                        PairBchJpy.DepthGrouping = Decimal.Parse(hoge.Value);
+                                    }
+                                    catch
+                                    {
+                                        PairBchJpy.DepthGrouping = 0;
+                                    }
+
+                                }
                             }
                         }
 
@@ -10723,408 +11143,34 @@ namespace BitDesk.ViewModels
                     }
 
 
-                    // PairXrpJpy
-                    pair = pairs.Element("XrpJpy");
-                    if (pair != null)
+                    #endregion
+
+                    #region == チャート関連 ==
+
+                    var chartSetting = xdoc.Root.Element("Chart");
+                    if (chartSetting != null)
                     {
-                        var hoge = pair.Attribute("playSoundLowest");
+                        var hoge = chartSetting.Attribute("candleType");
                         if (hoge != null)
                         {
-                            if (hoge.Value == "true")
+                            if (hoge.Value == CandleTypes.OneMin.ToString())
                             {
-                                PairXrpJpy.PlaySoundLowest = true;
+                                SelectedCandleType = CandleTypes.OneMin;
+                            }
+                            else if (hoge.Value == CandleTypes.OneHour.ToString())
+                            {
+                                SelectedCandleType = CandleTypes.OneHour;
+                            }
+                            else if (hoge.Value == CandleTypes.OneDay.ToString())
+                            {
+                                SelectedCandleType = CandleTypes.OneDay;
                             }
                             else
                             {
-                                PairXrpJpy.PlaySoundLowest = false;
-                            }
-                        }
+                                // TODO other candle types
 
-                        hoge = pair.Attribute("playSoundHighest");
-                        if (hoge != null)
-                        {
-                            if (hoge.Value == "true")
-                            {
-                                PairXrpJpy.PlaySoundHighest = true;
+                                SelectedCandleType = CandleTypes.OneHour;
                             }
-                            else
-                            {
-                                PairXrpJpy.PlaySoundHighest = false;
-                            }
-                        }
-
-                        hoge = pair.Attribute("playSoundLowest24h");
-                        if (hoge != null)
-                        {
-                            if (hoge.Value == "true")
-                            {
-                                PairXrpJpy.PlaySoundLowest24h = true;
-                            }
-                            else
-                            {
-                                PairXrpJpy.PlaySoundLowest24h = false;
-                            }
-                        }
-
-                        hoge = pair.Attribute("playSoundHighest24h");
-                        if (hoge != null)
-                        {
-                            if (hoge.Value == "true")
-                            {
-                                PairXrpJpy.PlaySoundHighest24h = true;
-                            }
-                            else
-                            {
-                                PairXrpJpy.PlaySoundHighest24h = false;
-                            }
-                        }
-
-                        // 板グルーピング
-                        hoge = pair.Attribute("depthGrouping");
-                        if (hoge != null)
-                        {
-                            if (!string.IsNullOrEmpty(hoge.Value))
-                            {
-                                try
-                                {
-                                    PairXrpJpy.DepthGrouping = Decimal.Parse(hoge.Value);
-                                }
-                                catch
-                                {
-                                    PairXrpJpy.DepthGrouping = 0;
-                                }
-
-                            }
-                        }
-
-                    }
-
-                    // PairEthBtc
-                    pair = pairs.Element("EthBtc");
-                    if (pair != null)
-                    {
-                        var hoge = pair.Attribute("playSoundLowest");
-                        if (hoge != null)
-                        {
-                            if (hoge.Value == "true")
-                            {
-                                PairEthBtc.PlaySoundLowest = true;
-                            }
-                            else
-                            {
-                                PairEthBtc.PlaySoundLowest = false;
-                            }
-                        }
-
-                        hoge = pair.Attribute("playSoundHighest");
-                        if (hoge != null)
-                        {
-                            if (hoge.Value == "true")
-                            {
-                                PairEthBtc.PlaySoundHighest = true;
-                            }
-                            else
-                            {
-                                PairEthBtc.PlaySoundHighest = false;
-                            }
-                        }
-
-                        hoge = pair.Attribute("playSoundLowest24h");
-                        if (hoge != null)
-                        {
-                            if (hoge.Value == "true")
-                            {
-                                PairEthBtc.PlaySoundLowest24h = true;
-                            }
-                            else
-                            {
-                                PairEthBtc.PlaySoundLowest24h = false;
-                            }
-                        }
-
-                        hoge = pair.Attribute("playSoundHighest24h");
-                        if (hoge != null)
-                        {
-                            if (hoge.Value == "true")
-                            {
-                                PairEthBtc.PlaySoundHighest24h = true;
-                            }
-                            else
-                            {
-                                PairEthBtc.PlaySoundHighest24h = false;
-                            }
-                        }
-
-                        // 板グルーピング
-                        hoge = pair.Attribute("depthGrouping");
-                        if (hoge != null)
-                        {
-                            if (!string.IsNullOrEmpty(hoge.Value))
-                            {
-                                try
-                                {
-                                    PairEthBtc.DepthGrouping = Decimal.Parse(hoge.Value);
-                                }
-                                catch
-                                {
-                                    PairEthBtc.DepthGrouping = 0;
-                                }
-
-                            }
-                        }
-
-                    }
-
-                    // PairLtcBtc
-                    pair = pairs.Element("LtcBtc");
-                    if (pair != null)
-                    {
-                        var hoge = pair.Attribute("playSoundLowest");
-                        if (hoge != null)
-                        {
-                            if (hoge.Value == "true")
-                            {
-                                PairLtcBtc.PlaySoundLowest = true;
-                            }
-                            else
-                            {
-                                PairLtcBtc.PlaySoundLowest = false;
-                            }
-                        }
-
-                        hoge = pair.Attribute("playSoundHighest");
-                        if (hoge != null)
-                        {
-                            if (hoge.Value == "true")
-                            {
-                                PairLtcBtc.PlaySoundHighest = true;
-                            }
-                            else
-                            {
-                                PairLtcBtc.PlaySoundHighest = false;
-                            }
-                        }
-
-                        hoge = pair.Attribute("playSoundLowest24h");
-                        if (hoge != null)
-                        {
-                            if (hoge.Value == "true")
-                            {
-                                PairLtcBtc.PlaySoundLowest24h = true;
-                            }
-                            else
-                            {
-                                PairLtcBtc.PlaySoundLowest24h = false;
-                            }
-                        }
-
-                        hoge = pair.Attribute("playSoundHighest24h");
-                        if (hoge != null)
-                        {
-                            if (hoge.Value == "true")
-                            {
-                                PairLtcBtc.PlaySoundHighest24h = true;
-                            }
-                            else
-                            {
-                                PairLtcBtc.PlaySoundHighest24h = false;
-                            }
-                        }
-
-                        // 板グルーピング
-                        hoge = pair.Attribute("depthGrouping");
-                        if (hoge != null)
-                        {
-                            if (!string.IsNullOrEmpty(hoge.Value))
-                            {
-                                try
-                                {
-                                    PairLtcBtc.DepthGrouping = Decimal.Parse(hoge.Value);
-                                }
-                                catch
-                                {
-                                    PairLtcBtc.DepthGrouping = 0;
-                                }
-
-                            }
-                        }
-                    }
-
-                    // PairMonaJpy
-                    pair = pairs.Element("MonaJpy");
-                    if (pair != null)
-                    {
-                        var hoge = pair.Attribute("playSoundLowest");
-                        if (hoge != null)
-                        {
-                            if (hoge.Value == "true")
-                            {
-                                PairMonaJpy.PlaySoundLowest = true;
-                            }
-                            else
-                            {
-                                PairMonaJpy.PlaySoundLowest = false;
-                            }
-                        }
-
-                        hoge = pair.Attribute("playSoundHighest");
-                        if (hoge != null)
-                        {
-                            if (hoge.Value == "true")
-                            {
-                                PairMonaJpy.PlaySoundHighest = true;
-                            }
-                            else
-                            {
-                                PairMonaJpy.PlaySoundHighest = false;
-                            }
-                        }
-
-                        hoge = pair.Attribute("playSoundLowest24h");
-                        if (hoge != null)
-                        {
-                            if (hoge.Value == "true")
-                            {
-                                PairMonaJpy.PlaySoundLowest24h = true;
-                            }
-                            else
-                            {
-                                PairMonaJpy.PlaySoundLowest24h = false;
-                            }
-                        }
-
-                        hoge = pair.Attribute("playSoundHighest24h");
-                        if (hoge != null)
-                        {
-                            if (hoge.Value == "true")
-                            {
-                                PairMonaJpy.PlaySoundHighest24h = true;
-                            }
-                            else
-                            {
-                                PairMonaJpy.PlaySoundHighest24h = false;
-                            }
-                        }
-
-                        // 板グルーピング
-                        hoge = pair.Attribute("depthGrouping");
-                        if (hoge != null)
-                        {
-                            if (!string.IsNullOrEmpty(hoge.Value))
-                            {
-                                try
-                                {
-                                    PairMonaJpy.DepthGrouping = Decimal.Parse(hoge.Value);
-                                }
-                                catch
-                                {
-                                    PairMonaJpy.DepthGrouping = 0;
-                                }
-
-                            }
-                        }
-                    }
-
-                    // PairBchJpy
-                    pair = pairs.Element("BchJpy");
-                    if (pair != null)
-                    {
-                        var hoge = pair.Attribute("playSoundLowest");
-                        if (hoge != null)
-                        {
-                            if (hoge.Value == "true")
-                            {
-                                PairBchJpy.PlaySoundLowest = true;
-                            }
-                            else
-                            {
-                                PairBchJpy.PlaySoundLowest = false;
-                            }
-                        }
-
-                        hoge = pair.Attribute("playSoundHighest");
-                        if (hoge != null)
-                        {
-                            if (hoge.Value == "true")
-                            {
-                                PairBchJpy.PlaySoundHighest = true;
-                            }
-                            else
-                            {
-                                PairBchJpy.PlaySoundHighest = false;
-                            }
-                        }
-
-                        hoge = pair.Attribute("playSoundLowest24h");
-                        if (hoge != null)
-                        {
-                            if (hoge.Value == "true")
-                            {
-                                PairBchJpy.PlaySoundLowest24h = true;
-                            }
-                            else
-                            {
-                                PairBchJpy.PlaySoundLowest24h = false;
-                            }
-                        }
-
-                        hoge = pair.Attribute("playSoundHighest24h");
-                        if (hoge != null)
-                        {
-                            if (hoge.Value == "true")
-                            {
-                                PairBchJpy.PlaySoundHighest24h = true;
-                            }
-                            else
-                            {
-                                PairBchJpy.PlaySoundHighest24h = false;
-                            }
-                        }
-
-                        // 板グルーピング
-                        hoge = pair.Attribute("depthGrouping");
-                        if (hoge != null)
-                        {
-                            if (!string.IsNullOrEmpty(hoge.Value))
-                            {
-                                try
-                                {
-                                    PairBchJpy.DepthGrouping = Decimal.Parse(hoge.Value);
-                                }
-                                catch
-                                {
-                                    PairBchJpy.DepthGrouping = 0;
-                                }
-
-                            }
-                        }
-                    }
-
-
-                }
-
-
-                #endregion
-
-                #region == チャート関連 ==
-
-                var chartSetting = xdoc.Root.Element("Chart");
-                if (chartSetting != null)
-                {
-                    var hoge = chartSetting.Attribute("candleType");
-                    if (hoge != null)
-                    {
-                        if (hoge.Value == CandleTypes.OneMin.ToString())
-                        {
-                            SelectedCandleType = CandleTypes.OneMin;
-                        }
-                        else if (hoge.Value == CandleTypes.OneHour.ToString())
-                        {
-                            SelectedCandleType = CandleTypes.OneHour;
-                        }
-                        else if (hoge.Value == CandleTypes.OneDay.ToString())
-                        {
-                            SelectedCandleType = CandleTypes.OneDay;
                         }
                         else
                         {
@@ -11132,13 +11178,15 @@ namespace BitDesk.ViewModels
 
                             SelectedCandleType = CandleTypes.OneHour;
                         }
+
                     }
                     else
                     {
-                        // TODO other candle types
-
+                        // デフォのチャート、キャンドルタイプ指定
                         SelectedCandleType = CandleTypes.OneHour;
                     }
+
+                    #endregion
 
                 }
                 else
@@ -11146,14 +11194,14 @@ namespace BitDesk.ViewModels
                     // デフォのチャート、キャンドルタイプ指定
                     SelectedCandleType = CandleTypes.OneHour;
                 }
-
-                #endregion
-
             }
-            else
+            catch (System.IO.FileNotFoundException)
             {
-                // デフォのチャート、キャンドルタイプ指定
-                SelectedCandleType = CandleTypes.OneHour;
+                System.Diagnostics.Debug.WriteLine("■■■■■ Error  設定ファイルの保存中 - FileNotFoundException : " + AppConfigFilePath);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("■■■■■ Error  設定ファイルの保存中: " + ex + " while opening : " + AppConfigFilePath);
             }
 
             #endregion
@@ -11820,8 +11868,16 @@ namespace BitDesk.ViewModels
 
             #endregion
 
-            // 設定ファイルの保存
-            doc.Save(AppConfigFilePath);
+            try
+            {
+                // 設定ファイルの保存
+                doc.Save(AppConfigFilePath);
+            }
+            //catch (System.IO.FileNotFoundException) { }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("■■■■■ Error  設定ファイルの保存中: " + ex + " while opening : " + AppConfigFilePath);
+            }
 
             #endregion
 
@@ -12513,86 +12569,86 @@ namespace BitDesk.ViewModels
                     if (Application.Current == null) return false;
                     Application.Current.Dispatcher.Invoke(() =>
                     {
-                    try
-                    {
-                        foreach (var ord in ords.OrderList)
+                        try
                         {
-
-                            var found = orders.FirstOrDefault(x => x.OrderID == ord.OrderID);
-                            if (found != null)
+                            foreach (var ord in ords.OrderList)
                             {
-                                found.AveragePrice = ord.AveragePrice;
-                                found.OrderedAt = ord.OrderedAt;
-                                found.Pair = ord.Pair;
-                                found.Price = ord.Price;
-                                found.RemainingAmount = ord.RemainingAmount;
-                                found.ExecutedAmount = ord.ExecutedAmount;
-                                found.Side = ord.Side;
-                                found.StartAmount = ord.StartAmount;
-                                found.Type = ord.Type;
-                                found.Status = ord.Status;
 
-                                // 現在値のセット
-                                // 投資金額
-                                if (found.Type == "limit")
+                                var found = orders.FirstOrDefault(x => x.OrderID == ord.OrderID);
+                                if (found != null)
                                 {
-                                    // 
-                                    found.ActualPrice = (ord.Price * ord.StartAmount);
-                                    // 一部約定の時は考えない？
+                                    found.AveragePrice = ord.AveragePrice;
+                                    found.OrderedAt = ord.OrderedAt;
+                                    found.Pair = ord.Pair;
+                                    found.Price = ord.Price;
+                                    found.RemainingAmount = ord.RemainingAmount;
+                                    found.ExecutedAmount = ord.ExecutedAmount;
+                                    found.Side = ord.Side;
+                                    found.StartAmount = ord.StartAmount;
+                                    found.Type = ord.Type;
+                                    found.Status = ord.Status;
+
+                                    // 現在値のセット
+                                    // 投資金額
+                                    if (found.Type == "limit")
+                                    {
+                                        // 
+                                        found.ActualPrice = (ord.Price * ord.StartAmount);
+                                        // 一部約定の時は考えない？
+                                    }
+                                    else
+                                    {
+                                        found.ActualPrice = (ord.AveragePrice * ord.StartAmount);
+                                    }
+
+                                    // 現在値との差額
+                                    if ((found.Status == "UNFILLED") || (found.Status == "PARTIALLY_FILLED"))
+                                    {
+                                        found.Shushi = ((ltp - ord.Price));
+                                    }
+                                    else
+                                    {
+                                        // 約定済みなので
+                                        found.Shushi = 0;
+                                    }
+
                                 }
                                 else
                                 {
-                                    found.ActualPrice = (ord.AveragePrice * ord.StartAmount);
-                                }
+                                    // 現在値のセット
+                                    // 投資金額
+                                    if (ord.Type == "limit")
+                                    {
+                                        ord.ActualPrice = (ord.Price * ord.StartAmount);
+                                    }
+                                    else
+                                    {
+                                        ord.ActualPrice = (ord.AveragePrice * ord.StartAmount);
+                                    }
 
-                                // 現在値との差額
-                                if ((found.Status == "UNFILLED") || (found.Status == "PARTIALLY_FILLED"))
-                                {
-                                    found.Shushi = ((ltp - ord.Price));
-                                }
-                                else
-                                {
-                                    // 約定済みなので
-                                    found.Shushi = 0;
-                                }
+                                    // 現在値との差額
+                                    if ((ord.Status == "UNFILLED") || (ord.Status == "PARTIALLY_FILLED"))
+                                    {
+                                        ord.Shushi = ((ltp - ord.Price));
+                                    }
+                                    else
+                                    {
+                                        // 約定済みなので
+                                        ord.Shushi = 0;
+                                    }
 
+
+                                    // リスト追加
+                                    orders.Insert(0, ord);
+                                }
                             }
-                            else
-                            {
-                                // 現在値のセット
-                                // 投資金額
-                                if (ord.Type == "limit")
-                                {
-                                    ord.ActualPrice = (ord.Price * ord.StartAmount);
-                                }
-                                else
-                                {
-                                    ord.ActualPrice = (ord.AveragePrice * ord.StartAmount);
-                                }
 
-                                // 現在値との差額
-                                if ((ord.Status == "UNFILLED") || (ord.Status == "PARTIALLY_FILLED"))
-                                {
-                                    ord.Shushi = ((ltp - ord.Price));
-                                }
-                                else
-                                {
-                                    // 約定済みなので
-                                    ord.Shushi = 0;
-                                }
-
-
-                                // リスト追加
-                                orders.Insert(0, ord);
-                            }
                         }
+                        catch (Exception ex)
+                        {
+                            System.Diagnostics.Debug.WriteLine("■■■■■ GetOrderList: Exception - " + ex.Message);
 
-                    }
-                    catch (Exception ex)
-                    {
-                        System.Diagnostics.Debug.WriteLine("■■■■■ GetOrderList: Exception - " + ex.Message);
-
-                    }
+                        }
                     });
 
                     // 返ってきた注文リストに存在しない、注文を抽出
@@ -12616,17 +12672,49 @@ namespace BitDesk.ViewModels
                     catch (Exception ex)
                     {
                         System.Diagnostics.Debug.WriteLine("■■■■■ GetOrderList lst: Exception - " + ex.Message);
-
                     }
 
                     // 注文リスト更新
                     if (lst.Count > 0)
                     {
-                        // 最新の情報をゲット
-                        Orders oup = await _priApi.GetOrderListByIDs(_getOrdersApiKey, _getOrdersSecret, pair.ToString(), lst);
+                        // リストのリスト（小分けにして分割取得用）
+                        List<List<int>> ListOfList = new List<List<int>>();
 
-                        if (oup != null)
+                        // GetOrderListByIDs 40015 数が多いとエラーになるので、小分けにして。
+                        List<int> temp = new List<int>();
+                        int c = 0;
+
+                        for (int i = 0; i < lst.Count; i++)
                         {
+
+                            temp.Add(lst[c]);
+
+                            if (temp.Count == 5)
+                            {
+                                ListOfList.Add(temp);
+
+                                temp = new List<int>();
+                            }
+
+                            if (c == lst.Count - 1)
+                            {
+                                if (temp.Count > 0)
+                                {
+                                    ListOfList.Add(temp);
+                                }
+
+                                break;
+                            }
+
+                            c = c + 1;
+                        }
+
+
+                        foreach (var list in ListOfList)
+                        {
+                            // 最新の注文情報をゲット
+                            Orders oup = await _priApi.GetOrderListByIDs(_autoTradeApiKey, _autoTradeSecret, pair.ToString(), list);
+
                             // 注文をアップデート
                             foreach (var ord in oup.OrderList)
                             {
@@ -12636,60 +12724,60 @@ namespace BitDesk.ViewModels
                                 }
                                 Application.Current.Dispatcher.Invoke(() =>
                                 {
-                                try
-                                {
-                                    var found = orders.FirstOrDefault(x => x.OrderID == ord.OrderID);
-                                    if (found != null)
+                                    try
                                     {
-                                        int i = orders.IndexOf(found);
-                                        if (i > -1)
+                                        var found = orders.FirstOrDefault(x => x.OrderID == ord.OrderID);
+                                        if (found != null)
                                         {
-                                            orders[i].Status = ord.Status;
-                                            orders[i].AveragePrice = ord.AveragePrice;
-                                            orders[i].OrderedAt = ord.OrderedAt;
-                                            orders[i].Type = ord.Type;
-                                            orders[i].StartAmount = ord.StartAmount;
-                                            orders[i].RemainingAmount = ord.RemainingAmount;
-                                            orders[i].ExecutedAmount = ord.ExecutedAmount;
-                                            orders[i].Price = ord.Price;
-                                            orders[i].AveragePrice = ord.AveragePrice;
+                                            int i = orders.IndexOf(found);
+                                            if (i > -1)
+                                            {
+                                                orders[i].Status = ord.Status;
+                                                orders[i].AveragePrice = ord.AveragePrice;
+                                                orders[i].OrderedAt = ord.OrderedAt;
+                                                orders[i].Type = ord.Type;
+                                                orders[i].StartAmount = ord.StartAmount;
+                                                orders[i].RemainingAmount = ord.RemainingAmount;
+                                                orders[i].ExecutedAmount = ord.ExecutedAmount;
+                                                orders[i].Price = ord.Price;
+                                                orders[i].AveragePrice = ord.AveragePrice;
 
 
-                                            // 現在値のセット
-                                            // 投資金額
-                                            if (orders[i].Type == "limit")
-                                            {
-                                                orders[i].ActualPrice = (ord.Price * ord.StartAmount);
-                                            }
-                                            else
-                                            {
-                                                orders[i].ActualPrice = (ord.AveragePrice * ord.StartAmount);
-                                            }
+                                                // 現在値のセット
+                                                // 投資金額
+                                                if (orders[i].Type == "limit")
+                                                {
+                                                    orders[i].ActualPrice = (ord.Price * ord.StartAmount);
+                                                }
+                                                else
+                                                {
+                                                    orders[i].ActualPrice = (ord.AveragePrice * ord.StartAmount);
+                                                }
 
-                                            // 現在値との差額
-                                            if ((orders[i].Status == "UNFILLED") || (orders[i].Status == "PARTIALLY_FILLED"))
-                                            {
-                                                orders[i].Shushi = ((ltp - ord.Price));
-                                            }
-                                            else
-                                            {
-                                                // 約定済みなので
-                                                orders[i].Shushi = 0;
-                                            }
+                                                // 現在値との差額
+                                                if ((orders[i].Status == "UNFILLED") || (orders[i].Status == "PARTIALLY_FILLED"))
+                                                {
+                                                    orders[i].Shushi = ((ltp - ord.Price));
+                                                }
+                                                else
+                                                {
+                                                    // 約定済みなので
+                                                    orders[i].Shushi = 0;
+                                                }
 
+                                            }
                                         }
                                     }
-                                }
-                                catch (Exception ex)
-                                {
-                                    System.Diagnostics.Debug.WriteLine("■■■■■ Order oup: Exception - " + ex.Message);
+                                    catch (Exception ex)
+                                    {
+                                        System.Diagnostics.Debug.WriteLine("■■■■■ Order oup: Exception - " + ex.Message);
 
-                                }
+                                    }
                                 });
                             }
+
                         }
                     }
-
 
                     APIResultActiveOrders = "";
 
@@ -14370,11 +14458,6 @@ namespace BitDesk.ViewModels
                 pair.AutoTradeBuyOrders = 0;
                 pair.AutoTradeErrOrders = 0;
 
-                if (pair.ThisPair == CurrentPair)
-                {
-                    // タブの「自動取引（On）」を更新
-                    //this.NotifyPropertyChanged("AutoTradeTitle");
-                }
 
                 // !!!!!
                 ltp = pair.Ltp;
@@ -14547,6 +14630,16 @@ namespace BitDesk.ViewModels
                                 pos.Counter = 0;
                             }
 
+                            if (pos.BuyErrorInfo.ErrorCode == 10003)
+                            {
+                                // "システムエラーが発生しました。サポートにお問い合わせ下さい"
+                                // エラーをリセット
+                                pos.BuyHasError = false;
+                                //pos.BuyErrorInfo // クリアしなくても大丈夫かな。
+                                // カウンターをリセット
+                                pos.Counter = 0;
+                            } 
+
                             //
                             if (pos.BuyErrorInfo.ErrorCode == 50009)
                             {
@@ -14571,8 +14664,6 @@ namespace BitDesk.ViewModels
                         if ((pos.SellOrderId == 0) && (pos.SellHasError == false) && (string.IsNullOrEmpty(pos.SellStatus)))
                         {
 
-                            await Task.Delay(200);
-
                             // 万一、LTPが売りより上がっていたら。
                             if (ltp > pos.SellPrice)
                             {
@@ -14590,22 +14681,31 @@ namespace BitDesk.ViewModels
                                 // 売り成功
                                 if (ord.IsSuccess)
                                 {
-                                    pos.SellHasError = false;
+                                    Application.Current.Dispatcher.Invoke(() =>
+                                    {
+                                        pos.SellHasError = false;
 
-                                    pos.SellOrderId = ord.OrderID;
-                                    pos.SellStatus = ord.Status;
+                                        pos.SellOrderId = ord.OrderID;
+                                        pos.SellStatus = ord.Status;
+
+                                    });
 
                                 }
                                 else
                                 {
-                                    pos.SellHasError = true;
-                                    if (pos.SellErrorInfo == null)
+                                    Application.Current.Dispatcher.Invoke(() =>
                                     {
-                                        pos.SellErrorInfo = new ErrorInfo();
-                                    }
-                                    pos.SellErrorInfo.ErrorTitle = ord.Err.ErrorTitle;
-                                    pos.SellErrorInfo.ErrorDescription = ord.Err.ErrorDescription;
-                                    pos.SellErrorInfo.ErrorCode = ord.Err.ErrorCode;
+                                        pos.SellHasError = true;
+                                        if (pos.SellErrorInfo == null)
+                                        {
+                                            pos.SellErrorInfo = new ErrorInfo();
+                                        }
+                                        pos.SellErrorInfo.ErrorTitle = ord.Err.ErrorTitle;
+                                        pos.SellErrorInfo.ErrorDescription = ord.Err.ErrorDescription;
+                                        pos.SellErrorInfo.ErrorCode = ord.Err.ErrorCode;
+
+
+                                    });
 
                                     System.Diagnostics.Debug.WriteLine("UpdateAutoTrade - 売り　sell MakeOrder API failed");
                                 }
@@ -14613,19 +14713,20 @@ namespace BitDesk.ViewModels
                             }
                             else
                             {
-                                pos.SellHasError = true;
-                                if (pos.SellErrorInfo == null)
+                                Application.Current.Dispatcher.Invoke(() =>
                                 {
-                                    pos.SellErrorInfo = new ErrorInfo();
-                                }
-                                pos.SellErrorInfo.ErrorTitle = "注文時にエラーが起きました。";
-                                pos.SellErrorInfo.ErrorDescription = "priApi.MakeOrder is null.";
-                                pos.SellErrorInfo.ErrorCode = -1;
+                                    pos.SellHasError = true;
+                                    if (pos.SellErrorInfo == null)
+                                    {
+                                        pos.SellErrorInfo = new ErrorInfo();
+                                    }
+                                    pos.SellErrorInfo.ErrorTitle = "注文時にエラーが起きました。";
+                                    pos.SellErrorInfo.ErrorDescription = "priApi.MakeOrder is null.";
+                                    pos.SellErrorInfo.ErrorCode = -1;
 
+                                });
                                 System.Diagnostics.Debug.WriteLine("UpdateAutoTrade - 売り　sell MakeOrder returened NULL");
                             }
-
-                            await Task.Delay(200);
 
                         }
                         else
@@ -14649,6 +14750,7 @@ namespace BitDesk.ViewModels
                 // 完了済み注文を、新たに注文し直す。 ただし、アッパーリミット以下なら（暴騰時に買うと、リバウンドですぐ下がる）
                 if ((ltp < pair.AutoTradeUpperLimit) && (ltp > pair.AutoTradeLowerLimit))
                 {
+
                     // 買い価格順でソートしたリスト
                     List<AutoTrade> SortedList = autoTrades.OrderByDescending(o => o.BuyPrice).ToList();
 
@@ -14736,8 +14838,8 @@ namespace BitDesk.ViewModels
                                                         autoTrades.Insert(0, position);
                                                     });
 
-                                                    await Task.Delay(200);
-
+                                                    //await Task.Delay(200);
+                                                    /*
                                                     if (autoTrades.Count > 5)
                                                     {
                                                         // チョット下あたりの注文を抜く。
@@ -14786,7 +14888,7 @@ namespace BitDesk.ViewModels
                                                             }
                                                         }
                                                     }
-
+                                                    */
                                                     // ループ中にリストを弄ったから、ループから抜ける。
                                                     break;
 
@@ -14884,56 +14986,63 @@ namespace BitDesk.ViewModels
                             {
                                 if (res.IsSuccess)
                                 {
-
-                                    position.BuyHasError = false;
-
-                                    position.BuyOrderId = res.OrderID;
-                                    position.BuyFilledPrice = res.AveragePrice;
-                                    position.BuyStatus = res.Status;
-
-                                    // 約定
-                                    if (res.Status == "FULLY_FILLED")
+                                    Application.Current.Dispatcher.Invoke(() =>
                                     {
-                                        // フラグをセット
-                                        position.BuyIsDone = true;
+                                        position.BuyHasError = false;
 
-                                    }
+                                        position.BuyOrderId = res.OrderID;
+                                        position.BuyFilledPrice = res.AveragePrice;
+                                        position.BuyStatus = res.Status;
 
-                                    // 下のカウンターをリセット
-                                    if (i < autoTrades.Count - 1)
-                                    {
-                                        autoTrades[i + 1].Counter = 0;
-                                    }
+                                        // 約定
+                                        if (res.Status == "FULLY_FILLED")
+                                        {
+                                            // フラグをセット
+                                            position.BuyIsDone = true;
 
-                                    // IsDone を削除する。>あとで。
-                                    //_autoTrades2.RemoveAt(i);
+                                        }
+
+                                        // 下のカウンターをリセット
+                                        if (i < autoTrades.Count - 1)
+                                        {
+                                            autoTrades[i + 1].Counter = 0;
+                                        }
+                                    });
+
 
                                 }
                                 else
                                 {
-                                    position.BuyHasError = true;
-                                    if (position.BuyErrorInfo == null)
+                                    Application.Current.Dispatcher.Invoke(() =>
                                     {
-                                        position.BuyErrorInfo = new ErrorInfo();
-                                    }
-                                    position.BuyErrorInfo.ErrorTitle = res.Err.ErrorTitle;
-                                    position.BuyErrorInfo.ErrorDescription = res.Err.ErrorDescription;
-                                    position.BuyErrorInfo.ErrorCode = res.Err.ErrorCode;
+                                        position.BuyHasError = true;
+                                        if (position.BuyErrorInfo == null)
+                                        {
+                                            position.BuyErrorInfo = new ErrorInfo();
+                                        }
+                                        position.BuyErrorInfo.ErrorTitle = res.Err.ErrorTitle;
+                                        position.BuyErrorInfo.ErrorDescription = res.Err.ErrorDescription;
+                                        position.BuyErrorInfo.ErrorCode = res.Err.ErrorCode;
+
+                                    });
 
                                     System.Diagnostics.Debug.WriteLine("■■■■■ UpdateAutoTrade 完了済み注文を、新たに注文し直すループ。途中 MakeOrder API returned error code.");
                                 }
                             }
                             else
                             {
-                                position.BuyHasError = true;
-                                if (position.BuyErrorInfo == null)
+                                Application.Current.Dispatcher.Invoke(() =>
                                 {
-                                    position.BuyErrorInfo = new ErrorInfo();
-                                }
-                                position.BuyErrorInfo.ErrorTitle = "注文時にエラーが起きました。";
-                                position.BuyErrorInfo.ErrorDescription = "priApi.MakeOrder is null.";
-                                position.BuyErrorInfo.ErrorCode = -1;
+                                    position.BuyHasError = true;
+                                    if (position.BuyErrorInfo == null)
+                                    {
+                                        position.BuyErrorInfo = new ErrorInfo();
+                                    }
+                                    position.BuyErrorInfo.ErrorTitle = "注文時にエラーが起きました。";
+                                    position.BuyErrorInfo.ErrorDescription = "priApi.MakeOrder is null.";
+                                    position.BuyErrorInfo.ErrorCode = -1;
 
+                                });
                                 System.Diagnostics.Debug.WriteLine("■■■■■ UpdateAutoTrade 完了済み注文を、新たに注文し直すループ。途中 MakeOrder API returned null.");
 
                             }
@@ -14946,8 +15055,6 @@ namespace BitDesk.ViewModels
 
                             });
 
-                            await Task.Delay(300);
-
                             // ループ中にリストを弄ったから、ループから抜ける。
                             break;
 
@@ -14958,11 +15065,11 @@ namespace BitDesk.ViewModels
                         {
                             await Task.Delay(200);
 
-                            if ((ltp - SortedList[i].BuyPrice) > 500M)
+                            if ((ltp - SortedList[i].BuyPrice) > 300M)
                             {
 
                                 // 現在値よりチョイ下の価格で買う。
-                                decimal basePrice = ltp - 500M;
+                                decimal basePrice = ltp - 300M;
 
                                 if ((basePrice < ltp) && (basePrice > SortedList[i].BuyPrice))
                                 {
@@ -15065,252 +15172,231 @@ namespace BitDesk.ViewModels
 
                 }
 
-                await Task.Delay(300);
+                // 削除アイテム用リスト
+                List<AutoTrade> needDeleteList = new List<AutoTrade>();
+
+                // キャンセル用リスト
+                List<AutoTrade> needCancelList = new List<AutoTrade>();
+
+                // ロスカット用リスト
+                List<AutoTrade> needLossCutList = new List<AutoTrade>();
 
                 // 掃除ループ
                 int h = -1;
-                foreach (var pos in autoTrades)
+                if (Application.Current == null) break;
+                Application.Current.Dispatcher.Invoke(() =>
                 {
-                    h = h + 1;
-
-                    if (pos.IsCanceled == true)
+                    foreach (var pos in autoTrades)
                     {
-                        if (Application.Current == null) break;
-                        Application.Current.Dispatcher.Invoke(() =>
+                        h = h + 1;
+
+                        if (pos.IsCanceled == true)
                         {
-                            autoTrades.Remove(pos);
-                        });
-                        
-                        break;
-                    }
-
-                    if (pos.IsDone == true)
-                    {
-                        if (Application.Current == null) break;
-                        Application.Current.Dispatcher.Invoke(() =>
-                        {
-                            autoTrades.Remove(pos);
-                        });
-                        
-                        break;
-                    }
-
-                    if (pos.BuyHasError == true)
-                    {
-                        //_autoTrades2.Remove(pos);
-                        //break;
-
-
-                        // 停滞タイムアウトでキャンセルしようとして、50010（指定の注文はキャンセル出来ませんエラー）が返ると、エラーが増え続ける。
-                        // ので、スキップ
-                        continue;
-                    }
-                    else if (pos.SellHasError == true)
-                    {
-                        //_autoTrades2.Remove(pos);
-                        //break;
-
-                        continue;
-                    }
-
-
-                    // 停滞中を抜く。
-                    // TODO (一部約定している場合は、キャンセルすると端数が出る。それどうするか)
-                    if ((pos.BuyStatus == "UNFILLED" || pos.BuyStatus == "PARTIALLY_FILLED") && pos.BuyHasError == false)
-                    {
-                        // 先頭でもなく、一番下でもない
-                        if ((h > 0) && (h < autoTrades.Count-1))
-                        {
-                            // 60秒以上停滞している。
-                            if (pos.Counter > 60)
-                            {
-                                // 注文を抜く。
-                                OrderResult ord = await _priApi.CancelOrder(_autoTradeApiKey, _autoTradeSecret, pair.ThisPair.ToString(), pos.BuyOrderId);
-                                if (ord != null)
-                                {
-                                    if (ord.IsSuccess)
-                                    {
-                                        if (Application.Current == null) break;
-                                        Application.Current.Dispatcher.Invoke(() =>
-                                        {
-                                            autoTrades.Remove(pos);
-                                        });
-                                    }
-                                    else
-                                    {
-                                        pos.BuyHasError = true;
-                                        if (pos.BuyErrorInfo == null)
-                                        {
-                                            pos.BuyErrorInfo = new ErrorInfo();
-                                        }
-                                        pos.BuyErrorInfo.ErrorTitle = ord.Err.ErrorTitle;
-                                        pos.BuyErrorInfo.ErrorDescription = ord.Err.ErrorDescription;
-                                        pos.BuyErrorInfo.ErrorCode = ord.Err.ErrorCode;
-
-                                        System.Diagnostics.Debug.WriteLine("■■■■■ UpdateAutoTrade 停滞中を抜く。キャンセルで。MakeOrder API returned error code.");
-                                    }
-
-                                }
-                                else
-                                {
-                                    pos.BuyHasError = true;
-                                    if (pos.BuyErrorInfo == null)
-                                    {
-                                        pos.BuyErrorInfo = new ErrorInfo();
-                                    }
-                                    pos.BuyErrorInfo.ErrorTitle = ord.Err.ErrorTitle;
-                                    pos.BuyErrorInfo.ErrorDescription = ord.Err.ErrorDescription;
-                                    pos.BuyErrorInfo.ErrorCode = ord.Err.ErrorCode;
-
-                                    System.Diagnostics.Debug.WriteLine("■■■■■ UpdateAutoTrade 停滞中を抜く。キャンセルで。MakeOrder API returned null.");
-                                }
-
-                                break;
-
-                            }
-
-
-
-
+                            needDeleteList.Add(pos);
                         }
 
-
-                    }
-
-                    // 指定幅　下がったら、損切。
-                    if ((pos.SellOrderId != 0) && pos.BuyIsDone && (pos.SellIsDone == false))
-                    {
-                        if (pos.SellStatus == "UNFILLED")
+                        if (pos.IsDone == true)
                         {
+                            needDeleteList.Add(pos);
+                        }
 
-                            bool lostcutSell = false;
+                        if (pos.BuyHasError == true)
+                        {
+                            continue;
+                        }
+                        else if (pos.SellHasError == true)
+                        {
+                            continue;
+                        }
 
-                            // ロスカットの幅を超えたらキャンセル。（または、同時に、幅が24Hを超えていたら？）
-                            if ((pos.SellPrice - ltp) > pair.AutoTradeLostCut)
+                        // 停滞中を抜く。
+                        // TODO (一部約定している場合は、キャンセルすると端数が出る。それどうするか)
+                        if ((pos.BuyStatus == "UNFILLED" || pos.BuyStatus == "PARTIALLY_FILLED") && pos.BuyHasError == false)
+                        {
+                            // 先頭でもなく、一番下でもない
+                            if ((h > 0) && (h < autoTrades.Count - 1))
                             {
-
-                                OrderResult ord = await _priApi.CancelOrder(_autoTradeApiKey, _autoTradeSecret, pair.ThisPair.ToString(), pos.SellOrderId);
-                                if (ord != null)
+                                // 20秒以上停滞している。
+                                if (pos.Counter > 20)
                                 {
-                                    if (ord.IsSuccess)
-                                    {
-                                        pos.SellStatus = ord.Status;
-
-                                        pos.IsCanceled = true;
-
-                                        lostcutSell = true;
-                                    }
-                                    else
-                                    {
-                                        pos.SellHasError = true;
-                                        if (pos.SellErrorInfo == null)
-                                        {
-                                            pos.SellErrorInfo = new ErrorInfo();
-                                        }
-                                        pos.SellErrorInfo.ErrorTitle = ord.Err.ErrorTitle;
-                                        pos.SellErrorInfo.ErrorDescription = ord.Err.ErrorDescription;
-                                        pos.SellErrorInfo.ErrorCode = ord.Err.ErrorCode;
-
-                                        System.Diagnostics.Debug.WriteLine("■■■■■ UpdateAutoTrade 損切売りキャンセルで。MakeOrder API returned error code.");
-                                    }
-
+                                    needCancelList.Add(pos);
                                 }
-                                else
+                            }
+                        }
+
+                        // 指定幅　下がったら、損切。
+                        if ((pos.SellOrderId != 0) && pos.BuyIsDone && (pos.SellIsDone == false))
+                        {
+                            if (pos.SellStatus == "UNFILLED")
+                            {
+                                // ロスカットの幅を超えたらキャンセルして、再発注
+                                if ((pos.SellPrice - ltp) > pair.AutoTradeLossCut)
                                 {
-                                    pos.SellHasError = true;
-                                    if (pos.SellErrorInfo == null)
+                                    // 一瞬の下げヒゲ対策
+                                    if (pos.LossCutCounter > 7)
                                     {
-                                        pos.SellErrorInfo = new ErrorInfo();
-                                    }
-                                    pos.SellErrorInfo.ErrorTitle = ord.Err.ErrorTitle;
-                                    pos.SellErrorInfo.ErrorDescription = ord.Err.ErrorDescription;
-                                    pos.SellErrorInfo.ErrorCode = ord.Err.ErrorCode;
+                                        pos.LossCutCounter = 0;
 
-                                    System.Diagnostics.Debug.WriteLine("■■■■■ UpdateAutoTrade 損切売りキャンセルで。MakeOrder API returned null.");
-                                }
-
-                                if (lostcutSell)
-                                {
-                                    // 新規売り
-                                    AutoTrade position = new AutoTrade();
-                                    position.BuySide = "buy";
-                                    position.BuyAmount = pos.BuyAmount;
-                                    position.SellSide = "sell";
-                                    position.SellAmount = pos.SellAmount;
-
-                                    position.BuyPrice = pos.BuyPrice;
-                                    position.SellPrice = ltp + 500M;
-
-                                    // 買いは済んだことにする。
-                                    position.BuyOrderId = pos.BuyOrderId;
-                                    position.BuyStatus = "FULLY_FILLED";
-                                    position.BuyIsDone = true;
-
-                                    // マイナス収支
-                                    position.ShushiAmount = (position.SellPrice * position.SellAmount) - (pos.BuyPrice * pos.BuyAmount);
-
-                                    // 売り発注
-                                    OrderResult ord2 = await _priApi.MakeOrder(_autoTradeApiKey, _autoTradeSecret, pair.ThisPair.ToString(), position.SellAmount, position.SellPrice, position.SellSide, "limit");
-
-                                    if (ord2 != null)
-                                    {
-                                        // 売り成功
-                                        if (ord2.IsSuccess)
-                                        {
-                                            pos.SellHasError = false;
-
-                                            pos.SellOrderId = ord2.OrderID;
-                                            pos.SellStatus = ord2.Status;
-
-                                        }
-                                        else
-                                        {
-                                            pos.SellHasError = true;
-                                            if (pos.SellErrorInfo == null)
-                                            {
-                                                pos.SellErrorInfo = new ErrorInfo();
-                                            }
-                                            pos.SellErrorInfo.ErrorTitle = ord2.Err.ErrorTitle;
-                                            pos.SellErrorInfo.ErrorDescription = ord2.Err.ErrorDescription;
-                                            pos.SellErrorInfo.ErrorCode = ord2.Err.ErrorCode;
-
-                                            System.Diagnostics.Debug.WriteLine("UpdateAutoTrade - 売り　sell MakeOrder API failed");
-                                        }
+                                        needLossCutList.Add(pos);
 
                                     }
-                                    else
-                                    {
-                                        pos.SellHasError = true;
-                                        if (pos.SellErrorInfo == null)
-                                        {
-                                            pos.SellErrorInfo = new ErrorInfo();
-                                        }
-                                        pos.SellErrorInfo.ErrorTitle = "注文時にエラーが起きました。";
-                                        pos.SellErrorInfo.ErrorDescription = "priApi.MakeOrder is null.";
-                                        pos.SellErrorInfo.ErrorCode = -1;
 
-                                        System.Diagnostics.Debug.WriteLine("UpdateAutoTrade - 売り　sell MakeOrder returened NULL");
-                                    }
-
-                                    // リストへ追加
-                                    if (Application.Current == null) break;
-                                    Application.Current.Dispatcher.Invoke(() =>
-                                    {
-                                        // 新規追加
-                                        autoTrades.Insert(0, position);
-                                    });
-
-                                    // 弄ったのでループを抜ける
-                                    break;
+                                    // カウントアップ
+                                    pos.LossCutCounter = pos.LossCutCounter + 1;
 
                                 }
 
                             }
+                        }
+
+                    }
+
+                });
+
+                if (needLossCutList.Count > 0)
+                {
+                    foreach(var ls in needLossCutList)
+                    {
+
+                        OrderResult ord = await _priApi.CancelOrder(_autoTradeApiKey, _autoTradeSecret, pair.ThisPair.ToString(), ls.SellOrderId);
+                        if (ord != null)
+                        {
+                            if (ord.IsSuccess)
+                            {
+
+                                Application.Current.Dispatcher.Invoke(() =>
+                                {
+                                    var newSellPrice = ltp + 1000M;
+
+                                    // 
+                                    ls.SellOrderId = 0;
+                                    ls.SellStatus = "";
+                                    ls.SellPrice = newSellPrice;
+                                    ls.SellStatus = ord.Status;
+
+                                    ls.ShushiAmount = (ls.SellPrice * ls.SellAmount) - (ls.BuyPrice * ls.BuyAmount);
+
+                                });
+
+                            }
+                            else
+                            {
+
+                                Application.Current.Dispatcher.Invoke(() =>
+                                {
+                                    ls.SellHasError = true;
+                                    if (ls.SellErrorInfo == null)
+                                    {
+                                        ls.SellErrorInfo = new ErrorInfo();
+                                    }
+                                    ls.SellErrorInfo.ErrorTitle = ord.Err.ErrorTitle;
+                                    ls.SellErrorInfo.ErrorDescription = ord.Err.ErrorDescription;
+                                    ls.SellErrorInfo.ErrorCode = ord.Err.ErrorCode;
+
+                                });
+
+
+                                System.Diagnostics.Debug.WriteLine("■■■■■ UpdateAutoTrade 損切売りキャンセルで。MakeOrder API returned error code.");
+                            }
 
                         }
+                        else
+                        {
+                            Application.Current.Dispatcher.Invoke(() =>
+                            {
+                                ls.SellHasError = true;
+                                if (ls.SellErrorInfo == null)
+                                {
+                                    ls.SellErrorInfo = new ErrorInfo();
+                                }
+                                ls.SellErrorInfo.ErrorTitle = ord.Err.ErrorTitle;
+                                ls.SellErrorInfo.ErrorDescription = ord.Err.ErrorDescription;
+                                ls.SellErrorInfo.ErrorCode = ord.Err.ErrorCode;
+
+                            });
+
+                            System.Diagnostics.Debug.WriteLine("■■■■■ UpdateAutoTrade 損切売りキャンセルで。MakeOrder API returned null.");
+                        }
+
                     }
 
                 }
+
+                // キャンセルリストを処理
+                if (needCancelList.Count > 0)
+                {
+                    foreach (var ca in needCancelList)
+                    {
+                        try
+                        {
+                            // 注文を抜く。
+                            OrderResult ord = await _priApi.CancelOrder(_autoTradeApiKey, _autoTradeSecret, pair.ThisPair.ToString(), ca.BuyOrderId);
+                            if (ord != null)
+                            {
+                                if (ord.IsSuccess)
+                                {
+                                    needDeleteList.Add(ca);
+                                }
+                                else
+                                {
+                                    Application.Current.Dispatcher.Invoke(() =>
+                                    {
+
+                                        ca.BuyHasError = true;
+                                        if (ca.BuyErrorInfo == null)
+                                        {
+                                            ca.BuyErrorInfo = new ErrorInfo();
+                                        }
+                                        ca.BuyErrorInfo.ErrorTitle = ord.Err.ErrorTitle;
+                                        ca.BuyErrorInfo.ErrorDescription = ord.Err.ErrorDescription;
+                                        ca.BuyErrorInfo.ErrorCode = ord.Err.ErrorCode;
+
+                                    });
+
+                                    System.Diagnostics.Debug.WriteLine("■■■■■ UpdateAutoTrade 停滞中を抜く。キャンセルで。MakeOrder API returned error code.");
+                                }
+
+                            }
+                            else
+                            {
+
+                                Application.Current.Dispatcher.Invoke(() =>
+                                {
+                                    ca.BuyHasError = true;
+                                    if (ca.BuyErrorInfo == null)
+                                    {
+                                        ca.BuyErrorInfo = new ErrorInfo();
+                                    }
+                                    ca.BuyErrorInfo.ErrorTitle = ord.Err.ErrorTitle;
+                                    ca.BuyErrorInfo.ErrorDescription = ord.Err.ErrorDescription;
+                                    ca.BuyErrorInfo.ErrorCode = ord.Err.ErrorCode;
+
+                                });
+
+                                System.Diagnostics.Debug.WriteLine("■■■■■ UpdateAutoTrade 停滞中を抜く。キャンセルで。MakeOrder API returned null.");
+                            }
+                        }
+                        catch
+                        {
+                            System.Diagnostics.Debug.WriteLine("■■■■■ UpdateAutoTrade 停滞中を抜く。キャンセルで。");
+                        }
+
+
+                    }
+
+                }
+                needCancelList.Clear();
+
+                // 削除リストを処理
+                if (Application.Current == null) break;
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    foreach (var aaa in needDeleteList)
+                    {
+                        autoTrades.Remove(aaa);
+                    }
+                });
+                needDeleteList.Clear();
 
             }
         }
@@ -15750,41 +15836,42 @@ namespace BitDesk.ViewModels
                     {
                         // 逆順にする
                         ListOhlcvsOneMin.Reverse();
+                    }
+                    else
+                    {
+                        ListOhlcvsOneMin = new List<Ohlcv>();
+                        Debug.WriteLine("■■■■■ " + pair.ToString() + " GetCandlesticks error: 今日の1min取得 null");
+                    }
 
-                        // 00:00:00から23:59:59分までしか取れないので、 3時間分取るには、00:00:00から3:00までは 最新のデータとるには日付を１日マイナスする
-                        if (dtToday.Hour <= 2)  // 3時間欲しい場合 2am までは昨日の分も。
+                    // 00:00:00から23:59:59分までしか取れないので、 3時間分取るには、00:00:00から3:00までは 最新のデータとるには日付を１日マイナスする
+                    if (dtToday.Hour <= 2)  // 3時間欲しい場合 2am までは昨日の分も。
+                    {
+                        //Debug.WriteLine("昨日の1min取得開始");
+
+                        await Task.Delay(200);
+
+                        // 昨日
+                        DateTime dtTarget = dtToday.AddDays(-1);
+
+                        List<Ohlcv> res = await GetCandlestick(pair, CandleTypes.OneMin, dtTarget);
+                        if (res != null)
                         {
-                            //Debug.WriteLine("昨日の1min取得開始");
+                            // 逆順にする
+                            res.Reverse();
 
-                            await Task.Delay(200);
-
-                            // 昨日
-                            DateTime dtTarget = dtToday.AddDays(-1);
-
-                            List<Ohlcv> res = await GetCandlestick(pair, CandleTypes.OneMin, dtTarget);
-                            if (res != null)
+                            foreach (var r in res)
                             {
-                                // 逆順にする
-                                res.Reverse();
-
-                                foreach (var r in res)
-                                {
-                                    ListOhlcvsOneMin.Add(r);
-                                }
-                            }
-                            else
-                            {
-                                Debug.WriteLine("■■■■■ " + pair.ToString() + " GetCandlesticks error: 昨日の1min取得 null");
+                                ListOhlcvsOneMin.Add(r);
                             }
                         }
                         else
                         {
-                            //Debug.WriteLine("昨日の1min取得スキップ " + dtToday.Hour.ToString());
+                            Debug.WriteLine("■■■■■ " + pair.ToString() + " GetCandlesticks error: 昨日の1min取得 null");
                         }
                     }
                     else
                     {
-                        Debug.WriteLine("■■■■■ " + pair.ToString() + " GetCandlesticks error: 今日の1min取得 null");
+                        //Debug.WriteLine("昨日の1min取得スキップ " + dtToday.Hour.ToString());
                     }
 
                 }
@@ -16338,7 +16425,7 @@ namespace BitDesk.ViewModels
                             Debug.WriteLine("■■■■■ Chart loading error: " + ex.ToString());
                         }
 
-                    });
+                    }, System.Windows.Threading.DispatcherPriority.Background);
                     
                 }
                 catch (Exception ex)
@@ -17342,7 +17429,6 @@ namespace BitDesk.ViewModels
 
                     }
                 }
-                catch (System.IO.FileNotFoundException) { }
                 catch (Exception ex)
                 {
                     System.Diagnostics.Debug.WriteLine("■■■■■ Error  自動取引データロード中: " + ex + " while opening : " + AutoTrades_FilePath);
@@ -18948,7 +19034,6 @@ namespace BitDesk.ViewModels
                 return;
             }
 
-
             // TEMP
             if (ActivePair.ThisPair != Pairs.btc_jpy)
                 return;
@@ -18961,132 +19046,67 @@ namespace BitDesk.ViewModels
             if (pair.AutoTradeStart == false)
                 return;
 
+            if (pair.AutoTradeSlots == 0)
+                return;
+
+            //if (pair.AutoTradeSlots >= 15)
+            //    pair.AutoTradeSlots = 15;
+
+            if (pair.AutoTradeSlots <= pair.AutoTrades.Count - 1)
+                return;
+
+            if ((pair.AutoTradeSlots - (pair.AutoTrades.Count - 1)) > 15)
+                pair.AutoTradeSlots = (pair.AutoTrades.Count - 1) + 15;
+
+            var newSlots = pair.AutoTradeSlots - pair.AutoTrades.Count;
+
+
             // 情報表示数のリセット。
-            pair.AutoTradeActiveOrders = 0;
-            pair.AutoTradeSellOrders = 0;
-            pair.AutoTradeBuyOrders = 0;
-            pair.AutoTradeErrOrders = 0;
+            //pair.AutoTradeActiveOrders = 0;
+            //pair.AutoTradeSellOrders = 0;
+            //pair.AutoTradeBuyOrders = 0;
+            //pair.AutoTradeErrOrders = 0;
 
-            // 損益表示リセット
-            //pair.AutoTradeProfit = 0;
+                // 損益表示リセット
+                //pair.AutoTradeProfit = 0;
 
-            // 上値制限セット
+                // 上値制限セット
             if (pair.AutoTradeUpperLimit == 0)
                 // pair.AutoTradeUpperLimit = ((ltp / 1000) * 1000) + 10000M;
                 pair.AutoTradeUpperLimit = pair.HighestIn24Price - 2000M;
 
             // 下値制限セット
             if (pair.AutoTradeLowerLimit == 0)
-                pair.AutoTradeLowerLimit = ((ltp / 1000) * 1000) - 50000M;
+                //pair.AutoTradeLowerLimit = ((ltp / 1000) * 1000) - 50000M;
+                pair.AutoTradeLowerLimit = pair.LowestIn24Price - 5000M;
+
+            // 幅
+            if (pair.AutoTradeDefaultHaba <= 0)
+                pair.AutoTradeDefaultHaba = 500;
+
+            decimal haba = pair.AutoTradeDefaultHaba;
 
             // ベース価格
-            decimal basePrice = ((ltp / 1000) * 1000);
+            decimal basePrice = ltp;//((ltp / 1000) * 1000);
 
-            // センチネルの追加
-            for (int i = 0; i < 15; i++)
+            if (basePrice > pair.AutoTradeUpperLimit)
+                basePrice = pair.AutoTradeUpperLimit - haba;
+
+            // 追加
+            for (int i = 0; i < newSlots; i++)
             {
 
                 AutoTrade position = new AutoTrade();
 
                 position.BuySide = "buy";
-                position.BuyAmount = 0.0001M;
+                position.BuyAmount = pair.AutoTradeTama;
                 position.SellSide = "sell";
-                position.SellAmount = 0.0001M;
+                position.SellAmount = pair.AutoTradeTama;
 
-                if (i == 0)
-                {
-                    // 500 単位
-                    position.BuyPrice = basePrice - 500M;
-                    position.SellPrice = position.BuyPrice + 1000M;
-
-                }
-                else if (i == 1)
-                {
-                    // 500 単位
-                    position.BuyPrice = basePrice - 1000M;
-                    position.SellPrice = position.BuyPrice + 1000M;
-                }
-                else if (i == 2)
-                {
-                    // 1000 単位
-                    position.BuyPrice = basePrice - 3000M;
-                    position.SellPrice = position.BuyPrice + 1000M;
-                }
-                else if (i == 3)
-                {
-                    // 1000 単位
-                    position.BuyPrice = basePrice - 5000M;
-                    position.SellPrice = position.BuyPrice + 1000M;
-                }
-                else if (i == 4)
-                {
-                    // 1000 単位
-                    position.BuyPrice = basePrice - 7000M;
-                    position.SellPrice = position.BuyPrice + 1000M;
-                }
-                else if (i == 5)
-                {
-                    // 1000 単位
-                    position.BuyPrice = basePrice - 9000M;
-                    position.SellPrice = position.BuyPrice + 1000M;
-                }
-                else if (i == 6)
-                {
-                    // 1000 単位
-                    position.BuyPrice = basePrice - 11000M;
-                    position.SellPrice = position.BuyPrice + 1000M;
-                }
-                else if (i == 7)
-                {
-                    // 1500 単位
-                    position.BuyPrice = basePrice - 12500M;
-                    position.SellPrice = position.BuyPrice + 1000M;
-                }
-                else if (i == 8)
-                {
-                    // 2500 単位
-                    position.BuyPrice = basePrice - 15000M;
-                    position.SellPrice = position.BuyPrice + 1000M;
-                }
-                else if (i == 9)
-                {
-                    // 5000 単位
-                    position.BuyPrice = basePrice - 20000M;
-                    position.SellPrice = position.BuyPrice + 1000M;
-                }
-                else if (i <= 10)
-                {
-                    // 5000 単位
-                    position.BuyPrice = basePrice - 25000M;
-                    position.SellPrice = position.BuyPrice + 1000M;
-                }
-                else if (i == 11)
-                {
-                    // 5000 単位
-                    position.BuyPrice = basePrice - 30000M;
-                    position.SellPrice = position.BuyPrice + 1000M;
-                }
-                else if (i == 12)
-                {
-                    // 10000 単位
-                    position.BuyPrice = basePrice - 35000M;
-                    position.SellPrice = position.BuyPrice + 1000M;
-                }
-                else if (i == 13)
-                {
-                    // 10000 単位
-                    position.BuyPrice = basePrice - 40000M;
-                    position.SellPrice = position.BuyPrice + 1000M;
-                }
-                else if (i == 14)
-                {
-                    // 10000 単位
-                    position.BuyPrice = basePrice - 45000M;
-                    position.SellPrice = position.BuyPrice + 1000M;
-                }
+                position.BuyPrice = basePrice - (haba * i);
+                position.SellPrice = position.BuyPrice + (haba * 2);
 
                 position.ShushiAmount = (position.SellPrice * position.SellAmount) - (position.BuyPrice * position.BuyAmount);
-
 
                 // 注文発注
                 OrderResult res = await _priApi.MakeOrder(_autoTradeApiKey, _autoTradeSecret, pair.ThisPair.ToString(), position.BuyAmount, position.BuyPrice, position.BuySide, "limit");
@@ -19146,13 +19166,11 @@ namespace BitDesk.ViewModels
                     // リストヘ追加
                     autoTrades.Add(position);
 
-
                 });
 
-                await Task.Delay(600);
+                //await Task.Delay(500);
 
             }
-
 
             // 注文数のセット
             pair.AutoTradeActiveOrders = autoTrades.Count;
