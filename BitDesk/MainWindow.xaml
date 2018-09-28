@@ -16,7 +16,7 @@
                   Height="450" Width="800"
                   MinWidth="430" MinHeight="474"
         
-                  Background="{DynamicResource WindowBackgroundColor}"
+                  Background="Transparent"
                   BorderThickness="0.1"
         
                   fw:AcrylicWindow.Enabled="True"
@@ -72,7 +72,7 @@
                     <!-- アプリアイコン -->
                     <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left">
 
-                        <Viewbox Margin="9 6 3 3" Panel.ZIndex="1" HorizontalAlignment="Left" VerticalAlignment="Center" Stretch="Uniform" Width="12" Height="12" ToolTip="{Binding AppTitle, Mode=OneWay}" ToolTipService.ToolTip="{Binding AppTitle, Mode=OneWay}">
+                        <Viewbox Margin="9 6 3 3" Panel.ZIndex="1" HorizontalAlignment="Left" VerticalAlignment="Center" Stretch="Uniform" Width="12" Height="12" Focusable="True" FocusVisualStyle="{x:Null}" ToolTip="{Binding AppTitle, Mode=OneWay}" ToolTipService.ToolTip="{Binding AppTitle, Mode=OneWay}">
                             <Canvas Opacity="1" Width="12" Height="12" HorizontalAlignment="Center" VerticalAlignment="Center">
 
                                 <Path Width="12" Height="12" Stretch="Uniform" Fill="{DynamicResource WindowBackgroundBaseColorBrush}" StrokeThickness="0.8" Stroke="#FF545454" StrokeLineJoin="Round" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Data="m 4 14 h 8 V 43 H 4 Z m 16 7 h 8 V 43 H 20 Z M 36 5 h 8 V 43 H 36 Z M 7.9830518 4.7966104 v 7.9999986 m 15.8644042 0.0339 v 7.999998"/>
@@ -2180,6 +2180,7 @@
                                                             <RowDefinition Height="Auto"/>
                                                             <RowDefinition Height="Auto"/>
                                                             <RowDefinition Height="Auto"/>
+                                                            <RowDefinition Height="Auto"/>
                                                         </Grid.RowDefinitions>
                                                         <Grid.ColumnDefinitions>
                                                             <ColumnDefinition Width="50*"/>
@@ -2226,24 +2227,28 @@
                                                         </Border>
                                                         <Border Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Padding="3">
                                                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                                                <Label Content="ロット追加起点： " VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"></Label>
+                                                                <TextBox Text="{Binding ActivePair.AutoTradeAddFrom}" Width="80" Style="{DynamicResource DefaultTextBoxStyle}"></TextBox>
+                                                            </StackPanel>
+                                                        </Border>
+                                                        <Border Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Padding="3">
+                                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                                                                 <Label Content="取引幅： " VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"></Label>
                                                                 <TextBox Text="{Binding ActivePair.AutoTradeDefaultHaba}" Width="80" Style="{DynamicResource DefaultTextBoxStyle}"></TextBox>
                                                             </StackPanel>
                                                         </Border>
-                                                        <Border Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Padding="3">
+                                                        <Border Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2" Padding="3">
                                                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                                                                 <Label Content="ロット数： " VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"></Label>
                                                                 <TextBox Text="{Binding ActivePair.AutoTradeSlots}" Width="80" Style="{DynamicResource DefaultTextBoxStyle}"></TextBox>
                                                             </StackPanel>
                                                         </Border>
-
-                                                        <Border Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="3" Padding="3">
+                                                        <Border Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="3" Padding="3">
                                                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0">
                                                                 <Button Padding="3" TextElement.FontWeight="DemiBold" Width="120" Command="{Binding AutoTradeAddCommand}" IsEnabled="{Binding ActivePair.StopButtonEnable}" Content="追加"/>
                                                             </StackPanel>
                                                         </Border>
-                                                        
-                                                        <Border Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="2" Padding="3">
+                                                        <Border Grid.Row="10" Grid.Column="0" Grid.ColumnSpan="2" Padding="3">
                                                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0 24 0 0">
                                                                 <Label Content="損益： " FontSize="24" Style="{DynamicResource DefaultLabelStyle}"></Label>
                                                                 <TextBlock Text="{Binding ActivePair.AutoTradeProfit, Mode=OneWay, StringFormat=0.#############################}" FontSize="24" Style="{DynamicResource DefaultTextBlockStyle}"></TextBlock>
@@ -4225,7 +4230,7 @@
                                                 </GridViewColumn.CellTemplate>
                                             </GridViewColumn>
 
-                                            <GridViewColumn Header="売/買" Width="{Binding ElementName=AT2Width1, Path=ActualWidth}">
+                                            <GridViewColumn Header="売/買" Width="{Binding ElementName=AT2Width1, Path=ActualWidth}" common:GridViewSort.PropertyName="BuySideText">
                                                 <GridViewColumn.CellTemplate>
                                                     <DataTemplate>
                                                         <TextBlock x:Name="AutoBuySide" Text="{Binding BuySideText, Mode=OneWay}" Padding="3"/>
@@ -4251,7 +4256,7 @@
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
                                             </GridViewColumn>
-                                            <GridViewColumn Header="注文数" Width="{Binding ElementName=AT2Width2, Path=ActualWidth}">
+                                            <GridViewColumn Header="注文数" Width="{Binding ElementName=AT2Width2, Path=ActualWidth}" common:GridViewSort.PropertyName="BuyAmount">
                                                 <GridViewColumn.CellTemplate>
                                                     <DataTemplate>
                                                         <TextBlock x:Name="AutoBuyAmount" Text="{Binding BuyAmount, Mode=OneWay, StringFormat=0.#############################}" Padding="3"/>
@@ -4305,7 +4310,7 @@
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
                                             </GridViewColumn>
-                                            <GridViewColumn Header="ステータス" Width="{Binding ElementName=AT2Width5, Path=ActualWidth}">
+                                            <GridViewColumn Header="ステータス" Width="{Binding ElementName=AT2Width5, Path=ActualWidth}" common:GridViewSort.PropertyName="BuyStatusText">
                                                 <GridViewColumn.CellTemplate>
                                                     <DataTemplate>
                                                         <TextBlock x:Name="AutoBuyStatusText" Text="{Binding BuyStatusText, Mode=OneWay}" Padding="3"/>
@@ -4353,7 +4358,7 @@
                                             </GridViewColumn>
 
 
-                                            <GridViewColumn Header="売/買" Width="{Binding ElementName=AT2Width7, Path=ActualWidth}">
+                                            <GridViewColumn Header="売/買" Width="{Binding ElementName=AT2Width7, Path=ActualWidth}" common:GridViewSort.PropertyName="SellSideText">
                                                 <GridViewColumn.CellTemplate>
                                                     <DataTemplate>
                                                         <TextBlock x:Name="AutoSellSide" Text="{Binding SellSideText, Mode=OneWay}" Padding="3"/>
@@ -4379,7 +4384,7 @@
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
                                             </GridViewColumn>
-                                            <GridViewColumn Header="注文数" Width="{Binding ElementName=AT2Width8, Path=ActualWidth}">
+                                            <GridViewColumn Header="注文数" Width="{Binding ElementName=AT2Width8, Path=ActualWidth}" common:GridViewSort.PropertyName="SellAmount">
                                                 <GridViewColumn.CellTemplate>
                                                     <DataTemplate>
                                                         <TextBlock x:Name="AutoSellAmount" Text="{Binding SellAmount, Mode=OneWay, StringFormat=0.#############################}" Padding="3"/>
@@ -4433,7 +4438,7 @@
                                                     </DataTemplate>
                                                 </GridViewColumn.CellTemplate>
                                             </GridViewColumn>
-                                            <GridViewColumn Header="ステータス" Width="{Binding ElementName=AT2Width11, Path=ActualWidth}">
+                                            <GridViewColumn Header="ステータス" Width="{Binding ElementName=AT2Width11, Path=ActualWidth}" common:GridViewSort.PropertyName="SellStatusText">
                                                 <GridViewColumn.CellTemplate>
                                                     <DataTemplate>
                                                         <TextBlock x:Name="AutoSellStatusText" Text="{Binding SellStatusText, Mode=OneWay}" Padding="3"/>
