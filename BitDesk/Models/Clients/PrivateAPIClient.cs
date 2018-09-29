@@ -684,7 +684,7 @@ namespace BitDesk.Models.Clients
                     er.ErrCode = jsonResult.data.code;
                     if (ApiErrorCodesDictionary.ContainsKey(jsonResult.data.code))
                     {
-                        er.ErrText = ApiErrorCodesDictionary[jsonResult.data.code];
+                        er.ErrText = "「" + ApiErrorCodesDictionary[jsonResult.data.code] + "」";
                     }
                     er.ErrDatetime = DateTime.Now;
                     er.ErrPlace = path.ToString();
@@ -808,7 +808,7 @@ namespace BitDesk.Models.Clients
                         er.ErrCode = jsonResult.data.code;
                         if (ApiErrorCodesDictionary.ContainsKey(jsonResult.data.code))
                         {
-                            er.ErrText = ApiErrorCodesDictionary[jsonResult.data.code];
+                            er.ErrText = "「" + ApiErrorCodesDictionary[jsonResult.data.code] + "」";
                         }
                         er.ErrDatetime = DateTime.Now;
                         er.ErrPlace = path.ToString();
@@ -905,7 +905,7 @@ namespace BitDesk.Models.Clients
                     er.ErrCode = jsonResult.data.code;
                     if (ApiErrorCodesDictionary.ContainsKey(jsonResult.data.code))
                     {
-                        er.ErrText = ApiErrorCodesDictionary[jsonResult.data.code];
+                        er.ErrText = "「" + ApiErrorCodesDictionary[jsonResult.data.code] + "」";
                     }
                     er.ErrDatetime = DateTime.Now;
                     er.ErrPlace = path.ToString();
@@ -980,8 +980,6 @@ namespace BitDesk.Models.Clients
                             {
                                 System.Diagnostics.Debug.WriteLine("■■■■■ GGetOrderListByIDs - ords.OrderList.Add ■■■■■");
                             }
-
-
                         }
 
                         return ords;
@@ -998,7 +996,7 @@ namespace BitDesk.Models.Clients
                         er.ErrCode = jsonResult.data.code;
                         if (ApiErrorCodesDictionary.ContainsKey(jsonResult.data.code))
                         {
-                            er.ErrText = ApiErrorCodesDictionary[jsonResult.data.code];
+                            er.ErrText = "「"+ ApiErrorCodesDictionary[jsonResult.data.code] + "」";
                         }
                         er.ErrDatetime = DateTime.Now;
                         er.ErrPlace = path.ToString();
@@ -1095,7 +1093,7 @@ namespace BitDesk.Models.Clients
                     er.ErrCode = jsonResult.data.code;
                     if (ApiErrorCodesDictionary.ContainsKey(jsonResult.data.code))
                     {
-                        er.ErrText = ApiErrorCodesDictionary[jsonResult.data.code];
+                        er.ErrText = "「" + ApiErrorCodesDictionary[jsonResult.data.code] + "」";
                     }
                     er.ErrDatetime = DateTime.Now;
                     er.ErrPlace = path.ToString();
@@ -1189,7 +1187,7 @@ namespace BitDesk.Models.Clients
                         er.ErrCode = jsonResult.data.code;
                         if (ApiErrorCodesDictionary.ContainsKey(jsonResult.data.code))
                         {
-                            er.ErrText = ApiErrorCodesDictionary[jsonResult.data.code];
+                            er.ErrText = "「" + ApiErrorCodesDictionary[jsonResult.data.code] + "」";
                         }
                         er.ErrDatetime = DateTime.Now;
                         er.ErrPlace = path.ToString();
@@ -1214,7 +1212,7 @@ namespace BitDesk.Models.Clients
         }
 
         // 注文リスト取得メソッド
-        public async Task<Orders> GetOrderList(string pair, string _ApiKey, string _ApiSecret)
+        public async Task<Orders> GetOrderList(string _ApiKey, string _ApiSecret, string pair)
         {
 
             Uri path = new Uri("/user/spot/active_orders", UriKind.Relative);
@@ -1277,7 +1275,7 @@ namespace BitDesk.Models.Clients
                     er.ErrCode = jsonResult.data.code;
                     if (ApiErrorCodesDictionary.ContainsKey(jsonResult.data.code))
                     {
-                        er.ErrText = ApiErrorCodesDictionary[jsonResult.data.code];
+                        er.ErrText = "「" + ApiErrorCodesDictionary[jsonResult.data.code] + "」";
                     }
                     er.ErrDatetime = DateTime.Now;
                     er.ErrPlace = path.ToString();
@@ -1295,7 +1293,7 @@ namespace BitDesk.Models.Clients
         }
         
         // 取引履歴取得メソッド
-        public async Task<TradeHistory> GetTradeHistory(string pair ,string _ApiKey, string _ApiSecret)
+        public async Task<TradeHistory> GetTradeHistory(string _ApiKey, string _ApiSecret, string pair)
         {
 
             Uri path = new Uri("/user/spot/trade_history", UriKind.Relative);
@@ -1360,7 +1358,7 @@ namespace BitDesk.Models.Clients
                     er.ErrCode = jsonResult.data.code;
                     if (ApiErrorCodesDictionary.ContainsKey(jsonResult.data.code))
                     {
-                        er.ErrText = ApiErrorCodesDictionary[jsonResult.data.code];
+                        er.ErrText = "「" + ApiErrorCodesDictionary[jsonResult.data.code] + "」";
                     }
                     er.ErrDatetime = DateTime.Now;
                     er.ErrPlace = path.ToString();

@@ -1634,8 +1634,7 @@ namespace BitDesk.ViewModels
             }
         }
 
-
-        // 売り買い
+        // 買い
         private string _buySide;
         public string BuySide
         {
@@ -1672,6 +1671,7 @@ namespace BitDesk.ViewModels
             }
         }
 
+        // 売り
         private string _sellSide;
         public string SellSide
         {
@@ -1971,6 +1971,7 @@ namespace BitDesk.ViewModels
                 this.NotifyPropertyChanged("ProfitAmount");
             }
         }
+        
         // 損益結果
         private decimal _shushiAmount;
         public decimal ShushiAmount
@@ -2188,7 +2189,7 @@ namespace BitDesk.ViewModels
             get
             {
                 #if DEBUG
-                return true;
+                return false;//true;
                 #else
                 return false; 
                 #endif
@@ -12672,7 +12673,7 @@ namespace BitDesk.ViewModels
 
             try
             {
-                Orders ords = await _priApi.GetOrderList(pair.ToString(), _getOrdersApiKey, _getOrdersSecret);
+                Orders ords = await _priApi.GetOrderList(_getOrdersApiKey, _getOrdersSecret, pair.ToString());
 
                 if (ords != null)
                 {
@@ -12827,7 +12828,7 @@ namespace BitDesk.ViewModels
                         foreach (var list in ListOfList)
                         {
                             // 最新の注文情報をゲット
-                            Orders oup = await _priApi.GetOrderListByIDs(_autoTradeApiKey, _autoTradeSecret, pair.ToString(), list);
+                            Orders oup = await _priApi.GetOrderListByIDs(_getOrdersApiKey, _getOrdersSecret, pair.ToString(), list);
                             if (oup != null)
                             {
                                 // 注文をアップデート
@@ -12981,7 +12982,7 @@ namespace BitDesk.ViewModels
             try
             {
 
-                TradeHistory trd = await _priApi.GetTradeHistory(pair.ToString() ,_getTradeHistoryApiKey, _getTradeHistorySecret);
+                TradeHistory trd = await _priApi.GetTradeHistory(_getTradeHistoryApiKey, _getTradeHistorySecret, pair.ToString());
 
                 if (trd != null)
                 {
@@ -14855,9 +14856,9 @@ namespace BitDesk.ViewModels
                             nsl.SellPrice = ltp;
 
                             // 上がり過ぎを抑える
-                            if ((nsl.SellPrice - nsl.BuyPrice) >= (defaultHaba * 5))
+                            if ((nsl.SellPrice - nsl.BuyPrice) >= (defaultHaba * 6))
                             {
-                                nsl.SellPrice = nsl.BuyPrice + (defaultHaba * 5);
+                                nsl.SellPrice = nsl.BuyPrice + (defaultHaba * 6);
                             }
                         }
 
@@ -14885,7 +14886,6 @@ namespace BitDesk.ViewModels
                                         nsl.SellIsDone = true;
 
                                         nsl.IsDone = true;
-                                        //needReorderList.Add(nsl);
                                     }
 
                                 });
@@ -15026,175 +15026,6 @@ namespace BitDesk.ViewModels
                             SortedList[i].Counter = 0;
                             continue;
                         }
-
-                        // 一番上 未約定
-
-                        /*
-                        if ((i == 0) && ((SortedList[i].BuyIsDone == false) && (SortedList[i].SellIsDone == false)))
-                        {
-                            // 上値制限以下、下限以上なら
-                            if ((ltp < pair.AutoTradeUpperLimit) && (ltp > pair.AutoTradeLowerLimit))
-                            { 
-                                // SortedList[i].Counter == 7 とかだったら、チョイ上の+1000価格で、買い注文。ただし、現在値より下の価格で買う。
-                                if (SortedList[i].Counter >= 7)
-                                {
-                                    if ((ltp - SortedList[i].BuyPrice) > 500M)
-                                    {
-
-                                        decimal basePrice = ltp - 200M;
-                                        //basePrice = ((_ltp / 1000) * 1000);
-
-                                        if ((basePrice < ltp) && (SortedList[i].BuyPrice < basePrice))
-                                        {
-
-                                            AutoTrade position = new AutoTrade();
-                                            position.BuySide = "buy";
-                                            position.BuyAmount = sentinelAmount;//SortedList[i].BuyAmount;
-                                            position.SellSide = "sell";
-                                            position.SellAmount = sentinelAmount;//SortedList[i].SellAmount;
-
-
-                                            position.BuyPrice = basePrice;
-                                            position.SellPrice = basePrice + 500M;
-
-                                            position.ShushiAmount = (position.SellPrice * position.SellAmount) - (position.BuyPrice * position.BuyAmount);
-
-                                            // 注文発注
-                                            OrderResult res = await _priApi.MakeOrder(_autoTradeApiKey, _autoTradeSecret, pair.ThisPair.ToString(), position.BuyAmount, position.BuyPrice, position.BuySide, "limit");
-
-                                            if (res != null)
-                                            {
-                                                if (res.IsSuccess)
-                                                {
-
-                                                    if (Application.Current == null) break;
-                                                    Application.Current.Dispatcher.Invoke(() =>
-                                                    {
-                                                        position.BuyHasError = false;
-
-                                                        position.BuyOrderId = res.OrderID;
-                                                        position.BuyFilledPrice = res.AveragePrice;
-                                                        position.BuyStatus = res.Status;
-
-                                                        // 約定
-                                                        if (res.Status == "FULLY_FILLED")
-                                                        {
-                                                            // フラグをセット
-                                                            position.BuyIsDone = true;
-                                                        }
-
-                                                        // 暴露カウンターを0にリセット
-                                                        SortedList[i].Counter = 0;
-
-                                                        // 新規追加
-                                                        autoTrades.Insert(0, position);
-
-                                                    });
-
-                                                    //await Task.Delay(200);
-                                                    
-                                                    if (autoTrades.Count > 5)
-                                                    {
-                                                        // チョット下あたりの注文を抜く。
-
-                                                        if (autoTrades[3].BuyIsDone == false)
-                                                        {
-
-                                                            OrderResult ord = await _priApi.CancelOrder(_autoTradeApiKey, _autoTradeSecret, pair.ThisPair.ToString(), autoTrades[3].BuyOrderId);
-                                                            if (ord != null)
-                                                            {
-                                                                if (ord.IsSuccess)
-                                                                {
-                                                                    if (Application.Current == null) break;
-                                                                    Application.Current.Dispatcher.Invoke(() =>
-                                                                    {
-                                                                        autoTrades.RemoveAt(3);
-                                                                    });
-                                                                }
-                                                                else
-                                                                {
-                                                                    autoTrades[3].BuyHasError = true;
-                                                                    if (autoTrades[3].BuyErrorInfo == null)
-                                                                    {
-                                                                        autoTrades[3].BuyErrorInfo = new ErrorInfo();
-                                                                    }
-                                                                    autoTrades[3].BuyErrorInfo.ErrorTitle = ord.Err.ErrorTitle;
-                                                                    autoTrades[3].BuyErrorInfo.ErrorDescription = ord.Err.ErrorDescription;
-                                                                    autoTrades[3].BuyErrorInfo.ErrorCode = ord.Err.ErrorCode;
-
-                                                                    System.Diagnostics.Debug.WriteLine("■■■■■ UpdateAutoTrade 一番上 途中を抜くキャンセルで。MakeOrder API returned error code.");
-                                                                }
-
-                                                            }
-                                                            else
-                                                            {
-                                                                autoTrades[3].BuyHasError = true;
-                                                                if (autoTrades[3].BuyErrorInfo == null)
-                                                                {
-                                                                    autoTrades[3].BuyErrorInfo = new ErrorInfo();
-                                                                }
-                                                                autoTrades[3].BuyErrorInfo.ErrorTitle = ord.Err.ErrorTitle;
-                                                                autoTrades[3].BuyErrorInfo.ErrorDescription = ord.Err.ErrorDescription;
-                                                                autoTrades[3].BuyErrorInfo.ErrorCode = ord.Err.ErrorCode;
-
-                                                                System.Diagnostics.Debug.WriteLine("■■■■■ UpdateAutoTrade 一番上 途中を抜くキャンセルで。MakeOrder API returned null.");
-                                                            }
-                                                        }
-                                                    }
-                                                    // ループ中にリストを弄ったから、ループから抜ける。
-                                                    break;
-
-
-                                                }
-                                                else
-                                                {
-                                                    if (Application.Current == null) break;
-                                                    Application.Current.Dispatcher.Invoke(() =>
-                                                    {
-                                                        position.BuyHasError = true;
-                                                        if (position.BuyErrorInfo == null)
-                                                        {
-                                                            position.BuyErrorInfo = new ErrorInfo();
-                                                        }
-                                                        position.BuyErrorInfo.ErrorTitle = res.Err.ErrorTitle;
-                                                        position.BuyErrorInfo.ErrorDescription = res.Err.ErrorDescription;
-                                                        position.BuyErrorInfo.ErrorCode = res.Err.ErrorCode;
-
-                                                    });
-                                                    System.Diagnostics.Debug.WriteLine("■■■■■ UpdateAutoTrade 完了済み注文を、新たに注文し直すループ。一番上 MakeOrder API returned error code.");
-                                                }
-                                            }
-                                            else
-                                            {
-                                                if (Application.Current == null) break;
-                                                Application.Current.Dispatcher.Invoke(() =>
-                                                {
-                                                    position.BuyHasError = true;
-                                                    if (position.BuyErrorInfo == null)
-                                                    {
-                                                        position.BuyErrorInfo = new ErrorInfo();
-                                                    }
-                                                    position.BuyErrorInfo.ErrorTitle = "注文時にエラーが起きました。";
-                                                    position.BuyErrorInfo.ErrorDescription = "priApi.MakeOrder is null.";
-                                                    position.BuyErrorInfo.ErrorCode = -1;
-
-                                                });
-
-                                                System.Diagnostics.Debug.WriteLine("■■■■■ UpdateAutoTrade 完了済み注文を、新たに注文し直すループ。一番上 MakeOrder API returned null.");
-
-                                            }
-
-
-
-                                        }
-
-
-                                    }
-
-                                }
-                            }
-                        }
-                        */
                                                                         
                         // 売りが約定した
                         if ((SortedList[i].SellIsDone) && (SortedList[i].SellHasError == false) && (SortedList[i].IsCanceled == false))
@@ -15205,119 +15036,17 @@ namespace BitDesk.ViewModels
                             {
                                 (SortedList[i]).IsDone = true;
                             });
-                            //needReorderList.Add(SortedList[i]);
 
                         }
-                        
-                        /*
-                        // SortedList[i].Counter >= 20 とかだったら、停滞中なので、売り待ちの価格より下で、、かつ、現在値よりチョイ下で、買い注文。ただし、全体の数が20を超えない範囲で。
-                        if ((SortedList[i].Counter >= 6) && SortedList.Count < pair.AutoTradeSlots)
+
+                        if ((SortedList[i].BuyOrderId != 0))
                         {
-                            await Task.Delay(200);
+                            // 待機カウンターを＋
+                            SortedList[i].Counter = SortedList[i].Counter + 1;
 
-                            if ((ltp - SortedList[i].BuyPrice) > 300M)
-                            {
-
-                                // 現在値よりチョイ下の価格で買う。
-                                decimal basePrice = ltp - 300M;
-
-                                if ((basePrice < ltp) && (basePrice > SortedList[i].BuyPrice))
-                                {
-                                    AutoTrade position = new AutoTrade();
-                                    position.BuySide = "buy";
-                                    position.BuyAmount = defaultAmount;//SortedList[i].BuyAmount;
-                                    position.SellSide = "sell";
-                                    position.SellAmount = defaultAmount;//SortedList[i].SellAmount;
-
-                                    position.BuyPrice = basePrice;
-                                    position.SellPrice = basePrice + 500M;
-
-                                    position.ShushiAmount = (position.SellPrice * position.SellAmount) - (position.BuyPrice * position.BuyAmount);
-                                    
-                                    // 注文発注
-                                    OrderResult res = await _priApi.MakeOrder(_autoTradeApiKey, _autoTradeSecret, pair.ThisPair.ToString(), position.BuyAmount, position.BuyPrice, position.BuySide, "limit");
-
-                                    if (res != null)
-                                    {
-                                        if (res.IsSuccess)
-                                        {
-
-                                            position.BuyHasError = false;
-
-                                            position.BuyOrderId = res.OrderID;
-                                            position.BuyFilledPrice = res.AveragePrice;
-                                            position.BuyStatus = res.Status;
-
-                                            // 約定
-                                            if (res.Status == "FULLY_FILLED")
-                                            {
-                                                // フラグをセット
-                                                position.BuyIsDone = true;
-
-                                            }
-
-
-                                            // カウンターをリセット
-                                            autoTrades[i].Counter = 0;
-
-                                            // 下のカウンターをリセット
-                                            if (i < autoTrades.Count - 1)
-                                            {
-                                                autoTrades[i + 1].Counter = 0;
-                                            }
-
-                                            await Task.Delay(200);
-
-                                        }
-                                        else
-                                        {
-                                            position.BuyHasError = true;
-                                            if (position.BuyErrorInfo == null)
-                                            {
-                                                position.BuyErrorInfo = new ErrorInfo();
-                                            }
-                                            position.BuyErrorInfo.ErrorTitle = res.Err.ErrorTitle;
-                                            position.BuyErrorInfo.ErrorDescription = res.Err.ErrorDescription;
-                                            position.BuyErrorInfo.ErrorCode = res.Err.ErrorCode;
-
-                                            System.Diagnostics.Debug.WriteLine("■■■■■ UpdateAutoTrade 完了済み注文を、新たに注文し直すループ。途中 MakeOrder API returned error code.");
-                                        }
-                                    }
-                                    else
-                                    {
-                                        position.BuyHasError = true;
-                                        if (position.BuyErrorInfo == null)
-                                        {
-                                            position.BuyErrorInfo = new ErrorInfo();
-                                        }
-                                        position.BuyErrorInfo.ErrorTitle = "注文時にエラーが起きました。";
-                                        position.BuyErrorInfo.ErrorDescription = "priApi.MakeOrder is null.";
-                                        position.BuyErrorInfo.ErrorCode = -1;
-
-                                        System.Diagnostics.Debug.WriteLine("■■■■■ UpdateAutoTrade 完了済み注文を、新たに注文し直すループ。途中 MakeOrder API returned null.");
-
-                                    }
-                                
-                                    if (Application.Current == null) break;
-                                    Application.Current.Dispatcher.Invoke(() =>
-                                    {
-                                        // 新規追加
-                                        autoTrades.Insert(i, position);
-                                    });
-
-                                    // ループ中にリストを弄ったから、ループから抜ける。
-                                    break;
-
-                            }
-                            }
+                            // 一番高い買い注文に到達したので、ループから抜ける。
+                            break;
                         }
-                        */
-
-                        // 暴露カウンターを＋
-                        SortedList[i].Counter = SortedList[i].Counter + 1;
-
-                        // 一番高い買い注文に到達したので、ループから抜ける。
-                        break;
 
                     }
 
@@ -17774,7 +17503,7 @@ namespace BitDesk.ViewModels
                     {
 
                         // CancelOrders
-                        Orders ord = await _priApi.CancelOrders(_autoTradeApiKey, _autoTradeSecret, pair.ThisPair.ToString(), list);
+                        Orders ord = await _priApi.CancelOrders(_manualTradeApiKey, _manualTradeSecret, pair.ThisPair.ToString(), list);
 
                         if (ord != null)
                         {
@@ -19563,7 +19292,7 @@ namespace BitDesk.ViewModels
                 {
 
                     // CancelOrders
-                    Orders ord = await _priApi.CancelOrders(_autoTradeApiKey, _autoTradeSecret, pair.ThisPair.ToString(), list);
+                    Orders ord = await _priApi.CancelOrders(_manualTradeApiKey, _manualTradeSecret, pair.ThisPair.ToString(), list);
 
                     // 後はループに任せる。
                 }

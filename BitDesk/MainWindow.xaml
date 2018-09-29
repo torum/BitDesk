@@ -4840,7 +4840,7 @@
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
-                                        <GridViewColumn Header="処理名" Width="{Binding ElementName=ERwidth4, Path=ActualWidth}" common:GridViewSort.PropertyName="ErrPlace">
+                                        <GridViewColumn Header="処理名" Width="{Binding ElementName=ERwidth4, Path=ActualWidth}" common:GridViewSort.PropertyName="ErrPlaceParent">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <TextBlock Text="{Binding ErrPlaceParent, Mode=OneWay}" Padding="3"/>
