@@ -25,10 +25,6 @@
 
 ![BitDesk](https://github.com/torum/BitDesk/blob/master/docs/Images/BitDesk-Sreenshot-IFDOCO-Dark.png?raw=true)
 
-![BitDesk](https://github.com/torum/BitDesk/blob/master/docs/Images/BitDesk-Sreenshot-MiddleSize-Dark.png?raw=true)
-
-![BitDesk](https://github.com/torum/BitDesk/blob/master/docs/Images/BitDesk-Sreenshot-SmallSize-Dark.png?raw=true)
-
 ![alt text](https://github.com/torum/BitDesk/blob/master/docs/Images/BitDesk1.gif?raw=true)
 
 ### 必要構成：
