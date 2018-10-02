@@ -1599,6 +1599,7 @@ namespace BitDesk.ViewModels
     public class AutoTrade : ViewModelBase
     {
         // 停滞カウンター
+        /*
         private int _counter;
         public int Counter
         {
@@ -1615,6 +1616,7 @@ namespace BitDesk.ViewModels
                 this.NotifyPropertyChanged("Counter");
             }
         }
+        */
 
         // ロスカットカウンター
         private int _lossCutCounter;
@@ -2181,19 +2183,22 @@ namespace BitDesk.ViewModels
         #region == 基本 ==
 
         // テスト用
-        private decimal _initPrice = 90937M; // 81800 + 9000 (0.013btc/702830)
+        private decimal _initPrice = 90937M;
 
         // プライベートモード表示切替（自動取引表示）
         public bool ExperimentalMode
         {
             get
             {
+                /*
                 #if DEBUG
-                return false;//true;
+                return true;
                 #else
                 return false; 
                 #endif
+                */
 
+                return false;
             }
         }
 
@@ -2202,11 +2207,11 @@ namespace BitDesk.ViewModels
         {
             get
             {
-                return false;
+                return true;
             }
         }
 
-        // ベータモード表示切替フラグ（特殊注文ｖ0.0.2.0）
+        // ベータモード表示切替フラグ（特殊注文ｖ0.0.3.0）
         public bool BetaMode
         {
             get
@@ -2216,7 +2221,7 @@ namespace BitDesk.ViewModels
         }
 
         // Application version
-        private string _appVer = "0.0.0.2";
+        private string _appVer = "0.0.0.3";
 
         // Application name
         private string _appName = "BitDesk";
@@ -7796,6 +7801,7 @@ namespace BitDesk.ViewModels
                 }
             }
 
+            // 損益
             private decimal _autoTradeProfit;
             public decimal AutoTradeProfit
             {
@@ -7813,7 +7819,7 @@ namespace BitDesk.ViewModels
                 }
             }
 
-            // 取引単位
+            // 取引単価
             private decimal _autoTradeTama = 0.001M;
             public decimal AutoTradeTama
             {
@@ -7832,7 +7838,7 @@ namespace BitDesk.ViewModels
             }
 
             // 初期価格幅
-            private decimal _autoTradeDefaultHaba = 500;
+            private decimal _autoTradeDefaultHaba = 500M;
             public decimal AutoTradeDefaultHaba
             {
                 get
@@ -7846,6 +7852,24 @@ namespace BitDesk.ViewModels
 
                     _autoTradeDefaultHaba = value;
                     this.NotifyPropertyChanged("AutoTradeDefaultHaba");
+                }
+            }
+
+            // 利確価格幅
+            private decimal _autoTradeDefaultRikakuHaba = 500M;
+            public decimal AutoTradeDefaultRikakuHaba
+            {
+                get
+                {
+                    return _autoTradeDefaultRikakuHaba;
+                }
+                set
+                {
+                    if (_autoTradeDefaultRikakuHaba == value)
+                        return;
+
+                    _autoTradeDefaultRikakuHaba = value;
+                    this.NotifyPropertyChanged("AutoTradeDefaultRikakuHaba");
                 }
             }
 
@@ -10796,6 +10820,21 @@ namespace BitDesk.ViewModels
                                     }
                                 }
                             }
+                            hoge = pair.Attribute("autoTradeDefaultRikakuHaba");
+                            if (hoge != null)
+                            {
+                                if (!string.IsNullOrEmpty(hoge.Value))
+                                {
+                                    try
+                                    {
+                                        PairBtcJpy.AutoTradeDefaultRikakuHaba = Decimal.Parse(hoge.Value);
+                                    }
+                                    catch
+                                    {
+                                        PairBtcJpy.AutoTradeDefaultRikakuHaba = 0;
+                                    }
+                                }
+                            }
                             hoge = pair.Attribute("autoTradeUpperLimit");
                             if (hoge != null)
                             {
@@ -11639,6 +11678,10 @@ namespace BitDesk.ViewModels
 
             attrs = doc.CreateAttribute("autoTradeDefaultHaba");
             attrs.Value = PairBtcJpy.AutoTradeDefaultHaba.ToString();
+            pairBtcJpy.SetAttributeNode(attrs);
+
+            attrs = doc.CreateAttribute("autoTradeDefaultRikakuHaba");
+            attrs.Value = PairBtcJpy.AutoTradeDefaultRikakuHaba.ToString();
             pairBtcJpy.SetAttributeNode(attrs);
 
             attrs = doc.CreateAttribute("autoTradeUpperLimit");
@@ -14545,6 +14588,7 @@ namespace BitDesk.ViewModels
             decimal defaultAmount = 0.0001M;
 
             decimal defaultHaba = pair.AutoTradeDefaultHaba;
+            decimal defaultRikaku = pair.AutoTradeDefaultRikakuHaba;
 
             while (pair.AutoTradeStart)
             {
@@ -14578,6 +14622,11 @@ namespace BitDesk.ViewModels
                 defaultHaba = pair.AutoTradeDefaultHaba;
                 if (defaultHaba <= 0)
                     defaultHaba = 50M;
+
+                defaultRikaku = pair.AutoTradeDefaultRikakuHaba;
+                if (defaultRikaku <= 0)
+                    defaultRikaku = 100M;
+
 
                 // 未約定注文の情報更新用リスト
                 List<int> needUpdateIdsList = new List<int>();
@@ -14747,7 +14796,7 @@ namespace BitDesk.ViewModels
                                     //pos.BuyHasError = false;
                                     //pos.BuyErrorInfo // クリアしなくても大丈夫かな。
                                     // カウンターをリセット
-                                    pos.Counter = 0;
+                                    //pos.Counter = 0;
                                 }
 
                                 if (pos.BuyErrorInfo.ErrorCode == 20001)
@@ -14756,7 +14805,7 @@ namespace BitDesk.ViewModels
                                     // エラーをリセット
                                     pos.BuyHasError = false;
                                     // カウンターをリセット
-                                    pos.Counter = 0;
+                                    //pos.Counter = 0;
                                 }
 
                                 if ((pos.BuyErrorInfo.ErrorCode == 10003) || (pos.BuyErrorInfo.ErrorCode == 70002) || (pos.BuyErrorInfo.ErrorCode == 70003) || (pos.BuyErrorInfo.ErrorCode == 70001))
@@ -14765,7 +14814,7 @@ namespace BitDesk.ViewModels
                                     // エラーをリセット
                                     pos.BuyHasError = false;
                                     // カウンターをリセット
-                                    pos.Counter = 0;
+                                    //pos.Counter = 0;
                                 }
 
                                 //
@@ -14824,6 +14873,8 @@ namespace BitDesk.ViewModels
                                     needReorderList.Add(pos);
 
                                     pos.SellIsDone = true;
+
+                                    pos.IsDone = true;
                                 }
                             }
                         }
@@ -14856,9 +14907,9 @@ namespace BitDesk.ViewModels
                             nsl.SellPrice = ltp;
 
                             // 上がり過ぎを抑える
-                            if ((nsl.SellPrice - nsl.BuyPrice) >= (defaultHaba * 6))
+                            if ((nsl.SellPrice - nsl.BuyPrice) >= (defaultRikaku * 3))
                             {
-                                nsl.SellPrice = nsl.BuyPrice + (defaultHaba * 6);
+                                nsl.SellPrice = nsl.BuyPrice + (defaultRikaku * 3);
                             }
                         }
 
@@ -14927,7 +14978,7 @@ namespace BitDesk.ViewModels
 
                 }
 
-                // 買い発注処理
+                // 買い発注処理 (リミット内で)
                 if ((ltp < pair.AutoTradeUpperLimit) && (ltp > pair.AutoTradeLowerLimit))
                 {
                     // 買い未発注を発注するループ
@@ -14999,59 +15050,6 @@ namespace BitDesk.ViewModels
                     }
                 }
 
-                // 完了済み注文を、新たに注文し直す。 ただし、アッパーリミット以下なら（暴騰時に買うと、リバウンドですぐ下がる）
-                if ((ltp < pair.AutoTradeUpperLimit) && (ltp > pair.AutoTradeLowerLimit))
-                {
-                    // 買い価格順でソートしたリスト
-                    List<AutoTrade> SortedList = autoTrades.OrderByDescending(o => o.BuyPrice).ToList();
-
-                    // 完了済み注文を、新たに注文し直すループ。
-                    for (int i = 0; i < SortedList.Count; i++)
-                    {
-                        if (SortedList[i].IsCanceled)
-                        {
-                            SortedList[i].Counter = 0;
-                            continue;
-                        }
-
-                        if ((SortedList[i].BuyIsDone == true) && (SortedList[i].SellIsDone == false))
-                        {
-                            SortedList[i].Counter = 0;
-                            continue;
-                        }
-
-                        // HasError スキップ
-                        if ((SortedList[i].BuyHasError == true) || (SortedList[i].SellHasError == true))
-                        {
-                            SortedList[i].Counter = 0;
-                            continue;
-                        }
-                                                                        
-                        // 売りが約定した
-                        if ((SortedList[i].SellIsDone) && (SortedList[i].SellHasError == false) && (SortedList[i].IsCanceled == false))
-                        {
-
-                            if (Application.Current == null) break;
-                            Application.Current.Dispatcher.Invoke(() =>
-                            {
-                                (SortedList[i]).IsDone = true;
-                            });
-
-                        }
-
-                        if ((SortedList[i].BuyOrderId != 0))
-                        {
-                            // 待機カウンターを＋
-                            SortedList[i].Counter = SortedList[i].Counter + 1;
-
-                            // 一番高い買い注文に到達したので、ループから抜ける。
-                            break;
-                        }
-
-                    }
-
-                }
-
                 // 発注し直し処理
                 if (needReorderList.Count > 0)
                 {
@@ -15067,7 +15065,7 @@ namespace BitDesk.ViewModels
                         // 同じ条件で、再度注文。ただし、現在値より下の場合
                         position.BuyPrice = ro.BuyPrice;
 
-                        position.SellPrice = position.BuyPrice + (defaultHaba * 2);//ro.SellPrice;
+                        position.SellPrice = position.BuyPrice + defaultRikaku;
 
                         // 最新をチェック
                         ltp = pair.Ltp;
@@ -15076,12 +15074,12 @@ namespace BitDesk.ViewModels
                         if (ltp > position.SellPrice)
                         {
                             // ltpよりちょっと上にする。
-                            position.SellPrice = ltp;// + defaultHaba;
+                            position.SellPrice = ltp;
 
                             // 上がり過ぎを抑える
-                            if ((position.SellPrice - position.BuyPrice) >= (defaultHaba * 5))
+                            if ((position.SellPrice - position.BuyPrice) >= (defaultRikaku * 3))
                             {
-                                position.SellPrice = position.BuyPrice + (defaultHaba * 5);
+                                position.SellPrice = position.BuyPrice + (defaultRikaku * 3);
                             }
 
                         }
@@ -15209,23 +15207,6 @@ namespace BitDesk.ViewModels
 
                             needDeleteList.Add(pos);
                         }
-
-                        // 停滞中を抜く。
-                        /*
-                        // TODO (一部約定している場合は、キャンセルすると端数が出る。それどうするか)
-                        if ((pos.BuyStatus == "UNFILLED" || pos.BuyStatus == "PARTIALLY_FILLED") && pos.BuyHasError == false)
-                        {
-                            // 先頭でもなく、一番下でもない
-                            if ((h > 0) && (h < autoTrades.Count - 1))
-                            {
-                                // 20秒以上停滞している。
-                                if (pos.Counter > 20)
-                                {
-                                    needCancelList.Add(pos);
-                                }
-                            }
-                        }
-                        */
 
                         // 指定幅　下がったら、損切。
                         if ((pos.SellOrderId != 0) && pos.BuyIsDone && (pos.SellIsDone == false))
@@ -19079,8 +19060,12 @@ namespace BitDesk.ViewModels
             // 幅
             if (pair.AutoTradeDefaultHaba <= 0)
                 pair.AutoTradeDefaultHaba = 50;
+            // 幅
+            if (pair.AutoTradeDefaultHaba <= 0)
+                pair.AutoTradeDefaultRikakuHaba = 500;
 
             decimal haba = pair.AutoTradeDefaultHaba;
+            decimal rikaku = pair.AutoTradeDefaultRikakuHaba;
 
             // ベース価格
             decimal basePrice = pair.AutoTradeAddFrom;
@@ -19102,7 +19087,7 @@ namespace BitDesk.ViewModels
                 position.SellAmount = pair.AutoTradeTama;
 
                 position.BuyPrice = basePrice - (haba * i);
-                position.SellPrice = position.BuyPrice + (haba * 2);
+                position.SellPrice = position.BuyPrice + rikaku;
 
                 if (position.BuyPrice < pair.AutoTradeLowerLimit)
                 {

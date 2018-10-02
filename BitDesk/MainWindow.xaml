@@ -2181,6 +2181,7 @@
                                                             <RowDefinition Height="Auto"/>
                                                             <RowDefinition Height="Auto"/>
                                                             <RowDefinition Height="Auto"/>
+                                                            <RowDefinition Height="Auto"/>
                                                         </Grid.RowDefinitions>
                                                         <Grid.ColumnDefinitions>
                                                             <ColumnDefinition Width="50*"/>
@@ -2221,7 +2222,7 @@
                                                         </Border>
                                                         <Border Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Padding="3">
                                                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                                                                <Label Content="取引単位： " VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"></Label>
+                                                                <Label Content="取引単価： " VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"></Label>
                                                                 <TextBox Text="{Binding ActivePair.AutoTradeTama}" Width="80" Style="{DynamicResource DefaultTextBoxStyle}"></TextBox>
                                                             </StackPanel>
                                                         </Border>
@@ -2239,17 +2240,23 @@
                                                         </Border>
                                                         <Border Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2" Padding="3">
                                                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                                                <Label Content="利確幅： " VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"></Label>
+                                                                <TextBox Text="{Binding ActivePair.AutoTradeDefaultRikakuHaba}" Width="80" Style="{DynamicResource DefaultTextBoxStyle}"></TextBox>
+                                                            </StackPanel>
+                                                        </Border>
+                                                        <Border Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="2" Padding="3">
+                                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                                                                 <Label Content="ロット数： " VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"></Label>
                                                                 <TextBox Text="{Binding ActivePair.AutoTradeSlots}" Width="80" Style="{DynamicResource DefaultTextBoxStyle}"></TextBox>
                                                             </StackPanel>
                                                         </Border>
-                                                        <Border Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="3" Padding="3">
+                                                        <Border Grid.Row="10" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="3" Padding="3">
                                                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0">
                                                                 <Button Padding="3" TextElement.FontWeight="DemiBold" Width="120" Command="{Binding AutoTradeAddCommand}" IsEnabled="{Binding ActivePair.StopButtonEnable}" Content="追加"/>
                                                             </StackPanel>
                                                         </Border>
-                                                        <Border Grid.Row="10" Grid.Column="0" Grid.ColumnSpan="2" Padding="3">
-                                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0 24 0 0">
+                                                        <Border Grid.Row="11" Grid.Column="0" Grid.ColumnSpan="2" Padding="3">
+                                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0 12 0 0">
                                                                 <Label Content="損益： " FontSize="24" Style="{DynamicResource DefaultLabelStyle}"></Label>
                                                                 <TextBlock Text="{Binding ActivePair.AutoTradeProfit, Mode=OneWay, StringFormat=0.#############################}" FontSize="24" Style="{DynamicResource DefaultTextBlockStyle}"></TextBlock>
                                                             </StackPanel>
@@ -4111,7 +4118,7 @@
 
                                 <Grid x:Name="AT2Dummy" Grid.Row="0" Grid.Column="0" Visibility="Hidden" Margin="0 0 27 0">
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="3*" />
+                                        <ColumnDefinition Width="0" />
 
                                         <ColumnDefinition Width="3*"/>
                                         <ColumnDefinition Width="4*"/>
