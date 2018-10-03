@@ -1618,6 +1618,25 @@ namespace BitDesk.ViewModels
         }
         */
 
+        // ビジーリトライ待機カウンター （70010, "ただいまシステム負荷が高まっているため、最小注文数量を一時的に引き上げています。"）
+        private int _autoTradeSrvBusyRetryCounter;
+        public int AutoTradeSrvBusyRetryCounter
+        {
+            get
+            {
+                return _autoTradeSrvBusyRetryCounter;
+            }
+            set
+            {
+                if (_autoTradeSrvBusyRetryCounter == value)
+                    return;
+
+                _autoTradeSrvBusyRetryCounter = value;
+                this.NotifyPropertyChanged("AutoTradeSrvBusyRetryCounter");
+            }
+        }
+
+
         // ロスカットカウンター
         private int _lossCutCounter;
         public int LossCutCounter
@@ -2183,7 +2202,7 @@ namespace BitDesk.ViewModels
         #region == 基本 ==
 
         // テスト用
-        private decimal _initPrice = 90937M;
+        private decimal _initPrice = 101937M;
 
         // プライベートモード表示切替（自動取引表示）
         public bool ExperimentalMode
@@ -11378,10 +11397,10 @@ namespace BitDesk.ViewModels
             #endregion
 
             // TODO test
-            LoadAutoTrades(PairBtcJpy, _appDataFolder, PairBtcJpy.ThisPair.ToString());
+            //LoadAutoTrades(PairBtcJpy, _appDataFolder, PairBtcJpy.ThisPair.ToString());
             if (PairBtcJpy.AutoTrades.Count > 0)
             {
-                StartAutoTradeCommand_Execute();
+                //StartAutoTradeCommand_Execute();
             }
 
             // サスペンド検知イベント
@@ -11393,7 +11412,7 @@ namespace BitDesk.ViewModels
         }
 
         // 終了時の処理
-        public async void OnWindowClosing(object sender, CancelEventArgs e)
+        public void OnWindowClosing(object sender, CancelEventArgs e)
         {
             // TODO
             // 自動取引、特殊注文で、注文中あるならキャンセルしてダイアログを表示。
@@ -12064,7 +12083,7 @@ namespace BitDesk.ViewModels
 
             if (PairBtcJpy.AutoTradeStart)
             {
-                await StopAutoTrade(PairBtcJpy);
+                //await StopAutoTrade(PairBtcJpy);
             }
         }
 
@@ -14825,6 +14844,22 @@ namespace BitDesk.ViewModels
                                     //pos.BuyHasError = false;
                                     //pos.IsDone = true;
                                 }
+
+                                if (pos.BuyErrorInfo.ErrorCode == 70010)
+                                {
+                                    // "ただいまシステム負荷が高まっているため、最小注文数量を一時的に引き上げています。"
+                                    // リトライ待機カウンターアップ
+                                    pos.AutoTradeSrvBusyRetryCounter = pos.AutoTradeSrvBusyRetryCounter + 1;
+
+                                    // 30秒待ってからリトライ
+                                    if (pos.AutoTradeSrvBusyRetryCounter > 30)
+                                    {
+                                        // エラーをリセット
+                                        pos.AutoTradeSrvBusyRetryCounter = 0;
+                                        pos.BuyHasError = false;
+                                    }
+                                }
+
                             }
 
                             if (pos.SellHasError == true)
@@ -14841,6 +14876,21 @@ namespace BitDesk.ViewModels
                                     // "システムエラーが発生しました。サポートにお問い合わせ下さい"
                                     // エラーをリセット
                                     pos.SellHasError = false;
+                                }
+
+                                if (pos.SellErrorInfo.ErrorCode == 70010)
+                                {
+                                    // "ただいまシステム負荷が高まっているため、最小注文数量を一時的に引き上げています。"
+                                    // リトライ待機カウンターアップ
+                                    pos.AutoTradeSrvBusyRetryCounter = pos.AutoTradeSrvBusyRetryCounter + 1;
+
+                                    // 30秒待ってからリトライ
+                                    if (pos.AutoTradeSrvBusyRetryCounter > 30)
+                                    {
+                                        // エラーをリセット
+                                        pos.AutoTradeSrvBusyRetryCounter = 0;
+                                        pos.SellHasError = false;
+                                    }
                                 }
 
                             }
