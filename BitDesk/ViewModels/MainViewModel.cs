@@ -2202,7 +2202,7 @@ namespace BitDesk.ViewModels
         #region == 基本 ==
 
         // テスト用
-        private decimal _initPrice = 101937M;
+        private decimal _initPrice = 421937M;//117937M;
 
         // プライベートモード表示切替（自動取引表示）
         public bool ExperimentalMode
@@ -14845,9 +14845,10 @@ namespace BitDesk.ViewModels
                                     //pos.IsDone = true;
                                 }
 
-                                if (pos.BuyErrorInfo.ErrorCode == 70010)
+                                if ((pos.BuyErrorInfo.ErrorCode == 70010) || (pos.BuyErrorInfo.ErrorCode == 70011))
                                 {
-                                    // "ただいまシステム負荷が高まっているため、最小注文数量を一時的に引き上げています。"
+                                    // 70010 "ただいまシステム負荷が高まっているため、最小注文数量を一時的に引き上げています。"
+                                    // 70011 ただいまリクエストが混雑してます。しばらく時間を空けてから再度リクエストをお願いします
                                     // リトライ待機カウンターアップ
                                     pos.AutoTradeSrvBusyRetryCounter = pos.AutoTradeSrvBusyRetryCounter + 1;
 
@@ -14944,7 +14945,10 @@ namespace BitDesk.ViewModels
                 // 売り発注処理
                 if (needSellList.Count > 0)
                 {
-                    foreach(var nsl in needSellList)
+
+                    needSellList.Reverse();
+
+                    foreach (var nsl in needSellList)
                     {
 
                         // 最新をチェック
