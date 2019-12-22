@@ -31,5 +31,3 @@
 ### 必要構成：
 - Windows 10
 
-### 更新情報（Twitter）： 
-https://twitter.com/torum_apps
