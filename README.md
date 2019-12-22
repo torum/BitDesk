@@ -15,7 +15,7 @@
   *取引を行うには、ビットバンクのアカウントが必要です。
   アカウント不要なツールはこちら（[https://github.com/torum/BitWallpaper](https://github.com/torum/BitWallpaper)）
   
-マイクロソフトストアで公開しようとしたら、「App Policies: 10.8.3 Collection of Banking and Financial Information - Apps that collect financial data must be Business account type」という事で、「ファインシャル情報を取得するアプリは法人でないとなりません」とあえなく却下。ビットバンクさん、公式アプリとして採用してくれませんか？^^
+マイクロソフトストアで公開しようとしたら、「App Policies: 10.8.3 Collection of Banking and Financial Information - Apps that collect financial data must be Business account type」という事で、「ファインシャル情報を取得するアプリは法人でないとなりません」という事で残念ながら公開出来ませんでした。ダウンロード自体は当サイトから可能です。
 
 ![BitDesk](https://github.com/torum/BitDesk/blob/master/docs/Images/BitDesk-Sreenshot-Default-Dark.png?raw=true)
 
