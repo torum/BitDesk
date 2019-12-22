@@ -46,6 +46,4 @@
 
 ### 開発プロジェクトページ（GitHub）：
 [https://github.com/torum/BitDesk](https://github.com/torum/BitDesk)
- 
-### 更新情報（Twitter）： 
-[https://twitter.com/torum_apps](https://twitter.com/torum_apps)
+
