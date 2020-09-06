@@ -9,7 +9,7 @@ namespace BitDesk.Models
     // /user/spot/order
     public class JsonOrderData
     {
-        public int order_id { get; set; }
+        public ulong order_id { get; set; }
         public string pair { get; set; }
         public string side { get; set; }
         public string type { get; set; }

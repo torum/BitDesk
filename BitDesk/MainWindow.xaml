@@ -20,7 +20,7 @@
                   BorderThickness="0.1"
         
                   fw:AcrylicWindow.Enabled="True"
-                  fw:AcrylicWindow.ShowTitleBar="False"
+                  fw:AcrylicWindow.AcrylicWindowStyle="None"
                   fw:AcrylicWindow.ExtendViewIntoTitleBar="False"
                   fw:AcrylicWindow.TintOpacity="0.5"
                   fw:AcrylicWindow.TintColor="{DynamicResource WindowTintColor}"

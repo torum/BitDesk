@@ -141,8 +141,8 @@ namespace BitDesk.ViewModels
         }
 
         // 注文ID
-        private int _ifdoneOrderID;
-        public int IfdoneOrderID
+        private ulong _ifdoneOrderID;
+        public ulong IfdoneOrderID
         {
             get
             {
@@ -157,8 +157,8 @@ namespace BitDesk.ViewModels
                 this.NotifyPropertyChanged("IfdoneOrderID");
             }
         }
-        private int _ifdDoOrderID;
-        public int IfdDoOrderID
+        private ulong _ifdDoOrderID;
+        public ulong IfdDoOrderID
         {
             get
             {
@@ -173,8 +173,8 @@ namespace BitDesk.ViewModels
                 this.NotifyPropertyChanged("IfdDoOrderID");
             }
         }
-        private int _ocoOneOrderID;
-        public int OcoOneOrderID
+        private ulong _ocoOneOrderID;
+        public ulong OcoOneOrderID
         {
             get
             {
@@ -189,8 +189,8 @@ namespace BitDesk.ViewModels
                 this.NotifyPropertyChanged("OcoOneOrderID");
             }
         }
-        private int _ocoOtherOrderID;
-        public int OcoOtherOrderID
+        private ulong _ocoOtherOrderID;
+        public ulong OcoOtherOrderID
         {
             get
             {
@@ -1838,8 +1838,8 @@ namespace BitDesk.ViewModels
         }
 
         // 買い注文ID
-        private int _buyOrderId;
-        public int BuyOrderId
+        private ulong _buyOrderId;
+        public ulong BuyOrderId
         {
             get
             {
@@ -1856,8 +1856,8 @@ namespace BitDesk.ViewModels
         }
 
         // 売り注文ID
-        private int _sellOrderId;
-        public int SellOrderId
+        private ulong _sellOrderId;
+        public ulong SellOrderId
         {
             get
             {
@@ -2217,7 +2217,7 @@ namespace BitDesk.ViewModels
                 #endif
                 */
 
-                return false;
+                return true;
             }
         }
 
@@ -3502,7 +3502,7 @@ namespace BitDesk.ViewModels
             }
         }
 
-        private Pair _pairBtcJpy = new Pair(Pairs.btc_jpy, 45, "{0:#,0}", 100M, 1000M);
+        private Pair _pairBtcJpy = new Pair(Pairs.btc_jpy, 40, "{0:#,0}", 100M, 1000M);
         public Pair PairBtcJpy
         {
             get
@@ -5090,7 +5090,7 @@ namespace BitDesk.ViewModels
                 }
                 else if (assetAll < _initPrice)
                 {
-                    return String.Format("{0:#,0}", _initPrice - assetAll);
+                    return "-" + String.Format("{0:#,0}", _initPrice - assetAll);
                 }
                 else
                 {
@@ -12828,7 +12828,7 @@ namespace BitDesk.ViewModels
                     });
 
                     // 返ってきた注文リストに存在しない注文リスト
-                    List<int> lst = new List<int>();
+                    List<ulong> lst = new List<ulong>();
 
                     // 返ってきた注文リストに存在しない注文を抽出
                     try
@@ -12856,10 +12856,10 @@ namespace BitDesk.ViewModels
                     if (lst.Count > 0)
                     {
                         // リストのリスト（小分けにして分割取得用）
-                        List<List<int>> ListOfList = new List<List<int>>();
+                        List<List<ulong>> ListOfList = new List<List<ulong>>();
 
                         // GetOrderListByIDs 40015 数が多いとエラーになるので、小分けにして。
-                        List<int> temp = new List<int>();
+                        List<ulong> temp = new List<ulong>();
                         int c = 0;
 
                         for (int i = 0; i < lst.Count; i++)
@@ -12871,7 +12871,7 @@ namespace BitDesk.ViewModels
                             {
                                 ListOfList.Add(temp);
 
-                                temp = new List<int>();
+                                temp = new List<ulong>();
                             }
 
                             if (c == lst.Count - 1)
@@ -12884,7 +12884,7 @@ namespace BitDesk.ViewModels
                                 break;
                             }
 
-                            c = c + 1;
+                            c += 1;
                         }
 
                         foreach (var list in ListOfList)
@@ -13148,7 +13148,7 @@ namespace BitDesk.ViewModels
             var ltp = p.Ltp;
 
             // 未約定IDリスト
-            List<int> unfilledOrderIDsList = new List<int>();
+            List<ulong> unfilledOrderIDsList = new List<ulong>();
             // 要発注リスト
             List<Ifdoco> needToOrderList = new List<Ifdoco>();
 
@@ -13500,13 +13500,13 @@ namespace BitDesk.ViewModels
                 }
 
                 // リストのリスト（小分けにして分割取得用）
-                List<List<int>> ListOfList = new List<List<int>>();
+                List<List<ulong>> ListOfList = new List<List<ulong>>();
 
                 // 未約定注文の最新状態をアップデートする。
                 if (unfilledOrderIDsList.Count > 0)
                 {
                     // GetOrderListByIDs 40015 数が多いとエラーになるから小分けにして。
-                    List<int> temp = new List<int>();
+                    List<ulong> temp = new List<ulong>();
                     int c = 0;
 
                     for (int i = 0; i < unfilledOrderIDsList.Count; i++)
@@ -13520,7 +13520,7 @@ namespace BitDesk.ViewModels
 
                             ListOfList.Add(temp);
 
-                            temp = new List<int>();
+                            temp = new List<ulong>();
                         }
 
                         if (c == unfilledOrderIDsList.Count - 1)
@@ -13874,7 +13874,7 @@ namespace BitDesk.ViewModels
                                         {
 
                                             // OCO other をキャンセル
-                                            int cancelId = ifdoco.OcoOtherOrderID;
+                                            ulong cancelId = ifdoco.OcoOtherOrderID;
 
                                             //System.Diagnostics.Debug.WriteLine("■ UpdateIfdocos needToOrderList OCO CancelOrder .....");
 
@@ -13958,7 +13958,7 @@ namespace BitDesk.ViewModels
                                         if (ifdoco.OcoOneHasError == false)
                                         {
                                             // OCO one をキャンセル
-                                            int cancelId = ifdoco.OcoOneOrderID;
+                                            ulong cancelId = ifdoco.OcoOneOrderID;
 
                                             //System.Diagnostics.Debug.WriteLine("■ UpdateIfdocos needToOrderList OCO CancelOrder .....");
 
@@ -14426,7 +14426,7 @@ namespace BitDesk.ViewModels
                                         if (ifdoco.OcoOneIsDone)
                                         {
                                             // OCO other をキャンセル
-                                            int cancelId = ifdoco.OcoOtherOrderID;
+                                            ulong cancelId = ifdoco.OcoOtherOrderID;
 
                                             //System.Diagnostics.Debug.WriteLine("■■■■■ UpdateIfdocos needToOrderList OCO CancelOrder .....");
 
@@ -14497,7 +14497,7 @@ namespace BitDesk.ViewModels
                                         else if (ifdoco.OcoOtherIsDone)
                                         {
                                             // OCO one をキャンセル
-                                            int cancelId = ifdoco.OcoOneOrderID;
+                                            ulong cancelId = ifdoco.OcoOneOrderID;
 
                                             //System.Diagnostics.Debug.WriteLine("■■■■■ UpdateIfdocos needToOrderList OCO CancelOrder .....");
 
@@ -14648,7 +14648,7 @@ namespace BitDesk.ViewModels
 
 
                 // 未約定注文の情報更新用リスト
-                List<int> needUpdateIdsList = new List<int>();
+                List<ulong> needUpdateIdsList = new List<ulong>();
 
                 // 未約定注文のリストを作るループ。
                 if (Application.Current == null) break;
@@ -14691,10 +14691,10 @@ namespace BitDesk.ViewModels
                 if (needUpdateIdsList.Count > 0)
                 {
                     // リストのリスト（小分けにして分割取得用）
-                    List<List<int>> ListOfList = new List<List<int>>();
+                    List<List<ulong>> ListOfList = new List<List<ulong>>();
 
                     // GetOrderListByIDs 40015 数が多いとエラーになるので、小分けにして。
-                    List<int> temp = new List<int>();
+                    List<ulong> temp = new List<ulong>();
                     int c = 0;
 
                     for (int i = 0; i < needUpdateIdsList.Count; i++)
@@ -14705,7 +14705,7 @@ namespace BitDesk.ViewModels
                         {
                             ListOfList.Add(temp);
 
-                            temp = new List<int>();
+                            temp = new List<ulong>();
                         }
 
                         if (c == needUpdateIdsList.Count - 1)
@@ -14879,9 +14879,10 @@ namespace BitDesk.ViewModels
                                     pos.SellHasError = false;
                                 }
 
-                                if (pos.SellErrorInfo.ErrorCode == 70010)
+                                if ((pos.SellErrorInfo.ErrorCode == 70010) || (pos.SellErrorInfo.ErrorCode == 70011))
                                 {
-                                    // "ただいまシステム負荷が高まっているため、最小注文数量を一時的に引き上げています。"
+                                    // 70010 "ただいまシステム負荷が高まっているため、最小注文数量を一時的に引き上げています。"
+                                    // 70011 ただいまリクエストが混雑してます。しばらく時間を空けてから再度リクエストをお願いします
                                     // リトライ待機カウンターアップ
                                     pos.AutoTradeSrvBusyRetryCounter = pos.AutoTradeSrvBusyRetryCounter + 1;
 
@@ -15503,7 +15504,7 @@ namespace BitDesk.ViewModels
         }
 
         // 注文キャンセル
-        private async Task<OrderResult> CancelOrder(Pair p, int orderID)
+        private async Task<OrderResult> CancelOrder(Pair p, ulong orderID)
         {
             if (ManualTradeApiKeyIsSet == false)
             {
@@ -17253,9 +17254,9 @@ namespace BitDesk.ViewModels
                         {
                             asdf.Kind = IfdocoKinds.ifd;
 
-                            asdf.IfdoneOrderID = Int32.Parse(row[1]);
+                            asdf.IfdoneOrderID = Convert.ToUInt64(row[1]);
 
-                            asdf.IfdDoOrderID = Int32.Parse(row[2]);
+                            asdf.IfdDoOrderID = Convert.ToUInt64(row[2]);
                             asdf.IfdDoSide = row[3];
 
                             if (row[4] == "limit")
@@ -17276,7 +17277,7 @@ namespace BitDesk.ViewModels
                         {
                             asdf.Kind = IfdocoKinds.oco;
 
-                            asdf.OcoOneOrderID = Int32.Parse(row[7]);
+                            asdf.OcoOneOrderID = Convert.ToUInt64(row[7]);
                             asdf.OcoOneSide = row[8];
                             if (row[9] == "limit")
                             {
@@ -17290,7 +17291,7 @@ namespace BitDesk.ViewModels
                             asdf.OcoOneStartAmount = Decimal.Parse(row[10]);
                             asdf.OcoOnePrice = Decimal.Parse(row[11]);
 
-                            asdf.OcoOtherOrderID = Int32.Parse(row[12]);
+                            asdf.OcoOtherOrderID = Convert.ToUInt64(row[12]);
                             asdf.OcoOtherSide = row[13];
                             if (row[14] == "limit")
                             {
@@ -17309,9 +17310,9 @@ namespace BitDesk.ViewModels
                         {
                             asdf.Kind = IfdocoKinds.ifdoco;
 
-                            asdf.IfdoneOrderID = Int32.Parse(row[1]);
+                            asdf.IfdoneOrderID = Convert.ToUInt64(row[1]);
 
-                            asdf.OcoOneOrderID = Int32.Parse(row[7]);
+                            asdf.OcoOneOrderID = Convert.ToUInt64(row[7]);
                             asdf.OcoOneSide = row[8];
                             if (row[9] == "limit")
                             {
@@ -17325,7 +17326,7 @@ namespace BitDesk.ViewModels
                             asdf.OcoOneStartAmount = Decimal.Parse(row[10]);
                             asdf.OcoOnePrice = Decimal.Parse(row[11]);
 
-                            asdf.OcoOtherOrderID = Int32.Parse(row[12]);
+                            asdf.OcoOtherOrderID = Convert.ToUInt64(row[12]);
                             asdf.OcoOtherSide = row[13];
                             if (row[14] == "limit")
                             {
@@ -17428,7 +17429,7 @@ namespace BitDesk.ViewModels
 
                         AutoTrade asdf = new AutoTrade();
 
-                        asdf.BuyOrderId = Int32.Parse(row[0]);
+                        asdf.BuyOrderId = Convert.ToUInt64(row[0]);
                         asdf.BuySide = row[1];
                         asdf.BuyAmount = Decimal.Parse(row[2]);
                         asdf.BuyPrice = Decimal.Parse(row[3]);
@@ -17439,7 +17440,7 @@ namespace BitDesk.ViewModels
                             asdf.BuyIsDone = true;
                         }
 
-                        asdf.SellOrderId = Int32.Parse(row[6]);
+                        asdf.SellOrderId = Convert.ToUInt64(row[6]);
                         asdf.SellSide = row[7];
                         asdf.SellAmount = Decimal.Parse(row[8]);
                         asdf.SellPrice = Decimal.Parse(row[9]);
@@ -17481,7 +17482,7 @@ namespace BitDesk.ViewModels
             {
                 // 買い注文をすべてキャンセルする。
 
-                List<int> needCancelIdsList = new List<int>();
+                List<ulong> needCancelIdsList = new List<ulong>();
                 List<AutoTrade> needDeleteList = new List<AutoTrade>();
 
                 foreach (var position in autoTrades)
@@ -17504,10 +17505,10 @@ namespace BitDesk.ViewModels
                 {
 
                     // リストのリスト（小分けにして分割取得用）
-                    List<List<int>> ListOfList = new List<List<int>>();
+                    List<List<ulong>> ListOfList = new List<List<ulong>>();
 
                     // GetOrderListByIDs 40015 数が多いとエラーになるので、小分けにして。
-                    List<int> temp = new List<int>();
+                    List<ulong> temp = new List<ulong>();
                     int c = 0;
 
                     for (int i = 0; i < needCancelIdsList.Count; i++)
@@ -17518,7 +17519,7 @@ namespace BitDesk.ViewModels
                         {
                             ListOfList.Add(temp);
 
-                            temp = new List<int>();
+                            temp = new List<ulong>();
                         }
 
                         if (c == needCancelIdsList.Count - 1)
@@ -18802,7 +18803,7 @@ namespace BitDesk.ViewModels
             // 選択注文アイテム保持用
             List<Ifdoco> ifdocoList = new List<Ifdoco>();
             // キャンセルする注文IDを保持
-            List<int> cancelIdList = new List<int>();
+            List<ulong> cancelIdList = new List<ulong>();
 
             // System.Windows.Controls.SelectedItemCollection をキャストして、ループ
             System.Collections.IList items = (System.Collections.IList)obj;
@@ -19259,7 +19260,7 @@ namespace BitDesk.ViewModels
             // 選択注文アイテム保持用
             List<AutoTrade> selectedList = new List<AutoTrade>();
             // キャンセルする注文IDを保持
-            List<int> needCancelIdsList = new List<int>();
+            List<ulong> needCancelIdsList = new List<ulong>();
 
             // System.Windows.Controls.SelectedItemCollection をキャストして、ループ
             System.Collections.IList items = (System.Collections.IList)obj;
@@ -19297,10 +19298,10 @@ namespace BitDesk.ViewModels
             {
 
                 // リストのリスト（小分けにして分割取得用）
-                List<List<int>> ListOfList = new List<List<int>>();
+                List<List<ulong>> ListOfList = new List<List<ulong>>();
 
                 // GetOrderListByIDs 40015 数が多いとエラーになるので、小分けにして。
-                List<int> temp = new List<int>();
+                List<ulong> temp = new List<ulong>();
                 int c = 0;
 
                 for (int i = 0; i < needCancelIdsList.Count; i++)
@@ -19311,7 +19312,7 @@ namespace BitDesk.ViewModels
                     {
                         ListOfList.Add(temp);
 
-                        temp = new List<int>();
+                        temp = new List<ulong>();
                     }
 
                     if (c == needCancelIdsList.Count - 1)

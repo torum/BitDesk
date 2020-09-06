@@ -158,7 +158,7 @@ namespace BitDesk.Models.Clients
     // 注文情報クラス（JsonOrderClassから）
     public class Order : ViewModelBase
     {
-        public int OrderID { get; set; }
+        public ulong OrderID { get; set; }
         public string Pair { get; set; } // btc_jpy, xrp_jpy, ltc_btc, eth_btc, mona_jpy, mona_btc, bcc_jpy, bcc_btc
 
         private string _side;// buy または sell
@@ -524,9 +524,9 @@ namespace BitDesk.Models.Clients
         public string pair { get; set; }
 
         [JsonProperty("order_id")]
-        public int order_id { get; set; }
+        public ulong order_id { get; set; }
 
-        public PairOrderIdParam(string pair, int orderID)
+        public PairOrderIdParam(string pair, ulong orderID)
         {
             this.pair = pair;
             this.order_id = orderID;
@@ -541,9 +541,9 @@ namespace BitDesk.Models.Clients
         public string Pair { get; set; }
 
         [JsonProperty("order_ids")]
-        public List<int> OrderIds { get; set; }
+        public List<ulong> OrderIds { get; set; }
 
-        public PairOrderIdList(string pair, List<int> orderIds)
+        public PairOrderIdList(string pair, List<ulong> orderIds)
         {
             this.Pair = pair;
             this.OrderIds = orderIds;
@@ -615,6 +615,7 @@ namespace BitDesk.Models.Clients
                 {60004, "指定した数量がしきい値を下回っています"},
                 {60005, "指定した価格が上限を上回っています"},
                 {60006, "指定した価格が下限を下回っています"},
+                {60011, "同時発注制限件数(30件)を上回っています"},
                 {70001, "システムエラーが発生しました。サポートにお問い合わせ下さい"},
                 {70002, "システムエラーが発生しました。サポートにお問い合わせ下さい"},
                 {70003, "システムエラーが発生しました。サポートにお問い合わせ下さい"},
@@ -928,7 +929,7 @@ namespace BitDesk.Models.Clients
         }
 
         // 注文情報を複数のIDから取得メソッド
-        public async Task<Orders> GetOrderListByIDs(string _ApiKey, string _ApiSecret, string pair, List<int> orderIDs)
+        public async Task<Orders> GetOrderListByIDs(string _ApiKey, string _ApiSecret, string pair, List<ulong> orderIDs)
         {
 
             Uri path = new Uri("/user/spot/orders_info", UriKind.Relative);
@@ -1026,7 +1027,7 @@ namespace BitDesk.Models.Clients
         }
 
         // 注文キャンセルメソッド
-        public async Task<OrderResult> CancelOrder(string _ApiKey, string _ApiSecret, string pair, int orderID)
+        public async Task<OrderResult> CancelOrder(string _ApiKey, string _ApiSecret, string pair, ulong orderID)
         {
 
             Uri path = new Uri("/user/spot/cancel_order", UriKind.Relative);
@@ -1117,7 +1118,7 @@ namespace BitDesk.Models.Clients
         }
 
         // 文キャンセル（複数）メソッド
-        public async Task<Orders> CancelOrders(string _ApiKey, string _ApiSecret, string pair, List<int> orderIDs)
+        public async Task<Orders> CancelOrders(string _ApiKey, string _ApiSecret, string pair, List<ulong> orderIDs)
         {
 
             Uri path = new Uri("/user/spot/cancel_orders", UriKind.Relative);
@@ -1233,7 +1234,7 @@ namespace BitDesk.Models.Clients
 
             if (!string.IsNullOrEmpty(json))
             {
-                //System.Diagnostics.Debug.WriteLine("GetOrderList: " + json);
+                //System.Diagnostics.Debug.WriteLine("■■■■■ ■■■■■ ■■■■■ GetOrderList: " + json);
 
                 var deserialized = JsonConvert.DeserializeObject<JsonOrderInfoObject>(json);
 
