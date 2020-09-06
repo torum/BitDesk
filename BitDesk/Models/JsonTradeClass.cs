@@ -8,9 +8,9 @@ namespace BitDesk.Models
 {
     public class Trade
     {
-        public int trade_id { get; set; }
+        public ulong trade_id { get; set; }
         public string pair { get; set; }
-        public int order_id { get; set; }
+        public ulong order_id { get; set; }
         public string side { get; set; }
         public string type { get; set; }
         public string amount { get; set; }

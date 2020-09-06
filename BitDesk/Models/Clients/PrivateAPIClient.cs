@@ -96,9 +96,9 @@ namespace BitDesk.Models.Clients
     // 取引履歴クラス
     public class Trade
     {
-        public int TradeID { get; set; }
+        public ulong TradeID { get; set; }
         public string Pair { get; set; }
-        public int OrderID { get; set; }
+        public ulong OrderID { get; set; }
         public string Side { get; set; }
         public string SideText
         {
@@ -836,7 +836,7 @@ namespace BitDesk.Models.Clients
         }
 
         // 注文情報をIDから取得メソッド
-        public async Task<OrderResult> GetOrderByID(string _ApiKey, string _ApiSecret, string pair, int orderID)
+        public async Task<OrderResult> GetOrderByID(string _ApiKey, string _ApiSecret, string pair, ulong orderID)
         {
 
             Uri path = new Uri("/user/spot/order", UriKind.Relative);
