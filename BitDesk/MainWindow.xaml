@@ -92,8 +92,10 @@
                                         <Run Text="{Binding ActivePair.AutoTradeSellOrders,Mode=OneWay}"></Run>
                                         <Run Text=" "></Run>
                                         <Run Text="{Binding ActivePair.AutoTradeErrOrders,Mode=OneWay}"></Run>
+                                    <!--
                                         <Run Text=" "></Run>
                                         <Run Text="{Binding ActivePair.AutoTradeActiveOrders,Mode=OneWay}"></Run>
+                                    -->
                                         <Run Text="]"></Run>
                                 </TextBlock>
                                 <Label Content=" 損益：" Margin="6 0 0 0" Style="{DynamicResource DefaultLabelStyle}" VerticalAlignment="Center"></Label>
@@ -850,6 +852,7 @@
 
                                 </StackPanel>
                             </Border>
+                            
                             <!-- 保有資産 未ログイン画面 -->
                             <Border Grid.Row="2" Grid.Column="0" Style="{DynamicResource BoardStyle}" Height="101" Margin="3 1 0 3" Width="360" HorizontalAlignment="Left" Visibility="{Binding PublicApiOnlyMode, Converter={StaticResource BoolToVisibilityCollapsedConverter}}" BorderThickness="0">
                                 <StackPanel>
@@ -864,6 +867,7 @@
 
                                 </StackPanel>
                             </Border>
+                            
                             <!-- 保有資産 -->
                             <Border Grid.Row="2" Grid.Column="0" Style="{DynamicResource BoardStyle}" Height="101" Margin="3 1 0 3" Width="360" HorizontalAlignment="Left" Visibility="{Binding ShowAsset, Converter={StaticResource BoolToVisibilityCollapsedConverter}}" BorderThickness="0">
 
@@ -2202,6 +2206,10 @@
                                                             </StackPanel>
                                                         </Border>
 
+                                                        <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" BorderBrush="Gainsboro" BorderThickness="0 0 0 0.1" Margin="3" Padding="3" HorizontalAlignment="Center">
+                                                            <Label FontWeight="Bold" Content="自動取引設定" Style="{DynamicResource DefaultLabelStyle}"/>
+                                                        </Border>
+                                                        
                                                         <Border Grid.Row="3" Grid.Column="0"  Padding="3 12 3 3">
                                                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                                                                 <Label Content="下値制限： " VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"></Label>
@@ -2214,12 +2222,14 @@
                                                                 <TextBox Text="{Binding ActivePair.AutoTradeUpperLimit}" Width="80" Style="{DynamicResource DefaultTextBoxStyle}"></TextBox>
                                                             </StackPanel>
                                                         </Border>
+                                                        <!--
                                                         <Border Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Padding="3">
                                                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                                                                 <Label Content="損切値幅： " VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"></Label>
                                                                 <TextBox Text="{Binding ActivePair.AutoTradeLossCut}" Width="80" Style="{DynamicResource DefaultTextBoxStyle}"></TextBox>
                                                             </StackPanel>
                                                         </Border>
+                                                        -->
                                                         <Border Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Padding="3">
                                                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                                                                 <Label Content="取引単価： " VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"></Label>
@@ -2762,7 +2772,7 @@
 
                                 </Grid>
 
-                                <ListView x:Name="ActiveOrdersListView" Grid.Row="1" Grid.Column="0" ItemsSource="{Binding ActivePair.ActiveOrders}" Background="{DynamicResource BoardBackgroundColorBrush}" IsSynchronizedWithCurrentItem="True" common:GridViewSort.AutoSort="True" common:GridViewSort.ShowSortGlyph="False" AlternationCount="2" MinHeight="80" BorderThickness="0" Padding="0 0 0 0" Margin="0 0 0 0" SelectionMode="Extended" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible">
+                                <ListView x:Name="ActiveOrdersListView" Grid.Row="1" Grid.Column="0" ItemsSource="{Binding ActivePair.ActiveOrders}" Background="{DynamicResource BoardBackgroundColorBrush}" IsSynchronizedWithCurrentItem="True" common:GridViewSort.AutoSort="True" common:GridViewSort.ShowSortGlyph="True" AlternationCount="2" MinHeight="80" BorderThickness="0" Padding="0 0 0 0" Margin="0 0 0 0" SelectionMode="Extended" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible">
                                     
                                     <ListView.Resources>
                                         <ContextMenu x:Key="ItemContextMenu">
@@ -3153,7 +3163,7 @@
                                     <Grid x:Name="AIfdocoWidth18" Grid.Column="18" />
                                 </Grid>
 
-                                <ListView x:Name="IFDOCO_ListView" Grid.Row="1" Grid.Column="0" ItemsSource="{Binding ActivePair.Ifdocos}" Background="{DynamicResource BoardBackgroundColorBrush}" IsSynchronizedWithCurrentItem="True" common:GridViewSort.AutoSort="True" common:GridViewSort.ShowSortGlyph="False" AlternationCount="2" MinHeight="80" BorderThickness="0" Padding="0 0 0 0" Margin="0" SelectionMode="Extended" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible">
+                                <ListView x:Name="IFDOCO_ListView" Grid.Row="1" Grid.Column="0" ItemsSource="{Binding ActivePair.Ifdocos}" Background="{DynamicResource BoardBackgroundColorBrush}" IsSynchronizedWithCurrentItem="True" common:GridViewSort.AutoSort="True" common:GridViewSort.ShowSortGlyph="True" AlternationCount="2" MinHeight="80" BorderThickness="0" Padding="0 0 0 0" Margin="0" SelectionMode="Extended" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible">
                                     <ListView.Resources>
                                         <ContextMenu x:Key="IFDOCO_ItemContextMenu">
                                             <MenuItem Header="選択アイテム">
@@ -4154,7 +4164,7 @@
                                     <Grid x:Name="AT2Width13" Grid.Column="13" />
                                 </Grid>
 
-                                <ListView x:Name="AutoTrade2ListView" Grid.Row="1" Grid.Column="0" ItemsSource="{Binding ActivePair.AutoTrades}" Background="{DynamicResource BoardBackgroundColorBrush}" IsSynchronizedWithCurrentItem="True" common:GridViewSort.AutoSort="True" common:GridViewSort.ShowSortGlyph="False" AlternationCount="2" MinHeight="80" BorderThickness="0" Padding="0 0 0 0" Margin="0 0 0 0" SelectionMode="Extended" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible">
+                                <ListView x:Name="AutoTrade2ListView" Grid.Row="1" Grid.Column="0" ItemsSource="{Binding ActivePair.AutoTrades}" Background="{DynamicResource BoardBackgroundColorBrush}" IsSynchronizedWithCurrentItem="True" common:GridViewSort.AutoSort="True" common:GridViewSort.ShowSortGlyph="True" AlternationCount="2" MinHeight="80" BorderThickness="0" Padding="0 0 0 0" Margin="0 0 0 0" SelectionMode="Extended" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible">
                                     <ListView.Resources>
                                         <ContextMenu x:Key="ATItemContextMenu">
                                             <MenuItem Header="選択アイテム">
@@ -4221,7 +4231,7 @@
                                             <GridViewColumn Header="待機" Width="{Binding ElementName=AT2Width0, Path=ActualWidth}">
                                                 <GridViewColumn.CellTemplate>
                                                     <DataTemplate>
-                                                        <TextBlock x:Name="AutoCounter" Text="{Binding Counter, Mode=OneWay}" Padding="3"/>
+                                                        <TextBlock x:Name="AutoCounter" Text="" Padding="3"/>
                                                         <DataTemplate.Triggers>
                                                             <DataTrigger Binding="{Binding IsDone}" Value="true">
                                                                 <Setter TargetName="AutoCounter" Property="TextBlock.Foreground" Value="Gray"/>
@@ -4632,7 +4642,7 @@
                                     <Grid x:Name="TDwidth9" Grid.Column="9" />
                                 </Grid>
 
-                                <ListView x:Name="TradeHistoryListView" Grid.Row="1" Grid.Column="0" ItemsSource="{Binding ActivePair.Trades}" Background="{DynamicResource BoardBackgroundColorBrush}" IsSynchronizedWithCurrentItem="True" common:GridViewSort.AutoSort="True" common:GridViewSort.ShowSortGlyph="False" AlternationCount="2" MinHeight="80" BorderThickness="0" Padding="0 0 0 0" Margin="0 0 0 0" SelectionMode="Extended" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible">
+                                <ListView x:Name="TradeHistoryListView" Grid.Row="1" Grid.Column="0" ItemsSource="{Binding ActivePair.Trades}" Background="{DynamicResource BoardBackgroundColorBrush}" IsSynchronizedWithCurrentItem="True" common:GridViewSort.AutoSort="True" common:GridViewSort.ShowSortGlyph="True" AlternationCount="2" MinHeight="80" BorderThickness="0" Padding="0 0 0 0" Margin="0 0 0 0" SelectionMode="Extended" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible">
                                     
                                     <ListView.Resources>
                                         <Style TargetType="{x:Type ScrollBar}">
@@ -4789,7 +4799,7 @@
                                 <Grid x:Name="ERwidth6" Grid.Column="6" />
                             </Grid>
 
-                            <ListView x:Name="ErrorsListView" Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Errors}" Background="{DynamicResource BoardBackgroundColorBrush}" IsSynchronizedWithCurrentItem="True" common:GridViewSort.AutoSort="True" common:GridViewSort.ShowSortGlyph="False" AlternationCount="2" MinHeight="80" BorderThickness="0" Padding="0 0 0 0" Margin="0 0 0 0" SelectionMode="Extended" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible">
+                            <ListView x:Name="ErrorsListView" Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Errors}" Background="{DynamicResource BoardBackgroundColorBrush}" IsSynchronizedWithCurrentItem="True" common:GridViewSort.AutoSort="True" common:GridViewSort.ShowSortGlyph="True" AlternationCount="2" MinHeight="80" BorderThickness="0" Padding="0 0 0 0" Margin="0 0 0 0" SelectionMode="Extended" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Visible">
                                 <ListView.Resources>
                                     <Style TargetType="{x:Type ScrollBar}">
                                         <Setter Property="Margin" Value="0,0,0,0" />

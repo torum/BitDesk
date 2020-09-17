@@ -2202,7 +2202,7 @@ namespace BitDesk.ViewModels
         #region == 基本 ==
 
         // テスト用
-        private decimal _initPrice = 421937M;//117937M;
+        private decimal _initPrice = 261167M;//421937M;//117937M;
 
         // プライベートモード表示切替（自動取引表示）
         public bool ExperimentalMode
@@ -2239,7 +2239,7 @@ namespace BitDesk.ViewModels
         }
 
         // Application version
-        private string _appVer = "0.0.0.3";
+        private string _appVer = "0.0.0.4";
 
         // Application name
         private string _appName = "BitDesk";
@@ -3120,7 +3120,7 @@ namespace BitDesk.ViewModels
 
         #endregion
 
-        #region == テーマ関係 ==
+        #region == テーマ関係のプロパティ ==
 
         // テーマ一覧
         private ObservableCollection<Theme> _themes;
@@ -7989,6 +7989,7 @@ namespace BitDesk.ViewModels
             }
 
             // アクティブ注文数
+            /*
             private int _autoTradeActiveOrders;
             public int AutoTradeActiveOrders
             {
@@ -8005,7 +8006,7 @@ namespace BitDesk.ViewModels
                     this.NotifyPropertyChanged("AutoTradeActiveOrders");
                 }
             }
-
+            */
             // 売り未約定の注文数
             private int _autoTradeSellOrders;
             public int AutoTradeSellOrders
@@ -8444,6 +8445,7 @@ namespace BitDesk.ViewModels
 
             #endregion
 
+            #region == イニシャライズ ==
             // 初期値
             ActivePairIndex = 0;
             CurrentPair = Pairs.btc_jpy;
@@ -8467,6 +8469,7 @@ namespace BitDesk.ViewModels
 
             ShowAllCharts = false;
             ShowMainContents = true;
+            #endregion
 
         }
 
@@ -10409,7 +10412,7 @@ namespace BitDesk.ViewModels
                 return;
             }
 
-            Debug.WriteLine("ChartTimer");
+            // Debug.WriteLine("ChartTimer");
 
             if (_showAllCharts)
             {
@@ -11384,7 +11387,7 @@ namespace BitDesk.ViewModels
             // チャート更新のタイマー起動
             dispatcherChartTimer.Start();
 
-            #region == 特殊注文の保存データのロード ==
+            #region == 特殊注文のデータをロード ==
 
             LoadIfdocos(PairBtcJpy, _appDataFolder, PairBtcJpy.ThisPair.ToString());
             LoadIfdocos(PairXrpJpy, _appDataFolder, PairXrpJpy.ThisPair.ToString());
@@ -11395,12 +11398,18 @@ namespace BitDesk.ViewModels
 
             #endregion
 
+            #region == 自動取引のデータをロード ==
+
             // TODO test
-            //LoadAutoTrades(PairBtcJpy, _appDataFolder, PairBtcJpy.ThisPair.ToString());
+            LoadAutoTrades(PairBtcJpy, _appDataFolder, PairBtcJpy.ThisPair.ToString());
+
             if (PairBtcJpy.AutoTrades.Count > 0)
             {
-                //StartAutoTradeCommand_Execute();
+                //PairBtcJpy.AutoTradeStart = true;
+                StartAutoTradeCommand_Execute();
             }
+            
+            #endregion
 
             // サスペンド検知イベント
             SystemEvents.PowerModeChanged += SystemEvents_PowerModeChanged;
@@ -11411,7 +11420,7 @@ namespace BitDesk.ViewModels
         }
 
         // 終了時の処理
-        public void OnWindowClosing(object sender, CancelEventArgs e)
+        public async void OnWindowClosing(object sender, CancelEventArgs e)
         {
             // TODO
             // 自動取引、特殊注文で、注文中あるならキャンセルしてダイアログを表示。
@@ -12077,13 +12086,17 @@ namespace BitDesk.ViewModels
 
             #endregion
 
-            // 売りを保存
+            #region == 自動取引のデータ保存 ==
+
+            // データをを保存 (現在の所、BTC限定)
+            System.Diagnostics.Debug.WriteLine("自動取引データを保存");
             SaveAutoTrades(PairBtcJpy, _appDataFolder, PairBtcJpy.ThisPair.ToString());
 
-            if (PairBtcJpy.AutoTradeStart)
-            {
-                //await StopAutoTrade(PairBtcJpy);
-            }
+            // 自動取引を停止
+            System.Diagnostics.Debug.WriteLine("自動取引を停止");
+            await StopAutoTrade(PairBtcJpy);
+
+            #endregion
         }
 
         // サスペンド検知
@@ -14588,7 +14601,7 @@ namespace BitDesk.ViewModels
         // 自動取引のループ
         private async void UpdateAutoTrade(Pair p)
         {
-            // TODO TEMP
+            // TODO TEMP 当座はビットコインオンリー
             if (ActivePair.ThisPair != Pairs.btc_jpy)
             {
                 await Task.Delay(1500);
@@ -14600,12 +14613,11 @@ namespace BitDesk.ViewModels
             var autoTrades = PairBtcJpy.AutoTrades;
             var ltp = PairBtcJpy.Ltp;
 
-            // 試し買いの単位
-            //decimal sentinelAmount = 0.0001M;
             // 取引単位
             decimal defaultAmount = 0.0001M;
-
+            // 取引幅
             decimal defaultHaba = pair.AutoTradeDefaultHaba;
+            // 利確幅
             decimal defaultRikaku = pair.AutoTradeDefaultRikakuHaba;
 
             while (pair.AutoTradeStart)
@@ -14627,7 +14639,7 @@ namespace BitDesk.ViewModels
                 await Task.Delay(1600);
 
                 // 全注文数のセット
-                pair.AutoTradeActiveOrders = autoTrades.Count;
+                //pair.AutoTradeActiveOrders = autoTrades.Count;
                 pair.AutoTradeSellOrders = 0;
                 pair.AutoTradeBuyOrders = 0;
                 pair.AutoTradeErrOrders = 0;
@@ -14639,13 +14651,13 @@ namespace BitDesk.ViewModels
                 defaultAmount = pair.AutoTradeTama;
                 defaultHaba = pair.AutoTradeDefaultHaba;
                 if (defaultHaba <= 0)
-                    defaultHaba = 50M;
+                    defaultHaba = 500M;
 
                 defaultRikaku = pair.AutoTradeDefaultRikakuHaba;
                 if (defaultRikaku <= 0)
-                    defaultRikaku = 100M;
+                    defaultRikaku = 1000M;
 
-
+                // 最新情報に更新
                 // 未約定注文の情報更新用リスト
                 List<ulong> needUpdateIdsList = new List<ulong>();
 
@@ -14663,7 +14675,7 @@ namespace BitDesk.ViewModels
                         if ((pos.BuyHasError == true) || (pos.SellHasError == true))
                         {
                             // エラー注文数をセット
-                            pair.AutoTradeErrOrders = pair.AutoTradeErrOrders + 1;
+                            pair.AutoTradeErrOrders += 1;
 
                             continue;
                         }
@@ -14671,7 +14683,7 @@ namespace BitDesk.ViewModels
                         if ((pos.BuyOrderId != 0) && ((pos.BuyStatus == "UNFILLED") || pos.BuyStatus == "PARTIALLY_FILLED"))
                         {
                             // 買い注文数をセット
-                            pair.AutoTradeBuyOrders = pair.AutoTradeBuyOrders + 1;
+                            pair.AutoTradeBuyOrders += 1;
 
                             needUpdateIdsList.Add(pos.BuyOrderId);
                         }
@@ -14679,7 +14691,7 @@ namespace BitDesk.ViewModels
                         if ((pos.SellOrderId != 0) && ((pos.SellStatus == "UNFILLED") || pos.SellStatus == "PARTIALLY_FILLED"))
                         {
                             // 売り注文数をセット
-                            pair.AutoTradeSellOrders = pair.AutoTradeSellOrders + 1;
+                            pair.AutoTradeSellOrders += 1;
 
                             needUpdateIdsList.Add(pos.SellOrderId);
                         }
@@ -14717,13 +14729,13 @@ namespace BitDesk.ViewModels
                             break;
                         }
 
-                        c = c + 1;
+                        c += 1;
                     }
 
                     foreach (var list in ListOfList)
                     {
                         // 最新の注文情報をゲット
-                        Orders ords = await _priApi.GetOrderListByIDs(_autoTradeApiKey, _autoTradeSecret, pair.ThisPair.ToString(), list);//needUpdateIdsList);
+                        Orders ords = await _priApi.GetOrderListByIDs(_autoTradeApiKey, _autoTradeSecret, pair.ThisPair.ToString(), list);
 
                         if (ords != null)
                         {
@@ -14770,6 +14782,7 @@ namespace BitDesk.ViewModels
 
                 }
 
+                // 発注
                 // 要売り発注リスト
                 List<AutoTrade> needSellList = new List<AutoTrade>();
 
@@ -14778,6 +14791,9 @@ namespace BitDesk.ViewModels
 
                 // 発注しなおしが必要なリスト
                 List<AutoTrade> needReorderList = new List<AutoTrade>();
+
+                // 発注取り下げリスト（注文数制限対策）
+                List<AutoTrade> needGoQueList = new List<AutoTrade>();
 
                 // 要発注を見つけるループ。
                 if (Application.Current == null) break;
@@ -14903,17 +14919,25 @@ namespace BitDesk.ViewModels
                         // 買い約定済み
                         if ((pos.BuyOrderId != 0) && (pos.BuyStatus == "FULLY_FILLED"))
                         {
-                            // 買いなおし
-                            needBuyList.Add(pos);
+                            //発注数制限対策 
+                            if ((ltp - pos.BuyPrice) <= defaultRikaku)
+                            {
+                                // 買いなおし
+                                needBuyList.Add(pos);
+                            }
 
                             pos.BuyIsDone = true;
 
                             // 売り未発注 
-                            //if ((pos.SellOrderId == 0) && (pos.SellHasError == false) && (string.IsNullOrEmpty(pos.SellStatus))) > 損切再注文の場合ステータス残している為、ここではステータスを無視する。
+                            //if ((pos.SellOrderId == 0) && (pos.SellHasError == false) && (string.IsNullOrEmpty(pos.SellStatus)))  損切再注文の場合ステータス残している為、ここではステータスを無視する。
                             if ((pos.SellOrderId == 0) && (pos.SellHasError == false))
+                            {
+                                //発注数制限対策 
+                                if ((pos.SellPrice - ltp) <= (defaultRikaku * 3))
                                 {
-                                // 要売り発注リストへ追加
-                                needSellList.Add(pos);
+                                    // 要売り発注リストへ追加
+                                    needSellList.Add(pos);
+                                }
                             }
                             else
                             {
@@ -14927,20 +14951,168 @@ namespace BitDesk.ViewModels
 
                                     pos.IsDone = true;
                                 }
+                                else
+                                {
+                                    // 売り注文は注文中。注文数制限対策の為、注文を取り下げるか確認する
+                                    if ((pos.SellOrderId != 0) && pos.BuyIsDone && (pos.SellIsDone == false) && (pos.SellStatus == "UNFILLED"))
+                                    {
+                                        if ((pos.SellPrice - ltp) > (defaultRikaku * 3))
+                                        {
+                                            // 注文一時取り下げリストへ追加
+                                            needGoQueList.Add(pos);
+                                        }
+                                    }
+                                }
                             }
                         }
                         else
                         {
                             // 買い未発注 
-                            //if ((pos.BuyOrderId == 0) && (pos.BuyHasError == false) && (string.IsNullOrEmpty(pos.BuyStatus)))
+                            //if ((pos.BuyOrderId == 0) && (pos.BuyHasError == false) && (string.IsNullOrEmpty(pos.BuyStatus))) 損切再注文の場合ステータス残している為、ここではステータスを無視する。
                             if ((pos.BuyOrderId == 0) && (pos.BuyHasError == false))
+                            {                            
+                                // 発注数制限対策 
+                                if ((ltp - pos.BuyPrice) <= defaultRikaku)
+                                {
+                                    needBuyList.Add(pos);
+                                }
+                            }
+                            else
                             {
-                                needBuyList.Add(pos);
+                                // 買い注文は発注済み。注文数制限対策の為、注文を取り下げるか確認する
+                                if ((pos.BuyOrderId != 0) && (pos.BuyStatus == "UNFILLED"))
+                                {
+                                    // 発注数制限対策 
+                                    if ((ltp - pos.BuyPrice) > defaultRikaku)
+                                    {
+                                        // 注文一時取り下げリストへ追加
+                                        needGoQueList.Add(pos);
+                                    }
+                                }
                             }
                         }
                     }
 
                 });
+
+                // 一時注文取り下げ処理（注文数制限対策）
+                if (needGoQueList.Count > 0)
+                {
+                    foreach (var ql in needGoQueList) 
+                    {
+                        // 買い約定済み
+                        if ((ql.BuyOrderId != 0) && (ql.BuyStatus == "FULLY_FILLED"))
+                        {
+                            // 売り発注済み・注文中。
+                            if ((ql.SellOrderId != 0) && (ql.SellStatus == "UNFILLED"))
+                            {
+                                // 売り注文キャンセル発注
+                                OrderResult ord = await _priApi.CancelOrder(_autoTradeApiKey, _autoTradeSecret, pair.ThisPair.ToString(), ql.SellOrderId);
+                                if (ord != null)
+                                {
+                                    if (ord.IsSuccess)
+                                    {
+                                        Application.Current.Dispatcher.Invoke(() =>
+                                        {
+                                            // 
+                                            ql.SellOrderId = 0;
+                                            ql.SellStatus = "";
+                                            // ql.SellStatus = ord.Status;
+                                        });
+                                    }
+                                    else
+                                    {
+                                        Application.Current.Dispatcher.Invoke(() =>
+                                        {
+                                            ql.SellHasError = true;
+                                            if (ql.SellErrorInfo == null)
+                                            {
+                                                ql.SellErrorInfo = new ErrorInfo();
+                                            }
+                                            ql.SellErrorInfo.ErrorTitle = ord.Err.ErrorTitle;
+                                            ql.SellErrorInfo.ErrorDescription = ord.Err.ErrorDescription;
+                                            ql.SellErrorInfo.ErrorCode = ord.Err.ErrorCode;
+                                        });
+
+                                        System.Diagnostics.Debug.WriteLine("■■■■■ UpdateAutoTrade 一時注文取り下げ処理（注文数制限対策）Sellで。MakeOrder API returned error code.");
+                                    }
+
+                                }
+                                else
+                                {
+                                    Application.Current.Dispatcher.Invoke(() =>
+                                    {
+                                        ql.SellHasError = true;
+                                        if (ql.SellErrorInfo == null)
+                                        {
+                                            ql.SellErrorInfo = new ErrorInfo();
+                                        }
+                                        ql.SellErrorInfo.ErrorTitle = ord.Err.ErrorTitle;
+                                        ql.SellErrorInfo.ErrorDescription = ord.Err.ErrorDescription;
+                                        ql.SellErrorInfo.ErrorCode = ord.Err.ErrorCode;
+                                    });
+
+                                    System.Diagnostics.Debug.WriteLine("■■■■■ UpdateAutoTrade 一時注文取り下げ処理（注文数制限対策）Sellで。MakeOrder API returned null.");
+                                }
+                            }
+                        }
+                        else
+                        {
+                            // 買い注文は発注済み・注文中。
+                            if ((ql.BuyOrderId != 0) && (ql.BuyStatus == "UNFILLED"))
+                            {
+                                // 買い注文キャンセル発注
+                                OrderResult ord = await _priApi.CancelOrder(_autoTradeApiKey, _autoTradeSecret, pair.ThisPair.ToString(), ql.BuyOrderId);
+                                if (ord != null)
+                                {
+                                    if (ord.IsSuccess)
+                                    {
+                                        Application.Current.Dispatcher.Invoke(() =>
+                                        {
+                                            // 
+                                            ql.BuyOrderId = 0;
+                                            ql.BuyStatus = "";
+                                            // ql.BuyStatus = ord.Status;
+                                        });
+                                    }
+                                    else
+                                    {
+                                        Application.Current.Dispatcher.Invoke(() =>
+                                        {
+                                            ql.BuyHasError = true;
+                                            if (ql.BuyErrorInfo == null)
+                                            {
+                                                ql.BuyErrorInfo = new ErrorInfo();
+                                            }
+                                            ql.BuyErrorInfo.ErrorTitle = ord.Err.ErrorTitle;
+                                            ql.BuyErrorInfo.ErrorDescription = ord.Err.ErrorDescription;
+                                            ql.BuyErrorInfo.ErrorCode = ord.Err.ErrorCode;
+                                        });
+
+                                        System.Diagnostics.Debug.WriteLine("■■■■■ UpdateAutoTrade 一時注文取り下げ処理（注文数制限対策）Buyで。MakeOrder API returned error code.");
+                                    }
+
+                                }
+                                else
+                                {
+                                    Application.Current.Dispatcher.Invoke(() =>
+                                    {
+                                        ql.BuyHasError = true;
+                                        if (ql.BuyErrorInfo == null)
+                                        {
+                                            ql.BuyErrorInfo = new ErrorInfo();
+                                        }
+                                        ql.BuyErrorInfo.ErrorTitle = ord.Err.ErrorTitle;
+                                        ql.BuyErrorInfo.ErrorDescription = ord.Err.ErrorDescription;
+                                        ql.BuyErrorInfo.ErrorCode = ord.Err.ErrorCode;
+                                    });
+
+                                    System.Diagnostics.Debug.WriteLine("■■■■■ UpdateAutoTrade 一時注文取り下げ処理（注文数制限対策）Buyで。MakeOrder API returned null.");
+                                }
+                            }
+                        }
+                    }
+                }
 
                 // 売り発注処理
                 if (needSellList.Count > 0)
@@ -14954,6 +15126,7 @@ namespace BitDesk.ViewModels
                         // 最新をチェック
                         ltp = pair.Ltp;
 
+                        /*
                         // 万一、LTPが売りより上がっていたら。
                         if (ltp > nsl.SellPrice)
                         {
@@ -14966,6 +15139,7 @@ namespace BitDesk.ViewModels
                                 nsl.SellPrice = nsl.BuyPrice + (defaultRikaku * 3);
                             }
                         }
+                        */
 
                         // 予想更新
                         nsl.ShushiAmount = (nsl.SellPrice * nsl.SellAmount) - (nsl.BuyPrice * nsl.BuyAmount);
@@ -15124,6 +15298,7 @@ namespace BitDesk.ViewModels
                         // 最新をチェック
                         ltp = pair.Ltp;
 
+                        /*
                         // 万一、LTPが売りより上がっていたら。
                         if (ltp > position.SellPrice)
                         {
@@ -15135,38 +15310,59 @@ namespace BitDesk.ViewModels
                             {
                                 position.SellPrice = position.BuyPrice + (defaultRikaku * 3);
                             }
-
                         }
+                        */
 
                         // 予想利益額
                         position.ShushiAmount = (position.SellPrice * position.SellAmount) - (position.BuyPrice * position.BuyAmount);
 
                         if (ltp > position.BuyPrice)
                         {
-                            // 注文発注
-                            OrderResult res = await _priApi.MakeOrder(_autoTradeApiKey, _autoTradeSecret, pair.ThisPair.ToString(), position.BuyAmount, position.BuyPrice, position.BuySide, "limit");
+                            //発注数制限対策 
+                            if ((ltp - position.BuyPrice) <= defaultRikaku)
+                            { 
+                                // 注文発注
+                                OrderResult res = await _priApi.MakeOrder(_autoTradeApiKey, _autoTradeSecret, pair.ThisPair.ToString(), position.BuyAmount, position.BuyPrice, position.BuySide, "limit");
 
-                            if (res != null)
-                            {
-                                if (res.IsSuccess)
+                                if (res != null)
                                 {
-                                    Application.Current.Dispatcher.Invoke(() =>
+                                    if (res.IsSuccess)
                                     {
-                                        position.BuyHasError = false;
-
-                                        position.BuyOrderId = res.OrderID;
-                                        position.BuyFilledPrice = res.AveragePrice;
-                                        position.BuyStatus = res.Status;
-
-                                        // 約定
-                                        if (res.Status == "FULLY_FILLED")
+                                        Application.Current.Dispatcher.Invoke(() =>
                                         {
-                                            // フラグをセット
-                                            position.BuyIsDone = true;
+                                            position.BuyHasError = false;
 
-                                        }
+                                            position.BuyOrderId = res.OrderID;
+                                            position.BuyFilledPrice = res.AveragePrice;
+                                            position.BuyStatus = res.Status;
 
-                                    });
+                                            // 約定
+                                            if (res.Status == "FULLY_FILLED")
+                                            {
+                                                // フラグをセット
+                                                position.BuyIsDone = true;
+
+                                            }
+
+                                        });
+                                    }
+                                    else
+                                    {
+                                        Application.Current.Dispatcher.Invoke(() =>
+                                        {
+                                            position.BuyHasError = true;
+                                            if (position.BuyErrorInfo == null)
+                                            {
+                                                position.BuyErrorInfo = new ErrorInfo();
+                                            }
+                                            position.BuyErrorInfo.ErrorTitle = res.Err.ErrorTitle;
+                                            position.BuyErrorInfo.ErrorDescription = res.Err.ErrorDescription;
+                                            position.BuyErrorInfo.ErrorCode = res.Err.ErrorCode;
+
+                                        });
+
+                                        System.Diagnostics.Debug.WriteLine("■■■■■ UpdateAutoTrade 完了済み注文を、新たに注文し直すループ。途中 MakeOrder API returned error code.");
+                                    }
                                 }
                                 else
                                 {
@@ -15177,34 +15373,15 @@ namespace BitDesk.ViewModels
                                         {
                                             position.BuyErrorInfo = new ErrorInfo();
                                         }
-                                        position.BuyErrorInfo.ErrorTitle = res.Err.ErrorTitle;
-                                        position.BuyErrorInfo.ErrorDescription = res.Err.ErrorDescription;
-                                        position.BuyErrorInfo.ErrorCode = res.Err.ErrorCode;
+                                        position.BuyErrorInfo.ErrorTitle = "注文時にエラーが起きました。";
+                                        position.BuyErrorInfo.ErrorDescription = "priApi.MakeOrder is null.";
+                                        position.BuyErrorInfo.ErrorCode = -1;
 
                                     });
 
-                                    System.Diagnostics.Debug.WriteLine("■■■■■ UpdateAutoTrade 完了済み注文を、新たに注文し直すループ。途中 MakeOrder API returned error code.");
+                                    System.Diagnostics.Debug.WriteLine("■■■■■ UpdateAutoTrade 完了済み注文を、新たに注文し直すループ。途中 MakeOrder API returned null.");
                                 }
                             }
-                            else
-                            {
-                                Application.Current.Dispatcher.Invoke(() =>
-                                {
-                                    position.BuyHasError = true;
-                                    if (position.BuyErrorInfo == null)
-                                    {
-                                        position.BuyErrorInfo = new ErrorInfo();
-                                    }
-                                    position.BuyErrorInfo.ErrorTitle = "注文時にエラーが起きました。";
-                                    position.BuyErrorInfo.ErrorDescription = "priApi.MakeOrder is null.";
-                                    position.BuyErrorInfo.ErrorCode = -1;
-
-                                });
-
-                                System.Diagnostics.Debug.WriteLine("■■■■■ UpdateAutoTrade 完了済み注文を、新たに注文し直すループ。途中 MakeOrder API returned null.");
-
-                            }
-
                         }
 
                         if (Application.Current == null) break;
@@ -15219,17 +15396,17 @@ namespace BitDesk.ViewModels
                         });
                     }
 
-
                 }
 
+                // クリーニングアップ
                 // 削除アイテム用リスト
                 List<AutoTrade> needDeleteList = new List<AutoTrade>();
 
                 // キャンセル用リスト
-                List<AutoTrade> needCancelList = new List<AutoTrade>();
+                //List<AutoTrade> needCancelList = new List<AutoTrade>();
 
                 // ロスカット用リスト
-                List<AutoTrade> needLossCutList = new List<AutoTrade>();
+                //List<AutoTrade> needLossCutList = new List<AutoTrade>();
 
                 // 掃除ループ
                 int h = -1;
@@ -15238,7 +15415,7 @@ namespace BitDesk.ViewModels
                 {
                     foreach (var pos in autoTrades)
                     {
-                        h = h + 1;
+                        h += 1;
 
                         if (pos.IsCanceled == true)
                         {
@@ -15257,11 +15434,12 @@ namespace BitDesk.ViewModels
                         if (pos.IsDone == true)
                         {
                             // 損益更新
-                            pair.AutoTradeProfit = pair.AutoTradeProfit + ((pos.SellPrice - pos.BuyPrice) * pos.SellAmount);
+                            pair.AutoTradeProfit += ((pos.SellPrice - pos.BuyPrice) * pos.SellAmount);
 
                             needDeleteList.Add(pos);
                         }
 
+                        /*
                         // 指定幅　下がったら、損切。
                         if ((pos.SellOrderId != 0) && pos.BuyIsDone && (pos.SellIsDone == false))
                         {
@@ -15279,17 +15457,16 @@ namespace BitDesk.ViewModels
                                     }
 
                                     // カウントアップ
-                                    pos.LossCutCounter = pos.LossCutCounter + 1;
+                                    pos.LossCutCounter += 1;
 
                                 }
-
                             }
                         }
-
+                        */
                     }
-
                 });
 
+                /*
                 // 損切処理
                 if (needLossCutList.Count > 0)
                 {
@@ -15351,7 +15528,9 @@ namespace BitDesk.ViewModels
                         }
                     }
                 }
+                */
 
+                /*
                 // キャンセルリストを処理
                 if (needCancelList.Count > 0)
                 {
@@ -15409,6 +15588,7 @@ namespace BitDesk.ViewModels
 
                 }
                 needCancelList.Clear();
+                */
 
                 // 削除リストを処理
                 if (Application.Current == null) break;
@@ -16736,15 +16916,14 @@ namespace BitDesk.ViewModels
                                     // 全てのポイントが同じ場合、スキップする。変なデータ？ 本家もスキップしている。
                                     if ((hoge.Open == hoge.High) && (hoge.Open == hoge.Low) && (hoge.Open == hoge.Close) && (hoge.Volume == 0))
                                     {
-                                        Debug.WriteLine("■ UpdateCandlestick 全てのポイントが同じ " + pair.ToString());
+                                        //Debug.WriteLine("■ UpdateCandlestick 全てのポイントが同じ " + pair.ToString());
                                         //continue;
                                     }
 
                                     if (hoge.TimeStamp == dtLastUpdate)
                                     {
                                         // 更新前の最後のポイントを更新する。最終データは中途半端なので。
-
-                                        Debug.WriteLine("１分毎のチャートデータ更新: " + hoge.TimeStamp.ToString() + " " + pair.ToString());
+                                        // Debug.WriteLine("１分毎のチャートデータ更新: " + hoge.TimeStamp.ToString() + " " + pair.ToString());
 
                                         ListOhlcvsOneMin[0].Open = hoge.Open;
                                         ListOhlcvsOneMin[0].High = hoge.High;
@@ -16759,8 +16938,7 @@ namespace BitDesk.ViewModels
                                     else
                                     {
                                         // 新規ポイントを追加する。
-
-                                        Debug.WriteLine("１分毎のチャートデータ追加: " + hoge.TimeStamp.ToString() + " " + pair.ToString());
+                                        // Debug.WriteLine("１分毎のチャートデータ追加: " + hoge.TimeStamp.ToString() + " " + pair.ToString());
 
                                         ListOhlcvsOneMin.Insert(0, hoge);
 
@@ -16813,11 +16991,11 @@ namespace BitDesk.ViewModels
                                     // 全てのポイントが同じ場合、スキップする。変なデータ？ 本家もスキップしている。
                                     if ((hoge.Open == hoge.High) && (hoge.Open == hoge.Low) && (hoge.Open == hoge.Close) && (hoge.Volume == 0))
                                     {
-                                        Debug.WriteLine("■ UpdateCandlestick 全てのポイントが同じ " + pair.ToString());
+                                        // Debug.WriteLine("■ UpdateCandlestick 全てのポイントが同じ " + pair.ToString());
                                         //continue;
                                     }
 
-                                    //Debug.WriteLine(hoge.TimeStamp.ToString()+" : "+ dtLastUpdate.ToString());
+                                    // Debug.WriteLine(hoge.TimeStamp.ToString()+" : "+ dtLastUpdate.ToString());
 
                                     if (hoge.TimeStamp >= dtLastUpdate)
                                     {
@@ -16825,8 +17003,7 @@ namespace BitDesk.ViewModels
                                         if (hoge.TimeStamp == dtLastUpdate)
                                         {
                                             // 更新前の最後のポイントを更新する。最終データは中途半端なので。
-
-                                            Debug.WriteLine("１時間チャートデータ更新: " + hoge.TimeStamp.ToString() + " " + pair.ToString());
+                                            // Debug.WriteLine("１時間チャートデータ更新: " + hoge.TimeStamp.ToString() + " " + pair.ToString());
 
                                             ListOhlcvsOneHour[0].Open = hoge.Open;
                                             ListOhlcvsOneHour[0].High = hoge.High;
@@ -16835,14 +17012,12 @@ namespace BitDesk.ViewModels
                                             ListOhlcvsOneHour[0].TimeStamp = hoge.TimeStamp;
 
                                             UpdateLastCandle(pair, CandleTypes.OneHour, hoge);
-
-                                            //Debug.WriteLine(hoge.TimeStamp.ToString() + " : " + dtLastUpdate.ToString());
+                                            // Debug.WriteLine(hoge.TimeStamp.ToString() + " : " + dtLastUpdate.ToString());
                                         }
                                         else
                                         {
                                             // 新規ポイントを追加する。
-
-                                            Debug.WriteLine("１時間チャートデータ追加: " + hoge.TimeStamp.ToString());
+                                            // Debug.WriteLine("１時間チャートデータ追加: " + hoge.TimeStamp.ToString());
 
                                             ListOhlcvsOneHour.Insert(0, hoge);
 
@@ -16913,8 +17088,7 @@ namespace BitDesk.ViewModels
                                         if (hoge.TimeStamp == dtLastUpdate)
                                         {
                                             // 更新前の最後のポイントを更新する。最終データは中途半端なので。
-
-                                            Debug.WriteLine("１日チャートデータ更新: " + hoge.TimeStamp.ToString());
+                                            // Debug.WriteLine("１日チャートデータ更新: " + hoge.TimeStamp.ToString());
 
                                             ListOhlcvsOneDay[0].Open = hoge.Open;
                                             ListOhlcvsOneDay[0].High = hoge.High;
@@ -16929,8 +17103,7 @@ namespace BitDesk.ViewModels
                                         else
                                         {
                                             // 新規ポイントを追加する。
-
-                                            Debug.WriteLine("１日チャートデータ追加: " + hoge.TimeStamp.ToString());
+                                            // Debug.WriteLine("１日チャートデータ追加: " + hoge.TimeStamp.ToString());
 
                                             ListOhlcvsOneDay.Insert(0, hoge);
 
@@ -17363,107 +17536,10 @@ namespace BitDesk.ViewModels
 
         }
 
-        // 自動取引のデータ保存メソッド
-        private void SaveAutoTrades(Pair p, string appDataFolder, string fileName)
-        {
-            //BtcJpy
-            var AutoTrades_FilePath = appDataFolder + System.IO.Path.DirectorySeparatorChar + fileName + "_AutoTrades.csv";
-
-            if (p.AutoTrades.Count > 0)
-            {
-                var csv = new StringBuilder();
-
-                foreach (var at in p.AutoTrades)
-                {
-
-                    // 未約定のみ保存する
-                    if (at.IsDone == false)
-                    {
-                        if ((at.SellIsDone == false) && (at.SellOrderId != 0))
-                        {
-                            // side, 注文数、価格、約定価格、ステータス、想定損益
-                            //var newLine = string.Format("{0},{1}", at.SellOrderId.ToString());
-                            var newLine = string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12}",
-                                at.BuyOrderId.ToString(), at.BuySide, at.BuyAmount.ToString(), at.BuyPrice, at.BuyFilledPrice.ToString(), at.BuyStatus,
-                                at.SellOrderId.ToString(), at.SellSide, at.SellAmount.ToString(), at.SellPrice, at.SellFilledPrice.ToString(), at.SellStatus,
-                                at.ShushiAmount.ToString()
-                                );
-                            csv.AppendLine(newLine);
-                        }
-                    }
-
-                }
-
-                File.WriteAllText(AutoTrades_FilePath, csv.ToString());
-
-            }
-            else
-            {
-                // リストが空なので、ファイルも削除。
-                if (File.Exists(AutoTrades_FilePath))
-                {
-                    File.Delete(AutoTrades_FilePath);
-                }
-            }
-        }
-
-        // 自動取引のデータをロードするメソッド
-        private void LoadAutoTrades(Pair p, string appDataFolder, string fileName)
-        {
-            var AutoTrades_FilePath = appDataFolder + System.IO.Path.DirectorySeparatorChar + fileName + "_AutoTrades.csv";
-
-            if (File.Exists(AutoTrades_FilePath))
-            {
-                try
-                {
-                    var contents = File.ReadAllText(AutoTrades_FilePath).Split('\n');
-                    var csv = from line in contents select line.Split(',').ToArray();
-
-                    foreach (var row in csv)
-                    {
-                        if (string.IsNullOrEmpty(row[0]))
-                        {
-                            break;
-                        }
-
-                        AutoTrade asdf = new AutoTrade();
-
-                        asdf.BuyOrderId = Convert.ToUInt64(row[0]);
-                        asdf.BuySide = row[1];
-                        asdf.BuyAmount = Decimal.Parse(row[2]);
-                        asdf.BuyPrice = Decimal.Parse(row[3]);
-                        asdf.BuyFilledPrice = Decimal.Parse(row[4]);
-                        asdf.BuyStatus = row[5];
-                        if (asdf.BuyStatus == "FULLY_FILLED")
-                        {
-                            asdf.BuyIsDone = true;
-                        }
-
-                        asdf.SellOrderId = Convert.ToUInt64(row[6]);
-                        asdf.SellSide = row[7];
-                        asdf.SellAmount = Decimal.Parse(row[8]);
-                        asdf.SellPrice = Decimal.Parse(row[9]);
-                        asdf.SellFilledPrice = Decimal.Parse(row[10]);
-                        asdf.SellStatus = row[11];
-
-                        asdf.ShushiAmount = Decimal.Parse(row[12]);
-
-                        p.AutoTrades.Add(asdf);
-
-                    }
-                }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Debug.WriteLine("■■■■■ Error  自動取引データロード中: " + ex + " while opening : " + AutoTrades_FilePath);
-                }
-            }
-
-        }
-
         // 自動取引を止めて、買いをキャンセルするメソッド
         private async Task<bool> StopAutoTrade(Pair p)
         {
-            System.Diagnostics.Debug.WriteLine("Stop Auto Trading.");
+            System.Diagnostics.Debug.WriteLine("Stopping AutoTrade.");
 
             if (AutoTradeApiKeyIsSet == false) return true;
 
@@ -17482,7 +17558,7 @@ namespace BitDesk.ViewModels
                 // 買い注文をすべてキャンセルする。
 
                 List<ulong> needCancelIdsList = new List<ulong>();
-                List<AutoTrade> needDeleteList = new List<AutoTrade>();
+                //List<AutoTrade> needDeleteList = new List<AutoTrade>();
 
                 foreach (var position in autoTrades)
                 {
@@ -17492,17 +17568,14 @@ namespace BitDesk.ViewModels
                         if (position.BuyOrderId > 0)
                         {
                             needCancelIdsList.Add(position.BuyOrderId);
-                            needDeleteList.Add(position);
+                            //needDeleteList.Add(position);
+
                         }
                     }
-
                 }
-
-                System.Diagnostics.Debug.WriteLine("Cancelling Buy orders....");
 
                 if (needCancelIdsList.Count > 0)
                 {
-
                     // リストのリスト（小分けにして分割取得用）
                     List<List<ulong>> ListOfList = new List<List<ulong>>();
 
@@ -17536,15 +17609,19 @@ namespace BitDesk.ViewModels
 
                     foreach (var list in ListOfList)
                     {
-
                         // CancelOrders
+                        System.Diagnostics.Debug.WriteLine("Cancelling Buy orders....");
                         Orders ord = await _priApi.CancelOrders(_manualTradeApiKey, _manualTradeSecret, pair.ThisPair.ToString(), list);
 
                         if (ord != null)
                         {
                             if (ord.OrderList.Count > 0)
                             {
+                                // TODO ??? ここまで来ない模様　要検証
 
+                                System.Diagnostics.Debug.WriteLine("Buy orders cancelled.");
+
+                                /*
                                 Application.Current.Dispatcher.Invoke(() =>
                                 {
                                     for (int i = 0; i < needDeleteList.Count; i++)
@@ -17553,18 +17630,15 @@ namespace BitDesk.ViewModels
                                     }
 
                                 });
-
+                                */
                             }
                         }
                     }
-
-
                 }
-
             }
 
             // 情報表示のリセット
-            pair.AutoTradeActiveOrders = 0;
+            //pair.AutoTradeActiveOrders = 0;
             pair.AutoTradeSellOrders = 0;
             pair.AutoTradeBuyOrders = 0;
             pair.AutoTradeErrOrders = 0;
@@ -17573,7 +17647,141 @@ namespace BitDesk.ViewModels
             this.NotifyPropertyChanged("AutoTradeTitle");
 
             return true;
+        }
 
+        // 自動取引のデータ保存メソッド
+        private void SaveAutoTrades(Pair p, string appDataFolder, string fileName)
+        {
+            // 通貨毎のファイル保存。（現在BtcJpy限定）
+            var AutoTrades_FilePath = appDataFolder + System.IO.Path.DirectorySeparatorChar + fileName + "_AutoTrades.csv";
+
+            if (p.AutoTrades.Count > 0)
+            {
+                var csv = new StringBuilder();
+                string atBuyOrderId = "0";
+                string atBuyStatus = "";
+                string atBuyFilledPrice = "";
+
+                foreach (var at in p.AutoTrades)
+                {
+                    // 未約定の買い注文はここでリセットしてしまう
+                    if (at.BuyStatus == "UNFILLED" || at.BuyStatus == "PARTIALLY_FILLED")
+                    {
+                        atBuyOrderId = "0";
+                        atBuyFilledPrice = "0";
+                        atBuyStatus = "";
+                    }
+                    else
+                    {
+                        atBuyOrderId = at.BuyOrderId.ToString();
+                        atBuyStatus = at.BuyStatus;
+                        atBuyFilledPrice = at.BuyFilledPrice.ToString();
+                    }
+
+                    var newLine = string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12}",
+                            //at.BuyOrderId.ToString(), 
+                            atBuyOrderId,
+                            at.BuySide,
+                            at.BuyAmount.ToString(),
+                            at.BuyPrice,
+                            //at.BuyFilledPrice.ToString(),
+                            atBuyFilledPrice,
+                            //at.BuyStatus,
+                            atBuyStatus,
+                            at.SellOrderId.ToString(),
+                            at.SellSide,
+                            at.SellAmount.ToString(),
+                            at.SellPrice,
+                            at.SellFilledPrice.ToString(),
+                            at.SellStatus,
+                            at.ShushiAmount.ToString()
+                            );
+                    csv.AppendLine(newLine);
+
+                }
+
+                // ファイル保存
+                try
+                {
+                    System.Diagnostics.Debug.WriteLine("自動取引データのファイル保存");
+                    File.WriteAllText(AutoTrades_FilePath, csv.ToString());
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine("■■■■■ Error  自動取引データファイル保存中: " + ex + " while saving : " + AutoTrades_FilePath);
+                }
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine("自動取引リストが空。p.AutoTrades.Count = 0");
+
+                // リストが空なので、ファイルも削除。
+                if (File.Exists(AutoTrades_FilePath))
+                {
+                    File.Delete(AutoTrades_FilePath);
+                }
+            }
+        }
+
+        // 自動取引のデータをロードするメソッド
+        private void LoadAutoTrades(Pair p, string appDataFolder, string fileName)
+        {
+            var AutoTrades_FilePath = appDataFolder + System.IO.Path.DirectorySeparatorChar + fileName + "_AutoTrades.csv";
+
+            if (File.Exists(AutoTrades_FilePath))
+            {
+                System.Diagnostics.Debug.WriteLine("自動取引ファイルのオープン");
+                try
+                {
+                    var contents = File.ReadAllText(AutoTrades_FilePath).Split('\n');
+                    var csv = from line in contents select line.Split(',').ToArray();
+
+                    foreach (var row in csv)
+                    {
+                        if (string.IsNullOrEmpty(row[0]))
+                        {
+                            break;
+                        }
+
+                        AutoTrade asdf = new AutoTrade();
+
+                        asdf.BuyOrderId = Convert.ToUInt64(row[0]);
+                        asdf.BuySide = row[1];
+                        asdf.BuyAmount = Decimal.Parse(row[2]);
+                        asdf.BuyPrice = Decimal.Parse(row[3]);
+                        asdf.BuyFilledPrice = Decimal.Parse(row[4]);
+                        asdf.BuyStatus = row[5];
+                        if (asdf.BuyStatus == "FULLY_FILLED")
+                        {
+                            asdf.BuyIsDone = true;
+                        }
+
+                        asdf.SellOrderId = Convert.ToUInt64(row[6]);
+                        asdf.SellSide = row[7];
+                        asdf.SellAmount = Decimal.Parse(row[8]);
+                        asdf.SellPrice = Decimal.Parse(row[9]);
+                        asdf.SellFilledPrice = Decimal.Parse(row[10]);
+                        asdf.SellStatus = row[11];
+                        if (asdf.SellStatus == "FULLY_FILLED")
+                        {
+                            asdf.SellIsDone = true;
+                        }
+
+                        asdf.ShushiAmount = Decimal.Parse(row[12]);
+
+                        p.AutoTrades.Add(asdf);
+
+                    }
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine("■■■■■ Error  自動取引データロード中: " + ex + " while opening : " + AutoTrades_FilePath);
+                }
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine("自動取引ファイルは無し");
+            }
         }
 
         #endregion
@@ -19030,7 +19238,7 @@ namespace BitDesk.ViewModels
             var autoTrades = ActivePair.AutoTrades;
 
             // 情報表示数のリセット。
-            pair.AutoTradeActiveOrders = 0;
+            //pair.AutoTradeActiveOrders = 0;
             pair.AutoTradeSellOrders = 0;
             pair.AutoTradeBuyOrders = 0;
             pair.AutoTradeErrOrders = 0;
@@ -19051,7 +19259,7 @@ namespace BitDesk.ViewModels
 
 
             // 注文数のセット
-            pair.AutoTradeActiveOrders = autoTrades.Count;
+            //pair.AutoTradeActiveOrders = autoTrades.Count;
 
             // 開始フラグセット
             pair.AutoTradeStart = true;
@@ -19113,10 +19321,10 @@ namespace BitDesk.ViewModels
 
             // 幅
             if (pair.AutoTradeDefaultHaba <= 0)
-                pair.AutoTradeDefaultHaba = 50;
+                pair.AutoTradeDefaultHaba = 500;
             // 幅
             if (pair.AutoTradeDefaultHaba <= 0)
-                pair.AutoTradeDefaultRikakuHaba = 500;
+                pair.AutoTradeDefaultRikakuHaba = 1000;
 
             decimal haba = pair.AutoTradeDefaultHaba;
             decimal rikaku = pair.AutoTradeDefaultRikakuHaba;
@@ -19152,28 +19360,44 @@ namespace BitDesk.ViewModels
 
                 if (ltp > position.BuyPrice)
                 {
-
-                    // 注文発注
-                    OrderResult res = await _priApi.MakeOrder(_manualTradeApiKey, _manualTradeSecret, pair.ThisPair.ToString(), position.BuyAmount, position.BuyPrice, position.BuySide, "limit");
-
-                    if (res != null)
+                    //発注数制限対策 
+                    if ((ltp - position.BuyPrice) <= rikaku)
                     {
-                        if (res.IsSuccess)
+                        // 注文発注
+                        OrderResult res = await _priApi.MakeOrder(_manualTradeApiKey, _manualTradeSecret, pair.ThisPair.ToString(), position.BuyAmount, position.BuyPrice, position.BuySide, "limit");
+
+                        if (res != null)
                         {
-
-                            position.BuyHasError = false;
-
-                            position.BuyOrderId = res.OrderID;
-                            position.BuyFilledPrice = res.AveragePrice;
-                            position.BuyStatus = res.Status;
-
-                            // 約定
-                            if (res.Status == "FULLY_FILLED")
+                            if (res.IsSuccess)
                             {
-                                // フラグをセット
-                                position.BuyIsDone = true;
-                            }
 
+                                position.BuyHasError = false;
+
+                                position.BuyOrderId = res.OrderID;
+                                position.BuyFilledPrice = res.AveragePrice;
+                                position.BuyStatus = res.Status;
+
+                                // 約定
+                                if (res.Status == "FULLY_FILLED")
+                                {
+                                    // フラグをセット
+                                    position.BuyIsDone = true;
+                                }
+
+                            }
+                            else
+                            {
+                                position.BuyHasError = true;
+                                if (position.BuyErrorInfo == null)
+                                {
+                                    position.BuyErrorInfo = new ErrorInfo();
+                                }
+                                position.BuyErrorInfo.ErrorTitle = res.Err.ErrorTitle;
+                                position.BuyErrorInfo.ErrorDescription = res.Err.ErrorDescription;
+                                position.BuyErrorInfo.ErrorCode = res.Err.ErrorCode;
+
+                                System.Diagnostics.Debug.WriteLine("■■■■■ StartAutoTradeCommand_Execute 新規注文ループ MakeOrder API returned error code.");
+                            }
                         }
                         else
                         {
@@ -19182,28 +19406,14 @@ namespace BitDesk.ViewModels
                             {
                                 position.BuyErrorInfo = new ErrorInfo();
                             }
-                            position.BuyErrorInfo.ErrorTitle = res.Err.ErrorTitle;
-                            position.BuyErrorInfo.ErrorDescription = res.Err.ErrorDescription;
-                            position.BuyErrorInfo.ErrorCode = res.Err.ErrorCode;
+                            position.BuyErrorInfo.ErrorTitle = "注文時にエラーが起きました。";
+                            position.BuyErrorInfo.ErrorDescription = "priApi.MakeOrder is null.";
+                            position.BuyErrorInfo.ErrorCode = -1;
 
-                            System.Diagnostics.Debug.WriteLine("■■■■■ StartAutoTradeCommand_Execute 新規注文ループ MakeOrder API returned error code.");
+                            System.Diagnostics.Debug.WriteLine("■■■■■ StartAutoTradeCommand_Execute 新規注文ループ MakeOrder API returned null.");
+
                         }
                     }
-                    else
-                    {
-                        position.BuyHasError = true;
-                        if (position.BuyErrorInfo == null)
-                        {
-                            position.BuyErrorInfo = new ErrorInfo();
-                        }
-                        position.BuyErrorInfo.ErrorTitle = "注文時にエラーが起きました。";
-                        position.BuyErrorInfo.ErrorDescription = "priApi.MakeOrder is null.";
-                        position.BuyErrorInfo.ErrorCode = -1;
-
-                        System.Diagnostics.Debug.WriteLine("■■■■■ StartAutoTradeCommand_Execute 新規注文ループ MakeOrder API returned null.");
-
-                    }
-
                 }
 
                 if (Application.Current == null) { return; }
@@ -19217,7 +19427,7 @@ namespace BitDesk.ViewModels
             }
 
             // 注文数のセット
-            pair.AutoTradeActiveOrders = autoTrades.Count;
+            //pair.AutoTradeActiveOrders = autoTrades.Count;
 
         }
 

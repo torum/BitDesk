@@ -30,6 +30,7 @@ namespace BitDesk
 
         // ミニマム　フラグ
         private bool isMinimum;
+
         // 元のサイズを覚える為　
         private double ttt;
         private double lll;
