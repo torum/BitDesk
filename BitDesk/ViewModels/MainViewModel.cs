@@ -14802,20 +14802,26 @@ namespace BitDesk.ViewModels
                     foreach (var pos in autoTrades)
                     {
                         // キャンセルはスキップ
-                        if (pos.IsCanceled) continue;
+                        // if (pos.IsCanceled) continue; 単純キャンセルではスキップしないように変更
 
-                        // 買いキャンセルされた スキップ
+                        // 買いキャンセルされた スキップはしないように変更。リセットする。
                         if ((pos.BuyOrderId != 0) && ((pos.BuyStatus == "CANCELED_UNFILLED") || pos.BuyStatus == "CANCELED_PARTIALLY_FILLED"))
                         {
-                            pos.IsCanceled = true;
-                            continue;
+                            //pos.IsCanceled = true;
+                            //continue;
+
+                            pos.BuyOrderId = 0;
+                            pos.BuyStatus = "";
                         }
 
-                        // 売りキャンセルされた スキップ
+                        // 売りキャンセルされた スキップはしないように変更。リセットする。
                         if ((pos.SellOrderId != 0) && ((pos.SellStatus == "CANCELED_UNFILLED") || pos.SellStatus == "CANCELED_PARTIALLY_FILLED"))
                         {
-                            pos.IsCanceled = true;
-                            continue;
+                            //pos.IsCanceled = true;
+                            //continue;
+
+                            pos.SellOrderId = 0;
+                            pos.SellStatus = "";
                         }
 
                         // TODO HasError スキップ または自動リセット
@@ -14919,13 +14925,14 @@ namespace BitDesk.ViewModels
                         // 買い約定済み
                         if ((pos.BuyOrderId != 0) && (pos.BuyStatus == "FULLY_FILLED"))
                         {
+                            /* これいる？要検証
                             //発注数制限対策 
-                            if ((ltp - pos.BuyPrice) <= defaultRikaku)
+                            if (((ltp - pos.BuyPrice) <= (defaultRikaku * 10)) && (pair.AutoTradeBuyOrders <= 9))
                             {
                                 // 買いなおし
                                 needBuyList.Add(pos);
                             }
-
+                            */
                             pos.BuyIsDone = true;
 
                             // 売り未発注 
@@ -14933,7 +14940,7 @@ namespace BitDesk.ViewModels
                             if ((pos.SellOrderId == 0) && (pos.SellHasError == false))
                             {
                                 //発注数制限対策 
-                                if ((pos.SellPrice - ltp) <= (defaultRikaku * 3))
+                                if ((pos.SellPrice - ltp) <= (defaultRikaku * 10)) //&& (pair.AutoTradeSellOrders <= 9))
                                 {
                                     // 要売り発注リストへ追加
                                     needSellList.Add(pos);
@@ -14956,7 +14963,7 @@ namespace BitDesk.ViewModels
                                     // 売り注文は注文中。注文数制限対策の為、注文を取り下げるか確認する
                                     if ((pos.SellOrderId != 0) && pos.BuyIsDone && (pos.SellIsDone == false) && (pos.SellStatus == "UNFILLED"))
                                     {
-                                        if ((pos.SellPrice - ltp) > (defaultRikaku * 3))
+                                        if ((pos.SellPrice - ltp) > (defaultRikaku * 10)) //&& (pair.AutoTradeSellOrders <= 9))
                                         {
                                             // 注文一時取り下げリストへ追加
                                             needGoQueList.Add(pos);
@@ -14972,7 +14979,7 @@ namespace BitDesk.ViewModels
                             if ((pos.BuyOrderId == 0) && (pos.BuyHasError == false))
                             {                            
                                 // 発注数制限対策 
-                                if ((ltp - pos.BuyPrice) <= defaultRikaku)
+                                if ((ltp - pos.BuyPrice) <= (defaultRikaku * 10)) //&& (pair.AutoTradeBuyOrders <= 9))
                                 {
                                     needBuyList.Add(pos);
                                 }
@@ -14983,7 +14990,7 @@ namespace BitDesk.ViewModels
                                 if ((pos.BuyOrderId != 0) && (pos.BuyStatus == "UNFILLED"))
                                 {
                                     // 発注数制限対策 
-                                    if ((ltp - pos.BuyPrice) > defaultRikaku)
+                                    if ((ltp - pos.BuyPrice) > (defaultRikaku * 10)) //&& (pair.AutoTradeBuyOrders <= 9))
                                     {
                                         // 注文一時取り下げリストへ追加
                                         needGoQueList.Add(pos);
@@ -15017,7 +15024,6 @@ namespace BitDesk.ViewModels
                                             // 
                                             ql.SellOrderId = 0;
                                             ql.SellStatus = "";
-                                            // ql.SellStatus = ord.Status;
                                         });
                                     }
                                     else
@@ -15072,7 +15078,6 @@ namespace BitDesk.ViewModels
                                             // 
                                             ql.BuyOrderId = 0;
                                             ql.BuyStatus = "";
-                                            // ql.BuyStatus = ord.Status;
                                         });
                                     }
                                     else
@@ -15214,7 +15219,7 @@ namespace BitDesk.ViewModels
                     {
                         if ((position.BuyIsDone == false) && (position.SellIsDone == false))
                         {
-                            if (ltp > position.BuyPrice)
+                            if (ltp >= position.BuyPrice)
                             {
                                 // 注文発注
                                 OrderResult res = await _priApi.MakeOrder(_autoTradeApiKey, _autoTradeSecret, pair.ThisPair.ToString(), position.BuyAmount, position.BuyPrice, position.BuySide, "limit");
@@ -15316,7 +15321,7 @@ namespace BitDesk.ViewModels
                         // 予想利益額
                         position.ShushiAmount = (position.SellPrice * position.SellAmount) - (position.BuyPrice * position.BuyAmount);
 
-                        if (ltp > position.BuyPrice)
+                        if (ltp >= position.BuyPrice)
                         {
                             //発注数制限対策 
                             if ((ltp - position.BuyPrice) <= defaultRikaku)
@@ -15419,7 +15424,16 @@ namespace BitDesk.ViewModels
 
                         if (pos.IsCanceled == true)
                         {
-                            needDeleteList.Add(pos);
+                            //needDeleteList.Add(pos); (キャンセルで削除はしないように変更)
+
+                            // TODO 要検証 > 上で処理することにした
+                            //pos.BuyOrderId = 0;
+                            //pos.BuyStatus = "";
+
+                            //pos.SellOrderId = 0;
+                            //pos.SellStatus = "";
+
+                            pos.IsCanceled = false;
                         }
 
                         if (pos.BuyHasError == true)
@@ -15436,6 +15450,7 @@ namespace BitDesk.ViewModels
                             // 損益更新
                             pair.AutoTradeProfit += ((pos.SellPrice - pos.BuyPrice) * pos.SellAmount);
 
+                            // 取引がワンセット完了したのは削除
                             needDeleteList.Add(pos);
                         }
 
@@ -17568,8 +17583,8 @@ namespace BitDesk.ViewModels
                         if (position.BuyOrderId > 0)
                         {
                             needCancelIdsList.Add(position.BuyOrderId);
-                            //needDeleteList.Add(position);
 
+                            //needDeleteList.Add(position); 削除はしないように変更
                         }
                     }
                 }

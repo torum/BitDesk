@@ -4168,6 +4168,7 @@
                                     <ListView.Resources>
                                         <ContextMenu x:Key="ATItemContextMenu">
                                             <MenuItem Header="選択アイテム">
+                                                <!--
                                                 <MenuItem Header="発注キャンセル" Command="{Binding Path=DataContext.AutoTradeCancelListviewCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}" CommandParameter="{Binding Path=SelectedItems, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}">
                                                     <MenuItem.Resources>
                                                         <ControlTemplate x:Key="CancelIcon">
@@ -4180,7 +4181,7 @@
                                                         <ContentControl Template="{StaticResource CancelIcon}" />
                                                     </MenuItem.Icon>
                                                 </MenuItem>
-
+                                                -->
                                                 <MenuItem Header="リストから削除" 
                                                   Command="{Binding Path=DataContext.AutoTradeDeleteItemListviewCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}"
                                                   CommandParameter="{Binding Path=SelectedItems, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}}">
