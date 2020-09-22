@@ -3,8 +3,8 @@
 
 [Setup]
 AppName=BitDesk
-AppVersion=0.0.0.4  
-VersionInfoVersion=0.0.0.4
+AppVersion=0.0.0.5  
+VersionInfoVersion=0.0.0.5
 DefaultDirName={pf}\BitDesk
 DefaultGroupName=BitDesk
 UninstallDisplayIcon={app}\BitDesk.exe

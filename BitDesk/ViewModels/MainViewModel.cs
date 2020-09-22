@@ -32,7 +32,8 @@ namespace BitDesk.ViewModels
     // 通貨ペア
     public enum Pairs
     {
-        btc_jpy, xrp_jpy, ltc_btc, eth_btc, mona_jpy, mona_btc, bcc_jpy, bcc_btc
+        //btc_jpy, xrp_jpy, ltc_btc, eth_btc, mona_jpy, mona_btc, bcc_jpy, bcc_btc
+        btc_jpy, xrp_jpy, eth_jpy, ltc_jpy, bcc_jpy, mona_jpy, xlm_jpy
     }
 
     // チャート表示期間
@@ -2239,7 +2240,7 @@ namespace BitDesk.ViewModels
         }
 
         // Application version
-        private string _appVer = "0.0.0.4";
+        private string _appVer = "0.0.0.5";
 
         // Application name
         private string _appName = "BitDesk";
@@ -3232,19 +3233,25 @@ namespace BitDesk.ViewModels
                     // 主にチャートの切替
                     IsBtcJpyVisible = true;
                     IsXrpJpyVisible = false;
-                    IsEthBtcVisible = false;
-                    IsLtcBtcVisible = false;
-                    IsMonaJpyVisible = false;
+                    //IsEthBtcVisible = false;
+                    //IsLtcBtcVisible = false;
+                    IsEthJpyVisible = false;
+                    IsLtcJpyVisible = false;
                     IsBchJpyVisible = false;
+                    IsMonaJpyVisible = false;
+                    IsXlmJpyVisible = false;
 
                     // 資産情報の切替
                     IsJpyAssetVisible = true;
                     IsBtcJpyAssetVisible = true;
                     IsXrpJpyAssetVisible = false;
-                    IsEthBtcAssetVisible = false;
-                    IsLtcBtcAssetVisible = false;
+                    //IsEthBtcAssetVisible = false;
+                    //IsLtcBtcAssetVisible = false;
+                    IsEthJpyAssetVisible = false;
+                    IsLtcJpyAssetVisible = false;
                     IsMonaJpyAssetVisible = false;
                     IsBchJpyAssetVisible = false;
+                    IsXlmJpyAssetVisible = false;
 
                 }
                 else if (_activePairIndex == 1)
@@ -3259,24 +3266,25 @@ namespace BitDesk.ViewModels
 
                     IsBtcJpyVisible = false;
                     IsXrpJpyVisible = true;
-                    IsEthBtcVisible = false;
-                    IsLtcBtcVisible = false;
+                    IsEthJpyVisible = false;
+                    IsLtcJpyVisible = false;
                     IsMonaJpyVisible = false;
                     IsBchJpyVisible = false;
+                    IsXlmJpyVisible = false;
 
                     IsJpyAssetVisible = true;
                     IsBtcJpyAssetVisible = false;
                     IsXrpJpyAssetVisible = true;
-                    IsEthBtcAssetVisible = false;
-                    IsLtcBtcAssetVisible = false;
+                    IsEthJpyAssetVisible = false;
+                    IsLtcJpyAssetVisible = false;
                     IsMonaJpyAssetVisible = false;
                     IsBchJpyAssetVisible = false;
-
+                    IsXlmJpyAssetVisible = false;
                 }
                 else if (_activePairIndex == 2)
                 {
-                    CurrentPair = Pairs.ltc_btc;
-                    ActivePair = PairLtcBtc;
+                    CurrentPair = Pairs.eth_jpy;
+                    ActivePair = PairEthJpy;
                     Application.Current.Dispatcher.Invoke(() =>
                     {
                     });
@@ -3285,24 +3293,25 @@ namespace BitDesk.ViewModels
 
                     IsBtcJpyVisible = false;
                     IsXrpJpyVisible = false;
-                    IsEthBtcVisible = false;
-                    IsLtcBtcVisible = true;
+                    IsEthJpyVisible = true;
+                    IsLtcJpyVisible = false;
                     IsMonaJpyVisible = false;
                     IsBchJpyVisible = false;
+                    IsXlmJpyVisible = false;
 
                     IsJpyAssetVisible = false;
                     IsBtcJpyAssetVisible = true;
                     IsXrpJpyAssetVisible = false;
-                    IsEthBtcAssetVisible = false;
-                    IsLtcBtcAssetVisible = true;
+                    IsEthJpyAssetVisible = true;
+                    IsLtcJpyAssetVisible = false;
                     IsMonaJpyAssetVisible = false;
                     IsBchJpyAssetVisible = false;
-
+                    IsXlmJpyAssetVisible = false;
                 }
                 else if (_activePairIndex == 3)
                 {
-                    CurrentPair = Pairs.eth_btc;
-                    ActivePair = PairEthBtc;
+                    CurrentPair = Pairs.ltc_jpy;
+                    ActivePair = PairLtcJpy;
                     Application.Current.Dispatcher.Invoke(() =>
                     {
                     });
@@ -3311,47 +3320,22 @@ namespace BitDesk.ViewModels
 
                     IsBtcJpyVisible = false;
                     IsXrpJpyVisible = false;
-                    IsEthBtcVisible = true;
-                    IsLtcBtcVisible = false;
+                    IsEthJpyVisible = false;
+                    IsLtcJpyVisible = true;
                     IsMonaJpyVisible = false;
                     IsBchJpyVisible = false;
+                    IsXlmJpyVisible = false;
 
                     IsJpyAssetVisible = false;
                     IsBtcJpyAssetVisible = true;
                     IsXrpJpyAssetVisible = false;
-                    IsEthBtcAssetVisible = true;
-                    IsLtcBtcAssetVisible = false;
+                    IsEthJpyAssetVisible = false;
+                    IsLtcJpyAssetVisible = true;
                     IsMonaJpyAssetVisible = false;
                     IsBchJpyAssetVisible = false;
-
+                    IsXlmJpyAssetVisible = false;
                 }
                 else if (_activePairIndex == 4)
-                {
-                    CurrentPair = Pairs.mona_jpy;
-                    ActivePair = PairMonaJpy;
-                    Application.Current.Dispatcher.Invoke(() =>
-                    {
-                    });
-
-                    DepthGroupingChanged = true;
-
-                    IsBtcJpyVisible = false;
-                    IsXrpJpyVisible = false;
-                    IsEthBtcVisible = false;
-                    IsLtcBtcVisible = false;
-                    IsMonaJpyVisible = true;
-                    IsBchJpyVisible = false;
-
-                    IsJpyAssetVisible = true;
-                    IsBtcJpyAssetVisible = false;
-                    IsXrpJpyAssetVisible = false;
-                    IsEthBtcAssetVisible = false;
-                    IsLtcBtcAssetVisible = false;
-                    IsMonaJpyAssetVisible = true;
-                    IsBchJpyAssetVisible = false;
-
-                }
-                else if (_activePairIndex == 5)
                 {
                     CurrentPair = Pairs.bcc_jpy;
                     ActivePair = PairBchJpy;
@@ -3363,19 +3347,74 @@ namespace BitDesk.ViewModels
 
                     IsBtcJpyVisible = false;
                     IsXrpJpyVisible = false;
-                    IsEthBtcVisible = false;
-                    IsLtcBtcVisible = false;
+                    IsEthJpyVisible = false;
+                    IsLtcJpyVisible = false;
                     IsMonaJpyVisible = false;
                     IsBchJpyVisible = true;
+                    IsXlmJpyVisible = false;
 
                     IsJpyAssetVisible = true;
                     IsBtcJpyAssetVisible = false;
                     IsXrpJpyAssetVisible = false;
-                    IsEthBtcAssetVisible = false;
-                    IsLtcBtcAssetVisible = false;
+                    IsEthJpyAssetVisible = false;
+                    IsLtcJpyAssetVisible = false;
                     IsMonaJpyAssetVisible = false;
                     IsBchJpyAssetVisible = true;
+                    IsXlmJpyAssetVisible = false;
+                }
+                else if (_activePairIndex == 5)
+                {
+                    CurrentPair = Pairs.mona_jpy;
+                    ActivePair = PairMonaJpy;
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                    });
 
+                    DepthGroupingChanged = true;
+
+                    IsBtcJpyVisible = false;
+                    IsXrpJpyVisible = false;
+                    IsEthJpyVisible = false;
+                    IsLtcJpyVisible = false;
+                    IsMonaJpyVisible = true;
+                    IsBchJpyVisible = false;
+                    IsXlmJpyVisible = false;
+
+                    IsJpyAssetVisible = true;
+                    IsBtcJpyAssetVisible = false;
+                    IsXrpJpyAssetVisible = false;
+                    IsEthJpyAssetVisible = false;
+                    IsLtcJpyAssetVisible = false;
+                    IsMonaJpyAssetVisible = true;
+                    IsBchJpyAssetVisible = false;
+                    IsXlmJpyAssetVisible = false;
+                }
+                else if (_activePairIndex == 6)
+                {
+                    CurrentPair = Pairs.xlm_jpy;
+                    ActivePair = PairXlmJpy;
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                    });
+
+                    DepthGroupingChanged = true;
+
+                    IsBtcJpyVisible = false;
+                    IsXrpJpyVisible = false;
+                    IsEthJpyVisible = false;
+                    IsLtcJpyVisible = false;
+                    IsMonaJpyVisible = false;
+                    IsBchJpyVisible = false;
+                    IsXlmJpyVisible = true;
+
+                    IsJpyAssetVisible = true;
+                    IsBtcJpyAssetVisible = false;
+                    IsXrpJpyAssetVisible = false;
+                    IsEthJpyAssetVisible = false;
+                    IsLtcJpyAssetVisible = false;
+                    IsMonaJpyAssetVisible = false;
+                    IsBchJpyAssetVisible = false;
+                    IsXlmJpyAssetVisible = true;
                 }
 
                 // 注文の値をクリア
@@ -3431,14 +3470,16 @@ namespace BitDesk.ViewModels
         {
             get
             {
-                if ((CurrentPair == Pairs.btc_jpy) || (CurrentPair == Pairs.xrp_jpy) || (CurrentPair == Pairs.mona_jpy) || (CurrentPair == Pairs.bcc_jpy))
+                if ((CurrentPair == Pairs.btc_jpy) || (CurrentPair == Pairs.xrp_jpy) || (CurrentPair == Pairs.mona_jpy) || (CurrentPair == Pairs.bcc_jpy) || (CurrentPair == Pairs.eth_jpy) || (CurrentPair == Pairs.ltc_jpy) || (CurrentPair == Pairs.xlm_jpy))
                 {
                     return "円";
                 }
+                /*
                 else if ((CurrentPair == Pairs.eth_btc) || (CurrentPair == Pairs.ltc_btc))
                 {
                     return "BTC";
                 }
+                */
                 else
                 {
                     return "?";
@@ -3451,36 +3492,45 @@ namespace BitDesk.ViewModels
         {
             {Pairs.btc_jpy, "BTC/JPY"},
             {Pairs.xrp_jpy, "XRP/JPY"},
-            {Pairs.eth_btc, "ETH/BTC"},
-            {Pairs.ltc_btc, "LTC/BTC"},
+            //{Pairs.eth_btc, "ETH/BTC"},
+            {Pairs.eth_jpy, "ETH/JPY"},
+            //{Pairs.ltc_btc, "LTC/BTC"},
+            {Pairs.ltc_jpy, "LTC/JPY"},
             {Pairs.mona_jpy, "MONA/JPY"},
-            {Pairs.mona_btc, "MONA/BTC"},
+            //{Pairs.mona_btc, "MONA/BTC"},
             {Pairs.bcc_jpy, "BCH/JPY"},
-            {Pairs.bcc_btc, "BCH/BTC"},
+            //{Pairs.bcc_btc, "BCH/BTC"},
+            {Pairs.xlm_jpy, "XLM/JPY"},
         };
 
         public Dictionary<string, Pairs> GetPairs { get; set; } = new Dictionary<string, Pairs>()
         {
             {"btc_jpy", Pairs.btc_jpy},
             {"xrp_jpy", Pairs.xrp_jpy},
-            {"eth_btc", Pairs.eth_btc},
-            {"ltc_btc", Pairs.ltc_btc},
+            //{"eth_btc", Pairs.eth_btc},
+            {"eth_jpy", Pairs.eth_jpy},
+            //{"ltc_btc", Pairs.ltc_btc},
+            {"ltc_jpy", Pairs.ltc_jpy},
             {"mona_jpy", Pairs.mona_jpy},
-            {"mona_btc", Pairs.mona_btc},
+            //{"mona_btc", Pairs.mona_btc},
             {"bcc_jpy", Pairs.bcc_jpy},
-            {"bcc_btc", Pairs.bcc_btc},
+            //{"bcc_btc", Pairs.bcc_btc},
+            {"xlm_jpy", Pairs.xlm_jpy},
         };
 
         public Dictionary<Pairs, string> CurrentPairCoin { get; set; } = new Dictionary<Pairs, string>()
         {
             {Pairs.btc_jpy, "BTC"},
             {Pairs.xrp_jpy, "XRP"},
-            {Pairs.eth_btc, "ETH"},
-            {Pairs.ltc_btc, "LTC"},
+            //{Pairs.eth_btc, "ETH"},
+            {Pairs.eth_jpy, "ETH"},
+            //{Pairs.ltc_btc, "LTC"},
+            {Pairs.ltc_jpy, "LTC"},
             {Pairs.mona_jpy, "Mona"},
-            {Pairs.mona_btc, "Mona"},
+            //{Pairs.mona_btc, "Mona"},
             {Pairs.bcc_jpy, "BCH"},
-            {Pairs.bcc_btc, "BCH"},
+            //{Pairs.bcc_btc, "BCH"},
+            {Pairs.xlm_jpy, "XLM"},
         };
 
         // デフォの通貨ペアクラス
@@ -3527,7 +3577,7 @@ namespace BitDesk.ViewModels
             }
         }
 
-        private Pair _pairXrpJpy = new Pair(Pairs.xrp_jpy, 45, "{0:#,0.000}", 0.1M, 0.01M);
+        private Pair _pairXrpJpy = new Pair(Pairs.xrp_jpy, 40, "{0:#,0.000}", 0.1M, 0.01M);
         public Pair PairXrpJpy
         {
             get
@@ -3553,6 +3603,7 @@ namespace BitDesk.ViewModels
             }
         }
 
+        /*
         private Pair _pairEthBtc = new Pair(Pairs.eth_btc, 30, "{0:#,0.00000000}", 0.0001M, 0.00001M);
         public Pair PairEthBtc
         {
@@ -3578,7 +3629,34 @@ namespace BitDesk.ViewModels
                 this.NotifyPropertyChanged("IsEthBtcVisible");
             }
         }
+        */
+        private Pair _pairEthJpy = new Pair(Pairs.eth_jpy, 40, "{0:#,0}", 100M, 1000M);
+        public Pair PairEthJpy
+        {
+            get
+            {
+                return _pairEthJpy;
+            }
+        }
 
+        private bool _isEthJpyVisible;
+        public bool IsEthJpyVisible
+        {
+            get
+            {
+                return _isEthJpyVisible;
+            }
+            set
+            {
+                if (_isEthJpyVisible == value)
+                    return;
+
+                _isEthJpyVisible = value;
+                this.NotifyPropertyChanged("IsEthJpyVisible");
+            }
+        }
+
+        /*
         private Pair _pairLtcBtc = new Pair(Pairs.ltc_btc ,30, "{0:#,0.00000000}", 0.0001M, 0.00001M);
         public Pair PairLtcBtc
         {
@@ -3604,8 +3682,34 @@ namespace BitDesk.ViewModels
                 this.NotifyPropertyChanged("IsLtcBtcVisible");
             }
         }
+        */
+        private Pair _pairLtcJpy = new Pair(Pairs.ltc_jpy, 40, "{0:#,0.0}", 100M, 1000M);
+        public Pair PairLtcJpy
+        {
+            get
+            {
+                return _pairLtcJpy;
+            }
+        }
 
-        private Pair _pairMonaJpy = new Pair(Pairs.mona_jpy ,45, "{0:#,0.000}", 0.1M, 1M);
+        private bool _isLtcJpyVisible;
+        public bool IsLtcJpyVisible
+        {
+            get
+            {
+                return _isLtcJpyVisible;
+            }
+            set
+            {
+                if (_isLtcJpyVisible == value)
+                    return;
+
+                _isLtcJpyVisible = value;
+                this.NotifyPropertyChanged("IsLtcJpyVisible");
+            }
+        }
+
+        private Pair _pairMonaJpy = new Pair(Pairs.mona_jpy ,40, "{0:#,0.000}", 0.1M, 1M);
         public Pair PairMonaJpy
         {
             get
@@ -3631,7 +3735,7 @@ namespace BitDesk.ViewModels
             }
         }
 
-        private Pair _pairBchJpy = new Pair(Pairs.bcc_jpy ,45, "{0:#,0}", 10M, 100M);
+        private Pair _pairBchJpy = new Pair(Pairs.bcc_jpy ,40, "{0:#,0}", 10M, 100M);
         public Pair PairBchJpy
         {
             get
@@ -3654,6 +3758,32 @@ namespace BitDesk.ViewModels
 
                 _isBchJpyVisible = value;
                 this.NotifyPropertyChanged("IsBchJpyVisible");
+            }
+        }
+
+        private Pair _pairXlmJpy = new Pair(Pairs.xlm_jpy, 40, "{0:#,0.000}", 0.1M, 0.01M);
+        public Pair PairXlmJpy
+        {
+            get
+            {
+                return _pairXlmJpy;
+            }
+        }
+
+        private bool _isXlmJpyVisible;
+        public bool IsXlmJpyVisible
+        {
+            get
+            {
+                return _isXlmJpyVisible;
+            }
+            set
+            {
+                if (_isXlmJpyVisible == value)
+                    return;
+
+                _isXlmJpyVisible = value;
+                this.NotifyPropertyChanged("IsXlmJpyVisible");
             }
         }
 
@@ -4336,54 +4466,54 @@ namespace BitDesk.ViewModels
         #region == LTCャートデータ用のプロパティ ==
 
         // === LTC === 
-        private SeriesCollection _chartSeriesLtcBtc = new SeriesCollection();
-        public SeriesCollection ChartSeriesLtcBtc
+        private SeriesCollection _chartSeriesLtcJpy = new SeriesCollection();
+        public SeriesCollection ChartSeriesLtcJpy
         {
             get
             {
-                return _chartSeriesLtcBtc;
+                return _chartSeriesLtcJpy;
             }
             set
             {
-                if (_chartSeriesLtcBtc == value)
+                if (_chartSeriesLtcJpy == value)
                     return;
 
-                _chartSeriesLtcBtc = value;
-                this.NotifyPropertyChanged("ChartSeriesLtcBtc");
+                _chartSeriesLtcJpy = value;
+                this.NotifyPropertyChanged("ChartSeriesLtcJpy");
             }
         }
 
-        private AxesCollection _chartAxisXLtcBtc = new AxesCollection();
-        public AxesCollection ChartAxisXLtcBtc
+        private AxesCollection _chartAxisXLtcJpy = new AxesCollection();
+        public AxesCollection ChartAxisXLtcJpy
         {
             get
             {
-                return _chartAxisXLtcBtc;
+                return _chartAxisXLtcJpy;
             }
             set
             {
-                if (_chartAxisXLtcBtc == value)
+                if (_chartAxisXLtcJpy == value)
                     return;
 
-                _chartAxisXLtcBtc = value;
-                this.NotifyPropertyChanged("ChartAxisXLtcBtc");
+                _chartAxisXLtcJpy = value;
+                this.NotifyPropertyChanged("ChartAxisXLtcJpy");
             }
         }
 
-        private AxesCollection _chartAxisYLtcBtc = new AxesCollection();
-        public AxesCollection ChartAxisYLtcBtc
+        private AxesCollection _chartAxisYLtcJpy = new AxesCollection();
+        public AxesCollection ChartAxisYLtcJpy
         {
             get
             {
-                return _chartAxisYLtcBtc;
+                return _chartAxisYLtcJpy;
             }
             set
             {
-                if (_chartAxisYLtcBtc == value)
+                if (_chartAxisYLtcJpy == value)
                     return;
 
-                _chartAxisYLtcBtc = value;
-                this.NotifyPropertyChanged("ChartAxisYLtcBtc");
+                _chartAxisYLtcJpy = value;
+                this.NotifyPropertyChanged("ChartAxisYLtcJpy");
             }
         }
 
@@ -4441,7 +4571,7 @@ namespace BitDesk.ViewModels
                     return;
 
                 _chartSeriesXrpJpy = value;
-                this.NotifyPropertyChanged("ChartSeriesXrp");
+                this.NotifyPropertyChanged("ChartSeriesXrpJpy");
             }
         }
 
@@ -4520,54 +4650,54 @@ namespace BitDesk.ViewModels
         #region == Ethャートデータ用のプロパティ ==
 
         // === Eth === 
-        private SeriesCollection _chartSeriesEthBtc;
-        public SeriesCollection ChartSeriesEthBtc
+        private SeriesCollection _chartSeriesEthJpy;
+        public SeriesCollection ChartSeriesEthJpy
         {
             get
             {
-                return _chartSeriesEthBtc;
+                return _chartSeriesEthJpy;
             }
             set
             {
-                if (_chartSeriesEthBtc == value)
+                if (_chartSeriesEthJpy == value)
                     return;
 
-                _chartSeriesEthBtc = value;
-                this.NotifyPropertyChanged("ChartSeriesEthBtc");
+                _chartSeriesEthJpy = value;
+                this.NotifyPropertyChanged("ChartSeriesEthJpy");
             }
         }
 
-        private AxesCollection _chartAxisXEthBtc;
-        public AxesCollection ChartAxisXEthBtc
+        private AxesCollection _chartAxisXEthJpy;
+        public AxesCollection ChartAxisXEthJpy
         {
             get
             {
-                return _chartAxisXEthBtc;
+                return _chartAxisXEthJpy;
             }
             set
             {
-                if (_chartAxisXEthBtc == value)
+                if (_chartAxisXEthJpy == value)
                     return;
 
-                _chartAxisXEthBtc = value;
-                this.NotifyPropertyChanged("ChartAxisXEthBtc");
+                _chartAxisXEthJpy = value;
+                this.NotifyPropertyChanged("ChartAxisXEthJpy");
             }
         }
 
-        private AxesCollection _chartAxisYEthBtc;
-        public AxesCollection ChartAxisYEthBtc
+        private AxesCollection _chartAxisYEthJpy;
+        public AxesCollection ChartAxisYEthJpy
         {
             get
             {
-                return _chartAxisYEthBtc;
+                return _chartAxisYEthJpy;
             }
             set
             {
-                if (_chartAxisYEthBtc == value)
+                if (_chartAxisYEthJpy == value)
                     return;
 
-                _chartAxisYEthBtc = value;
-                this.NotifyPropertyChanged("ChartAxisYEthBtc");
+                _chartAxisYEthJpy = value;
+                this.NotifyPropertyChanged("ChartAxisYEthJpy");
             }
         }
 
@@ -4788,6 +4918,98 @@ namespace BitDesk.ViewModels
             {
                 _ohlcvsOneDayBch = value;
                 this.NotifyPropertyChanged("OhlcvsOneDayBch");
+            }
+        }
+
+        #endregion
+        
+        #region == Xlmチャートデータ用のプロパティ ==
+
+        // === Bch === 
+        private SeriesCollection _chartSeriesXlmJpy;
+        public SeriesCollection ChartSeriesXlmJpy
+        {
+            get
+            {
+                return _chartSeriesXlmJpy;
+            }
+            set
+            {
+                if (_chartSeriesXlmJpy == value)
+                    return;
+
+                _chartSeriesXlmJpy = value;
+                this.NotifyPropertyChanged("ChartSeriesXlmJpy");
+            }
+        }
+
+        private AxesCollection _chartAxisXXlmJpy;
+        public AxesCollection ChartAxisXXlmJpy
+        {
+            get
+            {
+                return _chartAxisXXlmJpy;
+            }
+            set
+            {
+                if (_chartAxisXXlmJpy == value)
+                    return;
+
+                _chartAxisXXlmJpy = value;
+                this.NotifyPropertyChanged("ChartAxisXXlmJpy");
+            }
+        }
+
+        private AxesCollection _chartAxisYXlmJpy;
+        public AxesCollection ChartAxisYXlmJpy
+        {
+            get
+            {
+                return _chartAxisYXlmJpy;
+            }
+            set
+            {
+                if (_chartAxisYXlmJpy == value)
+                    return;
+
+                _chartAxisYXlmJpy = value;
+                this.NotifyPropertyChanged("ChartAxisYXlmJpy");
+            }
+        }
+
+        // 一時間単位 
+        private List<Ohlcv> _ohlcvsOneHourXlm = new List<Ohlcv>();
+        public List<Ohlcv> OhlcvsOneHourXlm
+        {
+            get { return _ohlcvsOneHourXlm; }
+            set
+            {
+                _ohlcvsOneHourXlm = value;
+                this.NotifyPropertyChanged("OhlcvsOneHourXlm");
+            }
+        }
+
+        // 一分単位 
+        private List<Ohlcv> _ohlcvsOneMinXlm = new List<Ohlcv>();
+        public List<Ohlcv> OhlcvsOneMinXlm
+        {
+            get { return _ohlcvsOneMinXlm; }
+            set
+            {
+                _ohlcvsOneMinXlm = value;
+                this.NotifyPropertyChanged("OhlcvsOneMinXlm");
+            }
+        }
+
+        // 一日単位 
+        private List<Ohlcv> _ohlcvsOneDayXlm = new List<Ohlcv>();
+        public List<Ohlcv> OhlcvsOneDayXlm
+        {
+            get { return _ohlcvsOneDayXlm; }
+            set
+            {
+                _ohlcvsOneDayXlm = value;
+                this.NotifyPropertyChanged("OhlcvsOneDayXlm");
             }
         }
 
@@ -5057,7 +5279,7 @@ namespace BitDesk.ViewModels
         // 円建て総資産時価評価額合計文字列
         public string AssetAllEstimateAmountString
         {
-            get { return String.Format("{0:#,0}", _assetBTCEstimateAmount + _assetJPYAmount + AssetXRPEstimateAmount + AssetLtcEstimateAmount + AssetEthEstimateAmount + AssetMonaEstimateAmount + AssetBchEstimateAmount); }
+            get { return String.Format("{0:#,0}", _assetBTCEstimateAmount + _assetJPYAmount + AssetXRPEstimateAmount + AssetLtcEstimateAmount + AssetEthEstimateAmount + AssetMonaEstimateAmount + AssetBchEstimateAmount + AssetXlmEstimateAmount); }
         }
 
         private bool _isBtcJpyAssetVisible;
@@ -5082,7 +5304,7 @@ namespace BitDesk.ViewModels
         {
             get
             {
-                var assetAll = _assetBTCEstimateAmount + _assetJPYAmount + AssetXRPEstimateAmount + AssetLtcEstimateAmount + AssetEthEstimateAmount + AssetMonaEstimateAmount + AssetBchEstimateAmount;
+                var assetAll = _assetBTCEstimateAmount + _assetJPYAmount + AssetXRPEstimateAmount + AssetLtcEstimateAmount + AssetEthEstimateAmount + AssetMonaEstimateAmount + AssetBchEstimateAmount + AssetXlmEstimateAmount;
                 if (assetAll > _initPrice)
                 {
                     return "+" + String.Format("{0:#,0}", assetAll - _initPrice);
@@ -5266,20 +5488,20 @@ namespace BitDesk.ViewModels
             }
         }
 
-        private bool _isLtcBtcAssetVisible;
-        public bool IsLtcBtcAssetVisible
+        private bool _isLtcJpyAssetVisible;
+        public bool IsLtcJpyAssetVisible
         {
             get
             {
-                return _isLtcBtcAssetVisible;
+                return _isLtcJpyAssetVisible;
             }
             set
             {
-                if (_isLtcBtcAssetVisible == value)
+                if (_isLtcJpyAssetVisible == value)
                     return;
 
-                _isLtcBtcAssetVisible = value;
-                this.NotifyPropertyChanged("IsLtcBtcAssetVisible");
+                _isLtcJpyAssetVisible = value;
+                this.NotifyPropertyChanged("IsLtcJpyAssetVisible");
             }
         }
 
@@ -5359,20 +5581,20 @@ namespace BitDesk.ViewModels
             }
         }
 
-        private bool _isEthBtcAssetVisible;
-        public bool IsEthBtcAssetVisible
+        private bool _isEthJpyAssetVisible;
+        public bool IsEthJpyAssetVisible
         {
             get
             {
-                return _isEthBtcAssetVisible;
+                return _isEthJpyAssetVisible;
             }
             set
             {
-                if (_isEthBtcAssetVisible == value)
+                if (_isEthJpyAssetVisible == value)
                     return;
 
-                _isEthBtcAssetVisible = value;
-                this.NotifyPropertyChanged("IsEthBtcAssetVisible");
+                _isEthJpyAssetVisible = value;
+                this.NotifyPropertyChanged("IsEthJpyAssetVisible");
             }
         }
 
@@ -5558,6 +5780,99 @@ namespace BitDesk.ViewModels
 
                 _isBchJpyAssetVisible = value;
                 this.NotifyPropertyChanged("IsBchJpyAssetVisible");
+            }
+        }
+
+        // ステラルーメン（XLM）
+        private string _assetXlmName;
+        public string AssetXlmName
+        {
+            get
+            {
+                return _assetXlmName;
+            }
+            set
+            {
+                if (_assetXlmName == value)
+                    return;
+
+                _assetXlmName = value;
+                this.NotifyPropertyChanged("AssetXlmName");
+            }
+        }
+
+        // ステラルーメン（XLM）総資産額
+        private decimal _assetXlmAmount;
+        public decimal AssetXlmAmount
+        {
+            get
+            {
+                return _assetXlmAmount;
+            }
+            set
+            {
+                if (_assetXlmAmount == value)
+                    return;
+
+                _assetXlmAmount = value;
+                this.NotifyPropertyChanged("AssetXlmAmount");
+            }
+        }
+
+        // ステラルーメン（XLM）利用可能額
+        private decimal _assetXlmFreeAmount;
+        public decimal AssetXlmFreeAmount
+        {
+            get
+            {
+                return _assetXlmFreeAmount;
+            }
+            set
+            {
+                if (_assetXlmFreeAmount == value)
+                    return;
+
+                _assetXlmFreeAmount = value;
+                this.NotifyPropertyChanged("AssetXlmFreeAmount");
+            }
+        }
+
+        // ステラルーメン（XLM）時価評価額
+        private decimal _assetXlmEstimateAmount;
+        public decimal AssetXlmEstimateAmount
+        {
+            get
+            {
+                return _assetXlmEstimateAmount;
+            }
+            set
+            {
+                if (_assetXlmEstimateAmount == value)
+                    return;
+
+                _assetXlmEstimateAmount = value;
+                this.NotifyPropertyChanged("AssetXlmEstimateAmount");
+
+                this.NotifyPropertyChanged("AssetAllEstimateAmountString");
+                this.NotifyPropertyChanged("AssetAllShushi");
+
+            }
+        }
+
+        private bool _isXlmJpyAssetVisible;
+        public bool IsXlmJpyAssetVisible
+        {
+            get
+            {
+                return _isXlmJpyAssetVisible;
+            }
+            set
+            {
+                if (_isXlmJpyAssetVisible == value)
+                    return;
+
+                _isXlmJpyAssetVisible = value;
+                this.NotifyPropertyChanged("IsXlmJpyAssetVisible");
             }
         }
 
@@ -6971,12 +7286,15 @@ namespace BitDesk.ViewModels
             {
                 {Pairs.btc_jpy, "BTC/JPY"},
                 {Pairs.xrp_jpy, "XRP/JPY"},
-                {Pairs.eth_btc, "ETH/BTC"},
-                {Pairs.ltc_btc, "LTC/BTC"},
+                //{Pairs.eth_btc, "ETH/BTC"},
+                {Pairs.eth_jpy, "ETH/JPY"},
+                //{Pairs.ltc_btc, "LTC/BTC"},
+                {Pairs.ltc_jpy, "LTC/JPY"},
                 {Pairs.mona_jpy, "MONA/JPY"},
-                {Pairs.mona_btc, "MONA/BTC"},
+                //{Pairs.mona_btc, "MONA/BTC"},
                 {Pairs.bcc_jpy, "BCH/JPY"},
-                {Pairs.bcc_btc, "BCH/BTC"},
+                //{Pairs.bcc_btc, "BCH/BTC"},
+                {Pairs.xlm_jpy, "XLM/JPY"},
              };
 
             #region == Tick系 ==
@@ -8386,11 +8704,11 @@ namespace BitDesk.ViewModels
                     ChartAxisXXrpJpy = chartAxisX;
                     ChartAxisYXrpJpy = chartAxisY;
                 }
-                else if (pair == Pairs.eth_btc)
+                else if (pair == Pairs.eth_jpy)
                 {
-                    ChartSeriesEthBtc = chartSeries;
-                    ChartAxisXEthBtc = chartAxisX;
-                    ChartAxisYEthBtc = chartAxisY;
+                    ChartSeriesEthJpy = chartSeries;
+                    ChartAxisXEthJpy = chartAxisX;
+                    ChartAxisYEthJpy = chartAxisY;
                 }
                 else if (pair == Pairs.mona_jpy)
                 {
@@ -8398,19 +8716,11 @@ namespace BitDesk.ViewModels
                     ChartAxisXMonaJpy = chartAxisX;
                     ChartAxisYMonaJpy = chartAxisY;
                 }
-                else if (pair == Pairs.mona_btc)
+                else if (pair == Pairs.ltc_jpy)
                 {
-                    //
-                }
-                else if (pair == Pairs.ltc_btc)
-                {
-                    ChartSeriesLtcBtc = chartSeries;
-                    ChartAxisXLtcBtc = chartAxisX;
-                    ChartAxisYLtcBtc = chartAxisY;
-                }
-                else if (pair == Pairs.bcc_btc)
-                {
-                    //
+                    ChartSeriesLtcJpy = chartSeries;
+                    ChartAxisXLtcJpy = chartAxisX;
+                    ChartAxisYLtcJpy = chartAxisY;
                 }
                 else if (pair == Pairs.bcc_jpy)
                 {
@@ -8418,7 +8728,12 @@ namespace BitDesk.ViewModels
                     ChartAxisXBchJpy = chartAxisX;
                     ChartAxisYBchJpy = chartAxisY;
                 }
-
+                else if (pair == Pairs.xlm_jpy)
+                {
+                    ChartSeriesXlmJpy = chartSeries;
+                    ChartAxisXXlmJpy = chartAxisX;
+                    ChartAxisYXlmJpy = chartAxisY;
+                }
             }
 
             #endregion
@@ -8454,18 +8769,24 @@ namespace BitDesk.ViewModels
 
             IsBtcJpyVisible = true;
             IsXrpJpyVisible = false;
-            IsEthBtcVisible = false;
-            IsLtcBtcVisible = false;
+            //IsEthBtcVisible = false;
+            //IsLtcBtcVisible = false;
+            IsEthJpyVisible = false;
+            IsLtcJpyVisible = false;
             IsMonaJpyVisible = false;
             IsBchJpyVisible = false;
+            IsXlmJpyVisible = false;
 
             IsJpyAssetVisible = true;
             IsBtcJpyAssetVisible = true;
             IsXrpJpyAssetVisible = false;
-            IsEthBtcAssetVisible = false;
-            IsLtcBtcAssetVisible = false;
+            //IsEthBtcAssetVisible = false;
+            //IsLtcBtcAssetVisible = false;
+            IsEthJpyAssetVisible = false;
+            IsLtcJpyAssetVisible = false;
             IsMonaJpyAssetVisible = false;
             IsBchJpyAssetVisible = false;
+            IsXlmJpyAssetVisible = false;
 
             ShowAllCharts = false;
             ShowMainContents = true;
@@ -8484,10 +8805,12 @@ namespace BitDesk.ViewModels
                 //foreach (string pair in Enum.GetNames(typeof(Pairs)))
                 foreach (Pairs pair in Enum.GetValues(typeof(Pairs)))
                 {
+                    /*
                     if ((pair == Pairs.mona_btc) || pair == Pairs.bcc_btc)
                     {
                         continue;
                     }
+                    */
 
                     Ticker tick = await _pubTickerApi.GetTicker(pair.ToString());
 
@@ -9126,41 +9449,41 @@ namespace BitDesk.ViewModels
                                 }
 
                             }
-                            else if (pair == Pairs.eth_btc)
+                            else if (pair == Pairs.eth_jpy)
                             {
 
                                 // 最新の価格をセット
-                                PairEthBtc.Ltp = tick.LTP;
-                                PairEthBtc.Bid = tick.Bid;
-                                PairEthBtc.Ask = tick.Ask;
-                                PairEthBtc.TickTimeStamp = tick.TimeStamp;
+                                PairEthJpy.Ltp = tick.LTP;
+                                PairEthJpy.Bid = tick.Bid;
+                                PairEthJpy.Ask = tick.Ask;
+                                PairEthJpy.TickTimeStamp = tick.TimeStamp;
 
-                                PairEthBtc.LowestIn24Price = tick.Low;
-                                PairEthBtc.HighestIn24Price = tick.High;
+                                PairEthJpy.LowestIn24Price = tick.Low;
+                                PairEthJpy.HighestIn24Price = tick.High;
 
                                 // 起動時価格セット
-                                if (PairEthBtc.BasePrice == 0) PairEthBtc.BasePrice = tick.LTP;
+                                if (PairEthJpy.BasePrice == 0) PairEthJpy.BasePrice = tick.LTP;
 
                                 // 最安値登録
-                                if (PairEthBtc.LowestPrice == 0)
+                                if (PairEthJpy.LowestPrice == 0)
                                 {
-                                    PairEthBtc.LowestPrice = tick.LTP;
+                                    PairEthJpy.LowestPrice = tick.LTP;
                                 }
-                                if (tick.LTP < PairEthBtc.LowestPrice)
+                                if (tick.LTP < PairEthJpy.LowestPrice)
                                 {
                                     //SystemSounds.Beep.Play();
-                                    PairEthBtc.LowestPrice = tick.LTP;
+                                    PairEthJpy.LowestPrice = tick.LTP;
                                 }
 
                                 // 最高値登録
-                                if (PairEthBtc.HighestPrice == 0)
+                                if (PairEthJpy.HighestPrice == 0)
                                 {
-                                    PairEthBtc.HighestPrice = tick.LTP;
+                                    PairEthJpy.HighestPrice = tick.LTP;
                                 }
-                                if (tick.LTP > PairEthBtc.HighestPrice)
+                                if (tick.LTP > PairEthJpy.HighestPrice)
                                 {
                                     //SystemSounds.Asterisk.Play();
-                                    PairEthBtc.HighestPrice = tick.LTP;
+                                    PairEthJpy.HighestPrice = tick.LTP;
                                 }
                                 
                                 #region == チック履歴 ==
@@ -9168,78 +9491,78 @@ namespace BitDesk.ViewModels
                                 TickHistory aym = new TickHistory();
                                 aym.Price = tick.LTP;
                                 aym.TimeAt = tick.TimeStamp;
-                                if (PairEthBtc.TickHistories.Count > 0)
+                                if (PairEthJpy.TickHistories.Count > 0)
                                 {
-                                    if (PairEthBtc.TickHistories[0].Price > aym.Price)
+                                    if (PairEthJpy.TickHistories[0].Price > aym.Price)
                                     {
                                         //aym.TickHistoryPriceColor = _priceUpColor;
                                         aym.TickHistoryPriceUp = true;
-                                        PairEthBtc.TickHistories.Insert(0, aym);
+                                        PairEthJpy.TickHistories.Insert(0, aym);
 
                                     }
-                                    else if (PairEthBtc.TickHistories[0].Price < aym.Price)
+                                    else if (PairEthJpy.TickHistories[0].Price < aym.Price)
                                     {
                                         //aym.TickHistoryPriceColor = _priceDownColor;
                                         aym.TickHistoryPriceUp = false;
-                                        PairEthBtc.TickHistories.Insert(0, aym);
+                                        PairEthJpy.TickHistories.Insert(0, aym);
                                     }
                                     else
                                     {
                                         //aym.TickHistoryPriceColor = Colors.Gainsboro;
-                                        PairEthBtc.TickHistories.Insert(0, aym);
+                                        PairEthJpy.TickHistories.Insert(0, aym);
                                     }
                                 }
                                 else
                                 {
                                     //aym.TickHistoryPriceColor = Colors.Gainsboro;
-                                    PairEthBtc.TickHistories.Insert(0, aym);
+                                    PairEthJpy.TickHistories.Insert(0, aym);
                                 }
 
                                 // limit the number of the list.
-                                if (PairEthBtc.TickHistories.Count > 60)
+                                if (PairEthJpy.TickHistories.Count > 60)
                                 {
-                                    PairEthBtc.TickHistories.RemoveAt(60);
+                                    PairEthJpy.TickHistories.RemoveAt(60);
                                 }
 
                                 // 60(1分)の平均値を求める
                                 decimal aSum = 0;
                                 int c = 0;
-                                if (PairEthBtc.TickHistories.Count > 0)
+                                if (PairEthJpy.TickHistories.Count > 0)
                                 {
 
-                                    if (PairEthBtc.TickHistories.Count > 60)
+                                    if (PairEthJpy.TickHistories.Count > 60)
                                     {
                                         c = 59;
                                     }
                                     else
                                     {
-                                        c = PairEthBtc.TickHistories.Count - 1;
+                                        c = PairEthJpy.TickHistories.Count - 1;
                                     }
 
                                     if (c == 0)
                                     {
-                                        PairEthBtc.AveragePrice = PairEthBtc.TickHistories[0].Price;
+                                        PairEthJpy.AveragePrice = PairEthJpy.TickHistories[0].Price;
                                     }
                                     else
                                     {
                                         for (int i = 0; i < c; i++)
                                         {
-                                            aSum = aSum + PairEthBtc.TickHistories[i].Price;
+                                            aSum = aSum + PairEthJpy.TickHistories[i].Price;
                                         }
-                                        PairEthBtc.AveragePrice = aSum / c;
+                                        PairEthJpy.AveragePrice = aSum / c;
                                     }
 
                                 }
-                                else if (PairEthBtc.TickHistories.Count == 1)
+                                else if (PairEthJpy.TickHistories.Count == 1)
                                 {
-                                    PairEthBtc.AveragePrice = PairEthBtc.TickHistories[0].Price;
+                                    PairEthJpy.AveragePrice = PairEthJpy.TickHistories[0].Price;
                                 }
 
                                 #endregion
 
                                 #region == アラーム ==
 
-                                PairEthBtc.HighLowInfoText = "";
+                                PairEthJpy.HighLowInfoText = "";
 
                                 // TODO 非表示の通貨の場合はどうする？？？
                                 if (pair == CurrentPair)
@@ -9248,12 +9571,12 @@ namespace BitDesk.ViewModels
                                     bool isPlayed = false;
 
                                     // アラーム
-                                    if (PairEthBtc.AlarmPlus > 0)
+                                    if (PairEthJpy.AlarmPlus > 0)
                                     {
-                                        if (tick.LTP >= PairEthBtc.AlarmPlus)
+                                        if (tick.LTP >= PairEthJpy.AlarmPlus)
                                         {
-                                            PairEthBtc.HighLowInfoTextColorFlag = true;
-                                            PairEthBtc.HighLowInfoText = "⇑⇑⇑　高値アラーム " + PairEthBtc.PairString;
+                                            PairEthJpy.HighLowInfoTextColorFlag = true;
+                                            PairEthJpy.HighLowInfoText = "⇑⇑⇑　高値アラーム " + PairEthJpy.PairString;
 
                                             if (PlaySound)
                                             {
@@ -9265,15 +9588,15 @@ namespace BitDesk.ViewModels
                                     else
                                     {
                                         // 起動後初期値セット
-                                        PairEthBtc.AlarmPlus = tick.LTP + 0.002M;
+                                        PairEthJpy.AlarmPlus = tick.LTP + 1000M;
                                     }
 
-                                    if (PairEthBtc.AlarmMinus > 0)
+                                    if (PairEthJpy.AlarmMinus > 0)
                                     {
-                                        if (tick.LTP <= PairEthBtc.AlarmMinus)
+                                        if (tick.LTP <= PairEthJpy.AlarmMinus)
                                         {
-                                            PairEthBtc.HighLowInfoTextColorFlag = false;
-                                            PairEthBtc.HighLowInfoText = "⇓⇓⇓　安値アラーム " + PairEthBtc.PairString;
+                                            PairEthJpy.HighLowInfoTextColorFlag = false;
+                                            PairEthJpy.HighLowInfoText = "⇓⇓⇓　安値アラーム " + PairEthJpy.PairString;
                                             if (PlaySound)
                                             {
                                                 SystemSounds.Beep.Play();
@@ -9284,18 +9607,18 @@ namespace BitDesk.ViewModels
                                     else
                                     {
                                         // 起動後初期値セット
-                                        PairEthBtc.AlarmMinus = tick.LTP - 0.002M;
+                                        PairEthJpy.AlarmMinus = tick.LTP - 1000M;
                                     }
 
                                     // 起動後最高値
-                                    if (tick.LTP >= PairEthBtc.HighestPrice)
+                                    if (tick.LTP >= PairEthJpy.HighestPrice)
                                     {
-                                        if ((PairEthBtc.TickHistories.Count > 25) && ((PairEthBtc.BasePrice + 2000M) < tick.LTP))
+                                        if ((PairEthJpy.TickHistories.Count > 25) && ((PairEthJpy.BasePrice + 200M) < tick.LTP))
                                         {
-                                            PairEthBtc.HighLowInfoTextColorFlag = true;
-                                            PairEthBtc.HighLowInfoText = "⇑⇑⇑　起動後最高値更新 " + PairEthBtc.PairString;
+                                            PairEthJpy.HighLowInfoTextColorFlag = true;
+                                            PairEthJpy.HighLowInfoText = "⇑⇑⇑　起動後最高値更新 " + PairEthJpy.PairString;
 
-                                            if ((isPlayed == false) && (PairEthBtc.PlaySoundHighest == true))
+                                            if ((isPlayed == false) && (PairEthJpy.PlaySoundHighest == true))
                                             {
                                                 if (PlaySound)
                                                 {
@@ -9306,14 +9629,14 @@ namespace BitDesk.ViewModels
                                         }
                                     }
                                     // 起動後最安値
-                                    if (tick.LTP <= PairEthBtc.LowestPrice)
+                                    if (tick.LTP <= PairEthJpy.LowestPrice)
                                     {
-                                        if ((PairEthBtc.TickHistories.Count > 25) && ((PairEthBtc.BasePrice - 2000M) > tick.LTP))
+                                        if ((PairEthJpy.TickHistories.Count > 25) && ((PairEthJpy.BasePrice - 200M) > tick.LTP))
                                         {
-                                            PairEthBtc.HighLowInfoTextColorFlag = false;
-                                            PairEthBtc.HighLowInfoText = "⇓⇓⇓　起動後最安値更新 " + PairEthBtc.PairString;
+                                            PairEthJpy.HighLowInfoTextColorFlag = false;
+                                            PairEthJpy.HighLowInfoText = "⇓⇓⇓　起動後最安値更新 " + PairEthJpy.PairString;
 
-                                            if ((isPlayed == false) && (PairEthBtc.PlaySoundLowest == true))
+                                            if ((isPlayed == false) && (PairEthJpy.PlaySoundLowest == true))
                                             {
                                                 if (PlaySound)
                                                 {
@@ -9325,12 +9648,12 @@ namespace BitDesk.ViewModels
                                     }
 
                                     // 過去24時間最高値
-                                    if (tick.LTP >= PairEthBtc.HighestIn24Price)
+                                    if (tick.LTP >= PairEthJpy.HighestIn24Price)
                                     {
-                                        PairEthBtc.HighLowInfoTextColorFlag = true;
-                                        PairEthBtc.HighLowInfoText = "⇑⇑⇑⇑⇑⇑　過去24時間最高値更新 " + PairEthBtc.PairString;
+                                        PairEthJpy.HighLowInfoTextColorFlag = true;
+                                        PairEthJpy.HighLowInfoText = "⇑⇑⇑⇑⇑⇑　過去24時間最高値更新 " + PairEthJpy.PairString;
 
-                                        if ((isPlayed == false) && (PairEthBtc.PlaySoundHighest24h == true))
+                                        if ((isPlayed == false) && (PairEthJpy.PlaySoundHighest24h == true))
                                         {
                                             if (PlaySound)
                                             {
@@ -9340,12 +9663,12 @@ namespace BitDesk.ViewModels
                                         }
                                     }
                                     // 過去24時間最安値
-                                    if (tick.LTP <= PairEthBtc.LowestIn24Price)
+                                    if (tick.LTP <= PairEthJpy.LowestIn24Price)
                                     {
-                                        PairEthBtc.HighLowInfoTextColorFlag = false;
-                                        PairEthBtc.HighLowInfoText = "⇓⇓⇓⇓⇓⇓　過去24時間最安値更新 " + PairEthBtc.PairString;
+                                        PairEthJpy.HighLowInfoTextColorFlag = false;
+                                        PairEthJpy.HighLowInfoText = "⇓⇓⇓⇓⇓⇓　過去24時間最安値更新 " + PairEthJpy.PairString;
 
-                                        if ((isPlayed == false) && (PairEthBtc.PlaySoundLowest24h == true))
+                                        if ((isPlayed == false) && (PairEthJpy.PlaySoundLowest24h == true))
                                         {
                                             if (PlaySound)
                                             {
@@ -9363,11 +9686,11 @@ namespace BitDesk.ViewModels
                                 if ((MinMode == false) && (pair == CurrentPair))
                                 {
                                     // 最新取引価格のラインを更新
-                                    if (ChartAxisYEthBtc != null)
+                                    if (ChartAxisYEthJpy != null)
                                     {
-                                        if (ChartAxisYEthBtc[0].Sections.Count > 0)
+                                        if (ChartAxisYEthJpy[0].Sections.Count > 0)
                                         {
-                                            ChartAxisYEthBtc[0].Sections[0].Value = (double)tick.LTP;
+                                            ChartAxisYEthJpy[0].Sections[0].Value = (double)tick.LTP;
                                         }
                                     }
 
@@ -9730,45 +10053,41 @@ namespace BitDesk.ViewModels
                                 }
 
                             }
-                            else if (pair == Pairs.mona_btc)
-                            {
-                                //
-                            }
-                            else if (pair == Pairs.ltc_btc)
+                            else if (pair == Pairs.ltc_jpy)
                             {
 
                                 // 最新の価格をセット
-                                PairLtcBtc.Ltp = tick.LTP;
-                                PairLtcBtc.Bid = tick.Bid;
-                                PairLtcBtc.Ask = tick.Ask;
-                                PairLtcBtc.TickTimeStamp = tick.TimeStamp;
+                                PairLtcJpy.Ltp = tick.LTP;
+                                PairLtcJpy.Bid = tick.Bid;
+                                PairLtcJpy.Ask = tick.Ask;
+                                PairLtcJpy.TickTimeStamp = tick.TimeStamp;
 
-                                PairLtcBtc.LowestIn24Price = tick.Low;
-                                PairLtcBtc.HighestIn24Price = tick.High;
+                                PairLtcJpy.LowestIn24Price = tick.Low;
+                                PairLtcJpy.HighestIn24Price = tick.High;
 
                                 // 起動時価格セット
-                                if (PairLtcBtc.BasePrice == 0) PairLtcBtc.BasePrice = tick.LTP;
+                                if (PairLtcJpy.BasePrice == 0) PairLtcJpy.BasePrice = tick.LTP;
 
                                 // 最安値登録
-                                if (PairLtcBtc.LowestPrice == 0)
+                                if (PairLtcJpy.LowestPrice == 0)
                                 {
-                                    PairLtcBtc.LowestPrice = tick.LTP;
+                                    PairLtcJpy.LowestPrice = tick.LTP;
                                 }
-                                if (tick.LTP < PairLtcBtc.LowestPrice)
+                                if (tick.LTP < PairLtcJpy.LowestPrice)
                                 {
                                     //SystemSounds.Beep.Play();
-                                    PairLtcBtc.LowestPrice = tick.LTP;
+                                    PairLtcJpy.LowestPrice = tick.LTP;
                                 }
 
                                 // 最高値登録
-                                if (PairLtcBtc.HighestPrice == 0)
+                                if (PairLtcJpy.HighestPrice == 0)
                                 {
-                                    PairLtcBtc.HighestPrice = tick.LTP;
+                                    PairLtcJpy.HighestPrice = tick.LTP;
                                 }
-                                if (tick.LTP > PairLtcBtc.HighestPrice)
+                                if (tick.LTP > PairLtcJpy.HighestPrice)
                                 {
                                     //SystemSounds.Asterisk.Play();
-                                    PairLtcBtc.HighestPrice = tick.LTP;
+                                    PairLtcJpy.HighestPrice = tick.LTP;
                                 }
 
                                 #region == チック履歴 ==
@@ -9776,78 +10095,78 @@ namespace BitDesk.ViewModels
                                 TickHistory aym = new TickHistory();
                                 aym.Price = tick.LTP;
                                 aym.TimeAt = tick.TimeStamp;
-                                if (PairLtcBtc.TickHistories.Count > 0)
+                                if (PairLtcJpy.TickHistories.Count > 0)
                                 {
-                                    if (PairLtcBtc.TickHistories[0].Price > aym.Price)
+                                    if (PairLtcJpy.TickHistories[0].Price > aym.Price)
                                     {
                                         //aym.TickHistoryPriceColor = _priceUpColor;
                                         aym.TickHistoryPriceUp = true;
-                                        PairLtcBtc.TickHistories.Insert(0, aym);
+                                        PairLtcJpy.TickHistories.Insert(0, aym);
 
                                     }
-                                    else if (PairLtcBtc.TickHistories[0].Price < aym.Price)
+                                    else if (PairLtcJpy.TickHistories[0].Price < aym.Price)
                                     {
                                         //aym.TickHistoryPriceColor = _priceDownColor;
                                         aym.TickHistoryPriceUp = false;
-                                        PairLtcBtc.TickHistories.Insert(0, aym);
+                                        PairLtcJpy.TickHistories.Insert(0, aym);
                                     }
                                     else
                                     {
                                         //aym.TickHistoryPriceColor = Colors.Gainsboro;
-                                        PairLtcBtc.TickHistories.Insert(0, aym);
+                                        PairLtcJpy.TickHistories.Insert(0, aym);
                                     }
                                 }
                                 else
                                 {
                                     //aym.TickHistoryPriceColor = Colors.Gainsboro;
-                                    PairLtcBtc.TickHistories.Insert(0, aym);
+                                    PairLtcJpy.TickHistories.Insert(0, aym);
                                 }
 
                                 // limit the number of the list.
-                                if (PairLtcBtc.TickHistories.Count > 60)
+                                if (PairLtcJpy.TickHistories.Count > 60)
                                 {
-                                    PairLtcBtc.TickHistories.RemoveAt(60);
+                                    PairLtcJpy.TickHistories.RemoveAt(60);
                                 }
 
                                 // 60(1分)の平均値を求める
                                 decimal aSum = 0;
                                 int c = 0;
-                                if (PairLtcBtc.TickHistories.Count > 0)
+                                if (PairLtcJpy.TickHistories.Count > 0)
                                 {
 
-                                    if (PairLtcBtc.TickHistories.Count > 60)
+                                    if (PairLtcJpy.TickHistories.Count > 60)
                                     {
                                         c = 59;
                                     }
                                     else
                                     {
-                                        c = PairLtcBtc.TickHistories.Count - 1;
+                                        c = PairLtcJpy.TickHistories.Count - 1;
                                     }
 
                                     if (c == 0)
                                     {
-                                        PairLtcBtc.AveragePrice = PairLtcBtc.TickHistories[0].Price;
+                                        PairLtcJpy.AveragePrice = PairLtcJpy.TickHistories[0].Price;
                                     }
                                     else
                                     {
                                         for (int i = 0; i < c; i++)
                                         {
-                                            aSum = aSum + PairLtcBtc.TickHistories[i].Price;
+                                            aSum = aSum + PairLtcJpy.TickHistories[i].Price;
                                         }
-                                        PairLtcBtc.AveragePrice = aSum / c;
+                                        PairLtcJpy.AveragePrice = aSum / c;
                                     }
 
                                 }
-                                else if (PairLtcBtc.TickHistories.Count == 1)
+                                else if (PairLtcJpy.TickHistories.Count == 1)
                                 {
-                                    PairLtcBtc.AveragePrice = PairLtcBtc.TickHistories[0].Price;
+                                    PairLtcJpy.AveragePrice = PairLtcJpy.TickHistories[0].Price;
                                 }
 
                                 #endregion
 
                                 #region == アラーム ==
 
-                                PairLtcBtc.HighLowInfoText = "";
+                                PairLtcJpy.HighLowInfoText = "";
 
                                 // TODO 非表示の通貨の場合はどうする？？？
                                 if (pair == CurrentPair)
@@ -9856,12 +10175,12 @@ namespace BitDesk.ViewModels
                                     bool isPlayed = false;
 
                                     // アラーム
-                                    if (PairLtcBtc.AlarmPlus > 0)
+                                    if (PairLtcJpy.AlarmPlus > 0)
                                     {
-                                        if (tick.LTP >= PairLtcBtc.AlarmPlus)
+                                        if (tick.LTP >= PairLtcJpy.AlarmPlus)
                                         {
-                                            PairLtcBtc.HighLowInfoTextColorFlag = true;
-                                            PairLtcBtc.HighLowInfoText = "⇑⇑⇑　高値アラーム " + PairLtcBtc.PairString;
+                                            PairLtcJpy.HighLowInfoTextColorFlag = true;
+                                            PairLtcJpy.HighLowInfoText = "⇑⇑⇑　高値アラーム " + PairLtcJpy.PairString;
 
                                             if (PlaySound)
                                             {
@@ -9873,15 +10192,15 @@ namespace BitDesk.ViewModels
                                     else
                                     {
                                         // 起動後初期値セット
-                                        PairLtcBtc.AlarmPlus = tick.LTP + 0.001M;
+                                        PairLtcJpy.AlarmPlus = tick.LTP + 500M;
                                     }
 
-                                    if (PairLtcBtc.AlarmMinus > 0)
+                                    if (PairLtcJpy.AlarmMinus > 0)
                                     {
-                                        if (tick.LTP <= PairLtcBtc.AlarmMinus)
+                                        if (tick.LTP <= PairLtcJpy.AlarmMinus)
                                         {
-                                            PairLtcBtc.HighLowInfoTextColorFlag = false;
-                                            PairLtcBtc.HighLowInfoText = "⇓⇓⇓　安値アラーム " + PairLtcBtc.PairString;
+                                            PairLtcJpy.HighLowInfoTextColorFlag = false;
+                                            PairLtcJpy.HighLowInfoText = "⇓⇓⇓　安値アラーム " + PairLtcJpy.PairString;
                                             if (PlaySound)
                                             {
                                                 SystemSounds.Beep.Play();
@@ -9892,18 +10211,18 @@ namespace BitDesk.ViewModels
                                     else
                                     {
                                         // 起動後初期値セット
-                                        PairLtcBtc.AlarmMinus = tick.LTP - 0.001M;
+                                        PairLtcJpy.AlarmMinus = tick.LTP - 500M;
                                     }
 
                                     // 起動後最高値
-                                    if (tick.LTP >= PairLtcBtc.HighestPrice)
+                                    if (tick.LTP >= PairLtcJpy.HighestPrice)
                                     {
-                                        if ((PairLtcBtc.TickHistories.Count > 25) && ((PairLtcBtc.BasePrice + 0.0001M) < tick.LTP))
+                                        if ((PairLtcJpy.TickHistories.Count > 25) && ((PairLtcJpy.BasePrice + 100M) < tick.LTP))
                                         {
-                                            PairLtcBtc.HighLowInfoTextColorFlag = true;
-                                            PairLtcBtc.HighLowInfoText = "⇑⇑⇑　起動後最高値更新 " + PairLtcBtc.PairString;
+                                            PairLtcJpy.HighLowInfoTextColorFlag = true;
+                                            PairLtcJpy.HighLowInfoText = "⇑⇑⇑　起動後最高値更新 " + PairLtcJpy.PairString;
 
-                                            if ((isPlayed == false) && (PairLtcBtc.PlaySoundHighest == true))
+                                            if ((isPlayed == false) && (PairLtcJpy.PlaySoundHighest == true))
                                             {
                                                 if (PlaySound)
                                                 {
@@ -9914,14 +10233,14 @@ namespace BitDesk.ViewModels
                                         }
                                     }
                                     // 起動後最安値
-                                    if (tick.LTP <= PairLtcBtc.LowestPrice)
+                                    if (tick.LTP <= PairLtcJpy.LowestPrice)
                                     {
-                                        if ((PairLtcBtc.TickHistories.Count > 25) && ((PairLtcBtc.BasePrice - 0.0001M) > tick.LTP))
+                                        if ((PairLtcJpy.TickHistories.Count > 25) && ((PairLtcJpy.BasePrice - 100M) > tick.LTP))
                                         {
-                                            PairLtcBtc.HighLowInfoTextColorFlag = false;
-                                            PairLtcBtc.HighLowInfoText = "⇓⇓⇓　起動後最安値更新 " + PairLtcBtc.PairString;
+                                            PairLtcJpy.HighLowInfoTextColorFlag = false;
+                                            PairLtcJpy.HighLowInfoText = "⇓⇓⇓　起動後最安値更新 " + PairLtcJpy.PairString;
 
-                                            if ((isPlayed == false) && (PairLtcBtc.PlaySoundLowest == true))
+                                            if ((isPlayed == false) && (PairLtcJpy.PlaySoundLowest == true))
                                             {
                                                 if (PlaySound)
                                                 {
@@ -9933,12 +10252,12 @@ namespace BitDesk.ViewModels
                                     }
 
                                     // 過去24時間最高値
-                                    if (tick.LTP >= PairLtcBtc.HighestIn24Price)
+                                    if (tick.LTP >= PairLtcJpy.HighestIn24Price)
                                     {
-                                        PairLtcBtc.HighLowInfoTextColorFlag = true;
-                                        PairLtcBtc.HighLowInfoText = "⇑⇑⇑⇑⇑⇑　過去24時間最高値更新 " + PairLtcBtc.PairString;
+                                        PairLtcJpy.HighLowInfoTextColorFlag = true;
+                                        PairLtcJpy.HighLowInfoText = "⇑⇑⇑⇑⇑⇑　過去24時間最高値更新 " + PairLtcJpy.PairString;
 
-                                        if ((isPlayed == false) && (PairLtcBtc.PlaySoundHighest24h == true))
+                                        if ((isPlayed == false) && (PairLtcJpy.PlaySoundHighest24h == true))
                                         {
                                             if (PlaySound)
                                             {
@@ -9948,12 +10267,12 @@ namespace BitDesk.ViewModels
                                         }
                                     }
                                     // 過去24時間最安値
-                                    if (tick.LTP <= PairLtcBtc.LowestIn24Price)
+                                    if (tick.LTP <= PairLtcJpy.LowestIn24Price)
                                     {
-                                        PairLtcBtc.HighLowInfoTextColorFlag = false;
-                                        PairLtcBtc.HighLowInfoText = "⇓⇓⇓⇓⇓⇓　過去24時間最安値更新 " + PairLtcBtc.PairString;
+                                        PairLtcJpy.HighLowInfoTextColorFlag = false;
+                                        PairLtcJpy.HighLowInfoText = "⇓⇓⇓⇓⇓⇓　過去24時間最安値更新 " + PairLtcJpy.PairString;
 
-                                        if ((isPlayed == false) && (PairLtcBtc.PlaySoundLowest24h == true))
+                                        if ((isPlayed == false) && (PairLtcJpy.PlaySoundLowest24h == true))
                                         {
                                             if (PlaySound)
                                             {
@@ -9971,11 +10290,11 @@ namespace BitDesk.ViewModels
                                 if ((MinMode == false) && (pair == CurrentPair))
                                 {
                                     // 最新取引価格のラインを更新
-                                    if (ChartAxisYLtcBtc != null)
+                                    if (ChartAxisYLtcJpy != null)
                                     {
-                                        if (ChartAxisYLtcBtc[0].Sections.Count > 0)
+                                        if (ChartAxisYLtcJpy[0].Sections.Count > 0)
                                         {
-                                            ChartAxisYLtcBtc[0].Sections[0].Value = (double)tick.LTP;
+                                            ChartAxisYLtcJpy[0].Sections[0].Value = (double)tick.LTP;
                                         }
                                     }
 
@@ -10035,10 +10354,6 @@ namespace BitDesk.ViewModels
                                     */
                                 }
 
-                            }
-                            else if (pair == Pairs.bcc_btc)
-                            {
-                                //
                             }
                             else if (pair == Pairs.bcc_jpy)
                             {
@@ -10144,7 +10459,7 @@ namespace BitDesk.ViewModels
                                     }
 
                                 }
-                                else if (PairLtcBtc.TickHistories.Count == 1)
+                                else if (PairBchJpy.TickHistories.Count == 1)
                                 {
                                     PairBchJpy.AveragePrice = PairBchJpy.TickHistories[0].Price;
                                 }
@@ -10342,7 +10657,308 @@ namespace BitDesk.ViewModels
                                 }
 
                             }
+                            else if (pair == Pairs.xlm_jpy)
+                            {
 
+                                // 最新の価格をセット
+                                PairXlmJpy.Ltp = tick.LTP;
+                                PairXlmJpy.Bid = tick.Bid;
+                                PairXlmJpy.Ask = tick.Ask;
+                                PairXlmJpy.TickTimeStamp = tick.TimeStamp;
+
+                                PairXlmJpy.LowestIn24Price = tick.Low;
+                                PairXlmJpy.HighestIn24Price = tick.High;
+
+                                // 起動時価格セット
+                                if (PairXlmJpy.BasePrice == 0) PairXlmJpy.BasePrice = tick.LTP;
+
+                                // 最安値登録
+                                if (PairXlmJpy.LowestPrice == 0)
+                                {
+                                    PairXlmJpy.LowestPrice = tick.LTP;
+                                }
+                                if (tick.LTP < PairXlmJpy.LowestPrice)
+                                {
+                                    //SystemSounds.Beep.Play();
+                                    PairXlmJpy.LowestPrice = tick.LTP;
+                                }
+
+                                // 最高値登録
+                                if (PairXlmJpy.HighestPrice == 0)
+                                {
+                                    PairXlmJpy.HighestPrice = tick.LTP;
+                                }
+                                if (tick.LTP > PairXlmJpy.HighestPrice)
+                                {
+                                    //SystemSounds.Asterisk.Play();
+                                    PairXlmJpy.HighestPrice = tick.LTP;
+                                }
+
+                                #region == チック履歴 ==
+
+                                TickHistory aym = new TickHistory();
+                                aym.Price = tick.LTP;
+                                aym.TimeAt = tick.TimeStamp;
+                                if (PairXlmJpy.TickHistories.Count > 0)
+                                {
+                                    if (PairXlmJpy.TickHistories[0].Price > aym.Price)
+                                    {
+                                        //aym.TickHistoryPriceColor = _priceUpColor;
+                                        aym.TickHistoryPriceUp = true;
+                                        PairXlmJpy.TickHistories.Insert(0, aym);
+
+                                    }
+                                    else if (PairXlmJpy.TickHistories[0].Price < aym.Price)
+                                    {
+                                        //aym.TickHistoryPriceColor = _priceDownColor;
+                                        aym.TickHistoryPriceUp = false;
+                                        PairXlmJpy.TickHistories.Insert(0, aym);
+                                    }
+                                    else
+                                    {
+                                        //aym.TickHistoryPriceColor = Colors.Gainsboro;
+                                        PairXlmJpy.TickHistories.Insert(0, aym);
+                                    }
+                                }
+                                else
+                                {
+                                    //aym.TickHistoryPriceColor = Colors.Gainsboro;
+                                    PairXlmJpy.TickHistories.Insert(0, aym);
+                                }
+
+                                // limit the number of the list.
+                                if (PairXlmJpy.TickHistories.Count > 60)
+                                {
+                                    PairXlmJpy.TickHistories.RemoveAt(60);
+                                }
+
+                                // 60(1分)の平均値を求める
+                                decimal aSum = 0;
+                                int c = 0;
+                                if (PairXlmJpy.TickHistories.Count > 0)
+                                {
+
+                                    if (PairXlmJpy.TickHistories.Count > 60)
+                                    {
+                                        c = 59;
+                                    }
+                                    else
+                                    {
+                                        c = PairXlmJpy.TickHistories.Count - 1;
+                                    }
+
+                                    if (c == 0)
+                                    {
+                                        PairXlmJpy.AveragePrice = PairXlmJpy.TickHistories[0].Price;
+                                    }
+                                    else
+                                    {
+                                        for (int i = 0; i < c; i++)
+                                        {
+                                            aSum = aSum + PairXlmJpy.TickHistories[i].Price;
+                                        }
+                                        PairXlmJpy.AveragePrice = aSum / c;
+                                    }
+
+                                }
+                                else if (PairXlmJpy.TickHistories.Count == 1)
+                                {
+                                    PairXlmJpy.AveragePrice = PairXlmJpy.TickHistories[0].Price;
+                                }
+
+                                #endregion
+
+                                #region == アラーム ==
+
+                                PairXlmJpy.HighLowInfoText = "";
+
+                                // TODO 非表示の通貨の場合はどうする？？？
+                                if (pair == CurrentPair)
+                                {
+
+                                    bool isPlayed = false;
+
+                                    // アラーム
+                                    if (PairXlmJpy.AlarmPlus > 0)
+                                    {
+                                        if (tick.LTP >= PairXlmJpy.AlarmPlus)
+                                        {
+                                            PairXlmJpy.HighLowInfoTextColorFlag = true;
+                                            PairXlmJpy.HighLowInfoText = "⇑⇑⇑　高値アラーム " + PairXlmJpy.PairString;
+
+                                            if (PlaySound)
+                                            {
+                                                SystemSounds.Hand.Play();
+                                                isPlayed = true;
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        // 起動後初期値セット
+                                        PairXlmJpy.AlarmPlus = ((tick.LTP / 100M) * 100M) + 1000M;
+                                    }
+
+                                    if (PairXlmJpy.AlarmMinus > 0)
+                                    {
+                                        if (tick.LTP <= PairXlmJpy.AlarmMinus)
+                                        {
+                                            PairXlmJpy.HighLowInfoTextColorFlag = false;
+                                            PairXlmJpy.HighLowInfoText = "⇓⇓⇓　安値アラーム " + PairXlmJpy.PairString;
+                                            if (PlaySound)
+                                            {
+                                                SystemSounds.Beep.Play();
+                                                isPlayed = true;
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        // 起動後初期値セット
+                                        PairXlmJpy.AlarmMinus = ((tick.LTP / 100M) * 100M) - 1000M;
+                                    }
+
+                                    // 起動後最高値
+                                    if (tick.LTP >= PairXlmJpy.HighestPrice)
+                                    {
+                                        if ((PairXlmJpy.TickHistories.Count > 25) && ((PairXlmJpy.BasePrice + 200M) < tick.LTP))
+                                        {
+                                            PairXlmJpy.HighLowInfoTextColorFlag = true;
+                                            PairXlmJpy.HighLowInfoText = "⇑⇑⇑　起動後最高値更新 " + PairXlmJpy.PairString;
+
+                                            if ((isPlayed == false) && (PairXlmJpy.PlaySoundHighest == true))
+                                            {
+                                                if (PlaySound)
+                                                {
+                                                    SystemSounds.Hand.Play();
+                                                    isPlayed = true;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    // 起動後最安値
+                                    if (tick.LTP <= PairXlmJpy.LowestPrice)
+                                    {
+                                        if ((PairXlmJpy.TickHistories.Count > 25) && ((PairXlmJpy.BasePrice - 200M) > tick.LTP))
+                                        {
+                                            PairXlmJpy.HighLowInfoTextColorFlag = false;
+                                            PairXlmJpy.HighLowInfoText = "⇓⇓⇓　起動後最安値更新 " + PairXlmJpy.PairString;
+
+                                            if ((isPlayed == false) && (PairXlmJpy.PlaySoundLowest == true))
+                                            {
+                                                if (PlaySound)
+                                                {
+                                                    SystemSounds.Beep.Play();
+                                                    isPlayed = true;
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    // 過去24時間最高値
+                                    if (tick.LTP >= PairXlmJpy.HighestIn24Price)
+                                    {
+                                        PairXlmJpy.HighLowInfoTextColorFlag = true;
+                                        PairXlmJpy.HighLowInfoText = "⇑⇑⇑⇑⇑⇑　過去24時間最高値更新 " + PairXlmJpy.PairString;
+
+                                        if ((isPlayed == false) && (PairXlmJpy.PlaySoundHighest24h == true))
+                                        {
+                                            if (PlaySound)
+                                            {
+                                                SystemSounds.Hand.Play();
+                                                isPlayed = true;
+                                            }
+                                        }
+                                    }
+                                    // 過去24時間最安値
+                                    if (tick.LTP <= PairXlmJpy.LowestIn24Price)
+                                    {
+                                        PairXlmJpy.HighLowInfoTextColorFlag = false;
+                                        PairXlmJpy.HighLowInfoText = "⇓⇓⇓⇓⇓⇓　過去24時間最安値更新 " + PairXlmJpy.PairString;
+
+                                        if ((isPlayed == false) && (PairXlmJpy.PlaySoundLowest24h == true))
+                                        {
+                                            if (PlaySound)
+                                            {
+                                                SystemSounds.Hand.Play();
+                                                isPlayed = true;
+                                            }
+                                        }
+                                    }
+
+                                }
+
+                                #endregion
+
+                                // 省エネモードでなかったら
+                                if ((MinMode == false) && (pair == CurrentPair))
+                                {
+                                    // 最新取引価格のラインを更新
+                                    if (ChartAxisYXlmJpy != null)
+                                    {
+                                        if (ChartAxisYXlmJpy[0].Sections.Count > 0)
+                                        {
+                                            ChartAxisYXlmJpy[0].Sections[0].Value = (double)tick.LTP;
+                                        }
+                                    }
+
+                                    /*
+                                    // 特殊注文 
+                                    this.NotifyPropertyChanged("IFD_IfdEstimatePrice");
+                                    this.NotifyPropertyChanged("IFD_DoEstimatePrice");
+                                    this.NotifyPropertyChanged("OCO_OneEstimatePrice");
+                                    this.NotifyPropertyChanged("OCO_OtherEstimatePrice");
+                                    this.NotifyPropertyChanged("IFDOCO_IfdEstimatePrice");
+                                    this.NotifyPropertyChanged("IFDOCO_OneEstimatePrice");
+                                    this.NotifyPropertyChanged("IFDOCO_OtherEstimatePrice");
+
+                                    // 手動注文の成行予想金額表示の更新
+                                    if (SellType == OrderTypes.market)
+                                    {
+                                        this.NotifyPropertyChanged("SellEstimatePrice");
+                                    }
+                                    if (BuyType == OrderTypes.market)
+                                    {
+                                        this.NotifyPropertyChanged("BuyEstimatePrice");
+                                    }
+                                    */
+
+
+                                    // 最新のロウソク足を更新する。＞＞＞重すぎ。負荷掛かり過ぎなので止め。
+                                    /*
+                                    if (ChartSeriesBchJpy[0].Values != null)
+                                    {
+                                        int c = ChartSeriesBchJpy[0].Values.Count;
+
+                                        if (c > 0)
+                                        {
+                                            double l = ((OhlcPoint)ChartSeriesBchJpy[0].Values[c - 1]).Low;
+                                            double h = ((OhlcPoint)ChartSeriesBchJpy[0].Values[c - 1]).High;
+
+                                            if (Application.Current == null) return;
+                                            Application.Current.Dispatcher.Invoke(() =>
+                                            {
+
+                                                ((OhlcPoint)ChartSeriesBchJpy[0].Values[c - 1]).Close = (double)tick.LTP;
+
+                                                if (l > (double)tick.LTP)
+                                                {
+                                                    ((OhlcPoint)ChartSeriesBchJpy[0].Values[c - 1]).Low = (double)tick.LTP;
+                                                }
+
+                                                if (h < (double)tick.LTP)
+                                                {
+                                                    ((OhlcPoint)ChartSeriesBchJpy[0].Values[c - 1]).High = (double)tick.LTP;
+                                                }
+
+                                            });
+
+                                        }
+                                    }
+                                    */
+                                }
+
+                            }
 
                             // TODO
                             // 各通貨の時価評価額の更新
@@ -10357,29 +10973,27 @@ namespace BitDesk.ViewModels
                             {
                                 AssetXRPEstimateAmount = AssetXRPAmount * tick.LTP;
                             }
-                            else if (pair == Pairs.eth_btc)
+                            else if (pair == Pairs.eth_jpy)
                             {
-                                AssetEthEstimateAmount = (AssetEthAmount * tick.LTP) * PairBtcJpy.Ltp;
+                                //AssetEthEstimateAmount = (AssetEthAmount * tick.LTP) * PairBtcJpy.Ltp;
+                                AssetEthEstimateAmount = AssetEthAmount * tick.LTP;
                             }
                             else if (pair == Pairs.mona_jpy)
                             {
                                 AssetMonaEstimateAmount = AssetMonaAmount * tick.LTP;
                             }
-                            else if (pair == Pairs.mona_btc)
+                            else if (pair == Pairs.ltc_jpy)
                             {
-                                //
-                            }
-                            else if (pair == Pairs.ltc_btc)
-                            {
-                                AssetLtcEstimateAmount= (AssetLtcAmount * tick.LTP) * PairBtcJpy.Ltp;
-                            }
-                            else if (pair == Pairs.bcc_btc)
-                            {
-                                //
+                                //AssetLtcEstimateAmount= (AssetLtcAmount * tick.LTP) * PairBtcJpy.Ltp;
+                                AssetLtcEstimateAmount = AssetLtcAmount * tick.LTP;
                             }
                             else if (pair == Pairs.bcc_jpy)
                             {
                                 AssetBchEstimateAmount = AssetBchAmount * tick.LTP;
+                            }
+                            else if (pair == Pairs.xlm_jpy)
+                            {
+                                AssetXlmEstimateAmount = AssetXlmAmount * tick.LTP;
                             }
 
                         }
@@ -10421,11 +11035,12 @@ namespace BitDesk.ViewModels
                     // 各通貨ペアをループ
                     foreach (Pairs pair in Enum.GetValues(typeof(Pairs)))
                     {
+                        /*
                         if ((pair == Pairs.mona_btc) || pair == Pairs.bcc_btc)
                         {
                             continue;
                         }
-
+                        */
                         UpdateCandlestick(pair, SelectedCandleType);
 
                     }
@@ -10998,7 +11613,7 @@ namespace BitDesk.ViewModels
                         }
 
                         // PairEthBtc
-                        pair = pairs.Element("EthBtc");
+                        pair = pairs.Element("EthJpy");
                         if (pair != null)
                         {
                             var hoge = pair.Attribute("playSoundLowest");
@@ -11006,11 +11621,11 @@ namespace BitDesk.ViewModels
                             {
                                 if (hoge.Value == "true")
                                 {
-                                    PairEthBtc.PlaySoundLowest = true;
+                                    PairEthJpy.PlaySoundLowest = true;
                                 }
                                 else
                                 {
-                                    PairEthBtc.PlaySoundLowest = false;
+                                    PairEthJpy.PlaySoundLowest = false;
                                 }
                             }
 
@@ -11019,11 +11634,11 @@ namespace BitDesk.ViewModels
                             {
                                 if (hoge.Value == "true")
                                 {
-                                    PairEthBtc.PlaySoundHighest = true;
+                                    PairEthJpy.PlaySoundHighest = true;
                                 }
                                 else
                                 {
-                                    PairEthBtc.PlaySoundHighest = false;
+                                    PairEthJpy.PlaySoundHighest = false;
                                 }
                             }
 
@@ -11032,11 +11647,11 @@ namespace BitDesk.ViewModels
                             {
                                 if (hoge.Value == "true")
                                 {
-                                    PairEthBtc.PlaySoundLowest24h = true;
+                                    PairEthJpy.PlaySoundLowest24h = true;
                                 }
                                 else
                                 {
-                                    PairEthBtc.PlaySoundLowest24h = false;
+                                    PairEthJpy.PlaySoundLowest24h = false;
                                 }
                             }
 
@@ -11045,11 +11660,11 @@ namespace BitDesk.ViewModels
                             {
                                 if (hoge.Value == "true")
                                 {
-                                    PairEthBtc.PlaySoundHighest24h = true;
+                                    PairEthJpy.PlaySoundHighest24h = true;
                                 }
                                 else
                                 {
-                                    PairEthBtc.PlaySoundHighest24h = false;
+                                    PairEthJpy.PlaySoundHighest24h = false;
                                 }
                             }
 
@@ -11061,11 +11676,11 @@ namespace BitDesk.ViewModels
                                 {
                                     try
                                     {
-                                        PairEthBtc.DepthGrouping = Decimal.Parse(hoge.Value);
+                                        PairEthJpy.DepthGrouping = Decimal.Parse(hoge.Value);
                                     }
                                     catch
                                     {
-                                        PairEthBtc.DepthGrouping = 0;
+                                        PairEthJpy.DepthGrouping = 0;
                                     }
 
                                 }
@@ -11074,7 +11689,7 @@ namespace BitDesk.ViewModels
                         }
 
                         // PairLtcBtc
-                        pair = pairs.Element("LtcBtc");
+                        pair = pairs.Element("LtcJpy");
                         if (pair != null)
                         {
                             var hoge = pair.Attribute("playSoundLowest");
@@ -11082,11 +11697,11 @@ namespace BitDesk.ViewModels
                             {
                                 if (hoge.Value == "true")
                                 {
-                                    PairLtcBtc.PlaySoundLowest = true;
+                                    PairLtcJpy.PlaySoundLowest = true;
                                 }
                                 else
                                 {
-                                    PairLtcBtc.PlaySoundLowest = false;
+                                    PairLtcJpy.PlaySoundLowest = false;
                                 }
                             }
 
@@ -11095,11 +11710,11 @@ namespace BitDesk.ViewModels
                             {
                                 if (hoge.Value == "true")
                                 {
-                                    PairLtcBtc.PlaySoundHighest = true;
+                                    PairLtcJpy.PlaySoundHighest = true;
                                 }
                                 else
                                 {
-                                    PairLtcBtc.PlaySoundHighest = false;
+                                    PairLtcJpy.PlaySoundHighest = false;
                                 }
                             }
 
@@ -11108,11 +11723,11 @@ namespace BitDesk.ViewModels
                             {
                                 if (hoge.Value == "true")
                                 {
-                                    PairLtcBtc.PlaySoundLowest24h = true;
+                                    PairLtcJpy.PlaySoundLowest24h = true;
                                 }
                                 else
                                 {
-                                    PairLtcBtc.PlaySoundLowest24h = false;
+                                    PairLtcJpy.PlaySoundLowest24h = false;
                                 }
                             }
 
@@ -11121,11 +11736,11 @@ namespace BitDesk.ViewModels
                             {
                                 if (hoge.Value == "true")
                                 {
-                                    PairLtcBtc.PlaySoundHighest24h = true;
+                                    PairLtcJpy.PlaySoundHighest24h = true;
                                 }
                                 else
                                 {
-                                    PairLtcBtc.PlaySoundHighest24h = false;
+                                    PairLtcJpy.PlaySoundHighest24h = false;
                                 }
                             }
 
@@ -11137,11 +11752,11 @@ namespace BitDesk.ViewModels
                                 {
                                     try
                                     {
-                                        PairLtcBtc.DepthGrouping = Decimal.Parse(hoge.Value);
+                                        PairLtcJpy.DepthGrouping = Decimal.Parse(hoge.Value);
                                     }
                                     catch
                                     {
-                                        PairLtcBtc.DepthGrouping = 0;
+                                        PairLtcJpy.DepthGrouping = 0;
                                     }
 
                                 }
@@ -11298,6 +11913,80 @@ namespace BitDesk.ViewModels
                             }
                         }
 
+                        // PairXlmJpy
+                        pair = pairs.Element("XlmJpy");
+                        if (pair != null)
+                        {
+                            var hoge = pair.Attribute("playSoundLowest");
+                            if (hoge != null)
+                            {
+                                if (hoge.Value == "true")
+                                {
+                                    PairXlmJpy.PlaySoundLowest = true;
+                                }
+                                else
+                                {
+                                    PairXlmJpy.PlaySoundLowest = false;
+                                }
+                            }
+
+                            hoge = pair.Attribute("playSoundHighest");
+                            if (hoge != null)
+                            {
+                                if (hoge.Value == "true")
+                                {
+                                    PairXlmJpy.PlaySoundHighest = true;
+                                }
+                                else
+                                {
+                                    PairXlmJpy.PlaySoundHighest = false;
+                                }
+                            }
+
+                            hoge = pair.Attribute("playSoundLowest24h");
+                            if (hoge != null)
+                            {
+                                if (hoge.Value == "true")
+                                {
+                                    PairXlmJpy.PlaySoundLowest24h = true;
+                                }
+                                else
+                                {
+                                    PairXlmJpy.PlaySoundLowest24h = false;
+                                }
+                            }
+
+                            hoge = pair.Attribute("playSoundHighest24h");
+                            if (hoge != null)
+                            {
+                                if (hoge.Value == "true")
+                                {
+                                    PairXlmJpy.PlaySoundHighest24h = true;
+                                }
+                                else
+                                {
+                                    PairXlmJpy.PlaySoundHighest24h = false;
+                                }
+                            }
+
+                            // 板グルーピング
+                            hoge = pair.Attribute("depthGrouping");
+                            if (hoge != null)
+                            {
+                                if (!string.IsNullOrEmpty(hoge.Value))
+                                {
+                                    try
+                                    {
+                                        PairXlmJpy.DepthGrouping = Decimal.Parse(hoge.Value);
+                                    }
+                                    catch
+                                    {
+                                        PairXlmJpy.DepthGrouping = 0;
+                                    }
+
+                                }
+                            }
+                        }
 
                     }
 
@@ -11391,10 +12080,11 @@ namespace BitDesk.ViewModels
 
             LoadIfdocos(PairBtcJpy, _appDataFolder, PairBtcJpy.ThisPair.ToString());
             LoadIfdocos(PairXrpJpy, _appDataFolder, PairXrpJpy.ThisPair.ToString());
-            LoadIfdocos(PairLtcBtc, _appDataFolder, PairLtcBtc.ThisPair.ToString());
-            LoadIfdocos(PairEthBtc, _appDataFolder, PairEthBtc.ThisPair.ToString());
+            LoadIfdocos(PairLtcJpy, _appDataFolder, PairLtcJpy.ThisPair.ToString());
+            LoadIfdocos(PairEthJpy, _appDataFolder, PairEthJpy.ThisPair.ToString());
             LoadIfdocos(PairMonaJpy, _appDataFolder, PairMonaJpy.ThisPair.ToString());
             LoadIfdocos(PairBchJpy, _appDataFolder, PairBchJpy.ThisPair.ToString());
+            LoadIfdocos(PairXlmJpy, _appDataFolder, PairXlmJpy.ThisPair.ToString());
 
             #endregion
 
@@ -11420,12 +12110,8 @@ namespace BitDesk.ViewModels
         }
 
         // 終了時の処理
-        public async void OnWindowClosing(object sender, CancelEventArgs e)
+        public void OnWindowClosing(object sender, CancelEventArgs e)
         {
-            // TODO
-            // 自動取引、特殊注文で、注文中あるならキャンセルしてダイアログを表示。
-            //e.Cancel = true;
-            //return;
 
             // データ保存フォルダの取得
             var AppDataFolder = System.Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
@@ -11786,10 +12472,10 @@ namespace BitDesk.ViewModels
             pairs.AppendChild(pairXrpJpy);
 
             // PairEthBtc の設定
-            XmlElement pairEthBtc = doc.CreateElement(string.Empty, "EthBtc", string.Empty);
+            XmlElement pairEthJpy = doc.CreateElement(string.Empty, "EthJpy", string.Empty);
 
             attrs = doc.CreateAttribute("playSoundLowest");
-            if (PairEthBtc.PlaySoundLowest)
+            if (PairEthJpy.PlaySoundLowest)
             {
                 attrs.Value = "true";
             }
@@ -11797,10 +12483,10 @@ namespace BitDesk.ViewModels
             {
                 attrs.Value = "false";
             }
-            pairEthBtc.SetAttributeNode(attrs);
+            pairEthJpy.SetAttributeNode(attrs);
 
             attrs = doc.CreateAttribute("playSoundHighest");
-            if (PairEthBtc.PlaySoundHighest)
+            if (PairEthJpy.PlaySoundHighest)
             {
                 attrs.Value = "true";
             }
@@ -11808,10 +12494,10 @@ namespace BitDesk.ViewModels
             {
                 attrs.Value = "false";
             }
-            pairEthBtc.SetAttributeNode(attrs);
+            pairEthJpy.SetAttributeNode(attrs);
 
             attrs = doc.CreateAttribute("playSoundLowest24h");
-            if (PairEthBtc.PlaySoundLowest24h)
+            if (PairEthJpy.PlaySoundLowest24h)
             {
                 attrs.Value = "true";
             }
@@ -11819,10 +12505,10 @@ namespace BitDesk.ViewModels
             {
                 attrs.Value = "false";
             }
-            pairEthBtc.SetAttributeNode(attrs);
+            pairEthJpy.SetAttributeNode(attrs);
 
             attrs = doc.CreateAttribute("playSoundHighest24h");
-            if (PairEthBtc.PlaySoundHighest24h)
+            if (PairEthJpy.PlaySoundHighest24h)
             {
                 attrs.Value = "true";
             }
@@ -11830,21 +12516,21 @@ namespace BitDesk.ViewModels
             {
                 attrs.Value = "false";
             }
-            pairEthBtc.SetAttributeNode(attrs);
+            pairEthJpy.SetAttributeNode(attrs);
 
             // 板グルーピング
             attrs = doc.CreateAttribute("depthGrouping");
-            attrs.Value = PairEthBtc.DepthGrouping.ToString();
-            pairEthBtc.SetAttributeNode(attrs);
+            attrs.Value = PairEthJpy.DepthGrouping.ToString();
+            pairEthJpy.SetAttributeNode(attrs);
 
             //
-            pairs.AppendChild(pairEthBtc);
+            pairs.AppendChild(pairEthJpy);
 
             // PairLtcBtc の設定
-            XmlElement pairLtcBtc = doc.CreateElement(string.Empty, "LtcBtc", string.Empty);
+            XmlElement pairLtcJpy = doc.CreateElement(string.Empty, "LtcJpy", string.Empty);
 
             attrs = doc.CreateAttribute("playSoundLowest");
-            if (PairLtcBtc.PlaySoundLowest)
+            if (PairLtcJpy.PlaySoundLowest)
             {
                 attrs.Value = "true";
             }
@@ -11852,10 +12538,10 @@ namespace BitDesk.ViewModels
             {
                 attrs.Value = "false";
             }
-            pairLtcBtc.SetAttributeNode(attrs);
+            pairLtcJpy.SetAttributeNode(attrs);
 
             attrs = doc.CreateAttribute("playSoundHighest");
-            if (PairLtcBtc.PlaySoundHighest)
+            if (PairLtcJpy.PlaySoundHighest)
             {
                 attrs.Value = "true";
             }
@@ -11863,10 +12549,10 @@ namespace BitDesk.ViewModels
             {
                 attrs.Value = "false";
             }
-            pairLtcBtc.SetAttributeNode(attrs);
+            pairLtcJpy.SetAttributeNode(attrs);
 
             attrs = doc.CreateAttribute("playSoundLowest24h");
-            if (PairLtcBtc.PlaySoundLowest24h)
+            if (PairLtcJpy.PlaySoundLowest24h)
             {
                 attrs.Value = "true";
             }
@@ -11874,10 +12560,10 @@ namespace BitDesk.ViewModels
             {
                 attrs.Value = "false";
             }
-            pairLtcBtc.SetAttributeNode(attrs);
+            pairLtcJpy.SetAttributeNode(attrs);
 
             attrs = doc.CreateAttribute("playSoundHighest24h");
-            if (PairLtcBtc.PlaySoundHighest24h)
+            if (PairLtcJpy.PlaySoundHighest24h)
             {
                 attrs.Value = "true";
             }
@@ -11885,15 +12571,15 @@ namespace BitDesk.ViewModels
             {
                 attrs.Value = "false";
             }
-            pairLtcBtc.SetAttributeNode(attrs);
+            pairLtcJpy.SetAttributeNode(attrs);
 
             // 板グルーピング
             attrs = doc.CreateAttribute("depthGrouping");
-            attrs.Value = PairLtcBtc.DepthGrouping.ToString();
-            pairLtcBtc.SetAttributeNode(attrs);
+            attrs.Value = PairLtcJpy.DepthGrouping.ToString();
+            pairLtcJpy.SetAttributeNode(attrs);
 
             //
-            pairs.AppendChild(pairLtcBtc);
+            pairs.AppendChild(pairLtcJpy);
 
             // PairMonaJpy の設定
             XmlElement pairMonaJpy = doc.CreateElement(string.Empty, "MonaJpy", string.Empty);
@@ -12005,6 +12691,61 @@ namespace BitDesk.ViewModels
             //
             pairs.AppendChild(pairBchJpy);
 
+            // PairXlmJpy の設定
+            XmlElement pairXlmJpy = doc.CreateElement(string.Empty, "XlmJpy", string.Empty);
+
+            attrs = doc.CreateAttribute("playSoundLowest");
+            if (PairXlmJpy.PlaySoundLowest)
+            {
+                attrs.Value = "true";
+            }
+            else
+            {
+                attrs.Value = "false";
+            }
+            pairXlmJpy.SetAttributeNode(attrs);
+
+            attrs = doc.CreateAttribute("playSoundHighest");
+            if (PairXlmJpy.PlaySoundHighest)
+            {
+                attrs.Value = "true";
+            }
+            else
+            {
+                attrs.Value = "false";
+            }
+            pairXlmJpy.SetAttributeNode(attrs);
+
+            attrs = doc.CreateAttribute("playSoundLowest24h");
+            if (PairXlmJpy.PlaySoundLowest24h)
+            {
+                attrs.Value = "true";
+            }
+            else
+            {
+                attrs.Value = "false";
+            }
+            pairXlmJpy.SetAttributeNode(attrs);
+
+            attrs = doc.CreateAttribute("playSoundHighest24h");
+            if (PairXlmJpy.PlaySoundHighest24h)
+            {
+                attrs.Value = "true";
+            }
+            else
+            {
+                attrs.Value = "false";
+            }
+            pairXlmJpy.SetAttributeNode(attrs);
+
+            // 板グルーピング
+            attrs = doc.CreateAttribute("depthGrouping");
+            attrs.Value = PairXlmJpy.DepthGrouping.ToString();
+            pairXlmJpy.SetAttributeNode(attrs);
+
+            //
+            pairs.AppendChild(pairXlmJpy);
+
 
 
             // ////
@@ -12076,11 +12817,13 @@ namespace BitDesk.ViewModels
             #endregion
 
             #region == 特殊注文のデータ保存 ==
+            // TODO
+            // 注文中あるならキャンセルしてダイアログを表示。
 
             SaveIfdocos(PairBtcJpy, _appDataFolder, PairBtcJpy.ThisPair.ToString());
             SaveIfdocos(PairXrpJpy, _appDataFolder, PairXrpJpy.ThisPair.ToString());
-            SaveIfdocos(PairLtcBtc, _appDataFolder, PairLtcBtc.ThisPair.ToString());
-            SaveIfdocos(PairEthBtc, _appDataFolder, PairEthBtc.ThisPair.ToString());
+            SaveIfdocos(PairLtcJpy, _appDataFolder, PairLtcJpy.ThisPair.ToString());
+            SaveIfdocos(PairEthJpy, _appDataFolder, PairEthJpy.ThisPair.ToString());
             SaveIfdocos(PairMonaJpy, _appDataFolder, PairMonaJpy.ThisPair.ToString());
             SaveIfdocos(PairBchJpy, _appDataFolder, PairBchJpy.ThisPair.ToString());
 
@@ -12092,9 +12835,19 @@ namespace BitDesk.ViewModels
             System.Diagnostics.Debug.WriteLine("自動取引データを保存");
             SaveAutoTrades(PairBtcJpy, _appDataFolder, PairBtcJpy.ThisPair.ToString());
 
-            // 自動取引を停止
-            System.Diagnostics.Debug.WriteLine("自動取引を停止");
-            await StopAutoTrade(PairBtcJpy);
+            // TODO
+            // 自動取引、特殊注文で、注文中あるならクローズキャンセルしてダイアログを表示。
+            if (PairBtcJpy.AutoTradeStart)
+            {
+                // 自動取引を停止
+                //System.Diagnostics.Debug.WriteLine("自動取引を停止");
+                //StopAutoTrade(PairBtcJpy);
+
+                // await できないので、クローズ自体をキャンセル。ダイアログを表示したい。
+                //System.Diagnostics.Debug.WriteLine("自動取引がオンなので、WindowCloseをキャンセル。");
+                e.Cancel = true;
+                return;
+            }
 
             #endregion
         }
@@ -12176,13 +12929,15 @@ namespace BitDesk.ViewModels
 
             UpdateIfdocos(PairXrpJpy);
 
-            UpdateIfdocos(PairLtcBtc);
+            UpdateIfdocos(PairLtcJpy);
 
-            UpdateIfdocos(PairEthBtc);
+            UpdateIfdocos(PairEthJpy);
 
             UpdateIfdocos(PairMonaJpy);
 
             UpdateIfdocos(PairBchJpy);
+
+            UpdateIfdocos(PairXlmJpy);
 
             //
             //UpdateAutoTrade(PairBtcJpy);
@@ -12657,7 +13412,14 @@ namespace BitDesk.ViewModels
                                 AssetBchAmount = ast.Amount;
                                 AssetBchFreeAmount = ast.FreeAmount;
                             }
+                            else if (ast.Name == "xlm")
+                            {
+                                ast.NameText = "ステラルーメン";
 
+                                AssetXlmName = ast.Name;
+                                AssetXlmAmount = ast.Amount;
+                                AssetXlmFreeAmount = ast.FreeAmount;
+                            }
                         }
 
 
@@ -14614,7 +15376,7 @@ namespace BitDesk.ViewModels
             var ltp = PairBtcJpy.Ltp;
 
             // 取引単位
-            decimal defaultAmount = 0.0001M;
+            decimal defaultAmount = 0.001M;
             // 取引幅
             decimal defaultHaba = pair.AutoTradeDefaultHaba;
             // 利確幅
@@ -14781,6 +15543,8 @@ namespace BitDesk.ViewModels
                     }
 
                 }
+
+                if (pair.AutoTradeStart == false) continue; //要
 
                 // 発注
                 // 要売り発注リスト
@@ -15219,7 +15983,10 @@ namespace BitDesk.ViewModels
                     {
                         if ((position.BuyIsDone == false) && (position.SellIsDone == false))
                         {
-                            if (ltp >= position.BuyPrice)
+                            // 最新をチェック
+                            ltp = pair.Ltp;
+
+                            if (ltp > position.BuyPrice)
                             {
                                 // 注文発注
                                 OrderResult res = await _priApi.MakeOrder(_autoTradeApiKey, _autoTradeSecret, pair.ThisPair.ToString(), position.BuyAmount, position.BuyPrice, position.BuySide, "limit");
@@ -15321,7 +16088,7 @@ namespace BitDesk.ViewModels
                         // 予想利益額
                         position.ShushiAmount = (position.SellPrice * position.SellAmount) - (position.BuyPrice * position.BuyAmount);
 
-                        if (ltp >= position.BuyPrice)
+                        if (ltp > position.BuyPrice)
                         {
                             //発注数制限対策 
                             if ((ltp - position.BuyPrice) <= defaultRikaku)
@@ -16188,7 +16955,7 @@ namespace BitDesk.ViewModels
                     if (ListOhlcvsOneDay != null)
                         OhlcvsOneDayXrp = ListOhlcvsOneDay;
                 }
-                else if (pair == Pairs.eth_btc)
+                else if (pair == Pairs.eth_jpy)
                 {
                     if (ListOhlcvsOneHour != null)
                         OhlcvsOneHourEth = ListOhlcvsOneHour;
@@ -16206,11 +16973,7 @@ namespace BitDesk.ViewModels
                     if (ListOhlcvsOneDay != null)
                         OhlcvsOneDayMona = ListOhlcvsOneDay;
                 }
-                else if (pair == Pairs.mona_btc)
-                {
-                    //
-                }
-                else if (pair == Pairs.ltc_btc)
+                else if (pair == Pairs.ltc_jpy)
                 {
                     if (ListOhlcvsOneHour != null)
                         OhlcvsOneHourLtc = ListOhlcvsOneHour;
@@ -16218,10 +16981,6 @@ namespace BitDesk.ViewModels
                         OhlcvsOneMinLtc = ListOhlcvsOneMin;
                     if (ListOhlcvsOneDay != null)
                         OhlcvsOneDayLtc = ListOhlcvsOneDay;
-                }
-                else if (pair == Pairs.bcc_btc)
-                {
-                    //
                 }
                 else if (pair == Pairs.bcc_jpy)
                 {
@@ -16231,6 +16990,15 @@ namespace BitDesk.ViewModels
                         OhlcvsOneMinBch = ListOhlcvsOneMin;
                     if (ListOhlcvsOneDay != null)
                         OhlcvsOneDayBch = ListOhlcvsOneDay;
+                }
+                else if (pair == Pairs.xlm_jpy)
+                {
+                    if (ListOhlcvsOneHour != null)
+                        OhlcvsOneHourXlm = ListOhlcvsOneHour;
+                    if (ListOhlcvsOneMin != null)
+                        OhlcvsOneMinXlm = ListOhlcvsOneMin;
+                    if (ListOhlcvsOneDay != null)
+                        OhlcvsOneDayXlm = ListOhlcvsOneDay;
                 }
 
             }
@@ -16270,7 +17038,7 @@ namespace BitDesk.ViewModels
                     {
                         lst = OhlcvsOneMinXrp;
                     }
-                    else if (pair == Pairs.eth_btc)
+                    else if (pair == Pairs.eth_jpy)
                     {
                         lst = OhlcvsOneMinEth;
                     }
@@ -16278,21 +17046,17 @@ namespace BitDesk.ViewModels
                     {
                         lst = OhlcvsOneMinMona;
                     }
-                    else if (pair == Pairs.mona_btc)
-                    {
-                        //
-                    }
-                    else if (pair == Pairs.ltc_btc)
+                    else if (pair == Pairs.ltc_jpy)
                     {
                         lst = OhlcvsOneMinLtc;
-                    }
-                    else if (pair == Pairs.bcc_btc)
-                    {
-                        //
                     }
                     else if (pair == Pairs.bcc_jpy)
                     {
                         lst = OhlcvsOneMinBch;
+                    }
+                    else if (pair == Pairs.xlm_jpy)
+                    {
+                        lst = OhlcvsOneMinXlm;
                     }
 
                     // 一時間の期間か１日の期間
@@ -16331,7 +17095,7 @@ namespace BitDesk.ViewModels
                     {
                         lst = OhlcvsOneHourXrp;
                     }
-                    else if (pair == Pairs.eth_btc)
+                    else if (pair == Pairs.eth_jpy)
                     {
                         lst = OhlcvsOneHourEth;
                     }
@@ -16339,21 +17103,17 @@ namespace BitDesk.ViewModels
                     {
                         lst = OhlcvsOneHourMona;
                     }
-                    else if (pair == Pairs.mona_btc)
-                    {
-                        //
-                    }
-                    else if (pair == Pairs.ltc_btc)
+                    else if (pair == Pairs.ltc_jpy)
                     {
                         lst = OhlcvsOneHourLtc;
-                    }
-                    else if (pair == Pairs.bcc_btc)
-                    {
-                        //
                     }
                     else if (pair == Pairs.bcc_jpy)
                     {
                         lst = OhlcvsOneHourBch;
+                    }
+                    else if (pair == Pairs.xlm_jpy)
+                    {
+                        lst = OhlcvsOneHourXlm;
                     }
 
                     // １日の期間か3日か１週間の期間
@@ -16388,7 +17148,7 @@ namespace BitDesk.ViewModels
                     {
                         lst = OhlcvsOneDayXrp;
                     }
-                    else if (pair == Pairs.eth_btc)
+                    else if (pair == Pairs.eth_jpy)
                     {
                         lst = OhlcvsOneDayEth;
                     }
@@ -16396,21 +17156,17 @@ namespace BitDesk.ViewModels
                     {
                         lst = OhlcvsOneDayMona;
                     }
-                    else if (pair == Pairs.mona_btc)
-                    {
-                        //
-                    }
-                    else if (pair == Pairs.ltc_btc)
+                    else if (pair == Pairs.ltc_jpy)
                     {
                         lst = OhlcvsOneDayLtc;
-                    }
-                    else if (pair == Pairs.bcc_btc)
-                    {
-                        //
                     }
                     else if (pair == Pairs.bcc_jpy)
                     {
                         lst = OhlcvsOneDayBch;
+                    }
+                    else if (pair == Pairs.xlm_jpy)
+                    {
+                        lst = OhlcvsOneDayXlm;
                     }
 
                     // 1ヵ月、2ヵ月、１年、５年の期間
@@ -16484,11 +17240,11 @@ namespace BitDesk.ViewModels
                         chartAxisY = ChartAxisYXrpJpy;
 
                     }
-                    else if (pair == Pairs.eth_btc)
+                    else if (pair == Pairs.eth_jpy)
                     {
-                        chartSeries = ChartSeriesEthBtc;
-                        chartAxisX = ChartAxisXEthBtc;
-                        chartAxisY = ChartAxisYEthBtc;
+                        chartSeries = ChartSeriesEthJpy;
+                        chartAxisX = ChartAxisXEthJpy;
+                        chartAxisY = ChartAxisYEthJpy;
                     }
                     else if (pair == Pairs.mona_jpy)
                     {
@@ -16496,25 +17252,23 @@ namespace BitDesk.ViewModels
                         chartAxisX = ChartAxisXMonaJpy;
                         chartAxisY = ChartAxisYMonaJpy;
                     }
-                    else if (pair == Pairs.mona_btc)
+                    else if (pair == Pairs.ltc_jpy)
                     {
-                        //
-                    }
-                    else if (pair == Pairs.ltc_btc)
-                    {
-                        chartSeries = ChartSeriesLtcBtc;
-                        chartAxisX = ChartAxisXLtcBtc;
-                        chartAxisY = ChartAxisYLtcBtc;
-                    }
-                    else if (pair == Pairs.bcc_btc)
-                    {
-                        //
+                        chartSeries = ChartSeriesLtcJpy;
+                        chartAxisX = ChartAxisXLtcJpy;
+                        chartAxisY = ChartAxisYLtcJpy;
                     }
                     else if (pair == Pairs.bcc_jpy)
                     {
                         chartSeries = ChartSeriesBchJpy;
                         chartAxisX = ChartAxisXBchJpy;
                         chartAxisY = ChartAxisYBchJpy;
+                    }
+                    else if (pair == Pairs.xlm_jpy)
+                    {
+                        chartSeries = ChartSeriesXlmJpy;
+                        chartAxisX = ChartAxisXXlmJpy;
+                        chartAxisY = ChartAxisYXlmJpy;
                     }
 
                     if (chartSeries == null)
@@ -16684,7 +17438,7 @@ namespace BitDesk.ViewModels
             foreach (Pairs p in Enum.GetValues(typeof(Pairs)))
             {
                 //Debug.WriteLine(p.ToString());
-
+                /*
                 if ((p == Pairs.mona_btc) || p == Pairs.bcc_btc)
                 {
                     //Debug.WriteLine(p.ToString() + " skipping.");
@@ -16698,9 +17452,14 @@ namespace BitDesk.ViewModels
                     {
                         LoadChart(p, SelectedCandleType);
                     }
-
                 }
+                */
+                bool bln = await GetCandlesticks(p, SelectedCandleType);
 
+                if (bln == true)
+                {
+                    LoadChart(p, SelectedCandleType);
+                }
             }
 
         }
@@ -16819,7 +17578,7 @@ namespace BitDesk.ViewModels
             foreach (Pairs p in Enum.GetValues(typeof(Pairs)))
             {
                 //Debug.WriteLine(p.ToString());
-
+                /*
                 if ((p == Pairs.mona_btc) || p == Pairs.bcc_btc)
                 {
                     //Debug.WriteLine(p.ToString() + " skipping.");
@@ -16829,6 +17588,8 @@ namespace BitDesk.ViewModels
                 {
                     ChangeChartSpan(p);
                 }
+                */
+                ChangeChartSpan(p);
             }
 
         }
@@ -16860,7 +17621,7 @@ namespace BitDesk.ViewModels
                 ListOhlcvsOneMin = OhlcvsOneMinXrp;
                 ListOhlcvsOneDay = OhlcvsOneDayXrp;
             }
-            else if (pair == Pairs.eth_btc)
+            else if (pair == Pairs.eth_jpy)
             {
                 ListOhlcvsOneHour = OhlcvsOneHourEth;
                 ListOhlcvsOneMin = OhlcvsOneMinEth;
@@ -16872,25 +17633,23 @@ namespace BitDesk.ViewModels
                 ListOhlcvsOneMin = OhlcvsOneMinMona;
                 ListOhlcvsOneDay = OhlcvsOneDayMona;
             }
-            else if (pair == Pairs.mona_btc)
-            {
-                //
-            }
-            else if (pair == Pairs.ltc_btc)
+            else if (pair == Pairs.ltc_jpy)
             {
                 ListOhlcvsOneHour = OhlcvsOneHourLtc;
                 ListOhlcvsOneMin = OhlcvsOneMinLtc;
                 ListOhlcvsOneDay = OhlcvsOneDayLtc;
-            }
-            else if (pair == Pairs.bcc_btc)
-            {
-                //
             }
             else if (pair == Pairs.bcc_jpy)
             {
                 ListOhlcvsOneHour = OhlcvsOneHourBch;
                 ListOhlcvsOneMin = OhlcvsOneMinBch;
                 ListOhlcvsOneDay = OhlcvsOneDayBch;
+            }
+            else if (pair == Pairs.xlm_jpy)
+            {
+                ListOhlcvsOneHour = OhlcvsOneHourXlm;
+                ListOhlcvsOneMin = OhlcvsOneMinXlm;
+                ListOhlcvsOneDay = OhlcvsOneDayXlm;
             }
 
             if (ListOhlcvsOneHour == null)
@@ -17173,11 +17932,11 @@ namespace BitDesk.ViewModels
                 chartAxisX = ChartAxisXXrpJpy;
                 chartAxisY = ChartAxisYXrpJpy;
             }
-            else if (pair == Pairs.eth_btc)
+            else if (pair == Pairs.eth_jpy)
             {
-                chartSeries = ChartSeriesEthBtc;
-                chartAxisX = ChartAxisXEthBtc;
-                chartAxisY = ChartAxisYEthBtc;
+                chartSeries = ChartSeriesEthJpy;
+                chartAxisX = ChartAxisXEthJpy;
+                chartAxisY = ChartAxisYEthJpy;
             }
             else if (pair == Pairs.mona_jpy)
             {
@@ -17185,25 +17944,23 @@ namespace BitDesk.ViewModels
                 chartAxisX = ChartAxisXMonaJpy;
                 chartAxisY = ChartAxisYMonaJpy;
             }
-            else if (pair == Pairs.mona_btc)
+            else if (pair == Pairs.ltc_jpy)
             {
-                //
-            }
-            else if (pair == Pairs.ltc_btc)
-            {
-                chartSeries = ChartSeriesLtcBtc;
-                chartAxisX = ChartAxisXLtcBtc;
-                chartAxisY = ChartAxisYLtcBtc;
-            }
-            else if (pair == Pairs.bcc_btc)
-            {
-                //
+                chartSeries = ChartSeriesLtcJpy;
+                chartAxisX = ChartAxisXLtcJpy;
+                chartAxisY = ChartAxisYLtcJpy;
             }
             else if (pair == Pairs.bcc_jpy)
             {
                 chartSeries = ChartSeriesBchJpy;
                 chartAxisX = ChartAxisXBchJpy;
                 chartAxisY = ChartAxisYBchJpy;
+            }
+            else if (pair == Pairs.xlm_jpy)
+            {
+                chartSeries = ChartSeriesXlmJpy;
+                chartAxisX = ChartAxisXXlmJpy;
+                chartAxisY = ChartAxisYXlmJpy;
             }
 
             if (chartSeries == null)
@@ -17289,11 +18046,11 @@ namespace BitDesk.ViewModels
                 chartAxisX = ChartAxisXXrpJpy;
                 chartAxisY = ChartAxisYXrpJpy;
             }
-            else if (pair == Pairs.eth_btc)
+            else if (pair == Pairs.eth_jpy)
             {
-                chartSeries = ChartSeriesEthBtc;
-                chartAxisX = ChartAxisXEthBtc;
-                chartAxisY = ChartAxisYEthBtc;
+                chartSeries = ChartSeriesEthJpy;
+                chartAxisX = ChartAxisXEthJpy;
+                chartAxisY = ChartAxisYEthJpy;
             }
             else if (pair == Pairs.mona_jpy)
             {
@@ -17301,25 +18058,23 @@ namespace BitDesk.ViewModels
                 chartAxisX = ChartAxisXMonaJpy;
                 chartAxisY = ChartAxisYMonaJpy;
             }
-            else if (pair == Pairs.mona_btc)
+            else if (pair == Pairs.ltc_jpy)
             {
-                //
-            }
-            else if (pair == Pairs.ltc_btc)
-            {
-                chartSeries = ChartSeriesLtcBtc;
-                chartAxisX = ChartAxisXLtcBtc;
-                chartAxisY = ChartAxisYLtcBtc;
-            }
-            else if (pair == Pairs.bcc_btc)
-            {
-                //
+                chartSeries = ChartSeriesLtcJpy;
+                chartAxisX = ChartAxisXLtcJpy;
+                chartAxisY = ChartAxisYLtcJpy;
             }
             else if (pair == Pairs.bcc_jpy)
             {
                 chartSeries = ChartSeriesBchJpy;
                 chartAxisX = ChartAxisXBchJpy;
                 chartAxisY = ChartAxisYBchJpy;
+            }
+            else if (pair == Pairs.xlm_jpy)
+            {
+                chartSeries = ChartSeriesXlmJpy;
+                chartAxisX = ChartAxisXXlmJpy;
+                chartAxisY = ChartAxisYXlmJpy;
             }
 
             if (chartSeries == null)
@@ -17565,9 +18320,6 @@ namespace BitDesk.ViewModels
             if (pair.AutoTradeStart == false)
                 return true;
 
-            // 更新ループを止める。
-            pair.AutoTradeStart = false;
-
             if (autoTrades.Count > 0)
             {
                 // 買い注文をすべてキャンセルする。
@@ -17619,7 +18371,7 @@ namespace BitDesk.ViewModels
                             break;
                         }
 
-                        c = c + 1;
+                        c += 1;
                     }
 
                     foreach (var list in ListOfList)
@@ -17647,10 +18399,21 @@ namespace BitDesk.ViewModels
                                 });
                                 */
                             }
+                            else
+                            {
+                                System.Diagnostics.Debug.WriteLine("'CancelOrders' returned 0 list.");
+                            }
+                        }
+                        else
+                        {
+                            System.Diagnostics.Debug.WriteLine("'CancelOrders' returned null.");
                         }
                     }
                 }
             }
+
+            // 
+            pair.AutoTradeStart = false;
 
             // 情報表示のリセット
             //pair.AutoTradeActiveOrders = 0;
