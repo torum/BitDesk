@@ -5074,6 +5074,7 @@
                     <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" VerticalAlignment="Top" Padding="12" Style="{DynamicResource CustomScrollViewerStyle}">
 
                         <StackPanel>
+
                             <Border BorderBrush="DimGray" BorderThickness="0 0 0 0.5" Margin="3" Padding="3">
                                 <Label Padding="0" Content="このアプリケーションについて" Style="{DynamicResource SectionTitle}"/>
                             </Border>
@@ -5113,7 +5114,14 @@
                                 <Run Text=""></Run>
                                 <Hyperlink NavigateUri="https://torum.github.io/BitDesk/" RequestNavigate="Hyperlink_RequestNavigate">https://torum.github.io/BitDesk/</Hyperlink>
                             </TextBlock>
-<!--
+                            
+                            <Border BorderBrush="DimGray" BorderThickness="0 0 0 0.5" Margin="3" Padding="3">
+                                <Label Padding="0" Content="バージョン" Style="{DynamicResource SectionTitle}"/>
+                            </Border>
+
+                            <TextBlock Padding="6" TextWrapping="Wrap" Style="{DynamicResource DefaultTextBlockStyle}" Text="{Binding AppVer}">
+                            </TextBlock>
+                            <!--
                             <Border BorderBrush="DimGray" BorderThickness="0 0 0 0.5" Margin="3" Padding="3">
                                 <Label Padding="0" Content="更新情報（Twitter）" Style="{DynamicResource SectionTitle}"/>
                             </Border>

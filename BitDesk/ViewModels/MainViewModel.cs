@@ -27,7 +27,7 @@ using Microsoft.Win32;
 namespace BitDesk.ViewModels
 {
 
-    #region == その他・定数・クラス等 ==
+    #region == 定数・クラス等 ==
 
     // 通貨ペア
     public enum Pairs
@@ -2203,21 +2203,20 @@ namespace BitDesk.ViewModels
         #region == 基本 ==
 
         // テスト用
-        private decimal _initPrice = 261167M;//421937M;//117937M;
+        private decimal _initPrice = 361167M;//421937M;//117937M;
 
         // プライベートモード表示切替（自動取引表示）
         public bool ExperimentalMode
         {
             get
             {
-                
+
                 #if DEBUG
-                return true;
+                    return false;
                 #else
-                return false; 
+                    return false; 
                 #endif
                 
-                // return true;
             }
         }
 
@@ -2240,7 +2239,14 @@ namespace BitDesk.ViewModels
         }
 
         // Application version
-        private string _appVer = "0.0.0.5";
+        private string _appVer = "0.0.5.1";
+        public string AppVer
+        {
+            get
+            {
+                return _appVer;
+            }
+        }
 
         // Application name
         private string _appName = "BitDesk";
@@ -10796,7 +10802,7 @@ namespace BitDesk.ViewModels
                                     else
                                     {
                                         // 起動後初期値セット
-                                        PairXlmJpy.AlarmPlus = ((tick.LTP / 100M) * 100M) + 1000M;
+                                        PairXlmJpy.AlarmPlus = ((tick.LTP / 100M) * 100M) + 1M;
                                     }
 
                                     if (PairXlmJpy.AlarmMinus > 0)
@@ -10815,13 +10821,13 @@ namespace BitDesk.ViewModels
                                     else
                                     {
                                         // 起動後初期値セット
-                                        PairXlmJpy.AlarmMinus = ((tick.LTP / 100M) * 100M) - 1000M;
+                                        PairXlmJpy.AlarmMinus = ((tick.LTP / 100M) * 100M) - 1M;
                                     }
 
                                     // 起動後最高値
                                     if (tick.LTP >= PairXlmJpy.HighestPrice)
                                     {
-                                        if ((PairXlmJpy.TickHistories.Count > 25) && ((PairXlmJpy.BasePrice + 200M) < tick.LTP))
+                                        if ((PairXlmJpy.TickHistories.Count > 25) && ((PairXlmJpy.BasePrice + 0.1M) < tick.LTP))
                                         {
                                             PairXlmJpy.HighLowInfoTextColorFlag = true;
                                             PairXlmJpy.HighLowInfoText = "⇑⇑⇑　起動後最高値更新 " + PairXlmJpy.PairString;
@@ -10839,7 +10845,7 @@ namespace BitDesk.ViewModels
                                     // 起動後最安値
                                     if (tick.LTP <= PairXlmJpy.LowestPrice)
                                     {
-                                        if ((PairXlmJpy.TickHistories.Count > 25) && ((PairXlmJpy.BasePrice - 200M) > tick.LTP))
+                                        if ((PairXlmJpy.TickHistories.Count > 25) && ((PairXlmJpy.BasePrice - 0.1M) > tick.LTP))
                                         {
                                             PairXlmJpy.HighLowInfoTextColorFlag = false;
                                             PairXlmJpy.HighLowInfoText = "⇓⇓⇓　起動後最安値更新 " + PairXlmJpy.PairString;
@@ -11257,7 +11263,7 @@ namespace BitDesk.ViewModels
                             }
                         }
 
-                        // TradeHistory
+                        // AutoTrade
                         var auto = user.Element("AutoTrade");
                         if (auto != null)
                         {
@@ -12090,14 +12096,18 @@ namespace BitDesk.ViewModels
 
             #region == 自動取引のデータをロード ==
 
-            // TODO test
-            LoadAutoTrades(PairBtcJpy, _appDataFolder, PairBtcJpy.ThisPair.ToString());
-
-            if (PairBtcJpy.AutoTrades.Count > 0)
+            if (ExperimentalMode)
             {
-                //PairBtcJpy.AutoTradeStart = true;
-                StartAutoTradeCommand_Execute();
+                // TODO test
+                LoadAutoTrades(PairBtcJpy, _appDataFolder, PairBtcJpy.ThisPair.ToString());
+
+                if (PairBtcJpy.AutoTrades.Count > 0)
+                {
+                    //PairBtcJpy.AutoTradeStart = true;
+                    StartAutoTradeCommand_Execute();
+                }
             }
+
             
             #endregion
 
@@ -12831,22 +12841,25 @@ namespace BitDesk.ViewModels
 
             #region == 自動取引のデータ保存 ==
 
-            // データをを保存 (現在の所、BTC限定)
-            System.Diagnostics.Debug.WriteLine("自動取引データを保存");
-            SaveAutoTrades(PairBtcJpy, _appDataFolder, PairBtcJpy.ThisPair.ToString());
-
-            // TODO
-            // 自動取引、特殊注文で、注文中あるならクローズキャンセルしてダイアログを表示。
-            if (PairBtcJpy.AutoTradeStart)
+            if (ExperimentalMode)
             {
-                // 自動取引を停止
-                //System.Diagnostics.Debug.WriteLine("自動取引を停止");
-                //StopAutoTrade(PairBtcJpy);
+                // データをを保存 (現在の所、BTC限定)
+                System.Diagnostics.Debug.WriteLine("自動取引データを保存");
+                SaveAutoTrades(PairBtcJpy, _appDataFolder, PairBtcJpy.ThisPair.ToString());
 
-                // await できないので、クローズ自体をキャンセル。ダイアログを表示したい。
-                //System.Diagnostics.Debug.WriteLine("自動取引がオンなので、WindowCloseをキャンセル。");
-                e.Cancel = true;
-                return;
+                // TODO
+                // 自動取引、特殊注文で、注文中あるならクローズキャンセルしてダイアログを表示。
+                if (PairBtcJpy.AutoTradeStart)
+                {
+                    // 自動取引を停止
+                    //System.Diagnostics.Debug.WriteLine("自動取引を停止");
+                    //StopAutoTrade(PairBtcJpy);
+
+                    // await できないので、クローズ自体をキャンセル。ダイアログを表示したい。
+                    //System.Diagnostics.Debug.WriteLine("自動取引がオンなので、WindowCloseをキャンセル。");
+                    e.Cancel = true;
+                    return;
+                }
             }
 
             #endregion
@@ -15886,29 +15899,24 @@ namespace BitDesk.ViewModels
                 // 売り発注処理
                 if (needSellList.Count > 0)
                 {
-
                     needSellList.Reverse();
 
                     foreach (var nsl in needSellList)
                     {
-
                         // 最新をチェック
                         ltp = pair.Ltp;
 
-                        /*
-                        // 万一、LTPが売りより上がっていたら。
-                        if (ltp > nsl.SellPrice)
+                        // 万一、LTPが売りより上がっていたら。（間を開けて再起動した場合など）
+                        if ((ltp > nsl.SellPrice) && nsl.BuyIsDone)
                         {
-                            // ltpよりちょっと上にする。
-                            nsl.SellPrice = ltp;
-
-                            // 上がり過ぎを抑える
-                            if ((nsl.SellPrice - nsl.BuyPrice) >= (defaultRikaku * 3))
+                            if (ltp >= (nsl.SellPrice + defaultRikaku))
                             {
-                                nsl.SellPrice = nsl.BuyPrice + (defaultRikaku * 3);
+                                // ltpよりちょっと下の売り価格に設定にする。
+                                Random rnd = new Random();
+                                int dice = rnd.Next(1, 7);
+                                nsl.SellPrice = ltp - dice;
                             }
                         }
-                        */
 
                         // 予想更新
                         nsl.ShushiAmount = (nsl.SellPrice * nsl.SellAmount) - (nsl.BuyPrice * nsl.BuyAmount);
@@ -15975,6 +15983,8 @@ namespace BitDesk.ViewModels
 
                 }
 
+                if (pair.AutoTradeStart == false) continue; //要
+
                 // 買い発注処理 (リミット内で)
                 if ((ltp < pair.AutoTradeUpperLimit) && (ltp > pair.AutoTradeLowerLimit))
                 {
@@ -15986,10 +15996,15 @@ namespace BitDesk.ViewModels
                             // 最新をチェック
                             ltp = pair.Ltp;
 
+                            Random rnd = new Random();
+                            int dice = rnd.Next(1, 7);
+                            // 買い価格の最小一桁をランダム化
+                            decimal realBuyPrice = position.BuyPrice + dice;
+
                             if (ltp > position.BuyPrice)
                             {
                                 // 注文発注
-                                OrderResult res = await _priApi.MakeOrder(_autoTradeApiKey, _autoTradeSecret, pair.ThisPair.ToString(), position.BuyAmount, position.BuyPrice, position.BuySide, "limit");
+                                OrderResult res = await _priApi.MakeOrder(_autoTradeApiKey, _autoTradeSecret, pair.ThisPair.ToString(), position.BuyAmount, realBuyPrice, position.BuySide, "limit");
 
                                 if (res != null)
                                 {
@@ -16062,25 +16077,28 @@ namespace BitDesk.ViewModels
                         position.SellSide = "sell";
                         position.SellAmount = defaultAmount;//SortedList[i].SellAmount;
 
-                        // 同じ条件で、再度注文。ただし、現在値より下の場合
+                        // 同じ条件で、再度注文。(現在値より下の場合)
                         position.BuyPrice = ro.BuyPrice;
 
-                        position.SellPrice = position.BuyPrice + defaultRikaku;
+                        Random rnd = new Random();
+                        int dice = rnd.Next(1, 7);
+                        // 買い価格の最小一桁をランダム化
+                        decimal realBuyPrice = position.BuyPrice + dice;
+
+                        dice = rnd.Next(1, 7);
+                        // 売り価格の最小一桁をランダム化
+                        position.SellPrice = position.BuyPrice + defaultRikaku + dice;
 
                         // 最新をチェック
                         ltp = pair.Ltp;
-
                         /*
-                        // 万一、LTPが売りより上がっていたら。
+                        // 万一、LTPが売りより上がっていたら。（間を開けて再起動した場合など）
                         if (ltp > position.SellPrice)
                         {
-                            // ltpよりちょっと上にする。
-                            position.SellPrice = ltp;
-
-                            // 上がり過ぎを抑える
-                            if ((position.SellPrice - position.BuyPrice) >= (defaultRikaku * 3))
+                            if (ltp >= (position.SellPrice + defaultRikaku))
                             {
-                                position.SellPrice = position.BuyPrice + (defaultRikaku * 3);
+                                // ltpよりちょっと下の売り価格に設定にする。
+                                position.SellPrice = ltp - dice;
                             }
                         }
                         */
@@ -16094,7 +16112,7 @@ namespace BitDesk.ViewModels
                             if ((ltp - position.BuyPrice) <= defaultRikaku)
                             { 
                                 // 注文発注
-                                OrderResult res = await _priApi.MakeOrder(_autoTradeApiKey, _autoTradeSecret, pair.ThisPair.ToString(), position.BuyAmount, position.BuyPrice, position.BuySide, "limit");
+                                OrderResult res = await _priApi.MakeOrder(_autoTradeApiKey, _autoTradeSecret, pair.ThisPair.ToString(), position.BuyAmount, realBuyPrice, position.BuySide, "limit");
 
                                 if (res != null)
                                 {
@@ -18311,7 +18329,8 @@ namespace BitDesk.ViewModels
         {
             System.Diagnostics.Debug.WriteLine("Stopping AutoTrade.");
 
-            if (AutoTradeApiKeyIsSet == false) return true;
+            if (AutoTradeApiKeyIsSet == false) 
+                return true;
 
             var pair = p;
             var ltp = p.Ltp;
@@ -18319,6 +18338,8 @@ namespace BitDesk.ViewModels
 
             if (pair.AutoTradeStart == false)
                 return true;
+
+            pair.AutoTradeStart = false;
 
             if (autoTrades.Count > 0)
             {
@@ -18411,9 +18432,6 @@ namespace BitDesk.ViewModels
                     }
                 }
             }
-
-            // 
-            pair.AutoTradeStart = false;
 
             // 情報表示のリセット
             //pair.AutoTradeActiveOrders = 0;
