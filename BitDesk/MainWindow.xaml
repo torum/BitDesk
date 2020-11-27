@@ -994,7 +994,7 @@
 
                                         <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Margin="3 0 3 0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Visibility="{Binding IsXrpJpyAssetVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
 
-                                            <TextBlock Margin="0" Padding="0" Text="{Binding AssetXRPFreeAmount, Mode=OneWay, StringFormat={}{0:N5}}" VerticalAlignment="Bottom" Style="{DynamicResource DefaultTextBlockStyle}"/>
+                                            <TextBlock Margin="0" Padding="0" Text="{Binding AssetXRPFreeAmount, Mode=OneWay, StringFormat={}{0:N4}}" VerticalAlignment="Bottom" Style="{DynamicResource DefaultTextBlockStyle}"/>
                                             <Label Padding="0" Content=" XRP" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                             <Label Padding="0" Content=" 利用可 /" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                         </StackPanel>
@@ -1013,7 +1013,7 @@
 
                                         <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Margin="3 0 3 0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Visibility="{Binding IsMonaJpyAssetVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
 
-                                            <TextBlock Margin="0" Padding="0" Text="{Binding AssetMonaFreeAmount, Mode=OneWay, StringFormat={}{0:N5}}" VerticalAlignment="Bottom" Style="{DynamicResource DefaultTextBlockStyle}"/>
+                                            <TextBlock Margin="0" Padding="0" Text="{Binding AssetMonaFreeAmount, Mode=OneWay, StringFormat={}{0:N4}}" VerticalAlignment="Bottom" Style="{DynamicResource DefaultTextBlockStyle}"/>
                                             <Label Padding="0" Content=" Mona" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                             <Label Padding="0" Content=" 利用可 /" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                         </StackPanel>
@@ -1032,7 +1032,7 @@
 
                                         <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Margin="3 0 3 0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Visibility="{Binding IsBchJpyAssetVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
 
-                                            <TextBlock Margin="0" Padding="0" Text="{Binding AssetBchFreeAmount, Mode=OneWay, StringFormat={}{0:N5}}" VerticalAlignment="Bottom" Style="{DynamicResource DefaultTextBlockStyle}"/>
+                                            <TextBlock Margin="0" Padding="0" Text="{Binding AssetBchFreeAmount, Mode=OneWay, StringFormat={}{0:N4}}" VerticalAlignment="Bottom" Style="{DynamicResource DefaultTextBlockStyle}"/>
                                             <Label Padding="0" Content=" BCH" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                             <Label Padding="0" Content=" 利用可 /" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                         </StackPanel>
@@ -1051,7 +1051,7 @@
 
                                         <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" Margin="3 0 3 0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Visibility="{Binding IsEthJpyAssetVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
 
-                                            <TextBlock Margin="0" Padding="0" Text="{Binding AssetEthFreeAmount, Mode=OneWay, StringFormat={}{0:N5}}" VerticalAlignment="Bottom" Style="{DynamicResource DefaultTextBlockStyle}"/>
+                                            <TextBlock Margin="0" Padding="0" Text="{Binding AssetEthFreeAmount, Mode=OneWay, StringFormat={}{0:N4}}" VerticalAlignment="Bottom" Style="{DynamicResource DefaultTextBlockStyle}"/>
                                             <Label Padding="0" Content=" ETH" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                             <Label Padding="0" Content=" 利用可 /" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                         </StackPanel>
@@ -1070,7 +1070,7 @@
 
                                         <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" Margin="3 0 3 0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Visibility="{Binding IsLtcJpyAssetVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
 
-                                            <TextBlock Margin="0" Padding="0" Text="{Binding AssetLtcFreeAmount, Mode=OneWay, StringFormat={}{0:N5}}" VerticalAlignment="Bottom" Style="{DynamicResource DefaultTextBlockStyle}"/>
+                                            <TextBlock Margin="0" Padding="0" Text="{Binding AssetLtcFreeAmount, Mode=OneWay, StringFormat={}{0:N4}}" VerticalAlignment="Bottom" Style="{DynamicResource DefaultTextBlockStyle}"/>
                                             <Label Padding="0" Content=" LTC" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                             <Label Padding="0" Content=" 利用可 /" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                         </StackPanel>
@@ -1089,7 +1089,7 @@
 
                                         <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Margin="3 0 3 0" VerticalAlignment="Bottom" HorizontalAlignment="Right" Visibility="{Binding IsXlmJpyAssetVisible, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
 
-                                            <TextBlock Margin="0" Padding="0" Text="{Binding AssetXlmFreeAmount, Mode=OneWay, StringFormat={}{0:N5}}" VerticalAlignment="Bottom" Style="{DynamicResource DefaultTextBlockStyle}"/>
+                                            <TextBlock Margin="0" Padding="0" Text="{Binding AssetXlmFreeAmount, Mode=OneWay, StringFormat={}{0:N4}}" VerticalAlignment="Bottom" Style="{DynamicResource DefaultTextBlockStyle}"/>
                                             <Label Padding="0" Content=" XLM" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                             <Label Padding="0" Content=" 利用可 /" VerticalAlignment="Bottom" Style="{DynamicResource DefaultLabelStyle}"/>
                                         </StackPanel>
@@ -4814,7 +4814,7 @@
                                         <TextBox Grid.Row="2" Grid.Column="1" Margin="3" Text="{Binding TradeHistorySecret}"></TextBox>
 
                                     </Grid>
-
+<!--
                                     <Grid Margin="6 6 9 12" HorizontalAlignment="Stretch" Visibility="{Binding ExperimentalMode, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
 
                                         <Grid.RowDefinitions>
@@ -4841,7 +4841,7 @@
                                         <TextBox Grid.Row="2" Grid.Column="1" Margin="3" Text="{Binding AutoTradeSecret}"></TextBox>
 
                                     </Grid>
-
+-->
 
                                 </StackPanel>
 

@@ -27,6 +27,7 @@ using Microsoft.Win32;
 namespace BitDesk.ViewModels
 {
     /// <summary>
+    /// v0.5.4 自動取引の削除洩れを削除。資産情報の小数点以下の桁数を修正。
     /// v0.5.3 自動取引を削除。自動取引はBitAutoへ移行。
     /// v0.5.2 注文リストの約定済みアイテムは削除するように変更（CPU負荷を下げる為）。
     /// </summary>
@@ -2243,7 +2244,7 @@ namespace BitDesk.ViewModels
         }
 
         // Application version
-        private string _appVer = "0.5.3";
+        private string _appVer = "0.5.4";
         public string AppVer
         {
             get
