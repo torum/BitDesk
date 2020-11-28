@@ -14,7 +14,7 @@
                   Title="{Binding AppTitle}" 
                   
                   Height="450" Width="800"
-                  MinWidth="430" MinHeight="474"
+                  MinWidth="410" MinHeight="474"
         
                   Background="Transparent"
                   BorderThickness="0.1"
@@ -82,26 +82,7 @@
 <!--
                         <TextBlock Text="{Binding AppTitle}" Style="{DynamicResource DefaultTextBlockStyle}" VerticalAlignment="Center" Padding="12 0 0 0"/>
 -->
-                        <!-- 自動取引の情報　表示 
-                        <Border Visibility="{Binding ExperimentalMode, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
-                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="24 6 3 3" Visibility="{Binding ActivePair.AutoTradeStart, Converter={StaticResource BoolToVisibilityCollapsedConverter}}">
 
-                                <TextBlock Style="{DynamicResource DefaultTextBlockStyle}" VerticalAlignment="Center">
-                                        <Run Text="["></Run>
-                                        <Run Text="{Binding ActivePair.AutoTradeBuyOrders,Mode=OneWay}"></Run>
-                                        <Run Text=" "></Run>
-                                        <Run Text="{Binding ActivePair.AutoTradeSellOrders,Mode=OneWay}"></Run>
-                                        <Run Text=" "></Run>
-                                        <Run Text="{Binding ActivePair.AutoTradeErrOrders,Mode=OneWay}"></Run>
-
-                                        <Run Text="]"></Run>
-                                </TextBlock>
-                                <Label Content=" 損益：" Margin="6 0 0 0" Style="{DynamicResource DefaultLabelStyle}" VerticalAlignment="Center"></Label>
-                                <TextBlock Text="{Binding ActivePair.AutoTradeProfit, Mode=OneWay, StringFormat=0.#############################}" Style="{DynamicResource DefaultTextBlockStyle}" VerticalAlignment="Center"></TextBlock>
-
-                            </StackPanel>
-                        </Border>
--->
                     </StackPanel>
 
                     <!-- システムメニュー -->
@@ -210,7 +191,7 @@
                         <Button x:Name="MaxButton" Style="{DynamicResource PathButton}" Width="18" Height="18" Margin="3" Opacity="0.7" Click="MaxButton_Click" ToolTip="最大化(Alt+Space, X)">
                             M4,4H20V20H4V4M6,8V18H18V8H6Z
                         </Button>
-                        <Button x:Name="CloseButton" Style="{DynamicResource PathButton}" Width="18" Height="18" Margin="3" Opacity="0.7" Click="CloseButton_Click" ToolTip="閉じる(Alt+Space, C)/(Alt+F4)">
+                        <Button x:Name="CloseButton" Style="{DynamicResource PathButton}" Visibility="{Binding NotMinMode,Converter={StaticResource BoolToVisibilityCollapsedConverter}}" Width="18" Height="18" Margin="3" Opacity="0.7" Click="CloseButton_Click" ToolTip="閉じる(Alt+Space, C)/(Alt+F4)">
                             M13.46,12L19,17.54V19H17.54L12,13.46L6.46,19H5V17.54L10.54,12L5,6.46V5H6.46L12,10.54L17.54,5H19V6.46L13.46,12Z
                         </Button>
 

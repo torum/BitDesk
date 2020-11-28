@@ -27,6 +27,7 @@ using Microsoft.Win32;
 namespace BitDesk.ViewModels
 {
     /// <summary>
+    /// v0.5.5 パスワードが設定されていない場合はAPI情報を保存しないようにした。起動時の設定ファイルの消滅案件対策。最小幅を少し変更。
     /// v0.5.4 自動取引の削除洩れを削除。資産情報の小数点以下の桁数を修正。
     /// v0.5.3 自動取引を削除。自動取引はBitAutoへ移行。
     /// v0.5.2 注文リストの約定済みアイテムは削除するように変更（CPU負荷を下げる為）。
@@ -2244,7 +2245,7 @@ namespace BitDesk.ViewModels
         }
 
         // Application version
-        private string _appVer = "0.5.4";
+        private string _appVer = "0.5.5";
         public string AppVer
         {
             get
@@ -11995,7 +11996,7 @@ namespace BitDesk.ViewModels
 
 
             // サスペンド検知イベント
-            SystemEvents.PowerModeChanged += SystemEvents_PowerModeChanged;
+            //SystemEvents.PowerModeChanged += SystemEvents_PowerModeChanged;
 
 
             // ループ再生開始　
@@ -12117,107 +12118,110 @@ namespace BitDesk.ViewModels
 
             #region == 認証関連 ==
 
-            // User element
-            XmlElement user = doc.CreateElement(string.Empty, "User", string.Empty);
+            if (!string.IsNullOrEmpty(_realPassword))
+            {
+                // User element
+                XmlElement user = doc.CreateElement(string.Empty, "User", string.Empty);
 
-            // User attributes
-            attrs = doc.CreateAttribute("password");
-            attrs.Value = Encrypt(_realPassword);
-            user.SetAttributeNode(attrs);
+                // User attributes
+                attrs = doc.CreateAttribute("password");
+                attrs.Value = Encrypt(_realPassword);
+                user.SetAttributeNode(attrs);
 
-            // set User element to root.
-            root.AppendChild(user);
+                // set User element to root.
+                root.AppendChild(user);
 
-            // APIキー関連
-            // Orders
-            XmlElement orders = doc.CreateElement(string.Empty, "Orders", string.Empty);
+                // APIキー関連
+                // Orders
+                XmlElement orders = doc.CreateElement(string.Empty, "Orders", string.Empty);
 
-            // Orders attributes
-            attrs = doc.CreateAttribute("key");
-            attrs.Value = Encrypt(_getOrdersApiKey);
-            orders.SetAttributeNode(attrs);
+                // Orders attributes
+                attrs = doc.CreateAttribute("key");
+                attrs.Value = Encrypt(_getOrdersApiKey);
+                orders.SetAttributeNode(attrs);
 
-            attrs = doc.CreateAttribute("secret");
-            attrs.Value = Encrypt(_getOrdersSecret);
-            orders.SetAttributeNode(attrs);
+                attrs = doc.CreateAttribute("secret");
+                attrs.Value = Encrypt(_getOrdersSecret);
+                orders.SetAttributeNode(attrs);
 
-            // set Orders element to user.
-            user.AppendChild(orders);
+                // set Orders element to user.
+                user.AppendChild(orders);
 
-            // Assets
-            XmlElement assets = doc.CreateElement(string.Empty, "Assets", string.Empty);
+                // Assets
+                XmlElement assets = doc.CreateElement(string.Empty, "Assets", string.Empty);
 
-            //  attributes
-            attrs = doc.CreateAttribute("key");
-            attrs.Value = Encrypt(_getAssetsApiKey);
-            assets.SetAttributeNode(attrs);
+                //  attributes
+                attrs = doc.CreateAttribute("key");
+                attrs.Value = Encrypt(_getAssetsApiKey);
+                assets.SetAttributeNode(attrs);
 
-            attrs = doc.CreateAttribute("secret");
-            attrs.Value = Encrypt(_getAssetsSecret);
-            assets.SetAttributeNode(attrs);
+                attrs = doc.CreateAttribute("secret");
+                attrs.Value = Encrypt(_getAssetsSecret);
+                assets.SetAttributeNode(attrs);
 
-            // set Assets element to user.
-            user.AppendChild(assets);
+                // set Assets element to user.
+                user.AppendChild(assets);
 
-            // TradeHistory
-            XmlElement history = doc.CreateElement(string.Empty, "TradeHistory", string.Empty);
+                // TradeHistory
+                XmlElement history = doc.CreateElement(string.Empty, "TradeHistory", string.Empty);
 
-            //  attributes
-            attrs = doc.CreateAttribute("key");
-            attrs.Value = Encrypt(_getTradeHistoryApiKey);
-            history.SetAttributeNode(attrs);
+                //  attributes
+                attrs = doc.CreateAttribute("key");
+                attrs.Value = Encrypt(_getTradeHistoryApiKey);
+                history.SetAttributeNode(attrs);
 
-            attrs = doc.CreateAttribute("secret");
-            attrs.Value = Encrypt(_getTradeHistorySecret);
-            history.SetAttributeNode(attrs);
+                attrs = doc.CreateAttribute("secret");
+                attrs.Value = Encrypt(_getTradeHistorySecret);
+                history.SetAttributeNode(attrs);
 
-            // set  element to user.
-            user.AppendChild(history);
+                // set  element to user.
+                user.AppendChild(history);
 
-            // AutoTrade
-            XmlElement auto = doc.CreateElement(string.Empty, "AutoTrade", string.Empty);
+                // AutoTrade
+                XmlElement auto = doc.CreateElement(string.Empty, "AutoTrade", string.Empty);
 
-            //  attributes
-            attrs = doc.CreateAttribute("key");
-            attrs.Value = Encrypt(_autoTradeApiKey);
-            auto.SetAttributeNode(attrs);
+                //  attributes
+                attrs = doc.CreateAttribute("key");
+                attrs.Value = Encrypt(_autoTradeApiKey);
+                auto.SetAttributeNode(attrs);
 
-            attrs = doc.CreateAttribute("secret");
-            attrs.Value = Encrypt(_autoTradeSecret);
-            auto.SetAttributeNode(attrs);
+                attrs = doc.CreateAttribute("secret");
+                attrs.Value = Encrypt(_autoTradeSecret);
+                auto.SetAttributeNode(attrs);
 
-            // set  element to user.
-            user.AppendChild(auto);
+                // set  element to user.
+                user.AppendChild(auto);
 
-            // ManualTrade
-            XmlElement manual = doc.CreateElement(string.Empty, "ManualTrade", string.Empty);
+                // ManualTrade
+                XmlElement manual = doc.CreateElement(string.Empty, "ManualTrade", string.Empty);
 
-            //  attributes
-            attrs = doc.CreateAttribute("key");
-            attrs.Value = Encrypt(_manualTradeApiKey);
-            manual.SetAttributeNode(attrs);
+                //  attributes
+                attrs = doc.CreateAttribute("key");
+                attrs.Value = Encrypt(_manualTradeApiKey);
+                manual.SetAttributeNode(attrs);
 
-            attrs = doc.CreateAttribute("secret");
-            attrs.Value = Encrypt(_manualTradeSecret);
-            manual.SetAttributeNode(attrs);
+                attrs = doc.CreateAttribute("secret");
+                attrs.Value = Encrypt(_manualTradeSecret);
+                manual.SetAttributeNode(attrs);
 
-            // set  element to user.
-            user.AppendChild(manual);
+                // set  element to user.
+                user.AppendChild(manual);
 
-            // IFDOCO
-            XmlElement ifdocoOrd = doc.CreateElement(string.Empty, "IFDOCO", string.Empty);
+                // IFDOCO
+                XmlElement ifdocoOrd = doc.CreateElement(string.Empty, "IFDOCO", string.Empty);
 
-            //  attributes
-            attrs = doc.CreateAttribute("key");
-            attrs.Value = Encrypt(_ifdocoTradeApiKey);
-            ifdocoOrd.SetAttributeNode(attrs);
+                //  attributes
+                attrs = doc.CreateAttribute("key");
+                attrs.Value = Encrypt(_ifdocoTradeApiKey);
+                ifdocoOrd.SetAttributeNode(attrs);
 
-            attrs = doc.CreateAttribute("secret");
-            attrs.Value = Encrypt(_ifdocoTradeSecret);
-            ifdocoOrd.SetAttributeNode(attrs);
+                attrs = doc.CreateAttribute("secret");
+                attrs.Value = Encrypt(_ifdocoTradeSecret);
+                ifdocoOrd.SetAttributeNode(attrs);
 
-            // set  element to user.
-            user.AppendChild(ifdocoOrd);
+                // set  element to user.
+                user.AppendChild(ifdocoOrd);
+            }
 
             #endregion
 
@@ -12696,6 +12700,7 @@ namespace BitDesk.ViewModels
         }
 
         // サスペンド検知
+        /*
         private async void SystemEvents_PowerModeChanged(object sender, PowerModeChangedEventArgs e)
         {
             switch (e.Mode)
@@ -12716,6 +12721,7 @@ namespace BitDesk.ViewModels
                     break;
             }
         }
+        */
 
         // エラーイベント
         private void OnError(PrivateAPIClient sender, ClientError err)
@@ -16711,7 +16717,7 @@ namespace BitDesk.ViewModels
         // チャートを読み込み表示する。
         private void LoadChart(Pairs pair, CandleTypes ct)
         {
-            ChartLoadingInfo = "チャートをロード中....";
+            //ChartLoadingInfo = "チャートをロード中....";
             //Debug.WriteLine("LoadChart... " + pair.ToString());
 
             try
@@ -16912,7 +16918,7 @@ namespace BitDesk.ViewModels
                     return;
                 }
 
-                Debug.WriteLine("チャートのロード中  " + pair.ToString() + " " + lst.Count.ToString() + " " + span.ToString());
+                //Debug.WriteLine("チャートのロード中  " + pair.ToString() + " " + lst.Count.ToString() + " " + span.ToString());
 
                 try
                 {
@@ -17101,7 +17107,7 @@ namespace BitDesk.ViewModels
                     Debug.WriteLine("■■■■■ Chart loading error: " + ex.ToString());
                 }
 
-                Debug.WriteLine("チャートのロード終わり  " + pair.ToString() + " " + lst.Count.ToString() + " " + span.ToString());
+                //Debug.WriteLine("チャートのロード終わり  " + pair.ToString() + " " + lst.Count.ToString() + " " + span.ToString());
                 ChartLoadingInfo = "";
 
             }
