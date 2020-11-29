@@ -11963,7 +11963,7 @@ namespace BitDesk.ViewModels
             //SelectedCandleType = で表示できるので、これは不要だが、デフォと同じ場合のみ、手動で表示させる。
             if (SelectedCandleType == CandleTypes.OneHour) // デフォと揃えること。
             {
-                Debug.WriteLine("OnWindowLoaded DisplayChart");
+                //Debug.WriteLine("OnWindowLoaded DisplayChart");
 
                 Task.Run(async () =>
                 {

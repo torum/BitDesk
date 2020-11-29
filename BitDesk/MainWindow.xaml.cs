@@ -23,7 +23,7 @@ namespace BitDesk
     /// <summary>
     /// MainWindow.xaml の相互作用ロジック
     /// </summary>
-    public partial class MainWindow
+    public partial class MainWindow : Window
     {
         // システムトレイ表示用
         //private string _appTitle;
@@ -792,6 +792,7 @@ namespace BitDesk
                     MaxButton.Visibility = Visibility.Collapsed;
                 }
 
+                BackgroundGrid.Margin = new Thickness(0, 0, 0, 0);
             }
             else if (this.WindowState == WindowState.Maximized)
             {
@@ -800,6 +801,7 @@ namespace BitDesk
 
                 //_dispatcherMouseTimer.Start();
 
+                BackgroundGrid.Margin = new Thickness(3, 3, 3, 3);
             }
 
         }
