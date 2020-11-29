@@ -3,8 +3,8 @@
 
 [Setup]
 AppName=BitDesk
-AppVersion=0.0.0.5  
-VersionInfoVersion=0.0.0.5
+AppVersion=0.5.6.0  
+VersionInfoVersion=0.5.6.0  
 DefaultDirName={pf}\BitDesk
 DefaultGroupName=BitDesk
 UninstallDisplayIcon={app}\BitDesk.exe
@@ -23,7 +23,6 @@ VersionInfoDescription=
 Source: "..\BitDesk\bin\Release\BitDesk.exe"; DestDir: "{app}"
 Source: "..\BitDesk\bin\Release\BitDesk.exe.config"; DestDir: "{app}"
 Source: "..\BitDesk\bin\Release\BitDesk.pdb"; DestDir: "{app}"
-Source: "..\BitDesk\bin\Release\FluentWPF.dll"; DestDir: "{app}"
 Source: "..\BitDesk\bin\Release\LiveCharts.dll"; DestDir: "{app}"
 Source: "..\BitDesk\bin\Release\LiveCharts.pdb"; DestDir: "{app}" 
 Source: "..\BitDesk\bin\Release\LiveCharts.Wpf.dll"; DestDir: "{app}"

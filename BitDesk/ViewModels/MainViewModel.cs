@@ -27,6 +27,7 @@ using Microsoft.Win32;
 namespace BitDesk.ViewModels
 {
     /// <summary>
+    /// v0.5.7 サイズ関係やその他詳細を見直し
     /// v0.5.6 アクリルウィンドウの削除と、Windowボーダーの追加と、Maximize時のサイズ修正。
     /// v0.5.5 パスワードが設定されていない場合はAPI情報を保存しないようにした。起動時の設定ファイルの消滅案件対策。最小幅を少し変更。
     /// v0.5.4 自動取引の削除洩れを削除。資産情報の小数点以下の桁数を修正。
@@ -2246,7 +2247,7 @@ namespace BitDesk.ViewModels
         }
 
         // Application version
-        private string _appVer = "0.5.6";
+        private string _appVer = "0.5.7";
         public string AppVer
         {
             get

@@ -465,13 +465,13 @@ namespace BitDesk
 
             Main3Grid.Height = 420;
 
-            Middle.Width = 360;
+            Middle.Width = 380;
             Middle.Margin = new Thickness(3, 0, 3, 0);
 
             Main2Colum.Width = new GridLength(0, GridUnitType.Pixel);
             Main3Colum.Width = new GridLength(0, GridUnitType.Pixel);
 
-            Transaction.Width = 360;
+            Transaction.Width = 380;
             Transaction.Margin = new Thickness(3, 0, 10, 0);
 
             BottomContents.Margin = new Thickness(3, 0, 0, 0);
@@ -484,7 +484,6 @@ namespace BitDesk
 
         private void ResizeToSmall()
         {
-
             BottomContents.SetValue(Grid.ColumnSpanProperty, 2);
             Split.SetValue(Grid.ColumnSpanProperty, 2);
 
@@ -519,7 +518,7 @@ namespace BitDesk
             Main2Grid.Height = 420;
             Main3Grid.Height = 420;
 
-            Middle.Width = 357;
+            Middle.Width = 357;//357
             Middle.Height = 416;
             Middle.Margin = new Thickness(3, 1, 3, 0);
 
@@ -538,7 +537,6 @@ namespace BitDesk
 
         private void ResizeToDefault()
         {
-
             // ボトムを
             BottomContents.Visibility = Visibility.Visible;
             // ボトムのコラムスパンを１に指定
@@ -593,22 +591,20 @@ namespace BitDesk
 
             // 中央のサイズ
             //Middle.Width = 487;
-            Middle.Width = this.ActualWidth - 645;
+            Middle.Width = this.ActualWidth - 665; //645
 
             Middle.Height = 416;
             Middle.Margin = new Thickness(3, 1, 0, 3);
 
             //Main3Grid.Width = 504;
-            Main3Grid.Width = this.ActualWidth - 628;
+            Main3Grid.Width = this.ActualWidth - 648;//628
 
-            var test = this.ActualWidth - 412;
-            //Main2Colum.Width = new GridLength(360, GridUnitType.Pixel);
-            //Main3Colum.Width = new GridLength(360, GridUnitType.Pixel);
+            var test = this.ActualWidth - 412;//412
             Main2Colum.Width = new GridLength(test, GridUnitType.Pixel);
             Main3Colum.Width = new GridLength(0, GridUnitType.Pixel);
 
 
-            BottomContents.Margin = new Thickness(3, 0, 3, 0);
+            BottomContents.Margin = new Thickness(3, 0, 24, 0);
 
             Transaction.Height = 416;
             Transaction.Width = 213;
@@ -678,18 +674,18 @@ namespace BitDesk
             Main2Grid.Height = 420;
             Main3Grid.Height = 420;
 
-            Middle.Width = 740;
+            Middle.Width = 740; //740
             Middle.Height = 416;
             Middle.Margin = new Thickness(3, 1, 0, 3);
 
-            Main3Grid.Width = 757;
+            Main3Grid.Width = 757;//757
 
             Transaction.Height = 416;
             Transaction.Width = 213;
             Transaction.Margin = new Thickness(3, 1, 3, 3);
 
-            Main2Colum.Width = new GridLength(380, GridUnitType.Pixel);
-            Main3Colum.Width = new GridLength(380, GridUnitType.Pixel);
+            Main2Colum.Width = new GridLength(380, GridUnitType.Pixel);//380
+            Main3Colum.Width = new GridLength(380, GridUnitType.Pixel);//380
 
             BottomContents.Margin = new Thickness(3, 0, 3, 0);
 
@@ -752,7 +748,7 @@ namespace BitDesk
             Middle.Height = 416;
             Middle.Margin = new Thickness(3, 1, 0, 3);
 
-            Main3Grid.Width = 760;
+            Main3Grid.Width = 760;//760
 
             Transaction.Height = 416;
             Transaction.Width = 210;
@@ -978,9 +974,9 @@ namespace BitDesk
                     RECT rcWorkArea = monitorInfo.rcWork;
                     RECT rcMonitorArea = monitorInfo.rcMonitor;
                     mmi.ptMaxPosition.X = Math.Abs(rcWorkArea.Left - rcMonitorArea.Left);
-                    mmi.ptMaxPosition.Y = Math.Abs(rcWorkArea.Top - rcMonitorArea.Top);
+                    mmi.ptMaxPosition.Y = Math.Abs(rcWorkArea.Top - rcMonitorArea.Top) - 4; // -4を付加した。てっぺんをクリックしても反応がなかったから。
                     mmi.ptMaxSize.X = Math.Abs(rcWorkArea.Right - rcWorkArea.Left);
-                    mmi.ptMaxSize.Y = Math.Abs(rcWorkArea.Bottom - rcWorkArea.Top);
+                    mmi.ptMaxSize.Y = Math.Abs(rcWorkArea.Bottom - rcWorkArea.Top) + 4; // 付加した分の補正。;
                 }
 
                 Marshal.StructureToPtr(mmi, lParam, true);
@@ -1051,5 +1047,6 @@ namespace BitDesk
         }
 
 #endregion
+    
     }
 }
