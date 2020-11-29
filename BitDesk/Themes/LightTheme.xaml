@@ -82,6 +82,8 @@
     <!-- 使用不可の色 -->
     <SolidColorBrush x:Key="ScrollBarDisabledBrush" Color="Gray" />
 
+    <SolidColorBrush x:Key="WindowBorderBrush" Color="#333333" />
+    <SolidColorBrush x:Key="WindowBorderInactiveBrush" Color="Gray" />
 
     <SolidColorBrush x:Key="WindowBackgroundBaseColorBrush" Color="{DynamicResource WindowBackgroundBaseColor}"/>
     <SolidColorBrush x:Key="WindowBackgroundColorBrush" Color="{DynamicResource WindowBackgroundColor}"/>

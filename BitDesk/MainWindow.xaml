@@ -16,7 +16,6 @@
                   MinWidth="410" MinHeight="474"
         
                   Background="Transparent"
-                  BorderThickness="0.1"
 
                   WindowStyle="None"
                   helpers:MaximizeDoubleClickHelper.MaximizeDoubleClick="True" 
@@ -31,10 +30,10 @@
                   FocusVisualStyle="{x:Null}"
 
                   DataContext="{StaticResource MainViewModel}">
+    
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="32" ResizeBorderThickness="{x:Static SystemParameters.WindowResizeBorderThickness}" />
     </WindowChrome.WindowChrome>
-    <!-- MinWidth="423" MinHeight="554" Width="1636" Height="848" Width="1536" Height="848",  Width="1420" Height="765", Width="1165" Height="690",-->
 
     <Window.InputBindings>
         <KeyBinding Command="{Binding Path=ShowSettingsCommand}" Key="S" Modifiers="Control"/>
@@ -42,7 +41,9 @@
         <KeyBinding Command="{Binding Path=ShowLogInCommand}" Key="U" Modifiers="Control"/>
         <KeyBinding Command="{Binding Path=LogOutCommand}" Key="L" Modifiers="Control"/>
     </Window.InputBindings>
-
+    
+    <Border Style="{StaticResource WindowMainPanelStyle}">
+        
     <Grid x:Name="BackgroundGrid" Background="Transparent">
         <Rectangle x:Name="AcrylicBackground" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Fill="{DynamicResource WindowBackgroundBaseColorBrush}" Opacity="{Binding WindowOpacity, Mode=OneWay}" helpers:EnableDragHelper.EnableDrag="True"></Rectangle>
 
@@ -5091,4 +5092,5 @@ SOFTWARE.
 
     </Grid>
 
+    </Border>
 </Window>
