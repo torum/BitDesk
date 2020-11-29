@@ -1,7 +1,7 @@
 
 ---------------------------------------
 
-## ビットバンク向け仮想通貨トレーディングアプリ 
+## ビットバンク向け暗号資産（仮想通貨）トレーディングアプリ 
 
 ### 機能：
 - ビットコイン/円、リップル/円、イーサリアム/円、ライトコイン/円、ビットコインキャッシュ/円、モナーコイン/円、ステラルーメン/円、の通貨ペアで取引が出来ます。
@@ -37,7 +37,7 @@
 
 [BitDesk Setup](https://github.com/torum/BitDesk/blob/master/downloads/BitDeskSetup.exe?raw=true)
 
-[BitDesk Zip](https://github.com/torum/BitDesk/blob/master/downloads/BitDesk-v0.0.0.2.zip?raw=true)
+[BitDesk Zip](https://github.com/torum/BitDesk/blob/master/downloads/BitDeskBin.zip?raw=true)
 
 - ＊なお、実行ファイルに署名していないので、インストール時に警告が出てしまいます。
 個人ではコードサイニング証明書で実行ファイルに署名するのが物凄く面倒で、1年数万する購入費用はもとより、銀行残高証明書の用意やら公証人やら独自ドメイン（一応持ってますが）の用意などなど...。
