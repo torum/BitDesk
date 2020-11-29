@@ -2189,9 +2189,9 @@
                                                         <ColumnDefinition Width="62" />
                                                     </Grid.ColumnDefinitions>
                                                     <!-- 値は左寄せ。小数点以下がはみ出しても問題ないが、逆はまずい -->
-                                                    <TextBlock Grid.Column="0" x:Name="DepthAskBest" Text="{Binding Path=DepthAsk, Mode=OneWay}" Margin="0" Padding="0 0 0 0" Foreground="{DynamicResource PriceUpColorBrush}" HorizontalAlignment="Left"/>
+                                                    <TextBlock Grid.Column="0" x:Name="DepthAskBest" Text="{Binding Path=DepthAsk, Mode=OneWay}" Margin="0" Padding="0 0 0 0" Foreground="{DynamicResource PriceDownColorBrush}" HorizontalAlignment="Left"/>
                                                     <TextBlock Grid.Column="1" x:Name="DepthPrice" Text="{Binding Path=DepthPrice, Mode=OneWay}" Margin="0" Padding="0 0 0 0" Foreground="{DynamicResource ControlMediumColorBrush}" HorizontalAlignment="Left"/>
-                                                    <TextBlock Grid.Column="2" x:Name="DepthBidBest" Text="{Binding Path=DepthBid, Mode=OneWay}" Margin="0" Padding="0 0 0 0" Foreground="{DynamicResource PriceDownColorBrush}"  HorizontalAlignment="Left"/>
+                                                    <TextBlock Grid.Column="2" x:Name="DepthBidBest" Text="{Binding Path=DepthBid, Mode=OneWay}" Margin="0" Padding="0 0 0 0" Foreground="{DynamicResource PriceUpColorBrush}"  HorizontalAlignment="Left"/>
                                                 </Grid>
                                                 <DataTemplate.Triggers>
                                                     <DataTrigger Binding="{Binding IsLTP}" Value="true">
@@ -2201,11 +2201,11 @@
                                                     </DataTrigger>
                                                     <DataTrigger Binding="{Binding IsAskBest}" Value="true">
                                                         <Setter Property="TextBlock.FontWeight" TargetName="DepthAskBest" Value="Bold"/>
-                                                        <Setter Property="TextBlock.Foreground" TargetName="DepthAskBest" Value="{DynamicResource PriceUpColorBrush}"/>
+                                                        <Setter Property="TextBlock.Foreground" TargetName="DepthAskBest" Value="{DynamicResource PriceDownColorBrush}"/>
                                                     </DataTrigger>
                                                     <DataTrigger Binding="{Binding IsBidBest}" Value="true">
                                                         <Setter Property="TextBlock.FontWeight" TargetName="DepthBidBest" Value="Bold"/>
-                                                        <Setter Property="TextBlock.Foreground" TargetName="DepthBidBest" Value="{DynamicResource PriceDownColorBrush}"/>
+                                                        <Setter Property="TextBlock.Foreground" TargetName="DepthBidBest" Value="{DynamicResource PriceUpColorBrush}"/>
                                                     </DataTrigger>
 
                                                     <DataTrigger Binding="{Binding DepthBid}" Value="0">
