@@ -27,6 +27,7 @@ using Microsoft.Win32;
 namespace BitDesk.ViewModels
 {
     /// <summary>
+    /// v0.5.9 起動後最高値のアラームを削除。 
     /// v0.5.8 Depth（板）のBid、Askの色を入れ替えた。
     /// v0.5.7 レイアウト関係のサイズやその他詳細を見直し。
     /// v0.5.6 アクリルウィンドウの削除と、Windowボーダーの追加と、Maximize時のサイズ修正。
@@ -2248,7 +2249,7 @@ namespace BitDesk.ViewModels
         }
 
         // Application version
-        private string _appVer = "0.5.8";
+        private string _appVer = "0.5.9";
         public string AppVer
         {
             get
@@ -9013,6 +9014,7 @@ namespace BitDesk.ViewModels
                                         PairBtcJpy.AlarmMinus = ((long)(tick.LTP / 1000) * 1000) - 10000;
                                     }
 
+                                    /*
                                     // 起動後最高値
                                     if (tick.LTP >= PairBtcJpy.HighestPrice)
                                     {
@@ -9049,6 +9051,7 @@ namespace BitDesk.ViewModels
                                             }
                                         }
                                     }
+                                    */
 
                                     // 過去24時間最高値
                                     if (tick.LTP >= PairBtcJpy.HighestIn24Price)
@@ -9326,6 +9329,7 @@ namespace BitDesk.ViewModels
                                         PairXrpJpy.AlarmMinus = (tick.LTP) - 2M;
                                     }
 
+                                    /*
                                     // 起動後最高値
                                     if (tick.LTP >= PairXrpJpy.HighestPrice)
                                     {
@@ -9362,6 +9366,7 @@ namespace BitDesk.ViewModels
                                             }
                                         }
                                     }
+                                    */
 
                                     // 過去24時間最高値
                                     if (tick.LTP >= PairXrpJpy.HighestIn24Price)
@@ -9628,6 +9633,7 @@ namespace BitDesk.ViewModels
                                         PairEthJpy.AlarmMinus = tick.LTP - 1000M;
                                     }
 
+                                    /*
                                     // 起動後最高値
                                     if (tick.LTP >= PairEthJpy.HighestPrice)
                                     {
@@ -9664,6 +9670,7 @@ namespace BitDesk.ViewModels
                                             }
                                         }
                                     }
+                                    */
 
                                     // 過去24時間最高値
                                     if (tick.LTP >= PairEthJpy.HighestIn24Price)
@@ -9930,6 +9937,7 @@ namespace BitDesk.ViewModels
                                         PairMonaJpy.AlarmMinus = tick.LTP - 10M;
                                     }
 
+                                    /*
                                     // 起動後最高値
                                     if (tick.LTP >= PairMonaJpy.HighestPrice)
                                     {
@@ -9966,6 +9974,7 @@ namespace BitDesk.ViewModels
                                             }
                                         }
                                     }
+                                    */
 
                                     // 過去24時間最高値
                                     if (tick.LTP >= PairMonaJpy.HighestIn24Price)
@@ -10232,6 +10241,7 @@ namespace BitDesk.ViewModels
                                         PairLtcJpy.AlarmMinus = tick.LTP - 500M;
                                     }
 
+                                    /*
                                     // 起動後最高値
                                     if (tick.LTP >= PairLtcJpy.HighestPrice)
                                     {
@@ -10268,6 +10278,7 @@ namespace BitDesk.ViewModels
                                             }
                                         }
                                     }
+                                    */
 
                                     // 過去24時間最高値
                                     if (tick.LTP >= PairLtcJpy.HighestIn24Price)
@@ -10534,6 +10545,7 @@ namespace BitDesk.ViewModels
                                         PairBchJpy.AlarmMinus = ((tick.LTP / 100M) * 100M) - 1000M;
                                     }
 
+                                    /*
                                     // 起動後最高値
                                     if (tick.LTP >= PairBchJpy.HighestPrice)
                                     {
@@ -10570,6 +10582,7 @@ namespace BitDesk.ViewModels
                                             }
                                         }
                                     }
+                                    */
 
                                     // 過去24時間最高値
                                     if (tick.LTP >= PairBchJpy.HighestIn24Price)
@@ -10836,6 +10849,7 @@ namespace BitDesk.ViewModels
                                         PairXlmJpy.AlarmMinus = ((tick.LTP / 100M) * 100M) - 1M;
                                     }
 
+                                    /*
                                     // 起動後最高値
                                     if (tick.LTP >= PairXlmJpy.HighestPrice)
                                     {
@@ -10872,6 +10886,7 @@ namespace BitDesk.ViewModels
                                             }
                                         }
                                     }
+                                    */
 
                                     // 過去24時間最高値
                                     if (tick.LTP >= PairXlmJpy.HighestIn24Price)
