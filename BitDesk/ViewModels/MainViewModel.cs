@@ -27,6 +27,7 @@ using Microsoft.Win32;
 namespace BitDesk.ViewModels
 {
     /// <summary>
+    /// v0.6.1 設定画面のアラーム音も消した。
     /// v0.6.0 アラーム音全部潰した。デフォルトでアラーム数値を入れるのも止めた。レイアウト変更の段階を増やした。
     /// v0.5.9 起動後最高値のアラームを削除。 
     /// v0.5.8 Depth（板）のBid、Askの色を入れ替えた。
@@ -2250,7 +2251,7 @@ namespace BitDesk.ViewModels
         }
 
         // Application version
-        private string _appVer = "0.6.0";
+        private string _appVer = "0.6.1";
         public string AppVer
         {
             get

@@ -3,8 +3,8 @@
 
 [Setup]
 AppName=BitDesk
-AppVersion=0.5.6.0  
-VersionInfoVersion=0.5.6.0  
+AppVersion=0.6.1.0  
+VersionInfoVersion=0.6.1.0  
 DefaultDirName={pf}\BitDesk
 DefaultGroupName=BitDesk
 UninstallDisplayIcon={app}\BitDesk.exe
@@ -20,17 +20,17 @@ VersionInfoCopyright=
 VersionInfoDescription=
 
 [Files]
-Source: "..\BitDesk\bin\Release\BitDesk.exe"; DestDir: "{app}"
-Source: "..\BitDesk\bin\Release\BitDesk.exe.config"; DestDir: "{app}"
-Source: "..\BitDesk\bin\Release\BitDesk.pdb"; DestDir: "{app}"
-Source: "..\BitDesk\bin\Release\LiveCharts.dll"; DestDir: "{app}"
-Source: "..\BitDesk\bin\Release\LiveCharts.pdb"; DestDir: "{app}" 
-Source: "..\BitDesk\bin\Release\LiveCharts.Wpf.dll"; DestDir: "{app}"
-Source: "..\BitDesk\bin\Release\LiveCharts.Wpf.pdb"; DestDir: "{app}"
-Source: "..\BitDesk\bin\Release\LiveCharts.Wpf.xml"; DestDir: "{app}"
-Source: "..\BitDesk\bin\Release\LiveCharts.xml"; DestDir: "{app}"
-Source: "..\BitDesk\bin\Release\Newtonsoft.Json.dll"; DestDir: "{app}"
-Source: "..\BitDesk\bin\Release\Newtonsoft.Json.xml"; DestDir: "{app}"
+Source: "..\BitDesk\bin\Debug\BitDesk.exe"; DestDir: "{app}"
+Source: "..\BitDesk\bin\Debug\BitDesk.exe.config"; DestDir: "{app}"
+Source: "..\BitDesk\bin\Debug\BitDesk.pdb"; DestDir: "{app}"
+Source: "..\BitDesk\bin\Debug\LiveCharts.dll"; DestDir: "{app}"
+Source: "..\BitDesk\bin\Debug\LiveCharts.pdb"; DestDir: "{app}" 
+Source: "..\BitDesk\bin\Debug\LiveCharts.Wpf.dll"; DestDir: "{app}"
+Source: "..\BitDesk\bin\Debug\LiveCharts.Wpf.pdb"; DestDir: "{app}"
+Source: "..\BitDesk\bin\Debug\LiveCharts.Wpf.xml"; DestDir: "{app}"
+Source: "..\BitDesk\bin\Debug\LiveCharts.xml"; DestDir: "{app}"
+Source: "..\BitDesk\bin\Debug\Newtonsoft.Json.dll"; DestDir: "{app}"
+Source: "..\BitDesk\bin\Debug\Newtonsoft.Json.xml"; DestDir: "{app}"
 
 ;Source: "Readme.txt"; DestDir: "{app}"; Flags: isreadme
 

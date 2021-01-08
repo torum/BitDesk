@@ -4606,7 +4606,7 @@
                     </TabItem>
 
                     <!-- アラーム -->
-                    <TabItem Width="100" Height="48" Style="{StaticResource SettingsTabItemStyle}">
+                    <TabItem Width="100" Height="48" Style="{StaticResource SettingsTabItemStyle}" Visibility="Collapsed">
                         <TabItem.Header>
                             <Label Content="アラーム" Foreground="{Binding RelativeSource={RelativeSource AncestorType=TabItem}, Path=Foreground}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></Label>
                         </TabItem.Header>
