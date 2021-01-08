@@ -170,6 +170,7 @@ namespace BitDesk
 
         private async void SetDepth2ListboxScrollPosition()
         {
+            /*
             try
             {
 
@@ -218,12 +219,12 @@ namespace BitDesk
             {
                 System.Diagnostics.Debug.WriteLine("■■■■■ SetDepth2ListboxScrollPosition Exception: " + e);
             }
-
+            */
 
         }
-
+        
         private void Depth2AyumiTab_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
+        {/*
             if (Depth2AyumiTab.SelectedIndex == 0)
             {
                 DepthAyumiTab.SelectedIndex = 1;
@@ -232,10 +233,12 @@ namespace BitDesk
             {
                 DepthAyumiTab.SelectedIndex = 0;
             }
+        */
         }
 
         private void DepthAyumiTab_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            /*
             if (DepthAyumiTab.SelectedIndex == 0)
             {
                 Depth2AyumiTab.SelectedIndex = 1;
@@ -244,6 +247,7 @@ namespace BitDesk
             {
                 Depth2AyumiTab.SelectedIndex = 0;
             }
+            */
         }
 
         private void DepthListBoxCenter_Click(object sender, RoutedEventArgs e)
@@ -267,37 +271,6 @@ namespace BitDesk
 
         private void LayoutChange()
         {
-
-            /*
-            // 幅
-            double appWidth = this.ActualWidth;
-            double boxWidth = (appWidth - 40) / 3;
-
-            // WrapPanes's width
-            Coins_wrap.Width = appWidth;
-
-            // WrapPanes's Margin
-            Coins_wrap.Margin = new Thickness(0, 0, 0, 0); ;
-
-            btc_box.Width = boxWidth;
-            ltc_box.Width = boxWidth;
-            xrp_box.Width = boxWidth;
-            eth_box.Width = boxWidth;
-            mona_box.Width = boxWidth;
-            bch_box.Width = boxWidth;
-
-            // 高さ
-            double appHeight = this.ActualHeight;
-            double boxHeight = ((appHeight - 40) / 2);
-
-            btc_box.Height = boxHeight;
-            ltc_box.Height = boxHeight;
-            xrp_box.Height = boxHeight;
-            eth_box.Height = boxHeight;
-            mona_box.Height = boxHeight;
-            bch_box.Height = boxHeight;
-            */
-
 
             if (this.ActualWidth >= 480)
             {
@@ -324,86 +297,62 @@ namespace BitDesk
                                     //this.Title = "large 1280dp 以上 (" + this.ActualWidth.ToString() + "x" + this.ActualHeight.ToString() + ")";
 
                                     if (this.ActualWidth >= 1400)
-                                    {
+                                    { 
                                         //this.Title = "large 1440dp 以上 (" + this.ActualWidth.ToString() + "x" + this.ActualHeight.ToString() + ")";
 
-                                        if (this.ActualWidth >= 1635)
+                                        if (this.ActualWidth > 1536)
                                         {
-                                            //this.Title = "large 1600dp 以上 (" + this.ActualWidth.ToString() + "x" + this.ActualHeight.ToString() + ")";
+                                            //1920 * 1.25 Zoom (window.devicePixelRatio)
 
-                                            //if (this.ActualWidth >= 1920)
-                                            //{
-                                            //this.Title = "xlarge 1920dp 以上 (" + this.ActualWidth.ToString() + "x" + this.ActualHeight.ToString() + ")";
+                                            if (this.ActualWidth >= 1635)
+                                            {
+                                                //this.Title = "large 1600dp 以上 (" + this.ActualWidth.ToString() + "x" + this.ActualHeight.ToString() + ")";
 
-                                            ResizeToXXXLarge();
-
-                                            //System.Diagnostics.Debug.WriteLine(" LayoutChange (ResizeToXXXLarge) - width:" + this.ActualWidth.ToString() + " - height:" + this.ActualHeight.ToString());
-                                            //}
+                                                ResizeToXXXLarge();
+                                            }
+                                            else
+                                            {
+                                                ResizeToXXXLarge();
+                                            }
                                         }
                                         else
                                         {
-
+                                            Debug.WriteLine("ResizeToLarge");
                                             ResizeToLarge();
-
-                                            //System.Diagnostics.Debug.WriteLine(" LayoutChange (ResizeToLarge) - width:" + this.ActualWidth.ToString() + " - height:" + this.ActualHeight.ToString());
-
                                         }
                                     }
                                     else
                                     {
-
                                         ResizeToDefault();
-
-                                        //System.Diagnostics.Debug.WriteLine(" LayoutChange (ResizeToDefault) - width:" + this.ActualWidth.ToString() + " - height:" + this.ActualHeight.ToString());
-
                                     }
                                 }
                                 else
                                 {
-
                                     ResizeToSmall();
-
-                                    //System.Diagnostics.Debug.WriteLine(" LayoutChange (ResizeToSmall) - width:" + this.ActualWidth.ToString() + " - height:" + this.ActualHeight.ToString());
-
                                 }
                             }
                             else
                             {
                                 ResizeToSmall();
-
-                                //System.Diagnostics.Debug.WriteLine(" LayoutChange (ResizeToSmall) - width:" + this.ActualWidth.ToString() + " - height:" + this.ActualHeight.ToString());
-
                             }
                         }
                         else
                         {
                             ResizeToSmall();
-
-                            //System.Diagnostics.Debug.WriteLine(" LayoutChange (ResizeToSmall) - width:" + this.ActualWidth.ToString() + " - height:" + this.ActualHeight.ToString());
-
                         }
                     }
                     else
                     {
                         ResizeToXXXSmall();
-
-                        //System.Diagnostics.Debug.WriteLine(" LayoutChange (ResizeToXXXSmall) - width:" + this.ActualWidth.ToString() + " - height:" + this.ActualHeight.ToString());
-
                     }
                 }
                 else
                 {
                     ResizeToXXXSmall();
-
-                    //System.Diagnostics.Debug.WriteLine(" LayoutChange (ResizeToXXXSmall) - width:" + this.ActualWidth.ToString() + " - height:" + this.ActualHeight.ToString());
-
                 }
             }
             else
             {
-                //// 480dp 未満
-                //this.Title = "480dp 未満 xsmall (" + this.ActualWidth.ToString() + ")";
-
                 ResizeToXXXSmall();
             }
 
@@ -664,7 +613,8 @@ namespace BitDesk
 
             Middle.SetValue(Grid.ColumnSpanProperty, 2);
 
-            Depth.Visibility = Visibility.Collapsed;
+            //Depth.Visibility = Visibility.Collapsed;
+            Depth.Visibility = Visibility.Visible;
 
             // メインコンテンツグリッドの高さ指定。＊スクロールが出るかでないかここのサイズ。
             MainContentsGrid.Height = 420;//1036;
@@ -674,24 +624,36 @@ namespace BitDesk
             Main2Grid.Height = 420;
             Main3Grid.Height = 420;
 
-            Middle.Width = 740; //740
+            //Middle.Width = 740; //740
+            //Middle.Width = 743;
+            //Middle.Width = this.ActualWidth - 665;
+            Middle.Width = 543;
+
             Middle.Height = 416;
             Middle.Margin = new Thickness(3, 1, 0, 3);
 
-            Main3Grid.Width = 757;//757
+            //Main3Grid.Width = 757;//757
+            Main3Grid.Width = 560;//760
+            //Main3Grid.Width = this.ActualWidth - 648;
+            //Main3Grid.Width = this.ActualWidth - 648;
 
             Transaction.Height = 416;
-            Transaction.Width = 213;
-            Transaction.Margin = new Thickness(3, 1, 3, 3);
+            //Transaction.Width = 213;
+            Transaction.Width = 210;
+            //Transaction.Margin = new Thickness(3, 1, 3, 3);
+            Transaction.Margin = new Thickness(3, 1, 0, 3);
 
-            Main2Colum.Width = new GridLength(380, GridUnitType.Pixel);//380
-            Main3Colum.Width = new GridLength(380, GridUnitType.Pixel);//380
+            //Main2Colum.Width = new GridLength(380, GridUnitType.Pixel);//380
+            //Main3Colum.Width = new GridLength(380, GridUnitType.Pixel);//380
+            Main2Colum.Width = new GridLength(280, GridUnitType.Pixel);//380
+            Main3Colum.Width = new GridLength(280, GridUnitType.Pixel);//380
 
             BottomContents.Margin = new Thickness(3, 0, 3, 0);
 
 
             RightSide1Colum.Width = new GridLength(213, GridUnitType.Pixel);
-            RightSide2Colum.Width = new GridLength(0, GridUnitType.Pixel);
+            //RightSide2Colum.Width = new GridLength(0, GridUnitType.Pixel);
+            RightSide2Colum.Width = new GridLength(229, GridUnitType.Pixel);
 
             ChartSpanOneYearRadioButton.Visibility = Visibility.Visible;
             ChartSpanOneWeekRadioButton.Visibility = Visibility.Visible;
@@ -739,9 +701,7 @@ namespace BitDesk
 
             // メイン１の高さを指定　＊重要
             Main1Grid.Height = 420;
-
             Main2Grid.Height = 420;
-
             Main3Grid.Height = 420;
 
             Middle.Width = 743;

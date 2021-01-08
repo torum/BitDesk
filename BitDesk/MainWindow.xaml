@@ -12,8 +12,8 @@
                   
                   Title="{Binding AppTitle}" 
                   
-                  Height="450" Width="800"
-                  MinWidth="430" MinHeight="474"
+                  Width="800" Height="450" 
+                  MinWidth="450" MinHeight="454"
         
                   Background="Transparent"
 
@@ -2189,9 +2189,9 @@
                                                         <ColumnDefinition Width="62" />
                                                     </Grid.ColumnDefinitions>
                                                     <!-- 値は左寄せ。小数点以下がはみ出しても問題ないが、逆はまずい -->
-                                                    <TextBlock Grid.Column="0" x:Name="DepthAskBest" Text="{Binding Path=DepthAsk, Mode=OneWay}" Margin="0" Padding="0 0 0 0" Foreground="{DynamicResource PriceDownColorBrush}" HorizontalAlignment="Left"/>
+                                                    <TextBlock Grid.Column="0" x:Name="DepthAskBest" Text="{Binding Path=DepthAsk, Mode=OneWay}" Margin="0" Padding="0 0 0 0" Foreground="{DynamicResource PriceUpColorBrush}" HorizontalAlignment="Left"/>
                                                     <TextBlock Grid.Column="1" x:Name="DepthPrice" Text="{Binding Path=DepthPrice, Mode=OneWay}" Margin="0" Padding="0 0 0 0" Foreground="{DynamicResource ControlMediumColorBrush}" HorizontalAlignment="Left"/>
-                                                    <TextBlock Grid.Column="2" x:Name="DepthBidBest" Text="{Binding Path=DepthBid, Mode=OneWay}" Margin="0" Padding="0 0 0 0" Foreground="{DynamicResource PriceUpColorBrush}"  HorizontalAlignment="Left"/>
+                                                    <TextBlock Grid.Column="2" x:Name="DepthBidBest" Text="{Binding Path=DepthBid, Mode=OneWay}" Margin="0" Padding="0 0 0 0" Foreground="{DynamicResource PriceDownColorBrush}"  HorizontalAlignment="Left"/>
                                                 </Grid>
                                                 <DataTemplate.Triggers>
                                                     <DataTrigger Binding="{Binding IsLTP}" Value="true">
@@ -2201,11 +2201,11 @@
                                                     </DataTrigger>
                                                     <DataTrigger Binding="{Binding IsAskBest}" Value="true">
                                                         <Setter Property="TextBlock.FontWeight" TargetName="DepthAskBest" Value="Bold"/>
-                                                        <Setter Property="TextBlock.Foreground" TargetName="DepthAskBest" Value="{DynamicResource PriceDownColorBrush}"/>
+                                                        <Setter Property="TextBlock.Foreground" TargetName="DepthAskBest" Value="{DynamicResource PriceUpColorBrush}"/>
                                                     </DataTrigger>
                                                     <DataTrigger Binding="{Binding IsBidBest}" Value="true">
                                                         <Setter Property="TextBlock.FontWeight" TargetName="DepthBidBest" Value="Bold"/>
-                                                        <Setter Property="TextBlock.Foreground" TargetName="DepthBidBest" Value="{DynamicResource PriceUpColorBrush}"/>
+                                                        <Setter Property="TextBlock.Foreground" TargetName="DepthBidBest" Value="{DynamicResource PriceDownColorBrush}"/>
                                                     </DataTrigger>
 
                                                     <DataTrigger Binding="{Binding DepthBid}" Value="0">
@@ -2272,116 +2272,6 @@
                 <!-- 最右コラム 板情報 | 歩み値 | 日本語ニュース | 英語ニュース -->
                 <Border x:Name="Depth" Grid.Row="1" Grid.Column="6" Grid.RowSpan="3" Grid.ColumnSpan="1" Style="{DynamicResource BoardStyle}" Visibility="Collapsed" Margin="14 0 0 0">
                     <TabControl x:Name="Depth2AyumiTab" Style="{StaticResource NoChromeTabControl}" Margin="0" BorderThickness="0" Background="Transparent" VerticalAlignment="Top" SelectionChanged="Depth2AyumiTab_SelectionChanged">
-
-                        <TabItem Header="板情報" FontWeight="Normal" Style="{StaticResource NoChromeTabHeader}" Background="Transparent" BorderThickness="0" Width="100" Padding="4">
-
-                            <ListBox x:Name="Depth2ListBox" Margin="6 6 0 6" Padding="0 0 0 0" ItemsSource="{Binding Depths}" Style="{StaticResource DepthListBoxStyle}" AlternationCount="2" Background="Transparent" BorderBrush="Gray" BorderThickness="0 0 0 0" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Visible" SizeChanged="Depth2ListBox_SizeChanged" MouseDoubleClick="Depth2ListBox_MouseDoubleClick">
-                                <ListBox.ContextMenu>
-                                    <ContextMenu>
-                                        <MenuItem Header="グルーピング表示">
-                                            <MenuItem Header="OFF" Command="{Binding DepthGroupingCommand}" CommandParameter="0" IsChecked="{Binding ActivePair.IsDepthGroupingOff, Mode=OneWay}"/>
-                                            <MenuItem Header="{Binding ActivePair.DepthGrouping100, Mode=OneWay}" Command="{Binding DepthGroupingCommand}" CommandParameter="{Binding ActivePair.DepthGrouping100, Mode=OneWay}" IsChecked="{Binding ActivePair.IsDepthGrouping100, Mode=OneWay}"/>
-                                            <MenuItem Header="{Binding ActivePair.DepthGrouping1000, Mode=OneWay}" Command="{Binding DepthGroupingCommand}" CommandParameter="{Binding ActivePair.DepthGrouping1000, Mode=OneWay}" IsChecked="{Binding ActivePair.IsDepthGrouping1000, Mode=OneWay}"/>
-                                        </MenuItem>
-                                        <MenuItem Header="中央に戻る" x:Name="Depth2ListBoxCenter" Click="Depth2ListBoxCenter_Click"></MenuItem>
-                                    </ContextMenu>
-                                </ListBox.ContextMenu>
-                                <ListBox.ItemContainerStyle>
-                                    <Style TargetType="{x:Type ListBoxItem}">
-                                        <Setter Property="Focusable" Value="true"/>
-                                        <Setter Property="IsEnabled" Value="False"/>
-
-                                        <Style.Triggers>
-                                            <Trigger Property="ItemsControl.AlternationIndex" Value="0">
-                                                <Setter Property="Background" Value="{DynamicResource ListviewAlt0ColorBrush}" />
-                                            </Trigger>
-                                            <Trigger Property="ItemsControl.AlternationIndex" Value="1">
-                                                <Setter Property="Background" Value="{DynamicResource ListviewAlt1ColorBrush}" />
-                                            </Trigger>
-                                        </Style.Triggers>
-
-                                    </Style>
-                                </ListBox.ItemContainerStyle>
-                                <ListBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <Grid Margin="0" HorizontalAlignment="Center">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="62" />
-                                                <ColumnDefinition Width="66" />
-                                                <ColumnDefinition Width="62" />
-                                            </Grid.ColumnDefinitions>
-                                            <TextBlock Grid.Column="0" x:Name="DepthAskBest" Text="{Binding Path=DepthAsk, Mode=OneWay}" Margin="0" Padding="0" Foreground="{DynamicResource PriceUpColorBrush}" HorizontalAlignment="Left"/>
-                                            <TextBlock Grid.Column="1" x:Name="DepthPrice" Text="{Binding Path=DepthPrice, Mode=OneWay}" Margin="0" Padding="0" Foreground="DarkGray" HorizontalAlignment="Left"/>
-                                            <TextBlock Grid.Column="2" x:Name="DepthBidBest" Text="{Binding Path=DepthBid, Mode=OneWay}" Margin="0" Padding="0" Foreground="{DynamicResource PriceDownColorBrush}"  HorizontalAlignment="Left"/>
-                                        </Grid>
-                                        <DataTemplate.Triggers>
-                                            <DataTrigger Binding="{Binding IsLTP}" Value="true">
-                                                <Setter Property="TextBlock.FontWeight" TargetName="DepthPrice" Value="Bold"/>
-                                                <Setter Property="TextBlock.FontSize" TargetName="DepthPrice" Value="13"/>
-                                                <Setter Property="TextBlock.Foreground" TargetName="DepthPrice" Value="{DynamicResource ControlLightColorBrush}"/>
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding IsAskBest}" Value="true">
-                                                <Setter Property="TextBlock.FontWeight" TargetName="DepthAskBest" Value="Bold"/>
-                                                <Setter Property="TextBlock.Foreground" TargetName="DepthAskBest" Value="{DynamicResource PriceUpColorBrush}"/>
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding IsBidBest}" Value="true">
-                                                <Setter Property="TextBlock.FontWeight" TargetName="DepthBidBest" Value="Bold"/>
-                                                <Setter Property="TextBlock.Foreground" TargetName="DepthBidBest" Value="{DynamicResource PriceDownColorBrush}"/>
-                                            </DataTrigger>
-
-                                            <DataTrigger Binding="{Binding DepthBid}" Value="0">
-                                                <Setter Property="TextBlock.Text" TargetName="DepthBidBest" Value=""/>
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding DepthPrice}" Value="0">
-                                                <Setter Property="TextBlock.Text" TargetName="DepthPrice" Value=""/>
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding DepthAsk}" Value="0">
-                                                <Setter Property="TextBlock.Text" TargetName="DepthAskBest" Value=""/>
-                                            </DataTrigger>
-                                        </DataTemplate.Triggers>
-                                    </DataTemplate>
-                                </ListBox.ItemTemplate>
-                            </ListBox>
-
-                        </TabItem>
-
-                        <TabItem Header="歩み値" FontWeight="Normal" Style="{StaticResource NoChromeTabHeader}" Background="Transparent" BorderThickness="0" Width="100" Padding="4">
-
-                            <ListBox Margin="3 6 3 0" Padding="0 0 0 0" ItemsSource="{Binding Transactions}" Background="Transparent" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Hidden" AlternationCount="2" BorderBrush="Gray" BorderThickness="0 0 0 0">
-                                <ListBox.ItemContainerStyle>
-                                    <Style TargetType="{x:Type ListBoxItem}">
-                                        <Setter Property="Focusable" Value="False"/>
-                                        <Setter Property="IsEnabled" Value="False" />
-                                    </Style>
-                                </ListBox.ItemContainerStyle>
-                                <ListBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <Grid Margin="0" HorizontalAlignment="Center">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="66" />
-                                                <ColumnDefinition Width="66" />
-                                                <ColumnDefinition Width="66" />
-                                            </Grid.ColumnDefinitions>
-                                            <TextBlock Grid.Column="0" x:Name="TransExecutedAt" Text="{Binding Path=ExecutedAt, Mode=OneWay, StringFormat=HH:mm:ss}" Margin="0" Padding="3 0 3 0" Foreground="DarkGray"  HorizontalAlignment="Center"/>
-                                            <TextBlock Grid.Column="1" x:Name="TransPrice" Text="{Binding Path=Price, Mode=OneWay}" Margin="0" Padding="3 0 3 0" Foreground="DarkGray"  HorizontalAlignment="Center" />
-                                            <TextBlock Grid.Column="2" x:Name="TransAmount" Text="{Binding Path=Amount, Mode=OneWay}" Margin="0" Padding="3 0 3 0" Foreground="DarkGray"  HorizontalAlignment="Left" />
-
-                                        </Grid>
-                                        <DataTemplate.Triggers>
-                                            <DataTrigger Binding="{Binding Side}" Value="buy">
-                                                <Setter Property="TextBlock.Foreground" TargetName="TransPrice" Value="{DynamicResource PriceUpColorBrush}"/>
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding Side}" Value="sell">
-                                                <Setter Property="TextBlock.Foreground" TargetName="TransPrice" Value="{DynamicResource PriceDownColorBrush}"/>
-                                            </DataTrigger>
-
-
-                                        </DataTemplate.Triggers>
-                                    </DataTemplate>
-                                </ListBox.ItemTemplate>
-                            </ListBox>
-
-                        </TabItem>
 
                         <TabItem Header="日本語ニュース(_N)" FontWeight="Normal" Style="{StaticResource NoChromeTabHeader}" Background="Transparent" BorderThickness="0" Width="100" Padding="4">
 

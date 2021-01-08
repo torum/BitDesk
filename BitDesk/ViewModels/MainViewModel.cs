@@ -27,6 +27,7 @@ using Microsoft.Win32;
 namespace BitDesk.ViewModels
 {
     /// <summary>
+    /// v0.6.0 アラーム音全部潰した。デフォルトでアラーム数値を入れるのも止めた。レイアウト変更の段階を増やした。
     /// v0.5.9 起動後最高値のアラームを削除。 
     /// v0.5.8 Depth（板）のBid、Askの色を入れ替えた。
     /// v0.5.7 レイアウト関係のサイズやその他詳細を見直し。
@@ -2249,7 +2250,7 @@ namespace BitDesk.ViewModels
         }
 
         // Application version
-        private string _appVer = "0.5.9";
+        private string _appVer = "0.6.0";
         public string AppVer
         {
             get
@@ -8840,7 +8841,6 @@ namespace BitDesk.ViewModels
 
                         try
                         {
-
                             if (pair == CurrentPair)
                             {
                                 if (tick.LTP > ActivePair.Ltp)
@@ -8984,15 +8984,15 @@ namespace BitDesk.ViewModels
 
                                             if (PlaySound)
                                             {
-                                                SystemSounds.Hand.Play();
-                                                isPlayed = true;
+                                                //SystemSounds.Hand.Play();
+                                                //isPlayed = true;
                                             }
                                         }
                                     }
                                     else
                                     {
                                         // 起動後初期値セット
-                                        PairBtcJpy.AlarmPlus = ((long)(tick.LTP / 1000) * 1000) + 20000;
+                                        //PairBtcJpy.AlarmPlus = ((long)(tick.LTP / 1000) * 1000) + 20000;
                                     }
 
                                     if (PairBtcJpy.AlarmMinus > 0)
@@ -9003,7 +9003,7 @@ namespace BitDesk.ViewModels
                                             PairBtcJpy.HighLowInfoText = "⇓⇓⇓　安値アラーム " + PairBtcJpy.PairString;
                                             if (PlaySound)
                                             {
-                                                SystemSounds.Beep.Play();
+                                                //SystemSounds.Beep.Play();
                                                 isPlayed = true;
                                             }
                                         }
@@ -9011,7 +9011,7 @@ namespace BitDesk.ViewModels
                                     else
                                     {
                                         // 起動後初期値セット
-                                        PairBtcJpy.AlarmMinus = ((long)(tick.LTP / 1000) * 1000) - 10000;
+                                        //PairBtcJpy.AlarmMinus = ((long)(tick.LTP / 1000) * 1000) - 10000;
                                     }
 
                                     /*
@@ -9063,7 +9063,7 @@ namespace BitDesk.ViewModels
                                         {
                                             if (PlaySound)
                                             {
-                                                SystemSounds.Hand.Play();
+                                                //SystemSounds.Hand.Play();
                                                 isPlayed = true;
                                             }
                                         }
@@ -9078,7 +9078,7 @@ namespace BitDesk.ViewModels
                                         {
                                             if (PlaySound)
                                             {
-                                                SystemSounds.Hand.Play();
+                                                //SystemSounds.Hand.Play();
                                                 isPlayed = true;
                                             }
                                         }
@@ -9102,68 +9102,7 @@ namespace BitDesk.ViewModels
                                             }
                                         }
 
-                                        // 最新のロウソク足を更新する。
-                                        //＞＞＞重すぎ。負荷掛かり過ぎなので止め。
-                                        /*
-                                        if (ChartSeriesBtcJpy != null)
-                                        {
-                                            if (ChartSeriesBtcJpy[0].Values != null)
-                                            {
-                                                int cb = ChartSeriesBtcJpy[0].Values.Count;
-
-                                                if (cb > 0)
-                                                {
-                                                    double l = ((OhlcPoint)ChartSeriesBtcJpy[0].Values[cb - 1]).Low;
-                                                    double h = ((OhlcPoint)ChartSeriesBtcJpy[0].Values[cb - 1]).High;
-
-                                                    if (Application.Current == null) return;
-                                                    Application.Current.Dispatcher.Invoke(() =>
-                                                    {
-
-                                                        ((OhlcPoint)ChartSeriesBtcJpy[0].Values[cb - 1]).Close = (double)tick.LTP;
-
-                                                        if (l > (double)tick.LTP)
-                                                        {
-                                                            ((OhlcPoint)ChartSeriesBtcJpy[0].Values[cb - 1]).Low = (double)tick.LTP;
-                                                        }
-
-                                                        if (h < (double)tick.LTP)
-                                                        {
-                                                            ((OhlcPoint)ChartSeriesBtcJpy[0].Values[cb - 1]).High = (double)tick.LTP;
-                                                        }
-
-                                                    });
-
-                                                }
-                                            }
-
-                                        }
-                                        */
-
                                     }
-
-                                    /*
-                                    // 特殊注文 
-                                    this.NotifyPropertyChanged("IFD_IfdEstimatePrice");
-                                    this.NotifyPropertyChanged("IFD_DoEstimatePrice");
-                                    this.NotifyPropertyChanged("OCO_OneEstimatePrice");
-                                    this.NotifyPropertyChanged("OCO_OtherEstimatePrice");
-                                    this.NotifyPropertyChanged("IFDOCO_IfdEstimatePrice");
-                                    this.NotifyPropertyChanged("IFDOCO_OneEstimatePrice");
-                                    this.NotifyPropertyChanged("IFDOCO_OtherEstimatePrice");
-
-                                    // 手動注文の成行予想金額表示の更新
-                                    if (SellType == OrderTypes.market)
-                                    {
-                                        this.NotifyPropertyChanged("SellEstimatePrice");
-                                    }
-                                    if (BuyType == OrderTypes.market)
-                                    {
-                                        this.NotifyPropertyChanged("BuyEstimatePrice");
-                                    }
-                                    */
-
-
 
                                 }
 
@@ -9299,7 +9238,7 @@ namespace BitDesk.ViewModels
 
                                             if (PlaySound)
                                             {
-                                                SystemSounds.Hand.Play();
+                                                //SystemSounds.Hand.Play();
                                                 isPlayed = true;
                                             }
                                         }
@@ -9307,7 +9246,7 @@ namespace BitDesk.ViewModels
                                     else
                                     {
                                         // 起動後初期値セット
-                                        PairXrpJpy.AlarmPlus = (tick.LTP) + 2M;
+                                        //PairXrpJpy.AlarmPlus = (tick.LTP) + 2M;
                                     }
 
                                     if (PairXrpJpy.AlarmMinus > 0)
@@ -9318,7 +9257,7 @@ namespace BitDesk.ViewModels
                                             PairXrpJpy.HighLowInfoText = "⇓⇓⇓　安値アラーム " + PairXrpJpy.PairString;
                                             if (PlaySound)
                                             {
-                                                SystemSounds.Beep.Play();
+                                                //SystemSounds.Beep.Play();
                                                 isPlayed = true;
                                             }
                                         }
@@ -9326,7 +9265,7 @@ namespace BitDesk.ViewModels
                                     else
                                     {
                                         // 起動後初期値セット
-                                        PairXrpJpy.AlarmMinus = (tick.LTP) - 2M;
+                                        //PairXrpJpy.AlarmMinus = (tick.LTP) - 2M;
                                     }
 
                                     /*
@@ -9378,7 +9317,7 @@ namespace BitDesk.ViewModels
                                         {
                                             if (PlaySound)
                                             {
-                                                SystemSounds.Hand.Play();
+                                                //SystemSounds.Hand.Play();
                                                 isPlayed = true;
                                             }
                                         }
@@ -9393,7 +9332,7 @@ namespace BitDesk.ViewModels
                                         {
                                             if (PlaySound)
                                             {
-                                                SystemSounds.Hand.Play();
+                                                //SystemSounds.Hand.Play();
                                                 isPlayed = true;
                                             }
                                         }
@@ -9603,7 +9542,7 @@ namespace BitDesk.ViewModels
 
                                             if (PlaySound)
                                             {
-                                                SystemSounds.Hand.Play();
+                                                //SystemSounds.Hand.Play();
                                                 isPlayed = true;
                                             }
                                         }
@@ -9611,7 +9550,7 @@ namespace BitDesk.ViewModels
                                     else
                                     {
                                         // 起動後初期値セット
-                                        PairEthJpy.AlarmPlus = tick.LTP + 1000M;
+                                        //PairEthJpy.AlarmPlus = tick.LTP + 1000M;
                                     }
 
                                     if (PairEthJpy.AlarmMinus > 0)
@@ -9622,7 +9561,7 @@ namespace BitDesk.ViewModels
                                             PairEthJpy.HighLowInfoText = "⇓⇓⇓　安値アラーム " + PairEthJpy.PairString;
                                             if (PlaySound)
                                             {
-                                                SystemSounds.Beep.Play();
+                                                //.Beep.Play();
                                                 isPlayed = true;
                                             }
                                         }
@@ -9630,7 +9569,7 @@ namespace BitDesk.ViewModels
                                     else
                                     {
                                         // 起動後初期値セット
-                                        PairEthJpy.AlarmMinus = tick.LTP - 1000M;
+                                        //PairEthJpy.AlarmMinus = tick.LTP - 1000M;
                                     }
 
                                     /*
@@ -9682,7 +9621,7 @@ namespace BitDesk.ViewModels
                                         {
                                             if (PlaySound)
                                             {
-                                                SystemSounds.Hand.Play();
+                                                //SystemSounds.Hand.Play();
                                                 isPlayed = true;
                                             }
                                         }
@@ -9697,7 +9636,7 @@ namespace BitDesk.ViewModels
                                         {
                                             if (PlaySound)
                                             {
-                                                SystemSounds.Hand.Play();
+                                                //SystemSounds.Hand.Play();
                                                 isPlayed = true;
                                             }
                                         }
@@ -9907,7 +9846,7 @@ namespace BitDesk.ViewModels
 
                                             if (PlaySound)
                                             {
-                                                SystemSounds.Hand.Play();
+                                                //SystemSounds.Hand.Play();
                                                 isPlayed = true;
                                             }
                                         }
@@ -9915,7 +9854,7 @@ namespace BitDesk.ViewModels
                                     else
                                     {
                                         // 起動後初期値セット
-                                        PairMonaJpy.AlarmPlus = tick.LTP + 10M;
+                                        //PairMonaJpy.AlarmPlus = tick.LTP + 10M;
                                     }
 
                                     if (PairMonaJpy.AlarmMinus > 0)
@@ -9926,7 +9865,7 @@ namespace BitDesk.ViewModels
                                             PairMonaJpy.HighLowInfoText = "⇓⇓⇓　安値アラーム " + PairMonaJpy.PairString;
                                             if (PlaySound)
                                             {
-                                                SystemSounds.Beep.Play();
+                                                //SystemSounds.Beep.Play();
                                                 isPlayed = true;
                                             }
                                         }
@@ -9934,7 +9873,7 @@ namespace BitDesk.ViewModels
                                     else
                                     {
                                         // 起動後初期値セット
-                                        PairMonaJpy.AlarmMinus = tick.LTP - 10M;
+                                        //PairMonaJpy.AlarmMinus = tick.LTP - 10M;
                                     }
 
                                     /*
@@ -9986,7 +9925,7 @@ namespace BitDesk.ViewModels
                                         {
                                             if (PlaySound)
                                             {
-                                                SystemSounds.Hand.Play();
+                                                //SystemSounds.Hand.Play();
                                                 isPlayed = true;
                                             }
                                         }
@@ -10001,7 +9940,7 @@ namespace BitDesk.ViewModels
                                         {
                                             if (PlaySound)
                                             {
-                                                SystemSounds.Hand.Play();
+                                                //SystemSounds.Hand.Play();
                                                 isPlayed = true;
                                             }
                                         }
@@ -10211,7 +10150,7 @@ namespace BitDesk.ViewModels
 
                                             if (PlaySound)
                                             {
-                                                SystemSounds.Hand.Play();
+                                                //SystemSounds.Hand.Play();
                                                 isPlayed = true;
                                             }
                                         }
@@ -10219,7 +10158,7 @@ namespace BitDesk.ViewModels
                                     else
                                     {
                                         // 起動後初期値セット
-                                        PairLtcJpy.AlarmPlus = tick.LTP + 500M;
+                                        //PairLtcJpy.AlarmPlus = tick.LTP + 500M;
                                     }
 
                                     if (PairLtcJpy.AlarmMinus > 0)
@@ -10230,7 +10169,7 @@ namespace BitDesk.ViewModels
                                             PairLtcJpy.HighLowInfoText = "⇓⇓⇓　安値アラーム " + PairLtcJpy.PairString;
                                             if (PlaySound)
                                             {
-                                                SystemSounds.Beep.Play();
+                                                //SystemSounds.Beep.Play();
                                                 isPlayed = true;
                                             }
                                         }
@@ -10238,7 +10177,7 @@ namespace BitDesk.ViewModels
                                     else
                                     {
                                         // 起動後初期値セット
-                                        PairLtcJpy.AlarmMinus = tick.LTP - 500M;
+                                        //PairLtcJpy.AlarmMinus = tick.LTP - 500M;
                                     }
 
                                     /*
@@ -10290,7 +10229,7 @@ namespace BitDesk.ViewModels
                                         {
                                             if (PlaySound)
                                             {
-                                                SystemSounds.Hand.Play();
+                                                //SystemSounds.Hand.Play();
                                                 isPlayed = true;
                                             }
                                         }
@@ -10305,7 +10244,7 @@ namespace BitDesk.ViewModels
                                         {
                                             if (PlaySound)
                                             {
-                                                SystemSounds.Hand.Play();
+                                                //SystemSounds.Hand.Play();
                                                 isPlayed = true;
                                             }
                                         }
@@ -10515,7 +10454,7 @@ namespace BitDesk.ViewModels
 
                                             if (PlaySound)
                                             {
-                                                SystemSounds.Hand.Play();
+                                                //SystemSounds.Hand.Play();
                                                 isPlayed = true;
                                             }
                                         }
@@ -10523,7 +10462,7 @@ namespace BitDesk.ViewModels
                                     else
                                     {
                                         // 起動後初期値セット
-                                        PairBchJpy.AlarmPlus = ((tick.LTP / 100M) * 100M) + 1000M;
+                                        //PairBchJpy.AlarmPlus = ((tick.LTP / 100M) * 100M) + 1000M;
                                     }
 
                                     if (PairBchJpy.AlarmMinus > 0)
@@ -10534,7 +10473,7 @@ namespace BitDesk.ViewModels
                                             PairBchJpy.HighLowInfoText = "⇓⇓⇓　安値アラーム " + PairBchJpy.PairString;
                                             if (PlaySound)
                                             {
-                                                SystemSounds.Beep.Play();
+                                                //SystemSounds.Beep.Play();
                                                 isPlayed = true;
                                             }
                                         }
@@ -10542,7 +10481,7 @@ namespace BitDesk.ViewModels
                                     else
                                     {
                                         // 起動後初期値セット
-                                        PairBchJpy.AlarmMinus = ((tick.LTP / 100M) * 100M) - 1000M;
+                                        //PairBchJpy.AlarmMinus = ((tick.LTP / 100M) * 100M) - 1000M;
                                     }
 
                                     /*
@@ -10594,7 +10533,7 @@ namespace BitDesk.ViewModels
                                         {
                                             if (PlaySound)
                                             {
-                                                SystemSounds.Hand.Play();
+                                                //SystemSounds.Hand.Play();
                                                 isPlayed = true;
                                             }
                                         }
@@ -10609,7 +10548,7 @@ namespace BitDesk.ViewModels
                                         {
                                             if (PlaySound)
                                             {
-                                                SystemSounds.Hand.Play();
+                                                //SystemSounds.Hand.Play();
                                                 isPlayed = true;
                                             }
                                         }
@@ -10819,7 +10758,7 @@ namespace BitDesk.ViewModels
 
                                             if (PlaySound)
                                             {
-                                                SystemSounds.Hand.Play();
+                                                //SystemSounds.Hand.Play();
                                                 isPlayed = true;
                                             }
                                         }
@@ -10827,7 +10766,7 @@ namespace BitDesk.ViewModels
                                     else
                                     {
                                         // 起動後初期値セット
-                                        PairXlmJpy.AlarmPlus = ((tick.LTP / 100M) * 100M) + 1M;
+                                        //PairXlmJpy.AlarmPlus = ((tick.LTP / 100M) * 100M) + 1M;
                                     }
 
                                     if (PairXlmJpy.AlarmMinus > 0)
@@ -10838,7 +10777,7 @@ namespace BitDesk.ViewModels
                                             PairXlmJpy.HighLowInfoText = "⇓⇓⇓　安値アラーム " + PairXlmJpy.PairString;
                                             if (PlaySound)
                                             {
-                                                SystemSounds.Beep.Play();
+                                                //SystemSounds.Beep.Play();
                                                 isPlayed = true;
                                             }
                                         }
@@ -10846,7 +10785,7 @@ namespace BitDesk.ViewModels
                                     else
                                     {
                                         // 起動後初期値セット
-                                        PairXlmJpy.AlarmMinus = ((tick.LTP / 100M) * 100M) - 1M;
+                                        //PairXlmJpy.AlarmMinus = ((tick.LTP / 100M) * 100M) - 1M;
                                     }
 
                                     /*
@@ -10898,7 +10837,7 @@ namespace BitDesk.ViewModels
                                         {
                                             if (PlaySound)
                                             {
-                                                SystemSounds.Hand.Play();
+                                                //SystemSounds.Hand.Play();
                                                 isPlayed = true;
                                             }
                                         }
@@ -10913,7 +10852,7 @@ namespace BitDesk.ViewModels
                                         {
                                             if (PlaySound)
                                             {
-                                                SystemSounds.Hand.Play();
+                                                //SystemSounds.Hand.Play();
                                                 isPlayed = true;
                                             }
                                         }
