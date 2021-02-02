@@ -15,7 +15,7 @@
                   Width="800" Height="450" 
                   MinWidth="450" MinHeight="454"
         
-                  Background="Transparent"
+                  Background="{DynamicResource WindowBackgroundBaseColorBrush}"
 
                   WindowStyle="None"
                   helpers:MaximizeDoubleClickHelper.MaximizeDoubleClick="True" 
