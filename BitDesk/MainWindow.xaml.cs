@@ -317,7 +317,7 @@ namespace BitDesk
                                         }
                                         else
                                         {
-                                            Debug.WriteLine("ResizeToLarge");
+                                            //Debug.WriteLine("ResizeToLarge");
                                             ResizeToLarge();
                                         }
                                     }
