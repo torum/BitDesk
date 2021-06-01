@@ -1559,7 +1559,7 @@
                                 <ControlTemplate TargetType="{x:Type TabItem}">
                                     <Grid>
                                         <Grid.RowDefinitions>
-                                            <RowDefinition Height="48" />
+                                            <RowDefinition Height="43" />
                                         </Grid.RowDefinitions>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="{TemplateBinding Width}"/>
@@ -2081,6 +2081,137 @@
                         </Setter>
                     </Style>
                     
+                </ResourceDictionary>
+
+                <!-- PathSysCloseButton -->
+                <ResourceDictionary>
+
+                    <!-- FocusVisual -->
+                    <Style x:Key="ButtonFocusVisual">
+                        <Setter Property="Control.Template">
+                            <Setter.Value>
+                                <ControlTemplate>
+                                    <Border>
+                                        <Rectangle Margin="2" StrokeThickness="1" Stroke="{DynamicResource ControlMediumColorBrush}" StrokeDashArray="1 2" />
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+
+
+                    <Style x:Key="PathSysCloseButton" TargetType="Button">
+                        <Setter Property="SnapsToDevicePixels" Value="true" />
+                        <Setter Property="OverridesDefaultStyle" Value="true" />
+                        <Setter Property="FocusVisualStyle" Value="{DynamicResource ButtonFocusVisual}" />
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="Foreground" Value="{DynamicResource ControlForegroundColorBrush}"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Border x:Name="Border"
+                                        TextBlock.Foreground="{DynamicResource ControlForegroundColorBrush}"
+                                        CornerRadius="0"
+                                        BorderThickness="0">
+                                        <Border.BorderBrush>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                <LinearGradientBrush.GradientStops>
+                                                    <GradientStopCollection>
+                                                        <GradientStop Color="{DynamicResource BorderLightColor}" Offset="0.0" />
+                                                        <GradientStop Color="{DynamicResource BorderDarkColor}" Offset="1.0" />
+                                                    </GradientStopCollection>
+                                                </LinearGradientBrush.GradientStops>
+                                            </LinearGradientBrush>
+                                        </Border.BorderBrush>
+                                        <Border.Background>
+                                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0" Opacity="0">
+                                                <GradientStop Color="{DynamicResource ControlLightColor}" Offset="0" />
+                                                <GradientStop Color="{DynamicResource ControlMediumColor}" Offset="1" />
+                                            </LinearGradientBrush>
+                                        </Border.Background>
+
+                                        <Path x:Name="PathIcon"
+                                            Data="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}"
+                                            Stretch="Uniform"
+                                            Stroke="Transparent"
+                                            StrokeThickness="0"
+                                            Margin="4"
+                                            RenderTransformOrigin="0.5,0.5">
+                                            <Path.RenderTransform>
+                                                <TransformGroup>
+                                                    <TransformGroup.Children>
+                                                        <RotateTransform Angle="0" />
+                                                        <ScaleTransform ScaleX="1" ScaleY="1" />
+                                                    </TransformGroup.Children>
+                                                </TransformGroup>
+                                            </Path.RenderTransform>
+                                            <Path.Fill>
+                                                <SolidColorBrush x:Name="PathIconColor" Color="{DynamicResource ControlForegroundColor}"/>
+                                            </Path.Fill>
+                                        </Path>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+
+                                        <Trigger Property="IsDefault" Value="true">
+                                            <Setter TargetName="Border" Property="BorderBrush">
+                                                <Setter.Value>
+                                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                        <GradientBrush.GradientStops>
+                                                            <GradientStopCollection>
+                                                                <GradientStop Color="{DynamicResource ControlDarkColor}" Offset="0.0" />
+                                                                <GradientStop Color="{DynamicResource ControlDarkColor}" Offset="1.0" />
+                                                            </GradientStopCollection>
+                                                        </GradientBrush.GradientStops>
+                                                    </LinearGradientBrush>
+
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Trigger>
+
+                                        <MultiTrigger>
+                                            <MultiTrigger.Conditions>
+                                                <Condition Property="IsPressed" Value="False" />
+                                                <Condition Property="IsMouseOver" Value="True" />
+                                            </MultiTrigger.Conditions>
+                                            <Setter TargetName="PathIcon" Property="Fill" Value="{DynamicResource ControlMouseOverColorBrush}">
+                                                <!--
+                                                <Setter.Value>
+                                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                        <GradientBrush.GradientStops>
+                                                            <GradientStopCollection>
+                                                                <GradientStop Color="{DynamicResource ControlMouseOverColor}" Offset="0.0" />
+                                                                <GradientStop Color="{DynamicResource ControlDarkColor}" Offset="1.0" />
+                                                            </GradientStopCollection>
+                                                        </GradientBrush.GradientStops>
+                                                    </LinearGradientBrush>
+                                                </Setter.Value>
+                                                -->
+                                            </Setter>
+                                        </MultiTrigger>
+
+                                        <MultiTrigger>
+                                            <MultiTrigger.Conditions>
+                                                <Condition Property="IsPressed" Value="true" />
+                                                <Condition Property="IsMouseOver" Value="True" />
+                                            </MultiTrigger.Conditions>
+
+                                            <Setter TargetName="PathIcon" Property="Fill" Value="{DynamicResource ControlPressedColorBrush}"/>
+
+                                        </MultiTrigger>
+
+                                        <Trigger Property="IsMouseOver" Value="true">
+                                            <Setter TargetName="Border" Property="Background" Value="#E81123"></Setter>
+                                            <Setter TargetName="PathIcon" Property="Fill" Value="{DynamicResource ControlMouseOverColorBrush}"/>
+                                        </Trigger>
+
+                                    </ControlTemplate.Triggers>
+
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+
+
                 </ResourceDictionary>
 
                 <!-- Flat ComboBox -->

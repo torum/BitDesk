@@ -12,8 +12,8 @@
                   
                   Title="{Binding AppTitle}" 
                   
-                  Width="800" Height="450" 
-                  MinWidth="450" MinHeight="454"
+                  Width="800" Height="600" 
+                  MinWidth="450" MinHeight="480"
         
                   Background="{DynamicResource WindowBackgroundBaseColorBrush}"
 
@@ -191,7 +191,7 @@
                             <Button x:Name="MaxButton" Style="{DynamicResource PathButton}" Width="19" Height="19" Margin="3" Opacity="0.7" Click="MaxButton_Click" ToolTip="最大化(Alt+Space, X)" WindowChrome.IsHitTestVisibleInChrome="True">
                                 M4,4H20V20H4V4M6,8V18H18V8H6Z
                             </Button>
-                            <Button x:Name="CloseButton" Style="{DynamicResource PathButton}" Visibility="{Binding NotMinMode,Converter={StaticResource BoolToVisibilityCollapsedConverter}}" Width="18" Height="18" Margin="3" Opacity="0.7" Click="CloseButton_Click" ToolTip="閉じる(Alt+Space, C)/(Alt+F4)" WindowChrome.IsHitTestVisibleInChrome="True">
+                            <Button x:Name="CloseButton" Style="{DynamicResource PathSysCloseButton}" Visibility="{Binding NotMinMode,Converter={StaticResource BoolToVisibilityCollapsedConverter}}" Width="19" Height="19" Margin="3" Opacity="0.7" Click="CloseButton_Click" ToolTip="閉じる(Alt+Space, C)/(Alt+F4)" WindowChrome.IsHitTestVisibleInChrome="True">
                                 M13.46,12L19,17.54V19H17.54L12,13.46L6.46,19H5V17.54L10.54,12L5,6.46V5H6.46L12,10.54L17.54,5H19V6.46L13.46,12Z
                             </Button>
 
@@ -240,7 +240,7 @@
                 <!-- 通貨ペア切替タブ -->
                 <TabControl x:Name="SubNavTabControl" Width="30" Grid.Row="1" Grid.Column="1" Grid.RowSpan="3" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0" Padding="0" BorderThickness="0" SelectedIndex="{Binding ActivePairIndex}" Style="{StaticResource SubNavTabControlStyle}" TabStripPlacement="Left">
 
-                    <TabItem x:Name="BTC_Tab" Width="30" Height="48" ToolTip="ビットコイン" IsSelected="True" Style="{StaticResource SubNavTabItemStyle}">
+                    <TabItem x:Name="BTC_Tab" Width="30" Height="43" ToolTip="ビットコイン" IsSelected="True" Style="{StaticResource SubNavTabItemStyle}">
                         <TabItem.Header>
                             <Viewbox Margin="0" HorizontalAlignment="Left" VerticalAlignment="Center" Stretch="Uniform" Width="18" Height="18">
 
@@ -286,7 +286,7 @@
 
                     </TabItem>
 
-                    <TabItem x:Name="XRP_Tab" Width="30" Height="48" ToolTip="リップル" Style="{StaticResource SubNavTabItemStyle}" Visibility="Visible">
+                    <TabItem x:Name="XRP_Tab" Width="30" Height="43" ToolTip="リップル" Style="{StaticResource SubNavTabItemStyle}" Visibility="Visible">
                         <TabItem.Header>
                             <Viewbox Margin="0" HorizontalAlignment="Left" VerticalAlignment="Center" Stretch="Uniform" Width="18" Height="18">
 
@@ -337,7 +337,7 @@
 
                     </TabItem>
 
-                    <TabItem x:Name="ETH_Tab" Width="30" Height="48" ToolTip="イーサリアム" Style="{StaticResource SubNavTabItemStyle}" Visibility="Visible">
+                    <TabItem x:Name="ETH_Tab" Width="30" Height="43" ToolTip="イーサリアム" Style="{StaticResource SubNavTabItemStyle}" Visibility="Visible">
                         <TabItem.Header>
 
                             <Viewbox Margin="0" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Uniform" Width="12" Height="12">
@@ -416,9 +416,9 @@
                     -->
                     </TabItem>
 
-                    <TabItem x:Name="LTC_Tab" Width="30" Height="48" ToolTip="ライトコイン" Style="{StaticResource SubNavTabItemStyle}" Visibility="Visible">
+                    <TabItem x:Name="LTC_Tab" Width="30" Height="43" ToolTip="ライトコイン" Style="{StaticResource SubNavTabItemStyle}" Visibility="Visible">
                         <TabItem.Header>
-                            <Viewbox Margin="0" HorizontalAlignment="Left" VerticalAlignment="Center" Stretch="Uniform" Width="16" Height="16">
+                            <Viewbox Margin="-2 0 0 0" HorizontalAlignment="Left" VerticalAlignment="Center" Stretch="Uniform" Width="16" Height="16">
 
                                 <Canvas Opacity="1" Width="12" Height="12" HorizontalAlignment="Center" VerticalAlignment="Center">
                                     <Polygon FillRule="NonZero" Fill="{Binding ElementName=LTC_Tab,Path=Foreground}" Stretch="Uniform" Width="12" Height="12" Points="94.718,184.145 107.496,123.31 172.074,79.039 179.644,42.883 115.053,87.335 133.398,0 83.788,0   57.142,127.189 29.975,145.887 23.667,180.781 49.639,162.975 36.281,226.743 195.198,226.743 204.027,184.145 "/>
@@ -460,10 +460,10 @@
                     -->
                     </TabItem>
 
-                    <TabItem x:Name="BCH_Tab" Width="30" Height="48" ToolTip="ビットコイン　キャッシュ" Style="{StaticResource SubNavTabItemStyle}" Visibility="Visible">
+                    <TabItem x:Name="BCH_Tab" Width="30" Height="43" ToolTip="ビットコイン　キャッシュ" Style="{StaticResource SubNavTabItemStyle}" Visibility="Visible">
                         <TabItem.Header>
 
-                            <Viewbox Margin="0" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Uniform" Width="18" Height="18">
+                            <Viewbox Margin="-2 0 0 0" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Uniform" Width="18" Height="18">
 
                                 <Canvas Width="24" Height="24" HorizontalAlignment="Center" VerticalAlignment="Center">
                                     <Canvas.RenderTransform>
@@ -512,9 +512,9 @@
                     -->
                     </TabItem>
 
-                    <TabItem x:Name="Mona_Tab" Width="30" Height="48" ToolTip="モナーコイン" Style="{StaticResource SubNavTabItemStyle}" Visibility="Visible">
+                    <TabItem x:Name="Mona_Tab" Width="30" Height="43" ToolTip="モナーコイン" Style="{StaticResource SubNavTabItemStyle}" Visibility="Visible">
                         <TabItem.Header>
-                            <Viewbox Margin="0" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Uniform" Width="18" Height="18">
+                            <Viewbox Margin="-2 0 0 0" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Uniform" Width="18" Height="18">
 
                                 <Canvas Width="24" Height="24" HorizontalAlignment="Center" VerticalAlignment="Center">
 
@@ -557,9 +557,9 @@
                     -->
                     </TabItem>
 
-                    <TabItem x:Name="Xlm_Tab" Width="30" Height="48" ToolTip="ステラルーメン" Style="{StaticResource SubNavTabItemStyle}" Visibility="Visible">
+                    <TabItem x:Name="Xlm_Tab" Width="30" Height="43" ToolTip="ステラルーメン" Style="{StaticResource SubNavTabItemStyle}" Visibility="Visible">
                         <TabItem.Header>
-                            <Viewbox Margin="0" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Uniform" Width="18" Height="18">
+                            <Viewbox Margin="-2 0 0 0" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Uniform" Width="18" Height="18">
 
                                 <Canvas Width="24" Height="24" HorizontalAlignment="Center" VerticalAlignment="Center">
 
@@ -601,8 +601,8 @@
                     </lvc:CartesianChart>
                     -->
                     </TabItem>
-                    
-                    <TabItem x:Name="Qtum_Tab" Width="30" Height="48" ToolTip="クアンタム" Style="{StaticResource SubNavTabItemStyle}" Visibility="Visible">
+
+                    <TabItem x:Name="Qtum_Tab" Width="30" Height="43" ToolTip="クアンタム" Style="{StaticResource SubNavTabItemStyle}" Visibility="Visible">
                         <TabItem.Header>
                             <Viewbox Margin="0" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Uniform" Width="18" Height="18">
 
@@ -614,7 +614,7 @@
                         </TabItem.Header>
                     </TabItem>
 
-                    <TabItem x:Name="Bat_Tab" Width="30" Height="48" ToolTip="ベーシックアテンショントークン" Style="{StaticResource SubNavTabItemStyle}" Visibility="Visible">
+                    <TabItem x:Name="Bat_Tab" Width="30" Height="43" ToolTip="ベーシックアテンショントークン" Style="{StaticResource SubNavTabItemStyle}" Visibility="Visible">
                         <TabItem.Header>
                             <Viewbox Margin="0" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Uniform" Width="18" Height="18">
                                 <Path Stretch="Uniform" Width="24" Height="24" Fill="{Binding ElementName=Bat_Tab,Path=Foreground}" Data="M 1005.1094 140.5 L 0 1859.5 L 2000 1857.1406 L 1005.1094 140.5 z M 1002.75 836.16992 L 1415.4395 1522.4199 L 591.90039 1522.4199 L 1002.75 836.16992 z ">
