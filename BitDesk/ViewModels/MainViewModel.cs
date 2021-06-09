@@ -27,7 +27,7 @@ using Microsoft.Win32;
 namespace BitDesk.ViewModels
 {
     /// <summary>
-    /// v0.6.2 Fixed size issue in MinMode.
+    /// v0.6.3 Fixed size issue in MinMode.
     /// v0.6.2 bat_jpyとqtum_jpyを追加。
     /// v0.6.1 設定画面のアラーム音も消した。IsEthJpyAssetVisible
     /// v0.6.0 アラーム音全部潰した。デフォルトでアラーム数値を入れるのも止めた。レイアウト変更の段階を増やした。

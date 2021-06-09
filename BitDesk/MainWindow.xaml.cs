@@ -104,16 +104,6 @@ namespace BitDesk
             SetDepthListboxScrollPosition();
         }
 
-        private void Depth2ListBox_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            Task.Run(() => SetDepth2ListboxScrollPosition());
-        }
-
-        private void Depth2ListBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            SetDepth2ListboxScrollPosition();
-        }
-
         private async void SetDepthListboxScrollPosition()
         {
             try
@@ -167,61 +157,6 @@ namespace BitDesk
 
 
         }
-
-        private async void SetDepth2ListboxScrollPosition()
-        {
-            /*
-            try
-            {
-
-                await Task.Delay(1000);
-
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    if (this.Depth2ListBox.Items.Count > 0)
-                    {
-                        try
-                        {
-                            // ListBoxからAutomationPeerを取得
-                            var peer = ItemsControlAutomationPeer.CreatePeerForElement(this.Depth2ListBox);
-                            // GetPatternでIScrollProviderを取得
-                            var scrollProvider = peer.GetPattern(System.Windows.Automation.Peers.PatternInterface.Scroll) as IScrollProvider;
-
-                            if (scrollProvider != null)
-                            {
-                                if (scrollProvider.VerticallyScrollable)
-                                {
-                                    try
-                                    {
-                                        // パーセントで位置を指定してスクロール
-                                        scrollProvider.SetScrollPercent(
-                                            // 水平スクロールは今の位置
-                                            scrollProvider.HorizontalScrollPercent,
-                                            // 垂直方向はどまんなか！50%
-                                            50.0);
-                                    }
-                                    catch
-                                    {
-                                        System.Diagnostics.Debug.WriteLine("■■■■■ SetDepth2ListboxScrollPosition scrollProvider null Error");
-                                    }
-                                }
-                            }
-                        }
-                        catch
-                        {
-                            System.Diagnostics.Debug.WriteLine("■■■■■ SetDepth2ListboxScrollPosition SetScrollPercent Error");
-                        }
-                    }
-                });
-
-            }
-            catch (Exception e)
-            {
-                System.Diagnostics.Debug.WriteLine("■■■■■ SetDepth2ListboxScrollPosition Exception: " + e);
-            }
-            */
-
-        }
         
         private void Depth2AyumiTab_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {/*
@@ -253,11 +188,6 @@ namespace BitDesk
         private void DepthListBoxCenter_Click(object sender, RoutedEventArgs e)
         {
             SetDepthListboxScrollPosition();
-        }
-
-        private void Depth2ListBoxCenter_Click(object sender, RoutedEventArgs e)
-        {
-            SetDepth2ListboxScrollPosition();
         }
 
         #endregion
