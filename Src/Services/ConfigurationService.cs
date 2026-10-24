@@ -1,10 +1,15 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Threading;
+using BitDesk.Models;
 using BitDesk.Services.Contracts;
+using BitDesk.ViewModels;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using System;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
@@ -29,7 +34,8 @@ internal sealed class ConfigurationService : IConfigurationService
     private bool _isInitialized;
     private bool _isConfigLoaded;
     private string? _configFilePath = string.Empty;
-    private XDocument? _xdoc;
+    private XDocument? _xDoc;
+    private XElement? _xPairs;
 
     public ConfigurationService()
     {
@@ -43,7 +49,8 @@ internal sealed class ConfigurationService : IConfigurationService
     {
         _configFilePath = configFilePath;
         _isConfigLoaded = false;
-        _xdoc = null;
+        _xDoc = null;
+        _xPairs = null;
         _isInitialized = true;
 
         CurrentConfiguration = new Models.Configuration();
@@ -89,8 +96,8 @@ internal sealed class ConfigurationService : IConfigurationService
 
         try
         {
-            _xdoc = XDocument.Load(_configFilePath);
-            if (_xdoc.Root is null)
+            _xDoc = XDocument.Load(_configFilePath);
+            if (_xDoc.Root is null)
             {
                 return config;
             }
@@ -98,7 +105,7 @@ internal sealed class ConfigurationService : IConfigurationService
             #region == Window setting ==
             
             // Main Window element
-            var mainWindow = _xdoc.Root.Element("MainWindow");
+            var mainWindow = _xDoc.Root.Element("MainWindow");
             if (mainWindow is not null)
             {
                 int wY = 24;
@@ -199,7 +206,7 @@ internal sealed class ConfigurationService : IConfigurationService
 
             #region == Options ==
             
-            var opts = _xdoc.Root.Element("Options");
+            var opts = _xDoc.Root.Element("Options");
             if (opts is not null)
             {
                 var attrs = opts.Attribute("IsSaveLog");
@@ -284,7 +291,7 @@ internal sealed class ConfigurationService : IConfigurationService
 
 
             }
-            
+
             #endregion
 
             _isConfigLoaded = true;
@@ -300,7 +307,162 @@ internal sealed class ConfigurationService : IConfigurationService
         return CurrentConfiguration;
     }
 
-    public async Task SaveConfigurationAsync()
+    public void GetPairs(ObservableCollection<PairViewModel> pairs)
+    {
+        // Each Pairs
+        if (_xPairs == null)
+        {
+            return;
+        }
+
+        var pairList = _xPairs.Elements("Pair");
+
+        foreach (var hoge in pairList)
+        {
+            if (hoge is not XElement element)
+                continue;
+
+            var xvalue = element.Attribute("PairCode");
+            if (xvalue == null)
+            {
+                continue;
+            }
+            if (string.IsNullOrEmpty(xvalue.Value))
+            {
+                continue;
+            }
+
+            try
+            {
+                var pair = pairs.FirstOrDefault(x => x.PairCode.ToString() == xvalue.Value);
+                if (pair is not null)
+                {
+                    // TODO:
+                    //pair.IsChartTooltipVisible = MainVM.IsChartTooltipVisible;
+
+                    var attrv = hoge.Attribute("IsEnabled");
+                    if (attrv != null)
+                    {
+                        if (!string.IsNullOrEmpty(attrv.Value))
+                        {
+                            pair.IsEnabled = attrv.Value == "True";
+                        }
+                    }
+
+                    attrv = hoge.Attribute("IsPaneOpen");
+                    if (attrv != null)
+                    {
+                        if (!string.IsNullOrEmpty(attrv.Value))
+                        {
+                            pair.IsPaneOpen = attrv.Value == "True";
+                        }
+                    }
+
+                    attrv = hoge.Attribute("CandleType");
+                    if (attrv != null)
+                    {
+                        if (!string.IsNullOrEmpty(attrv.Value))
+                        {
+                            var candleTypeString = attrv.Value;
+
+                            if (candleTypeString == "OneMin")
+                            {
+                                pair.SelectedCandleType = CandleTypes.OneMin;
+                            }
+                            else if (candleTypeString == "FiveMin")
+                            {
+                                pair.SelectedCandleType = CandleTypes.FiveMin;
+                            }
+                            else if (candleTypeString == "FifteenMin")
+                            {
+                                pair.SelectedCandleType = CandleTypes.FifteenMin;
+                            }
+                            else if (candleTypeString == "ThirtyMin")
+                            {
+                                pair.SelectedCandleType = CandleTypes.ThirtyMin;
+                            }
+                            else if (candleTypeString == "OneHour")
+                            {
+                                pair.SelectedCandleType = CandleTypes.OneHour;
+                            }
+                            else if (candleTypeString == "FourHour")
+                            {
+                                pair.SelectedCandleType = CandleTypes.FourHour;
+                            }
+                            else if (candleTypeString == "EightHour")
+                            {
+                                pair.SelectedCandleType = CandleTypes.EightHour;
+                            }
+                            else if (candleTypeString == "TwelveHour")
+                            {
+                                pair.SelectedCandleType = CandleTypes.TwelveHour;
+                            }
+                            else if (candleTypeString == "OneDay")
+                            {
+                                pair.SelectedCandleType = CandleTypes.OneDay;
+                            }
+                            else if (candleTypeString == "OneWeek")
+                            {
+                                pair.SelectedCandleType = CandleTypes.OneWeek;
+                            }
+                            else if (candleTypeString == "OneMonth")
+                            {
+                                pair.SelectedCandleType = CandleTypes.OneMonth;
+                            }
+                        }
+                    }
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Exception@GetPairs: {ex}");
+
+                Dispatcher.UIThread.Post(() =>
+                {
+                    App.AppendErrorLog("Exception@GetPairs", ex.ToString());
+                });
+            }
+        }
+    }
+
+    private static XmlElement SetPairs(ObservableCollection<PairViewModel> pairs, XmlDocument doc)
+    {
+        // Each pairs
+        var xPairs = doc.CreateElement(string.Empty, "Pairs", string.Empty);
+        foreach (var hoge in pairs)
+        {
+            var xPair = doc.CreateElement(string.Empty, "Pair", string.Empty);
+
+            var xAttrs = doc.CreateAttribute("PairCode");
+            xAttrs.Value = hoge.PairCode.ToString();
+            xPair.SetAttributeNode(xAttrs);
+
+            xAttrs = doc.CreateAttribute("IsEnabled");
+            xAttrs.Value = hoge.IsEnabled.ToString();
+            xPair.SetAttributeNode(xAttrs);
+
+            xAttrs = doc.CreateAttribute("IsPaneOpen");
+            xAttrs.Value = hoge.IsPaneOpen.ToString();
+            xPair.SetAttributeNode(xAttrs);
+
+            xAttrs = doc.CreateAttribute("CandleType");
+            xAttrs.Value = hoge.SelectedCandleType.ToString();
+            xPair.SetAttributeNode(xAttrs);
+
+            xAttrs = doc.CreateAttribute("IsChartTooltipVisible");
+            xAttrs.Value = "";// TODO:
+            xPair.SetAttributeNode(xAttrs);
+
+            xPairs.AppendChild(xPair);
+
+        }
+
+        return xPairs;
+    }
+
+    public async Task SaveConfigurationAsync(ObservableCollection<PairViewModel> pairs)
     {
         if (!_isInitialized)
         {
@@ -446,6 +608,10 @@ internal sealed class ConfigurationService : IConfigurationService
         root.AppendChild(opts);
 
         #endregion
+
+        // Each pairs
+        var xPairs = SetPairs(pairs, doc);
+        root.AppendChild(xPairs);
 
         try
         {

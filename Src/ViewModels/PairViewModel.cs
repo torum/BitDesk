@@ -2059,11 +2059,11 @@ public partial class PairViewModel : ObservableObject
 
     private async Task UpdateChartAsync()
     {
-        if (!IsChartInitAndLoaded || !IsEnabled || _isChartRefreshRunning) 
+        if (!IsChartInitAndLoaded || !IsEnabled || !IsSelectedActive || _isChartRefreshRunning) 
         {
             // || !IsSelectedActive 
-            // Let's update the chart even if it's not selected,
-            // so that when the user switches to it, it's already updated.
+            // Let's update the chart even if it's not selected, so that when the user switches to it, it's already updated.
+            // OR... ticker updates as well, sort of, so maybe we don't need to update the chart if it's not selected.
 
             return;
         }

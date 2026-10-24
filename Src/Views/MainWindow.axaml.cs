@@ -241,7 +241,7 @@ public partial class MainWindow : Window
 
         config.IsNavigationViewMenuOpen = this.NavigateViewControl.IsPaneOpen;
 
-        await _configurationService.SaveConfigurationAsync();
+        await _configurationService.SaveConfigurationAsync(_mainViewModel.Pairs);
 
         #endregion
 
