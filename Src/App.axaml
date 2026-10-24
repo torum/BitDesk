@@ -7,7 +7,7 @@
   
 	<Application.Styles>
 		<sty:FluentAvaloniaTheme PreferUserAccentColor="True" UseSystemFontOnWindows="True" />
-		<StyleInclude Source="avares://BitDeskX/Styles/Styles.axaml" />
+		<StyleInclude Source="avares://BitDesk/Styles/Styles.axaml" />
 
 		
 	</Application.Styles>

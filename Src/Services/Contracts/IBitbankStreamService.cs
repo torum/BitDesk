@@ -16,7 +16,9 @@ namespace BitDesk.Services.Contracts
 
         bool IsConnected { get; }
 
-        Task LeaveRoomAsync(PairCodes pairCode);
-        Task JoinRoomAsync(PairCodes pairCode);
+        Task LeaveTickerRoomAsync(PairCodes pairCode);
+        Task JoinTickerRoomAsync(PairCodes pairCode);
+        Task LeaveDepthRoomAsync(PairCodes pairCode);
+        Task JoinDepthRoomAsync(PairCodes pairCode);
     }
 }

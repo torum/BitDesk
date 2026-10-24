@@ -25,7 +25,7 @@ namespace BitDesk;
 
 public partial class App : Application
 {
-    public const string AppName = "BitDeskX";
+    public const string AppName = "BitDesk";
     private const string AppDeveloper = "torum";
 
     // Log file.
@@ -48,7 +48,7 @@ public partial class App : Application
         services.AddSingleton<IConfigurationService, ConfigurationService>();
         services.AddSingleton<INavigationService, NavigationService>();
 
-        services.AddHttpClient("BitDeskX", client =>
+        services.AddHttpClient("BitDesk", client =>
         {
             // Addition to this timeout, also use the per-request cancellation token as the fallback timeout mechanism.
             // Though, not a good idea to set timeout here to avoid disposable race. 

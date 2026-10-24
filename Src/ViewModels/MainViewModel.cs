@@ -1677,11 +1677,11 @@ internal partial class MainViewModel : ObservableObject
         {
             if (e.IsEnabled)
             {
-                await _bitbankStreamService.JoinRoomAsync(e.PairCode);
+                await _bitbankStreamService.JoinTickerRoomAsync(e.PairCode);
             }
             else
             {
-                await _bitbankStreamService.LeaveRoomAsync(e.PairCode);
+                await _bitbankStreamService.LeaveTickerRoomAsync(e.PairCode);
             }
         }
         catch (Exception ex)

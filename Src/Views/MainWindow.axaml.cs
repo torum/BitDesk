@@ -83,8 +83,8 @@ public partial class MainWindow : Window
 
         InitializeComponent();
 
-        this.Title = "BitDeskX";
-        Bitmap bitmap = new(AssetLoader.Open(new Uri("avares://BitDeskX/Assets/BitDeskX-24.png")));
+        this.Title = "BitDesk";
+        Bitmap bitmap = new(AssetLoader.Open(new Uri("avares://BitDesk/Assets/BitDesk-24.png")));
         ImageAppIcon.Source = bitmap;
         this.WindowDecorations = WindowDecorations.Full;
         this.ExtendClientAreaToDecorationsHint = true;

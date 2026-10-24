@@ -11,8 +11,8 @@
 		 Background="{DynamicResource SolidBackgroundFillColorBaseBrush}"
 		MinWidth="320" 
 		MinHeight="460"
-        Icon="/Assets/BitDeskX.ico"
-        Title="BitDeskX">
+        Icon="/Assets/BitDesk.ico"
+        Title="BitDesk">
 
     <Design.DataContext>
         <!-- This only sets the DataContext for the previewer in an IDE,

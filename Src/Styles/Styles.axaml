@@ -38,10 +38,10 @@
 
 
 			<ResourceDictionary.MergedDictionaries>
-				<ResourceInclude Source="avares://BitDeskX/Styles/NavigationViewStyles.axaml" />
-				<ResourceInclude Source="avares://BitDeskX/Styles/NavigationViewItemStyles.axaml" />
-				<ResourceInclude Source="avares://BitDeskX/Styles/NavigationViewItemPresenterStyles.axaml" />
-				<ResourceInclude Source="avares://BitDeskX/Styles/WindowDecorations.axaml" />
+				<ResourceInclude Source="avares://BitDesk/Styles/NavigationViewStyles.axaml" />
+				<ResourceInclude Source="avares://BitDesk/Styles/NavigationViewItemStyles.axaml" />
+				<ResourceInclude Source="avares://BitDesk/Styles/NavigationViewItemPresenterStyles.axaml" />
+				<ResourceInclude Source="avares://BitDesk/Styles/WindowDecorations.axaml" />
 			</ResourceDictionary.MergedDictionaries>
 
         </ResourceDictionary>

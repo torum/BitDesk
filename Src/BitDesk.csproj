@@ -6,8 +6,8 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
 	  <RootNamespace>BitDesk</RootNamespace>
-	  <AssemblyName>BitDeskX</AssemblyName>
-	  <ApplicationIcon>Assets\BitDeskX.ico</ApplicationIcon>
+	  <AssemblyName>BitDesk</AssemblyName>
+	  <ApplicationIcon>Assets\BitDesk.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Assets\BitDeskX.ico" />
+    <Content Include="Assets\BitDesk.ico" />
   </ItemGroup>
 
   <ItemGroup>
