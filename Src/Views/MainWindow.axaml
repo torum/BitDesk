@@ -1,0 +1,132 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:BitDesk.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:ui="using:FluentAvalonia.UI.Controls"
+		xmlns:control="using:Avalonia.Controls"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="BitDesk.Views.MainWindow"
+        x:DataType="vm:MainViewModel"
+		 Background="{DynamicResource SolidBackgroundFillColorBaseBrush}"
+		MinWidth="320" 
+		MinHeight="460"
+        Icon="/Assets/BitDeskX.ico"
+        Title="BitDeskX">
+
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm:MainViewModel/>
+    </Design.DataContext>
+
+	<Grid x:Name="MainGrid" RowDefinitions="*,Auto">
+		<Grid x:Name="ContentGrid" Grid.Row="0" Margin="0">
+
+			<!-- NavigationView -->
+			<ui:FANavigationView Grid.Row="0" Margin="0" 
+								 Name="NavigateViewControl" 
+								 Loaded="NavigationView_Loaded" 
+								 SelectionFollowsFocus="False" 
+								 ItemInvoked="NavigationView_ItemInvoked" 
+								 SelectionChanged="NavigationView_SelectionChanged" 
+								 IsPaneToggleButtonVisible="True" 
+								 IsSettingsVisible="True" 
+								 PaneDisplayMode="Auto" 
+								 OpenPaneLength="260" 
+								 IsPaneOpen="{Binding IsNavigationViewMenuOpen, Mode=TwoWay}" 
+								 ScrollViewer.AllowAutoHide="True" 
+								 CompactModeThresholdWidth="740" 
+								 ExpandedModeThresholdWidth="1000" 
+								 ScrollViewer.VerticalScrollBarVisibility="Visible">
+				<ui:FANavigationView.PaneHeader>
+					<Border WindowDecorationProperties.ElementRole="TitleBar" Margin="0,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent">
+						<Grid ColumnDefinitions="*">
+							<!-- App Icon and Title hide when x11 -->
+							<StackPanel x:Name="AppTitle" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,42,0" IsVisible="{OnPlatform Default=False, Windows=True, Linux=True, x:TypeArguments=x:Boolean}">
+								<Image x:Name="ImageAppIcon" Width="16" Height="16" Margin="0,0,6,0" Stretch="Uniform" StretchDirection="DownOnly" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+								<TextBlock Text="BitDesk" Opacity="0.9" FontWeight="SemiBold" Margin="0,0,0,1" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+							</StackPanel>
+						</Grid>
+					</Border>
+				</ui:FANavigationView.PaneHeader>
+
+				<ui:FANavigationView.MenuItems>
+					<ui:FANavigationViewItem Tag="btc_jpy" Padding="3" IsVisible="{Binding IsOnBtcJpy, Mode=OneWay}">
+						<ui:FANavigationViewItem.IconSource>
+							<ui:FAPathIconSource Data="{StaticResource BtcIconData}" />
+						</ui:FANavigationViewItem.IconSource>
+						<ui:FANavigationViewItem.Content>
+							<Grid>
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="*"/>
+									<ColumnDefinition Width="86"/>
+								</Grid.ColumnDefinitions>
+								<TextBlock Grid.Column="0" Text="{Binding LtpBtcJpy, Mode=OneWay}" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0"/>
+								<TextBlock Grid.Column="1" Text="{Binding LtpBtcJpyPercentChange, Mode=OneWay}" FontWeight="Normal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0"/>
+							</Grid>
+						</ui:FANavigationViewItem.Content>
+					</ui:FANavigationViewItem>
+					<ui:FANavigationViewItem Tag="xrp_jpy" Padding="3" IsVisible="{Binding IsOnXrpJpy, Mode=OneWay}">
+						<ui:FANavigationViewItem.IconSource>
+							<ui:FAPathIconSource Data="{StaticResource XrpIconData}" />
+						</ui:FANavigationViewItem.IconSource>
+						<ui:FANavigationViewItem.Content>
+							<Grid>
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="*"/>
+									<ColumnDefinition Width="86"/>
+								</Grid.ColumnDefinitions>
+								<TextBlock Grid.Column="0" Text="{Binding LtpXrpJpy, Mode=OneWay}" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0"/>
+								<TextBlock Grid.Column="1" Text="{Binding LtpXrpJpyPercentChange, Mode=OneWay}" FontWeight="Normal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0"/>
+							</Grid>
+						</ui:FANavigationViewItem.Content>
+					</ui:FANavigationViewItem>
+					<ui:FANavigationViewItem Tag="eth_jpy" Padding="3" IsVisible="{Binding IsOnEthJpy, Mode=OneWay}">
+						<ui:FANavigationViewItem.IconSource>
+							<ui:FAPathIconSource Data="{StaticResource EthIconData}" />
+						</ui:FANavigationViewItem.IconSource>
+						<ui:FANavigationViewItem.Content>
+							<Grid>
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="*"/>
+									<ColumnDefinition Width="86"/>
+								</Grid.ColumnDefinitions>
+								<TextBlock Grid.Column="0" Text="{Binding LtpEthJpy, Mode=OneWay}" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0"/>
+								<TextBlock Grid.Column="1" Text="{Binding LtpEthJpyPercentChange, Mode=OneWay}" FontWeight="Normal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0"/>
+							</Grid>
+						</ui:FANavigationViewItem.Content>
+					</ui:FANavigationViewItem>
+				</ui:FANavigationView.MenuItems>
+
+				<ui:FANavigationView.FooterMenuItems>
+					<ui:FANavigationViewItem Tag="gridview" Padding="3">
+						<ui:FANavigationViewItem.IconSource>
+							<ui:FAPathIconSource Data="{StaticResource TableIconData}" />
+						</ui:FANavigationViewItem.IconSource>
+						<ui:FANavigationViewItem.Content>
+							<TextBlock Text="Grid View" VerticalAlignment="Center" Margin="0"/>
+						</ui:FANavigationViewItem.Content>
+					</ui:FANavigationViewItem>
+				</ui:FANavigationView.FooterMenuItems>
+
+				<Grid RowDefinitions="36,*">
+					<Border Grid.Row="0" WindowDecorationProperties.ElementRole="TitleBar" Background="Transparent"></Border>				
+					<ui:FAFrame x:Name="RootFrame" Grid.Row="0" Grid.RowSpan="2" Navigated="RootFrame_Navigated"/>
+				</Grid>
+			
+			</ui:FANavigationView>
+
+		</Grid>
+
+		<Grid Grid.Row="1">
+			<!-- InfoBar -->
+			<!--
+			<ui:FAInfoBar Title="{Binding InfoBarInfoTitle}" IsOpen="{Binding IsShowInfoWindow, Mode=TwoWay}" IsIconVisible="True" IsClosable="True" Severity="Informational" Message="{Binding InfoBarInfoMessage}" />
+			<ui:FAInfoBar Title="{Binding InfoBarAckTitle}" IsOpen="{Binding IsShowAckWindow, Mode=TwoWay}" IsIconVisible="True" IsClosable="True" Severity="Warning" Message="{Binding InfoBarAckMessage}" />
+			<ui:FAInfoBar Title="{Binding InfoBarErrTitle}" IsOpen="{Binding IsShowErrWindow, Mode=TwoWay}" IsIconVisible="True" IsClosable="True" Severity="Error" Message="{Binding InfoBarErrMessage}" />
+			-->
+		</Grid>
+	</Grid>
+
+</Window>

@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+	  <RootNamespace>BitDesk</RootNamespace>
+	  <AssemblyName>BitDeskX</AssemblyName>
+	  <ApplicationIcon>Assets\BitDeskX.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AvaloniaResource Include="Assets\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Assets\BitDeskX.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="12.1.4" />
+    <PackageReference Include="Avalonia.Desktop" Version="12.1.4" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="12.1.4" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+	  <PackageReference Include="Egolds.Xaml.Behaviors.Interactions.Animated" Version="11.4.0" />
+	  <PackageReference Include="FluentAvaloniaUI" Version="3.1.0" />
+	  <PackageReference Include="LiveChartsCore.SkiaSharpView.Avalonia" Version="2.1.0-dev-798" />
+	  <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.13" />
+	  <PackageReference Include="SocketIOClient" Version="4.0.5" />
+	  <PackageReference Include="Xaml.Behaviors.Avalonia" Version="12.0.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Views\GridViewPage.axaml.cs">
+      <DependentUpon>GridViewPage.axaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+</Project>

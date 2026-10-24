@@ -1,0 +1,34 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="BitDesk.Views.SettingsPage"
+             xmlns:vm="using:BitDesk.ViewModels"
+             x:DataType="vm:MainViewModel">
+    <Grid x:Name="ContentArea" Margin="{DynamicResource PageContentTitleBarSpacingThickness}">
+        <StackPanel Margin="24">
+            <StackPanel Orientation="Horizontal" Margin="24,12,0,0">
+                <Viewbox Width="16">
+                    <PathIcon Data="{StaticResource BtcIconData}"/>
+                </Viewbox>
+                <ToggleSwitch Margin="24,0,0,0" IsChecked="{Binding IsOnBtcJpy, Mode=TwoWay}"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="24,12,0,0">
+                <Viewbox Width="16">
+                    <PathIcon Data="{StaticResource XrpIconData}"/>
+                </Viewbox>
+                <ToggleSwitch Margin="24,0,0,0" IsChecked="{Binding IsOnXrpJpy, Mode=TwoWay}"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="24,12,0,0">
+                <Viewbox Width="16">
+                    <PathIcon Data="{StaticResource EthIconData}"/>
+                </Viewbox>
+                <ToggleSwitch Margin="24,0,0,0" IsChecked="{Binding IsOnEthJpy, Mode=TwoWay}"/>
+            </StackPanel>
+        </StackPanel>
+
+    </Grid>
+</UserControl>

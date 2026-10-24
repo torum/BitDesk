@@ -1,0 +1,43 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:views="clr-namespace:BitDesk.Views"
+             xmlns:vm="clr-namespace:BitDesk.ViewModels"
+             x:DataType="vm:MainViewModel"
+             x:Class="BitDesk.Views.GridViewPage">
+    <Grid x:Name="ContentArea" Margin="{DynamicResource PageContentTitleBarSpacingThickness}">
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <ItemsControl ItemsSource="{Binding EnabledPairs}" Margin="12,0,0,0">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Columns="{Binding UniformGridColumns}" UseLayoutRounding="True" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="vm:PairViewModel">
+                    <Grid Margin="6">
+                        <Border HorizontalAlignment="Left" 
+                                VerticalAlignment="Top" 
+                                Margin="8" 
+                                Padding="8,4" 
+                                CornerRadius="4" 
+                                Background="{DynamicResource AcrylicInAppFillColorDefaultBrush}" 
+                                BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}" 
+                                BorderThickness="1">                        
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding PairString}" FontWeight="Normal" Margin="4" />
+                                <TextBlock Text="{Binding LtpString}" FontWeight="Normal" Margin="4" />
+                                <TextBlock Text="{Binding PercentChange}" FontWeight="Normal" Margin="4" />
+                            </StackPanel>
+                        </Border>
+
+                        <views:ChartContent PairVM="{Binding}" Padding="2"/>
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </ScrollViewer>
+    </Grid>
+</UserControl>
