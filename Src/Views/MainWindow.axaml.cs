@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 
 namespace BitDesk.Views;
 
@@ -138,6 +139,8 @@ public partial class MainWindow : Window
         //this.ActualThemeVariantChanged += OnActualThemeVariantChanged;
         //this.PropertyChanged += this.OnWindow_PropertyChanged;
 
+        await Task.Yield();
+
         await _mainViewModel.InitializeAndStartAsync();
 
         bool IsOnlySettingsPage = false;
@@ -187,6 +190,8 @@ public partial class MainWindow : Window
 
             if (_navigationService.NavigateTo(page.FullName, null))
             {
+                await Task.Yield();
+
                 NavigateViewControl.SelectedItem = NavigateViewControl.MenuItems.OfType<FANavigationViewItem>().Where(x => x.Tag?.ToString()?.Equals(pairViewModel.PairCode.ToString()) == true).FirstOrDefault();//.First();
 
                 await _mainViewModel.SetSelectedPairFromCodeAsync(pairViewModel.PairCode);

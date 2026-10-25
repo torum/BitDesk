@@ -16,16 +16,13 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Threading.Tasks;
-using System.Transactions;
 
 namespace BitDesk.ViewModels;
 
 public partial class PairViewModel : ObservableObject
 {
-    private DateTime lastChartLoadedDateTime = DateTime.MinValue;
+    //private DateTime lastChartLoadedDateTime = DateTime.MinValue;
 
-    public delegate void DepthCenterEventHandler();
-    //public event DepthCenterEventHandler? DepthScrollCenter;
     private bool _isChartLoading;
     private readonly List<DateTime> _chartTimes = [];
     private bool _isChartRefreshRunning;
@@ -1774,7 +1771,7 @@ public partial class PairViewModel : ObservableObject
 
         IsChartInitAndLoaded = true;
 
-        lastChartLoadedDateTime = DateTime.Now;
+        //lastChartLoadedDateTime = DateTime.Now;
     }
 
     private async Task<List<Ohlcv>?> GetCandlesticksAsync(PairCodes pair, CandleTypes ct)
