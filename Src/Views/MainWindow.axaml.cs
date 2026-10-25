@@ -360,6 +360,8 @@ public partial class MainWindow : Window
             {
                 await _mainViewModel.SetSelectedAllPairsFromCodeAsync();
             }
+
+            return;
         }
 
         /*
