@@ -1,5 +1,6 @@
 ﻿using BitDesk.Models;
 using BitDesk.Services.Contracts;
+using FluentAvalonia.UI.Controls;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace BitDesk.Services;
 
-internal class BitbankHttpSearvice : IBitbankHttpSearvice
+internal class BitbankHttpService : IBitbankHttpService
 {
     private readonly HttpClient? _publicClient;
     private readonly HttpClient? _privateClient;
@@ -22,9 +23,10 @@ internal class BitbankHttpSearvice : IBitbankHttpSearvice
 
     private readonly IHttpClientFactory _httpClientFactory;
 
-    public event EventHandler<ClientError>? ErrorOccured;
+    public event EventHandler<ErrorInfo>? ErrorOccured;
+    public event EventHandler<ApiClientError>? ApiErrorOccured;
 
-    public BitbankHttpSearvice(IHttpClientFactory httpClientFactory)
+    public BitbankHttpService(IHttpClientFactory httpClientFactory)
     {
         _httpClientFactory = httpClientFactory;
         _publicClient = _httpClientFactory.CreateClient("BitDesk");
@@ -208,12 +210,25 @@ internal class BitbankHttpSearvice : IBitbankHttpSearvice
                 System.Diagnostics.Debug.WriteLine("GetCandlestick: HttpRequestException - " + ex.Message);
             }
 
-            //TODO
+            var errorInfo = new ErrorInfo(ErrType.ConnectionError)
+            {
+                ErrorMessage = $"{ex.Message} @GetCandlestickAsync.",
+                ErrorSeverity = FAInfoBarSeverity.Error
+            };
+
+            ErrorOccured?.Invoke(this, errorInfo);
+
             return null;
         }
         catch (Exception ex)
         {
             Debug.WriteLine("GetCandlestick: Exception - " + ex.Message);
+            var errorInfo = new ErrorInfo(ErrType.Unexpected)
+            {
+                ErrorMessage = $"{ex.Message} ({ex.GetType().FullName}) @GetCandlestickAsync.",
+                ErrorSeverity = FAInfoBarSeverity.Error
+            };
+            ErrorOccured?.Invoke(this, errorInfo);
             return null;
         }
 
@@ -302,7 +317,7 @@ internal class BitbankHttpSearvice : IBitbankHttpSearvice
                 System.Diagnostics.Debug.WriteLine("■■■■■ GetAssetList: API error code - " + jsonResult?.Data?.Code.ToString() + " ■■■■■");
 
                 // エラーイベント発火
-                var er = new ClientError
+                var er = new ApiClientError
                 {
                     ErrType = "API",
                     ErrCode = jsonResult?.Data?.Code ?? 0
@@ -314,7 +329,7 @@ internal class BitbankHttpSearvice : IBitbankHttpSearvice
                 er.ErrDatetime = DateTime.Now;
                 er.ErrPlace = path.ToString();
 
-                ErrorOccured?.Invoke(this, er);
+                ApiErrorOccured?.Invoke(this, er);
 
                 return null;
             }
@@ -324,6 +339,9 @@ internal class BitbankHttpSearvice : IBitbankHttpSearvice
             System.Diagnostics.Debug.WriteLine("■■■■■ GetAssetList: Send returned NULL.");
 
             // HTTPエラー情報を返しても使わないので、Nullを返す。
+            //ord.Err.ErrorCode = -1;
+            //ord.Err.ErrorType = ErrType.ResposeParseError;
+            //ord.Err.ErrorMessage = "GetAssetList JsonOrderObject deserialized.Data != null";
 
             return null;
         }
@@ -360,8 +378,8 @@ internal class BitbankHttpSearvice : IBitbankHttpSearvice
                 ord.HasErrorInfo = true;
 
                 ord.Err.ErrorCode = resbo.HTTPError.ErrCode;
-                ord.Err.ErrorTitle = resbo.HTTPError.ErrType ?? "HTTP error/exception";
-                ord.Err.ErrorDescription = resbo.HTTPError.ErrText ?? "";
+                ord.Err.ErrorType = ErrType.HttpError;
+                ord.Err.ErrorMessage = resbo.HTTPError.ErrText ?? resbo.HTTPError.ErrCode.ToString();
 
                 return ord;
             }
@@ -406,12 +424,13 @@ internal class BitbankHttpSearvice : IBitbankHttpSearvice
                     {
                         ord.IsSuccess = false;
                         ord.HasErrorInfo = true;
+
                         ord.Err.ErrorCode = -1;
-                        ord.Err.ErrorTitle = "@MakeOrder";
-                        ord.Err.ErrorDescription = "JsonOrderObject deserialized.Data != null";
+                        ord.Err.ErrorType = ErrType.ResposeParseError;
+                        ord.Err.ErrorMessage = $"Error on MakeOrder: JsonOrderObject deserialized.Data != null";
 
                         // エラーイベント発火
-                        var er = new ClientError
+                        var er = new ApiClientError
                         {
                             ErrType = "Data",
                             ErrCode = 0,
@@ -420,7 +439,7 @@ internal class BitbankHttpSearvice : IBitbankHttpSearvice
                             ErrPlace = path.ToString()
                         };
 
-                        ErrorOccured?.Invoke(this, er);
+                        ApiErrorOccured?.Invoke(this, er);
                     }
 
                     //return ord;
@@ -437,29 +456,30 @@ internal class BitbankHttpSearvice : IBitbankHttpSearvice
 
                     // ユーザに表示するエラー情報
                     ord.HasErrorInfo = true;
-                    ord.Err.ErrorCode = ord.ApiErrorCode;
-                    ord.Err.ErrorTitle = "発注処理でエラーが返りました。";
 
+                    ord.Err.ErrorCode = ord.ApiErrorCode;
+                    ord.Err.ErrorType = ErrType.ApiError;
+                    ord.Err.ErrorSeverity = FAInfoBarSeverity.Warning;
                     if (ApiErrorCodesDictionary.TryGetValue(ord.ApiErrorCode, out var value))
                     {
-                        ord.Err.ErrorDescription = value;
+                        ord.Err.ErrorMessage = value;
                     }
-                    ord.Err.ErrorDescription = ord.Err.ErrorDescription + "(エラーコード：" + ord.ApiErrorCode.ToString() + ")";
+                    ord.Err.ErrorMessage = $"Error on MakeOrder: {ord.Err.ErrorMessage} (Error code: {ord.ApiErrorCode})";
 
                     // エラーイベント発火
-                    var er = new ClientError
+                    var er = new ApiClientError
                     {
                         ErrType = "API",
                         ErrCode = jsonResult?.Data?.Code ?? 0
                     };
                     if (ApiErrorCodesDictionary.ContainsKey(jsonResult?.Data?.Code ?? 0))
                     {
-                        er.ErrText = "「" + ApiErrorCodesDictionary[jsonResult?.Data?.Code ?? 0] + "」";
+                        er.ErrText = "(" + ApiErrorCodesDictionary[jsonResult?.Data?.Code ?? 0] + ")";
                     }
                     er.ErrDatetime = DateTime.Now;
                     er.ErrPlace = path.ToString();
 
-                    ErrorOccured?.Invoke(this, er);
+                    ApiErrorOccured?.Invoke(this, er);
 
                     //return ord;
                 }
@@ -472,12 +492,12 @@ internal class BitbankHttpSearvice : IBitbankHttpSearvice
                 ord.ApiErrorCode = -1;
                 ord.HasErrorInfo = true;
 
-                ord.Err.ErrorTitle = "発注処理で空のBodyTextが返りました。";
-                ord.Err.ErrorCode = 0;
-                ord.Err.ErrorDescription = "/user/spot/order への発注処理で、空のBodyTextが返りました。";
+                ord.Err.ErrorCode = -1;
+                ord.Err.ErrorType = ErrType.ResposeParseError;
+                ord.Err.ErrorMessage = $"Error on MakeOrder: /user/spot/order への発注処理で、空のBodyTextが返りました。";
 
                 // エラーイベント発火
-                var er = new ClientError
+                var er = new ApiClientError
                 {
                     ErrType = "Data",
                     ErrCode = 0,
@@ -486,7 +506,7 @@ internal class BitbankHttpSearvice : IBitbankHttpSearvice
                     ErrPlace = path.ToString()
                 };
 
-                ErrorOccured?.Invoke(this, er);
+                ApiErrorOccured?.Invoke(this, er);
 
                 //return ord;
             }
@@ -499,9 +519,9 @@ internal class BitbankHttpSearvice : IBitbankHttpSearvice
             ord.ApiErrorCode = -1;
             ord.HasErrorInfo = true;
 
-            ord.Err.ErrorTitle = "発注処理で例外処理が発生しました。";
+            ord.Err.ErrorType = ErrType.Unexpected;
             ord.Err.ErrorCode = -1;
-            ord.Err.ErrorDescription = "/user/spot/order への発注処理で、Exception（" + e + "）発生しました。";
+            ord.Err.ErrorMessage = $"Error on MakeOrder: /user/spot/order への発注処理で、予期しないエラーが発生しました。{e.Message}";
         }
 
         return ord;
@@ -576,19 +596,20 @@ internal class BitbankHttpSearvice : IBitbankHttpSearvice
 
                 Debug.WriteLine("■■■■■ GetOrderByID: API error code - " + jsonResult?.Data?.Code.ToString() + " ■■■■■");
 
-                // ユーザに表示するエラー情報
                 ord.HasErrorInfo = true;
-                ord.Err.ErrorCode = ord.ApiErrorCode;
-                ord.Err.ErrorTitle = "注文情報を取得中にエラーが返りました。";
 
+                ord.Err.ErrorCode = ord.ApiErrorCode;
+                ord.Err.ErrorType = ErrType.ApiError;
+                ord.Err.ErrorSeverity = FAInfoBarSeverity.Warning;
                 if (ApiErrorCodesDictionary.TryGetValue(ord.ApiErrorCode, out var value))
                 {
-                    ord.Err.ErrorDescription = value;
+                    ord.Err.ErrorMessage = value;
                 }
-                ord.Err.ErrorDescription = ord.Err.ErrorDescription + "(エラーコード：" + ord.ApiErrorCode.ToString() + ")";
+                ord.Err.ErrorMessage = $"Error on GetOrderByID: {ord.Err.ErrorMessage} (Error code: {ord.ApiErrorCode})";
+
 
                 // エラーイベント発火
-                var er = new ClientError
+                var er = new ApiClientError
                 {
                     ErrType = "API",
                     ErrCode = jsonResult?.Data?.Code ?? 0
@@ -600,7 +621,7 @@ internal class BitbankHttpSearvice : IBitbankHttpSearvice
                 er.ErrDatetime = DateTime.Now;
                 er.ErrPlace = path.ToString();
 
-                ErrorOccured?.Invoke(this, er);
+                ApiErrorOccured?.Invoke(this, er);
 
                 return ord;
             }
@@ -616,9 +637,10 @@ internal class BitbankHttpSearvice : IBitbankHttpSearvice
                 HasErrorInfo = true
             };
 
-            ord.Err.ErrorTitle = "注文情報を取得処理でHTTPエラーが返りました。";
-            ord.Err.ErrorCode = resbo.HTTPError.ErrCode;
-            ord.Err.ErrorDescription = "/user/spot/order への注文情報取得処理で、HTTPエラー（" + resbo.HTTPError.ErrCode.ToString() + "）が返りました。";
+            ord.Err.ErrorType = ErrType.ApiError;
+            ord.Err.ErrorCode = -1;
+            ord.Err.ErrorType = ErrType.ResposeParseError;
+            ord.Err.ErrorMessage = $"Error on GetOrderByID: /user/spot/order への注文情報取得処理で、空のBodyTextが返りました。HTTPエラー: {resbo.HTTPError.ErrCode}";
 
             return ord;
         }
@@ -723,7 +745,7 @@ internal class BitbankHttpSearvice : IBitbankHttpSearvice
                     System.Diagnostics.Debug.WriteLine("■■■■■ GetOrderListByIDs: API error code - " + jsonResult?.Data?.Code.ToString() + " ■■■■■");
 
                     // エラーイベント発火
-                    var er = new ClientError
+                    var er = new ApiClientError
                     {
                         ErrType = "API",
                         ErrCode = jsonResult?.Data?.Code ?? 0
@@ -737,7 +759,7 @@ internal class BitbankHttpSearvice : IBitbankHttpSearvice
                     er.ErrPlaceParent = "GetOrderListByIDs";
                     er.ErrEx = "注文情報を更新出来ませんでした";
 
-                    ErrorOccured?.Invoke(this, er);
+                    ApiErrorOccured?.Invoke(this, er);
 
                     return null;
                 }
@@ -752,9 +774,9 @@ internal class BitbankHttpSearvice : IBitbankHttpSearvice
                     ApiErrorCode = -1
                 };
 
-                ords.Err.ErrorTitle = "注文情報取得（複数）処理でHTTPエラーが返りました。";
+                ords.Err.ErrorType = ErrType.ApiError;
                 ords.Err.ErrorCode = resbo.HTTPError.ErrCode;
-                ords.Err.ErrorDescription = "/user/spot/orders_info への発注処理で、HTTPエラー（" + resbo.HTTPError.ErrCode.ToString() + "）が返りました。";
+                ords.Err.ErrorMessage = $"Error on GetOrderListByIDs: /user/spot/orders_info への情報取得処理で、空のBodyTextが返りました。HTTPエラー: {resbo.HTTPError.ErrCode}";
 
                 return ords;
             }
@@ -770,9 +792,9 @@ internal class BitbankHttpSearvice : IBitbankHttpSearvice
                 ApiErrorCode = -1
             };
 
-            ord.Err.ErrorTitle = "発注処理で例外処理が発生しました。";
+            ord.Err.ErrorType = ErrType.Unexpected;
             ord.Err.ErrorCode = -1;
-            ord.Err.ErrorDescription = "/user/spot/orders_info への情報取得処理で、Exception（" + e + "）発生しました。";
+            ord.Err.ErrorMessage = $"Error on GetOrderListByIDs: /user/spot/orders_info への情報取得処理で、予期しないエラーが発生しました。{e.Message}";
 
             return ord;
         }
@@ -835,12 +857,13 @@ internal class BitbankHttpSearvice : IBitbankHttpSearvice
                 {
                     ord.IsSuccess = false;
                     ord.HasErrorInfo = true;
+
                     ord.Err.ErrorCode = -1;
-                    ord.Err.ErrorTitle = "@CancelOrder";
-                    ord.Err.ErrorDescription = "JsonOrderObject deserialized.Data != null";
+                    ord.Err.ErrorType = ErrType.ResposeParseError;
+                    ord.Err.ErrorMessage = "Error on CancelOrder: JsonOrderObject deserialized.Data != null";
 
                     // エラーイベント発火
-                    var er = new ClientError
+                    var er = new ApiClientError
                     {
                         ErrType = "Data",
                         ErrCode = 0,
@@ -849,7 +872,7 @@ internal class BitbankHttpSearvice : IBitbankHttpSearvice
                         ErrPlace = path.ToString()
                     };
 
-                    ErrorOccured?.Invoke(this, er);
+                    ApiErrorOccured?.Invoke(this, er);
                 }
 
                 //return ord;
@@ -864,18 +887,18 @@ internal class BitbankHttpSearvice : IBitbankHttpSearvice
 
                 // ユーザに表示するエラー情報
                 ord.HasErrorInfo = true;
-                ord.Err.ErrorCode = ord.ApiErrorCode;
-                ord.Err.ErrorTitle = "注文キャンセル処理でエラーが返りました。";
 
+                ord.Err.ErrorCode = ord.ApiErrorCode;
+                ord.Err.ErrorType = ErrType.ApiError;
+                ord.Err.ErrorSeverity = FAInfoBarSeverity.Warning;
                 if (ApiErrorCodesDictionary.TryGetValue(ord.ApiErrorCode, out var value))
                 {
-                    ord.Err.ErrorDescription = value;
+                    ord.Err.ErrorMessage = value;
                 }
-                ord.Err.ErrorDescription = ord.Err.ErrorDescription + "(エラーコード：" + ord.ApiErrorCode.ToString() + ")";
-
+                ord.Err.ErrorMessage = $"Error on CancelOrder: {ord.Err.ErrorMessage} (Error code: {ord.ApiErrorCode})";
 
                 // エラーイベント発火
-                var er = new ClientError
+                var er = new ApiClientError
                 {
                     ErrType = "API",
                     ErrCode = jsonResult?.Data?.Code ?? 0
@@ -887,7 +910,7 @@ internal class BitbankHttpSearvice : IBitbankHttpSearvice
                 er.ErrDatetime = DateTime.Now;
                 er.ErrPlace = path.ToString();
 
-                ErrorOccured?.Invoke(this, er);
+                ApiErrorOccured?.Invoke(this, er);
 
                 Debug.WriteLine("■■■■■ CancelOrder: API error code - " + jsonResult?.Data?.Code.ToString() + " ■■■■■");
 
@@ -902,12 +925,12 @@ internal class BitbankHttpSearvice : IBitbankHttpSearvice
             ord.ApiErrorCode = -1;
             ord.HasErrorInfo = true;
 
-            ord.Err.ErrorTitle = "注文キャンセル処理でHTTPエラーが返りました。";
             ord.Err.ErrorCode = resbo.HTTPError.ErrCode;
-            ord.Err.ErrorDescription = "/user/spot/cancel_order への注文キャンセル処理で、HTTPエラー（" + resbo.HTTPError.ErrCode.ToString() + "）が返りました。";
+            ord.Err.ErrorType = ErrType.ResposeParseError;
+            ord.Err.ErrorMessage = $"Error on CancelOrder: /user/spot/cancel_order への注文キャンセル処理で、空のBodyTextが返りました。HTTP error code: {resbo.HTTPError.ErrCode}";
 
             // エラーイベント発火
-            var er = new ClientError
+            var er = new ApiClientError
             {
                 ErrType = "Data",
                 ErrCode = 0,
@@ -916,7 +939,7 @@ internal class BitbankHttpSearvice : IBitbankHttpSearvice
                 ErrPlace = path.ToString()
             };
 
-            ErrorOccured?.Invoke(this, er);
+            ApiErrorOccured?.Invoke(this, er);
 
             //return ord;
         }
@@ -1023,7 +1046,7 @@ internal class BitbankHttpSearvice : IBitbankHttpSearvice
                     System.Diagnostics.Debug.WriteLine("■■■■■ CancelOrders: API error code - " + jsonResult?.Data?.Code.ToString() + " ■■■■■");
 
                     // エラーイベント発火
-                    var er = new ClientError
+                    var er = new ApiClientError
                     {
                         ErrType = "API",
                         ErrCode = jsonResult?.Data?.Code ?? 0
@@ -1035,7 +1058,7 @@ internal class BitbankHttpSearvice : IBitbankHttpSearvice
                     er.ErrDatetime = DateTime.Now;
                     er.ErrPlace = path.ToString();
 
-                    ErrorOccured?.Invoke(this, er);
+                    ApiErrorOccured?.Invoke(this, er);
 
                     return null;
                 }
@@ -1050,9 +1073,9 @@ internal class BitbankHttpSearvice : IBitbankHttpSearvice
                     ApiErrorCode = -1
                 };
 
-                ords.Err.ErrorTitle = "注文キャンセル処理（複数）でHTTPエラーが返りました。";
                 ords.Err.ErrorCode = resbo.HTTPError.ErrCode;
-                ords.Err.ErrorDescription = "/user/spot/cancel_orders への処理で、HTTPエラー（" + resbo.HTTPError.ErrCode.ToString() + "）が返りました。";
+                ords.Err.ErrorType = ErrType.ResposeParseError;
+                ords.Err.ErrorMessage = $"Error on CancelOrders: /user/spot/cancel_orders への注文キャンセル処理で、HTTPエラー。HTTP error code: {resbo.HTTPError.ErrCode}";
 
                 return ords;
             }
@@ -1068,9 +1091,10 @@ internal class BitbankHttpSearvice : IBitbankHttpSearvice
                 ApiErrorCode = -1
             };
 
-            ord.Err.ErrorTitle = "注文キャンセル処理（複数）で例外処理が発生しました。";
             ord.Err.ErrorCode = -1;
-            ord.Err.ErrorDescription = "/user/spot/cancel_orders への情報取得処理で、Exception（" + e + "）発生しました。";
+            ord.Err.ErrorType = ErrType.Unexpected;
+            ord.Err.ErrorCode = -1;
+            ord.Err.ErrorMessage = $"Error on CancelOrders: /user/spot/cancel_orders への情報取得処理で、予期しないエラーが発生しました。{e.Message}";
 
             return ord;
         }
@@ -1175,7 +1199,7 @@ internal class BitbankHttpSearvice : IBitbankHttpSearvice
                 System.Diagnostics.Debug.WriteLine("■■■■■ GetOrderList: API error code - " + jsonResult?.Data?.Code.ToString() + " ■■■■■");
 
                 // エラーイベント発火
-                var er = new ClientError
+                var er = new ApiClientError
                 {
                     ErrType = "API",
                     ErrCode = jsonResult?.Data?.Code ?? 0
@@ -1187,7 +1211,7 @@ internal class BitbankHttpSearvice : IBitbankHttpSearvice
                 er.ErrDatetime = DateTime.Now;
                 er.ErrPlace = path.ToString();
 
-                ErrorOccured?.Invoke(this, er);
+                ApiErrorOccured?.Invoke(this, er);
 
                 return null;
             }
@@ -1290,7 +1314,7 @@ internal class BitbankHttpSearvice : IBitbankHttpSearvice
                 System.Diagnostics.Debug.WriteLine("■■■■■ GetTradeHistory: API error code - " + jsonResult?.Data?.Code.ToString() + " ■■■■■");
 
                 // エラーイベント発火
-                var er = new ClientError
+                var er = new ApiClientError
                 {
                     ErrType = "API",
                     ErrCode = jsonResult?.Data?.Code ?? 0
@@ -1302,7 +1326,7 @@ internal class BitbankHttpSearvice : IBitbankHttpSearvice
                 er.ErrDatetime = DateTime.Now;
                 er.ErrPlace = path.ToString();
 
-                ErrorOccured?.Invoke(this, er);
+                ApiErrorOccured?.Invoke(this, er);
 
                 return null;
             }
@@ -1415,7 +1439,7 @@ internal class BitbankHttpSearvice : IBitbankHttpSearvice
                 {
                     //System.Diagnostics.Debug.WriteLine("■■■■■■■■ Send: HTTP Error " + res.StatusCode.ToString() + " " + method + " " + _HTTPConn._client.BaseAddress.ToString() + path.ToString() + " ■■■■■■■");
 
-                    var er = new ClientError
+                    var er = new ApiClientError
                     {
                         ErrType = "HTTP " + method,
                         ErrCode = (int)res.StatusCode,
@@ -1424,7 +1448,7 @@ internal class BitbankHttpSearvice : IBitbankHttpSearvice
                         ErrPlace = path.ToString()
                     };
                     // イベント発火
-                    ErrorOccured?.Invoke(this, er);
+                    ApiErrorOccured?.Invoke(this, er);
 
                     //ラッパー
                     resbowrap.BodyText = text;
@@ -1450,7 +1474,7 @@ internal class BitbankHttpSearvice : IBitbankHttpSearvice
                     errtext = "HTTP SocketException - " + ex.Message;
                 }
 
-                var er = new ClientError
+                var er = new ApiClientError
                 {
                     ErrType = "HTTP " + method,
                     ErrCode = 0,
@@ -1459,7 +1483,7 @@ internal class BitbankHttpSearvice : IBitbankHttpSearvice
                     ErrPlace = path.ToString()
                 };
                 // 
-                ErrorOccured?.Invoke(this, er);
+                ApiErrorOccured?.Invoke(this, er);
 
                 //
                 resbowrap.BodyText = "";
@@ -1480,7 +1504,7 @@ internal class BitbankHttpSearvice : IBitbankHttpSearvice
                     errtext = "HTTP IOException - " + ex.Message;
                 }
 
-                var er = new ClientError
+                var er = new ApiClientError
                 {
                     ErrType = "HTTP " + method,
                     ErrCode = 0,
@@ -1489,7 +1513,7 @@ internal class BitbankHttpSearvice : IBitbankHttpSearvice
                     ErrPlace = path.ToString()
                 };
                 // 
-                ErrorOccured?.Invoke(this, er);
+                ApiErrorOccured?.Invoke(this, er);
 
                 //
                 resbowrap.BodyText = "";
@@ -1509,7 +1533,7 @@ internal class BitbankHttpSearvice : IBitbankHttpSearvice
                     errtext = "HTTP HttpRequestException - " + ex.Message;
                 }
 
-                var er = new ClientError
+                var er = new ApiClientError
                 {
                     ErrType = "HTTP " + method,
                     ErrCode = 0,
@@ -1518,7 +1542,7 @@ internal class BitbankHttpSearvice : IBitbankHttpSearvice
                     ErrPlace = path.ToString()
                 };
                 // 
-                ErrorOccured?.Invoke(this, er);
+                ApiErrorOccured?.Invoke(this, er);
 
                 //
                 resbowrap.BodyText = "";
@@ -1529,7 +1553,7 @@ internal class BitbankHttpSearvice : IBitbankHttpSearvice
         {
             Debug.WriteLine("■■■■■ HTTP GET/POST Error - Exception : " + ex.Message);
 
-            var er = new ClientError
+            var er = new ApiClientError
             {
                 ErrType = "HTTP " + method,
                 ErrCode = 0,
@@ -1538,7 +1562,7 @@ internal class BitbankHttpSearvice : IBitbankHttpSearvice
                 ErrPlace = path.ToString()
             };
             // 
-            ErrorOccured?.Invoke(this, er);
+            ApiErrorOccured?.Invoke(this, er);
 
             //
             resbowrap.BodyText = "";

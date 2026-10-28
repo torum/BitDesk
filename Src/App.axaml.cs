@@ -69,7 +69,7 @@ public partial class App : Application
                 // Optional: nothing to change here by default; handshake time is bounded by ConnectTimeout.
             }
         });
-        services.AddSingleton<IBitbankHttpSearvice, BitbankHttpSearvice>();
+        services.AddSingleton<IBitbankHttpService, BitbankHttpService>();
 
         // Build the provider
         ServiceProvider = services.BuildServiceProvider();

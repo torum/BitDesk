@@ -111,23 +111,20 @@
 					</ui:FANavigationViewItem>
 				</ui:FANavigationView.FooterMenuItems>
 
-				<Grid RowDefinitions="36,*"><!--  -->			
+				<Grid RowDefinitions="36,*,Auto"><!--  -->			
 					<ui:FAFrame x:Name="RootFrame" Grid.Row="0" Grid.RowSpan="2" Navigated="RootFrame_Navigated"/>
 					<Border Grid.Row="0" WindowDecorationProperties.ElementRole="TitleBar" Background="Transparent"></Border>	
+					
+					<Grid Grid.Row="2">
+						<!-- InfoBar -->
+						<ui:FAInfoBar Title="{Binding InfoBarTitle}" IsOpen="{Binding IsInfoBarOpen, Mode=TwoWay}" IsIconVisible="True" IsClosable="True" Severity="{Binding InfoBarSeverity}" Message="{Binding InfoBarMessage}" />
+						</Grid>
 				</Grid>
 			
 			</ui:FANavigationView>
 
 		</Grid>
 
-		<Grid Grid.Row="1">
-			<!-- InfoBar -->
-			<!--
-			<ui:FAInfoBar Title="{Binding InfoBarInfoTitle}" IsOpen="{Binding IsShowInfoWindow, Mode=TwoWay}" IsIconVisible="True" IsClosable="True" Severity="Informational" Message="{Binding InfoBarInfoMessage}" />
-			<ui:FAInfoBar Title="{Binding InfoBarAckTitle}" IsOpen="{Binding IsShowAckWindow, Mode=TwoWay}" IsIconVisible="True" IsClosable="True" Severity="Warning" Message="{Binding InfoBarAckMessage}" />
-			<ui:FAInfoBar Title="{Binding InfoBarErrTitle}" IsOpen="{Binding IsShowErrWindow, Mode=TwoWay}" IsIconVisible="True" IsClosable="True" Severity="Error" Message="{Binding InfoBarErrMessage}" />
-			-->
-		</Grid>
 	</Grid>
 
 </Window>

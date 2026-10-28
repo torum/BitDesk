@@ -358,7 +358,7 @@ public partial class Order : ObservableObject
 
     public Order()
     {
-        _err = new ErrorInfo();
+        _err = new ErrorInfo(ErrType.ApiError);
     }
 }
 
@@ -393,7 +393,7 @@ public class OrderListResult : Orders
 
     public OrderListResult()
     {
-        Err = new ErrorInfo();
+        Err = new ErrorInfo(ErrType.ApiError);
     }
 }
 

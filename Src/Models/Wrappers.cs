@@ -9,5 +9,5 @@ public class ResponseBodyWrapper
         get; set;
     }
     public string BodyText = string.Empty;
-    public ClientError HTTPError = new();
+    public ApiClientError HTTPError = new();
 }

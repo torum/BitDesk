@@ -2,6 +2,7 @@
 using BitDesk.Models;
 using BitDesk.Services.Contracts;
 using CommunityToolkit.Mvvm.ComponentModel;
+using FluentAvalonia.UI.Controls;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -17,7 +18,7 @@ internal record IsEnabledState
     public PairCodes PairCode { get; set; }
 }
 
-internal partial class MainViewModel : ObservableObject
+internal partial class MainViewModel : ObservableObject, IDisposable
 {
     private readonly bool _isWebSocketOn = true;
     private readonly bool _isLiveChartsOn = true;
@@ -55,12 +56,17 @@ internal partial class MainViewModel : ObservableObject
 
         IsEnabledChanged += OnIsEnabledChanged;
 
-        _bitbankStreamService.TickerUpdated += OnTickerService_TickerUpdated;
+        _bitbankStreamService.TickerUpdated += OnBitbankStreamService_TickerUpdated;
         _bitbankStreamService.DepthUpdated += OnBitbankStreamService_DepthUpdated;
+        _bitbankStreamService.ErrorOccured += OnErrorOccured;
+        foreach (var pair in Pairs)
+        {
+            pair.ErrorOccured += OnErrorOccured;
+        }
 
         // For developing purposes, we can set this to true to avoid starting the ticker service and charts loading.
-        _isWebSocketOn = false;
-        _isLiveChartsOn = false;
+        _isWebSocketOn = true;
+        _isLiveChartsOn = true;
 
 #if DEBUG
         IsSaveLog = true;
@@ -1583,6 +1589,70 @@ internal partial class MainViewModel : ObservableObject
 
     #endregion
 
+    #region == Error ==
+
+    public FAInfoBarSeverity InfoBarSeverity
+    {
+        get;
+        set
+        {
+            if (field == value)
+            {
+                return;
+            }
+
+            field = value;
+            OnPropertyChanged();
+        }
+    } = FAInfoBarSeverity.Warning;
+
+    public string InfoBarMessage
+    {
+        get;
+        set
+        {
+            if (field == value)
+            {
+                return;
+            }
+
+            field = value;
+            OnPropertyChanged();
+        }
+    } = string.Empty;
+
+    public string InfoBarTitle
+    {
+        get;
+        set
+        {
+            if (field == value)
+            {
+                return;
+            }
+
+            field = value;
+            OnPropertyChanged();
+        }
+    } = string.Empty;
+
+    public bool IsInfoBarOpen
+    {
+        get;
+        set
+        {
+            if (field == value)
+            {
+                return;
+            }
+
+            field = value;
+            OnPropertyChanged();
+        }
+    }
+
+    #endregion
+
     #endregion
 
     #region == Public Methods ==
@@ -1666,6 +1736,32 @@ internal partial class MainViewModel : ObservableObject
 
     }
 
+    public void Dispose()
+    {
+        _bitbankStreamService.TickerUpdated -= OnBitbankStreamService_TickerUpdated;
+        _bitbankStreamService.DepthUpdated -= OnBitbankStreamService_DepthUpdated;
+        _bitbankStreamService.ErrorOccured -= OnErrorOccured;
+
+        IsEnabledChanged -= OnIsEnabledChanged;
+
+        try
+        {
+            foreach (var pair in Pairs)
+            {
+                pair.ErrorOccured -= OnErrorOccured;
+                pair.Dispose();
+            }
+
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error disposing PairViewModels: {ex}");
+        }
+
+
+        Debug.WriteLine($"MainViewModel disposed at {DateTime.Now:yyyy-MM-dd HH:mm:ss}");
+    }
+
     #endregion
 
     #region == private methods ==
@@ -1692,7 +1788,7 @@ internal partial class MainViewModel : ObservableObject
         }
     }
 
-    private async void OnTickerService_TickerUpdated(object? sender, BitbankTickerData data)
+    private async void OnBitbankStreamService_TickerUpdated(object? sender, BitbankTickerData data)
     {
         /*
         PairCodes pair = data.TickerPair;
@@ -1851,6 +1947,17 @@ internal partial class MainViewModel : ObservableObject
         {
             Debug.WriteLine($"No PairViewModel found for {data.DepthPair} at {DateTimeOffset.FromUnixTimeMilliseconds(data.Timestamp).LocalDateTime:yyyy-MM-dd HH:mm:ss}");
         }
+    }
+
+    private void OnErrorOccured(object? sender, ErrorInfo errorInfo)
+    {
+        Dispatcher.UIThread.Post(() =>
+        {
+            InfoBarSeverity = errorInfo.ErrorSeverity;
+            InfoBarMessage = errorInfo.ErrorMessage;
+            InfoBarTitle = errorInfo.ErrorTitle;
+            IsInfoBarOpen = true;
+        });
     }
 
 

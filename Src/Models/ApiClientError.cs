@@ -3,7 +3,7 @@ using System;
 
 namespace BitDesk.Models;
 
-public class ClientError
+public class ApiClientError
 {
     public string? ErrType
     {
@@ -34,7 +34,7 @@ public class ClientError
         get; set;
     }
 
-    public ClientError()
+    public ApiClientError()
     {
 
     }

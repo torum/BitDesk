@@ -4,6 +4,7 @@ using BitDesk.Services;
 using BitDesk.Services.Contracts;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using FluentAvalonia.UI.Controls;
 using LiveChartsCore;
 using LiveChartsCore.Defaults;
 using LiveChartsCore.Kernel;
@@ -21,7 +22,7 @@ using System.Threading.Tasks;
 
 namespace BitDesk.ViewModels;
 
-public partial class PairViewModel : ObservableObject
+public partial class PairViewModel : ObservableObject, IDisposable
 {
     //private DateTime lastChartLoadedDateTime = DateTime.MinValue;
     private bool _isChartLoading;
@@ -29,14 +30,15 @@ public partial class PairViewModel : ObservableObject
     private bool _isChartRefreshRunning;
     private readonly DispatcherTimer _dispatcherTimerChart = new();
 
-    private readonly IBitbankHttpSearvice _bitbankHttpSearvice;
+    private readonly IBitbankHttpService _bitbankHttpService;
     private readonly IBitbankStreamService _bitbankStreamService;
 
     public event EventHandler<bool>? DepthScrollCenter;
+    public event EventHandler<ErrorInfo>? ErrorOccured;
 
     public PairViewModel(PairCodes p, double fontSize, string ltpFormstString, string currencyFormstString, decimal grouping100, decimal grouping1000)
     {
-        _bitbankHttpSearvice = App.GetService<IBitbankHttpSearvice>();
+        _bitbankHttpService = App.GetService<IBitbankHttpService>();
         _bitbankStreamService = App.GetService<IBitbankStreamService>();
 
         _p = p;
@@ -54,6 +56,8 @@ public partial class PairViewModel : ObservableObject
         _dispatcherTimerChart.Interval = chartUpdateInterval;  // Temp testing. new(0, 5, 0);
         _dispatcherTimerChart.Start(); // Testing without updating the chart.. using ticker as we go.
 
+        _bitbankHttpService.ErrorOccured += OnErrorOccured;
+        _bitbankHttpService.ApiErrorOccured += OnApiErrorOccured;
     }
 
     #region == Properties ==
@@ -1674,6 +1678,18 @@ public partial class PairViewModel : ObservableObject
         });
     }
 
+    public void Dispose()
+    {
+        _dispatcherTimerChart.Stop();
+        _dispatcherTimerChart.Tick -= OnTimerChart;
+
+        _bitbankHttpService.ErrorOccured -= OnErrorOccured;
+
+        // TODO: Dispose other resources if necessary
+
+        GC.SuppressFinalize(this);
+    }
+
     #endregion
 
     #region == Private Methods ==
@@ -2075,7 +2091,7 @@ public partial class PairViewModel : ObservableObject
         }
 
         //
-        var csr = await _bitbankHttpSearvice.GetCandlestick(pair.ToString(), ctString, dtString);
+        var csr = await _bitbankHttpService.GetCandlestick(pair.ToString(), ctString, dtString);
 
         if (!IsEnabled)
         {
@@ -2140,7 +2156,7 @@ public partial class PairViewModel : ObservableObject
         {
             // Replace this with a request for only the latest API period.
             // GetCandlesticksAsync currently downloads multiple days/years.
-            var refreshed = await _bitbankHttpSearvice.GetLatestCandlesticksAsync(PairCode, SelectedCandleType);
+            var refreshed = await _bitbankHttpService.GetLatestCandlesticksAsync(PairCode, SelectedCandleType);
 
             if (refreshed is null ||
                 Series[1].Values is not ObservableCollection<FinancialPoint> prices ||
@@ -2597,7 +2613,7 @@ public partial class PairViewModel : ObservableObject
 
     #endregion
 
-    private static async Task RunSafeAsync(Func<Task> work, string name, bool continueOnCapturedContext = false)
+    private async Task RunSafeAsync(Func<Task> work, string name, bool continueOnCapturedContext = false)
     {
         try
         {
@@ -2615,7 +2631,29 @@ public partial class PairViewModel : ObservableObject
         {
             Debug.WriteLine($"Exception @{name}: {ex.Message}{Environment.NewLine}StackTrace: {ex.StackTrace}");
 
+            var errorInfo = new ErrorInfo(ErrType.Unexpected)
+            {
+                ErrorMessage = $"{ex.Message} ({ex.GetType().FullName}) @{name}",
+                ErrorSeverity = FAInfoBarSeverity.Error
+            };
+            this.ErrorOccured?.Invoke(this, errorInfo);
         }
+    }
+
+    private void OnErrorOccured(object? sender, ErrorInfo errorInfo)
+    {
+        this.ErrorOccured?.Invoke(this, errorInfo);
+    }
+
+    private void OnApiErrorOccured(object? sender, ApiClientError ApiErrorInfo)
+    {
+        var ErrorInfo = new ErrorInfo(ErrType.ApiError)
+        {
+            ErrorMessage = $"{ApiErrorInfo.ErrText} ({ApiErrorInfo.ErrType}) @{ApiErrorInfo.ErrPlace}",
+            ErrorSeverity = FAInfoBarSeverity.Warning
+        };
+
+        this.ErrorOccured?.Invoke(this, ErrorInfo);
     }
 
     #endregion
