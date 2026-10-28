@@ -4,17 +4,112 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia"
+             xmlns:ia="using:Xaml.Behaviors.Interactions.Animated"
              xmlns:vm="using:BitDesk.ViewModels"
+             xmlns:mod="using:BitDesk.Models"
              x:DataType="vm:PairViewModel"
              x:Class="BitDesk.Views.ChartContent">
     <Grid>
-        <lvc:CartesianChart x:Name="LiveChart" Margin="0,0,0,0" Background="Transparent"
-                            XAxes="{Binding XAxes, Mode=OneWay}"
-                            YAxes="{Binding YAxes, Mode=OneWay}"
-                            Series="{Binding Series, Mode=OneWay}"
-                            Sections="{Binding Sections, Mode=OneWay}"
-                            TooltipPosition="{Binding IsChartTooltipVisibleTemp, Mode=OneWay}"
-                            ZoomMode="X">
-        </lvc:CartesianChart>
+
+        <SplitView x:Name="SplitViewControl" Margin="0,0,0,0" CornerRadius="0,0,0,0" BorderThickness="0,0,0,0" PaneBackground="Transparent" IsPaneOpen="{Binding Path=IsPaneOpen, Mode=TwoWay}" PanePlacement="Right" OpenPaneLength="280" CompactPaneLength="0" DisplayMode="CompactInline">
+            <SplitView.Pane>
+                <Grid>
+                    <Border Grid.Row="1" BorderThickness="0,0,0,0" Margin="0,40,0,0">
+                        <ScrollViewer x:Name="DepthScrollViewer" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" SizeChanged="DepthScrollViewer_SizeChanged">
+                              <Interaction.Behaviors>
+                                <ia:VerticalScrollViewerAnimatedBehavior/>
+                              </Interaction.Behaviors>
+                            <ItemsControl x:Name="DepthListBox" ItemsSource="{Binding Path=Depth, Mode=OneWay}" Opacity="0.8" Background="Transparent" Margin="0,0,0,6" Padding="0,12,0,12" HorizontalAlignment="Stretch" DoubleTapped="DepthListBox_DoubleTapped">
+                                <ItemsControl.ItemTemplate>
+							        <DataTemplate x:DataType="mod:Depth">
+                                        <Grid Margin="0" HorizontalAlignment="Stretch">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="80" />
+                                                <ColumnDefinition Width="90" />
+                                                <ColumnDefinition Width="80" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <TextBlock Grid.Column="0" x:Name="DepthAskBest" Text="{Binding Path=DepthAskFormatted, Mode=OneWay}" Foreground="{StaticResource PriceUpColorBrush}" FontWeight="Normal" FontSize="12" Margin="2" Padding="0" HorizontalAlignment="Right">
+
+                                            </TextBlock>
+                                            <TextBlock Grid.Column="1" x:Name="DepthPrice" Text="{Binding Path=DepthPriceFormatted, Mode=OneWay}" FontWeight="Normal" FontSize="12" Margin="6,2,6,4" Padding="3,0,3,0" HorizontalAlignment="Right">
+                                                <Interaction.Behaviors>
+											        <DataTriggerBehavior Binding="{Binding IsLTP}" ComparisonCondition="Equal" Value="True">
+												        <ChangePropertyAction PropertyName="FontWeight" Value="Bold" />
+											        </DataTriggerBehavior>
+											        <DataTriggerBehavior Binding="{Binding IsLTP}" ComparisonCondition="Equal" Value="False">
+												        <ChangePropertyAction PropertyName="FontWeight" Value="Normal" />
+											        </DataTriggerBehavior>
+										        </Interaction.Behaviors>
+                                            </TextBlock>
+                                            <TextBlock Grid.Column="2" x:Name="DepthBidBest" Text="{Binding Path=DepthBidFormatted, Mode=OneWay}" Foreground="{StaticResource PriceDownColorBrush}" FontWeight="Normal" FontSize="12" Margin="2" Padding="0" HorizontalAlignment="Right">
+
+                                            </TextBlock>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Border>
+                </Grid>
+            </SplitView.Pane>
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+                
+                <lvc:CartesianChart x:Name="LiveChart" Grid.Row="0" Margin="0,32,0,0" Background="Transparent"
+                                    XAxes="{Binding XAxes, Mode=OneWay}"
+                                    YAxes="{Binding YAxes, Mode=OneWay}"
+                                    Series="{Binding Series, Mode=OneWay}"
+                                    Sections="{Binding Sections, Mode=OneWay}"
+                                    TooltipPosition="{Binding IsChartTooltipVisibleTemp, Mode=OneWay}"
+                                    ZoomMode="X">
+                </lvc:CartesianChart>
+
+                <Border HorizontalAlignment="Left" 
+                                        VerticalAlignment="Top" 
+                                        Margin="8,10,8,8" 
+                                        Padding="8,4" 
+                                        CornerRadius="4" 
+                                        Background="{DynamicResource AcrylicInAppFillColorDefaultBrush}" 
+                                        BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}" 
+                                        BorderThickness="1">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="4,2,4,2">
+                            <TextBlock Text="{Binding PairString}" FontWeight="SemiBold" Margin="4" />
+                            <TextBlock Text="{Binding LtpString}" FontWeight="SemiBold" Margin="4" />
+                            <TextBlock Text="{Binding PercentChange}" FontWeight="Normal" Margin="4" />
+                        </StackPanel>
+
+                        <StackPanel Margin="4,2,4,2">
+                            <ToggleButton Content="Toggle Pane" IsChecked="{Binding IsPaneOpen, Mode=TwoWay}"></ToggleButton>
+                        </StackPanel>
+
+                    </StackPanel>
+                </Border>
+
+                <Grid Grid.Row="1" Margin="0,0,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel x:Name="BottomCommandBarStackPanel" Orientation="Horizontal" Grid.Row="0">
+                    
+                    </StackPanel>
+                    <StackPanel x:Name="BottomListViewStackPanel" Orientation="Horizontal" Grid.Row="1">
+                    
+
+
+                    </StackPanel>
+
+                </Grid>
+            </Grid>
+
+        </SplitView>
+
     </Grid>
 </UserControl>

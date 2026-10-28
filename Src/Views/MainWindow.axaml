@@ -110,9 +110,9 @@
 					</ui:FANavigationViewItem>
 				</ui:FANavigationView.FooterMenuItems>
 
-				<Grid RowDefinitions="36,*">
-					<Border Grid.Row="0" WindowDecorationProperties.ElementRole="TitleBar" Background="Transparent"></Border>				
+				<Grid RowDefinitions="36,*"><!--  -->			
 					<ui:FAFrame x:Name="RootFrame" Grid.Row="0" Grid.RowSpan="2" Navigated="RootFrame_Navigated"/>
+					<Border Grid.Row="0" WindowDecorationProperties.ElementRole="TitleBar" Background="Transparent"></Border>	
 				</Grid>
 			
 			</ui:FANavigationView>

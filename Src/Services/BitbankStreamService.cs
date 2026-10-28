@@ -164,7 +164,16 @@ internal class BitbankStreamService : IBitbankStreamService
             return Task.CompletedTask;
         });
 
-        await _client.ConnectAsync();
+        //await _client.ConnectAsync();
+        try
+        {
+            await _client.ConnectAsync();
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Failed to connect initially @BitbankStreamService: {ex}");
+
+        }
     }
 
     private async void OnClientConnected(object? sender, EventArgs e)
@@ -326,6 +335,12 @@ internal class BitbankStreamService : IBitbankStreamService
         if (!_isInitialized) return;
 
         if (string.IsNullOrWhiteSpace(pairCode.ToString())) return;
+
+        if (_depthRoom.Equals($"depth_whole_{pairCode.ToString().ToLower()}", StringComparison.OrdinalIgnoreCase))
+        {
+            Debug.WriteLine($"--> Already joined depth room: {_depthRoom}. No action taken.");
+            return;
+        }
 
         if (!string.IsNullOrWhiteSpace(_depthRoom))
         {

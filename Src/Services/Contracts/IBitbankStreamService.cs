@@ -8,6 +8,7 @@ namespace BitDesk.Services.Contracts
     internal interface IBitbankStreamService
     {
         event EventHandler<BitbankTickerData>? TickerUpdated;
+        event EventHandler<BitbankDepthData>? DepthUpdated;
 
         void Initialize(List<PairCodes> pairCodes);
 

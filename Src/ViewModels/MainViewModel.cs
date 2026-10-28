@@ -50,9 +50,13 @@ internal partial class MainViewModel : ObservableObject
         IsOnXrpJpy = config.IsOnXrpJpy;
         //OnPropertyChanged(nameof(EnabledPairs));
 
+        // Load the pairs from the configuration service into the Pairs collection
+        _configurationService.GetPairs(Pairs);
+
         IsEnabledChanged += OnIsEnabledChanged;
 
         _bitbankStreamService.TickerUpdated += OnTickerService_TickerUpdated;
+        _bitbankStreamService.DepthUpdated += OnBitbankStreamService_DepthUpdated;
 
         // For developing purposes, we can set this to true to avoid starting the ticker service and charts loading.
         _isWebSocketOn = true;
@@ -60,9 +64,6 @@ internal partial class MainViewModel : ObservableObject
 
 #if DEBUG
         IsSaveLog = true;
-
-#else
-        IsSaveLog = false;
 #endif
     }
 
@@ -1833,6 +1834,25 @@ internal partial class MainViewModel : ObservableObject
             Debug.WriteLine($"No PairViewModel found for {data.TickerPair} at {DateTimeOffset.FromUnixTimeMilliseconds(data.Timestamp).LocalDateTime:yyyy-MM-dd HH:mm:ss}");
         }
     }
+
+    private async void OnBitbankStreamService_DepthUpdated(object? sender, BitbankDepthData data)
+    {
+        var pairViewModel = Pairs.FirstOrDefault(p => p.PairCode == data.DepthPair);
+        if (pairViewModel is not null)
+        {
+            if (pairViewModel.IsEnabled == false)
+            {
+                return;
+            }
+
+            await pairViewModel.UpdateDepthDataAsync(data);
+        }
+        else
+        {
+            Debug.WriteLine($"No PairViewModel found for {data.DepthPair} at {DateTimeOffset.FromUnixTimeMilliseconds(data.Timestamp).LocalDateTime:yyyy-MM-dd HH:mm:ss}");
+        }
+    }
+
 
     #endregion
 

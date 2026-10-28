@@ -26,8 +26,9 @@ public class Configuration
     public bool IsSaveLog { get; set; } = false;
 
     public bool IsNavigationViewMenuOpen { get; set; } = true;
+    public bool IsPaneOpen { get; set; } = true;
 
-    public bool IsOnBtcJpy { get; set; } = false;
+    public bool IsOnBtcJpy { get; set; } = true;
     public bool IsOnXrpJpy { get; set; } = false;
     public bool IsOnEthJpy { get; set; } = false;
 

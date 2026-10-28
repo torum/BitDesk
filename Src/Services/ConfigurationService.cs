@@ -294,6 +294,9 @@ internal sealed class ConfigurationService : IConfigurationService
 
             #endregion
 
+            // Save lator to be retrieved by GetPairs() method.
+            _xPairs = _xDoc.Root.Element("Pairs");
+
             _isConfigLoaded = true;
         }
         catch (Exception ex)

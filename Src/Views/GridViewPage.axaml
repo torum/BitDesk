@@ -5,11 +5,12 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              xmlns:views="clr-namespace:BitDesk.Views"
              xmlns:vm="clr-namespace:BitDesk.ViewModels"
+             xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia"
              x:DataType="vm:MainViewModel"
              x:Class="BitDesk.Views.GridViewPage">
     <Grid x:Name="ContentArea" Margin="{DynamicResource PageContentTitleBarSpacingThickness}">
         <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <ItemsControl ItemsSource="{Binding EnabledPairs}" Margin="12,0,0,0">
+        <ItemsControl ItemsSource="{Binding EnabledPairs}" Margin="12,24,0,0">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <UniformGrid Columns="{Binding UniformGridColumns}" UseLayoutRounding="True" />
@@ -33,7 +34,18 @@
                             </StackPanel>
                         </Border>
 
+                        <!--
                         <views:ChartContent PairVM="{Binding}" Padding="2"/>
+                        -->
+                        <lvc:CartesianChart x:Name="LiveChart" Margin="0,0,0,0" Background="Transparent"
+                            XAxes="{Binding XAxes, Mode=OneWay}"
+                            YAxes="{Binding YAxes, Mode=OneWay}"
+                            Series="{Binding Series, Mode=OneWay}"
+                            Sections="{Binding Sections, Mode=OneWay}"
+                            TooltipPosition="{Binding IsChartTooltipVisibleTemp, Mode=OneWay}"
+                            ZoomMode="X">
+                        </lvc:CartesianChart>
+
                     </Grid>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
