@@ -7,51 +7,95 @@
              xmlns:ia="using:Xaml.Behaviors.Interactions.Animated"
              xmlns:vm="using:BitDesk.ViewModels"
              xmlns:mod="using:BitDesk.Models"
+             xmlns:behaviors="using:BitDesk.Behaviors"
              x:DataType="vm:PairViewModel"
              x:Class="BitDesk.Views.ChartContent">
     <Grid>
 
-        <SplitView x:Name="SplitViewControl" Margin="0,0,0,0" CornerRadius="0,0,0,0" BorderThickness="0,0,0,0" PaneBackground="Transparent" IsPaneOpen="{Binding Path=IsPaneOpen, Mode=TwoWay}" PanePlacement="Right" OpenPaneLength="280" CompactPaneLength="0" DisplayMode="CompactInline">
+        <SplitView x:Name="SplitViewControl" Margin="0,0,0,0" CornerRadius="0,0,0,0" BorderThickness="0,0,0,0" PaneBackground="Transparent" IsPaneOpen="{Binding Path=IsPaneOpen, Mode=TwoWay}" PanePlacement="Right" OpenPaneLength="560" CompactPaneLength="0" DisplayMode="CompactInline">
             
             <SplitView.Pane>
                 <Grid>
-                    <Border Grid.Row="1" BorderThickness="0,0,0,0" Margin="0,48,0,0">
-                        <ScrollViewer x:Name="DepthScrollViewer" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" SizeChanged="DepthScrollViewer_SizeChanged">
-                              <Interaction.Behaviors>
-                                <ia:VerticalScrollViewerAnimatedBehavior/>
-                              </Interaction.Behaviors>
-                            <ItemsControl x:Name="DepthListBox" ItemsSource="{Binding Path=Depth, Mode=OneWay}" Opacity="0.8" Background="Transparent" Margin="0,0,0,6" Padding="0,12,0,12" HorizontalAlignment="Stretch" DoubleTapped="DepthListBox_DoubleTapped">
-                                <ItemsControl.ItemTemplate>
-							        <DataTemplate x:DataType="mod:Depth">
-                                        <Grid Margin="0" HorizontalAlignment="Stretch">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="80" />
-                                                <ColumnDefinition Width="90" />
-                                                <ColumnDefinition Width="80" />
-                                            </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="280"/>
+                        <ColumnDefinition Width="280"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <ScrollViewer x:Name="DepthScrollViewer" Grid.Row="1" Grid.Column="0" Margin="0,4,0,0" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" SizeChanged="DepthScrollViewer_SizeChanged">
+                            <Interaction.Behaviors>
+                            <ia:VerticalScrollViewerAnimatedBehavior/>
+                            </Interaction.Behaviors>
+                        <ItemsControl x:Name="DepthListBox" ItemsSource="{Binding Path=Depth, Mode=OneWay}" Opacity="0.8" Background="Transparent" Margin="0,0,0,6" Padding="0,12,0,12" HorizontalAlignment="Stretch" DoubleTapped="DepthListBox_DoubleTapped">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="mod:Depth">
 
-                                            <TextBlock Grid.Column="0" x:Name="DepthAskBest" Text="{Binding Path=DepthAskFormatted, Mode=OneWay}" Foreground="{StaticResource PriceUpColorBrush}" FontWeight="Normal" FontSize="12" Margin="2" Padding="0" HorizontalAlignment="Right">
+                                    <Grid Margin="0" HorizontalAlignment="Stretch">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="80" />
+                                            <ColumnDefinition Width="90" />
+                                            <ColumnDefinition Width="80" />
+                                        </Grid.ColumnDefinitions>
 
-                                            </TextBlock>
-                                            <TextBlock Grid.Column="1" x:Name="DepthPrice" Text="{Binding Path=DepthPriceFormatted, Mode=OneWay}" FontWeight="Normal" FontSize="12" Margin="6,2,6,4" Padding="3,0,3,0" HorizontalAlignment="Right">
-                                                <Interaction.Behaviors>
-											        <DataTriggerBehavior Binding="{Binding IsLTP}" ComparisonCondition="Equal" Value="True">
-												        <ChangePropertyAction PropertyName="FontWeight" Value="Bold" />
-											        </DataTriggerBehavior>
-											        <DataTriggerBehavior Binding="{Binding IsLTP}" ComparisonCondition="Equal" Value="False">
-												        <ChangePropertyAction PropertyName="FontWeight" Value="Normal" />
-											        </DataTriggerBehavior>
-										        </Interaction.Behaviors>
-                                            </TextBlock>
-                                            <TextBlock Grid.Column="2" x:Name="DepthBidBest" Text="{Binding Path=DepthBidFormatted, Mode=OneWay}" Foreground="{StaticResource PriceDownColorBrush}" FontWeight="Normal" FontSize="12" Margin="2" Padding="0" HorizontalAlignment="Right">
+                                        <TextBlock Grid.Column="0" x:Name="DepthAskBest" Text="{Binding Path=DepthAskFormatted, Mode=OneWay}" Foreground="{StaticResource PriceUpColorBrush}" FontWeight="Normal" FontSize="12" Margin="2" Padding="0" HorizontalAlignment="Right"
+                                                   behaviors:TextBlockExtensions.FlashColor="#666666"/>
+                                        
+                                        <TextBlock Grid.Column="1" x:Name="DepthPrice" Text="{Binding Path=DepthPriceFormatted, Mode=OneWay}" FontWeight="Normal" FontSize="12" Margin="6,2,6,4" Padding="3,0,3,0" HorizontalAlignment="Right"
+                                                   behaviors:TextBlockExtensions.FlashColor="#666666">
+                                            <Interaction.Behaviors>
+											    <DataTriggerBehavior Binding="{Binding IsLTP}" ComparisonCondition="Equal" Value="True">
+												    <ChangePropertyAction PropertyName="FontWeight" Value="Bold" />
+												    <ChangePropertyAction PropertyName="FontSize" Value="14" />
+											    </DataTriggerBehavior>
+											    <DataTriggerBehavior Binding="{Binding IsLTP}" ComparisonCondition="Equal" Value="False">
+												    <ChangePropertyAction PropertyName="FontWeight" Value="Normal" />
+											    </DataTriggerBehavior>
+										    </Interaction.Behaviors>
+                                        </TextBlock>
+                                        
+                                        <TextBlock Grid.Column="2" x:Name="DepthBidBest" Text="{Binding Path=DepthBidFormatted, Mode=OneWay}" Foreground="{StaticResource PriceDownColorBrush}" FontWeight="Normal" FontSize="12" Margin="2" Padding="0" HorizontalAlignment="Right"
+                                            behaviors:TextBlockExtensions.FlashColor="#666666"/>
 
-                                            </TextBlock>
-                                        </Grid>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                        </ScrollViewer>
+                                    </Grid>
+
+                                </DataTemplate>
+
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                    
+                    <Border Grid.Row="0" Grid.Column="1" Margin="4,44,4,0" CornerRadius="6">
+                        <ListBox SelectedIndex="0" CornerRadius="6" Padding="0" Background="Transparent">
+                            <ListBox.Resources>
+							<!-- Edit: move selection indicator to bottom. -->
+							<!-- Edit: padding changed. -->
+							
+                            </ListBox.Resources>
+                            <ListBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <UniformGrid Rows="1"/>
+                                </ItemsPanelTemplate>
+                            </ListBox.ItemsPanel>
+                            <ListBox.Styles>
+                                <Style Selector="ListBoxItem">
+                                    <Setter Property="Theme" Value="{StaticResource BottomIndicatorListBoxItemTheme}" />
+                                </Style>
+                                <Style Selector="ListBoxItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                    <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                    <Setter Property="CornerRadius" Value="6"/>
+                                </Style>
+                            </ListBox.Styles>
+                            
+                            <ListBoxItem>Buy</ListBoxItem>
+                            <ListBoxItem>Sell</ListBoxItem>
+                            <ListBoxItem>T&amp;S</ListBoxItem>
+                        </ListBox>
                     </Border>
+
                 </Grid>
             </SplitView.Pane>
 
@@ -81,7 +125,7 @@
                     <StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="4,2,4,2">
                             <TextBlock Text="{Binding PairString}" FontWeight="SemiBold" Margin="4" />
-                            <TextBlock Text="{Binding LtpString}" FontWeight="SemiBold" Margin="4" />
+                            <TextBlock Text="{Binding LtpString}" FontWeight="Bold" Margin="4" Foreground="{DynamicResource TextFillColorPrimary}" behaviors:TextBlockExtensions.FlashColor="#666666"/>
                             <TextBlock Text="{Binding PercentChange}" FontWeight="Normal" Margin="4" />
                         </StackPanel>
 
@@ -139,16 +183,37 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <StackPanel x:Name="BottomCommandBarStackPanel" Orientation="Horizontal" Grid.Row="0">
-                    
-                    </StackPanel>
+					<Border Grid.Row="0" Margin="8,0,0,0">
+					    <ListBox SelectedIndex="0" CornerRadius="6" Padding="0" Background="Transparent" HorizontalAlignment="Left">
+                            <ListBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <UniformGrid Rows="1"/>
+                                </ItemsPanelTemplate>
+                            </ListBox.ItemsPanel>
+                            <ListBox.Styles>
+                                <Style Selector="ListBoxItem">
+                                    <Setter Property="Theme" Value="{StaticResource BottomIndicatorListBoxItemTheme}" />
+                                </Style>
+                                <Style Selector="ListBoxItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                    <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                    <Setter Property="CornerRadius" Value="6"/>
+                                </Style>
+                            </ListBox.Styles>
+
+                            <ListBoxItem>Orders</ListBoxItem>
+                            <ListBoxItem>Pending</ListBoxItem>
+                            <ListBoxItem>History</ListBoxItem>
+                        </ListBox>
+						</Border>
+
                     <StackPanel x:Name="BottomListViewStackPanel" Orientation="Horizontal" Grid.Row="1">
-                    
 
 
                     </StackPanel>
 
                 </Grid>
+
             </Grid>
 
         </SplitView>

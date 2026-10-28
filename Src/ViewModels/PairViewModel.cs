@@ -2418,8 +2418,8 @@ public partial class PairViewModel : ObservableObject
         }
 
         // LTP を追加
-        _depth[half].DepthPrice = Ltp;
-        _depth[half].IsLTP = true;
+        Depth[half].DepthPrice = Ltp;
+        Depth[half].IsLTP = true;
 
         if (!IsEnabled)
         {
@@ -2504,16 +2504,16 @@ public partial class PairViewModel : ObservableObject
             {
                 //dp.PriceFormat = this._ltpFormstString;
                 //_depth[half - i] = dp;
-                _depth[half - i].DepthPrice = dp.DepthPrice;
-                _depth[half - i].DepthBid = dp.DepthBid;
-                _depth[half - i].DepthAsk = dp.DepthAsk;
-                _depth[half - i].PriceFormat = _ltpFormstString;
+                Depth[half - i].DepthPrice = dp.DepthPrice;
+                Depth[half - i].DepthBid = dp.DepthBid;
+                Depth[half - i].DepthAsk = dp.DepthAsk;
+                Depth[half - i].PriceFormat = _ltpFormstString;
 
                 i++;
             }
         }
 
-        _depth[half - 1].IsAskBest = true;
+        Depth[half - 1].IsAskBest = true;
 
         i = half + 1;
 
@@ -2575,16 +2575,16 @@ public partial class PairViewModel : ObservableObject
                 //dp.PriceFormat = this._ltpFormstString;
                 //_depth[i] = dp;
 
-                _depth[i].DepthPrice = dp.DepthPrice;
-                _depth[i].DepthBid = dp.DepthBid;
-                _depth[i].DepthAsk = dp.DepthAsk;
-                _depth[i].PriceFormat = _ltpFormstString;
+                Depth[i].DepthPrice = dp.DepthPrice;
+                Depth[i].DepthBid = dp.DepthBid;
+                Depth[i].DepthAsk = dp.DepthAsk;
+                Depth[i].PriceFormat = _ltpFormstString;
 
                 i++;
             }
         }
 
-        _depth[half + 1].IsBidBest = true;
+        Depth[half + 1].IsBidBest = true;
 
     }
 

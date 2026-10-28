@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:ui="using:FluentAvalonia.UI.Controls"
 		xmlns:control="using:Avalonia.Controls"
+		xmlns:behaviors="using:BitDesk.Behaviors"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="BitDesk.Views.MainWindow"
         x:DataType="vm:MainViewModel"
@@ -62,7 +63,7 @@
 									<ColumnDefinition Width="*"/>
 									<ColumnDefinition Width="86"/>
 								</Grid.ColumnDefinitions>
-								<TextBlock Grid.Column="0" Text="{Binding LtpBtcJpy, Mode=OneWay}" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0"/>
+								<TextBlock Grid.Column="0" Text="{Binding LtpBtcJpy, Mode=OneWay}" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0" behaviors:TextBlockExtensions.FlashColor="#666666"/>
 								<TextBlock Grid.Column="1" Text="{Binding LtpBtcJpyPercentChange, Mode=OneWay}" FontWeight="Normal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0"/>
 							</Grid>
 						</ui:FANavigationViewItem.Content>
@@ -77,7 +78,7 @@
 									<ColumnDefinition Width="*"/>
 									<ColumnDefinition Width="86"/>
 								</Grid.ColumnDefinitions>
-								<TextBlock Grid.Column="0" Text="{Binding LtpXrpJpy, Mode=OneWay}" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0"/>
+								<TextBlock Grid.Column="0" Text="{Binding LtpXrpJpy, Mode=OneWay}" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0" behaviors:TextBlockExtensions.FlashColor="#666666"/>
 								<TextBlock Grid.Column="1" Text="{Binding LtpXrpJpyPercentChange, Mode=OneWay}" FontWeight="Normal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0"/>
 							</Grid>
 						</ui:FANavigationViewItem.Content>
@@ -92,7 +93,7 @@
 									<ColumnDefinition Width="*"/>
 									<ColumnDefinition Width="86"/>
 								</Grid.ColumnDefinitions>
-								<TextBlock Grid.Column="0" Text="{Binding LtpEthJpy, Mode=OneWay}" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0"/>
+								<TextBlock Grid.Column="0" Text="{Binding LtpEthJpy, Mode=OneWay}" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0" behaviors:TextBlockExtensions.FlashColor="#666666"/>
 								<TextBlock Grid.Column="1" Text="{Binding LtpEthJpyPercentChange, Mode=OneWay}" FontWeight="Normal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0"/>
 							</Grid>
 						</ui:FANavigationViewItem.Content>
