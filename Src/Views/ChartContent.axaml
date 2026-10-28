@@ -12,9 +12,10 @@
     <Grid>
 
         <SplitView x:Name="SplitViewControl" Margin="0,0,0,0" CornerRadius="0,0,0,0" BorderThickness="0,0,0,0" PaneBackground="Transparent" IsPaneOpen="{Binding Path=IsPaneOpen, Mode=TwoWay}" PanePlacement="Right" OpenPaneLength="280" CompactPaneLength="0" DisplayMode="CompactInline">
+            
             <SplitView.Pane>
                 <Grid>
-                    <Border Grid.Row="1" BorderThickness="0,0,0,0" Margin="0,40,0,0">
+                    <Border Grid.Row="1" BorderThickness="0,0,0,0" Margin="0,48,0,0">
                         <ScrollViewer x:Name="DepthScrollViewer" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" SizeChanged="DepthScrollViewer_SizeChanged">
                               <Interaction.Behaviors>
                                 <ia:VerticalScrollViewerAnimatedBehavior/>
@@ -84,8 +85,49 @@
                             <TextBlock Text="{Binding PercentChange}" FontWeight="Normal" Margin="4" />
                         </StackPanel>
 
+                        <Grid Margin="8,2,6,4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="24H High: " FontSize="12" Opacity="0.7"></TextBlock>
+                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Path=High24String, Mode=OneWay}" FontSize="12" Opacity="0.7" Margin="6,0,0,0"></TextBlock>
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="24H Low: " FontSize="12" Opacity="0.7"></TextBlock>
+                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Path=Low24String, Mode=OneWay}" FontSize="12" Opacity="0.7" Margin="6,0,0,0"></TextBlock>
+                        </Grid>
+
                         <StackPanel Margin="4,2,4,2">
-                            <ToggleButton Content="Toggle Pane" IsChecked="{Binding IsPaneOpen, Mode=TwoWay}"></ToggleButton>
+
+                            <StackPanel Orientation="Horizontal" Margin="0,6,0,6">
+                                <SplitButton x:Name="ChartTypeSplitButton" Content="{Binding SelectedCandleTypeLabelString}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="4,0,0,0" Width="120" Height="24">
+					                <SplitButton.Flyout>
+						                <MenuFlyout Placement="Bottom">
+							                <MenuItem Header="1min" Command="{Binding ChangeCandleTypeFromTagCommand}" CommandParameter="{Binding $self.Tag}" Tag="OneMin"/>
+							                <MenuItem Header="5min" Command="{Binding ChangeCandleTypeFromTagCommand}" CommandParameter="{Binding $self.Tag}" Tag="FiveMin" />
+							                <MenuItem Header="15min" Command="{Binding ChangeCandleTypeFromTagCommand}" CommandParameter="{Binding $self.Tag}" Tag="FifteenMin" />
+							                <MenuItem Header="30min" Command="{Binding ChangeCandleTypeFromTagCommand}" CommandParameter="{Binding $self.Tag}" Tag="ThirtyMin" />
+                                            <Separator/>
+							                <MenuItem Header="1hour" Command="{Binding ChangeCandleTypeFromTagCommand}" CommandParameter="{Binding $self.Tag}" Tag="OneHour" />
+							                <MenuItem Header="4hour" Command="{Binding ChangeCandleTypeFromTagCommand}" CommandParameter="{Binding $self.Tag}" Tag="FourHour" />
+							                <MenuItem Header="8hour" Command="{Binding ChangeCandleTypeFromTagCommand}" CommandParameter="{Binding $self.Tag}" Tag="EightHour" />
+							                <MenuItem Header="12hour" Command="{Binding ChangeCandleTypeFromTagCommand}" CommandParameter="{Binding $self.Tag}" Tag="TwelveHour" />
+                                            <Separator/>
+							                <MenuItem Header="1day" Command="{Binding ChangeCandleTypeFromTagCommand}" CommandParameter="{Binding $self.Tag}" Tag="OneDay" />
+							                <MenuItem Header="1week" Command="{Binding ChangeCandleTypeFromTagCommand}" CommandParameter="{Binding $self.Tag}" Tag="OneWeek" />
+							                <MenuItem Header="1month" Command="{Binding ChangeCandleTypeFromTagCommand}" CommandParameter="{Binding $self.Tag}" Tag="OneMonth" />
+							                <Separator/>
+						                </MenuFlyout>
+					                </SplitButton.Flyout>
+                                </SplitButton>
+                                <ToggleButton IsChecked="{Binding IsPaneOpen, Mode=TwoWay}" Height="32" Margin="6,0,0,0">
+                                    <PathIcon Width="16" Height="16" Data="M14 5.5C14 4.11929 12.8807 3 11.5 3H4.5C3.11929 3 2 4.11929 2 5.5V10.5C2 11.8807 3.11929 13 4.5 13H11.5C12.8807 13 14 11.8807 14 10.5V5.5ZM9 4V12H4.5C3.67157 12 3 11.3284 3 10.5V5.5C3 4.67157 3.67157 4 4.5 4H9ZM10 4H11.5C12.3284 4 13 4.67157 13 5.5V10.5C13 11.3284 12.3284 12 11.5 12H10V4Z"></PathIcon>
+                                </ToggleButton>
+                            </StackPanel>
+
                         </StackPanel>
 
                     </StackPanel>

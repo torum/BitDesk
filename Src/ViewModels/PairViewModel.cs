@@ -3,6 +3,7 @@ using BitDesk.Models;
 using BitDesk.Services;
 using BitDesk.Services.Contracts;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using LiveChartsCore;
 using LiveChartsCore.Defaults;
 using LiveChartsCore.Kernel;
@@ -1679,29 +1680,6 @@ public partial class PairViewModel : ObservableObject
 
     #region == Chart ==
 
-    private async void ChangeCandleType(CandleTypes candleType)
-    {
-        if (candleType == SelectedCandleType)
-        {
-            return;
-        }
-
-        // set new candle type
-        SelectedCandleType = candleType;
-
-        // clear chart data.
-        Series[0].Values = new ObservableCollection<DateTimePoint>
-        {
-            //new DateTimePoint(DateTime.Now, 1)
-        };
-        Series[1].Values = new ObservableCollection<FinancialPoint>
-        {
-            //new(DateTime.Now, 100, 0, 0, 0)
-        };
-
-        await LoadChartAsync(SelectedCandleType);
-    }
-
     private async Task LoadChartAsync(CandleTypes ct)
     {
         if (Sections[0] is RectangularSection secn)
@@ -2619,28 +2597,38 @@ public partial class PairViewModel : ObservableObject
     #endregion
 
     #region == Commands ==
-    /*
-    public RelayCommand TogglePaneVisibilityCommand { get; private set; }
-    private bool TogglePaneVisibilityCommand_CanExecute()
-    {
-        return true;
-    }
 
-    public void TogglePaneVisibilityCommand_Execute()
+    [RelayCommand]
+    private async Task ChangeCandleTypeFromTag(string tag)
     {
-        IsPaneVisible = !IsPaneVisible;
-    }
+        if (Enum.TryParse<CandleTypes>(tag, out var candleType))
+        {
+            if (candleType == SelectedCandleType)
+            {
+                return;
+            }
+        }
+        else
+        {
+            return;
+        }
 
-    public ICommand ChangeCandleTypeCommand { get; set; }
-    public static bool ChangeCandleTypeCommand_CanExecute()
-    {
-        return true;
+        // set new candle type
+        SelectedCandleType = candleType;
+
+        // clear chart data.
+        Series[0].Values = new ObservableCollection<DateTimePoint>
+        {
+            //new DateTimePoint(DateTime.Now, 1)
+        };
+        Series[1].Values = new ObservableCollection<FinancialPoint>
+        {
+            //new(DateTime.Now, 100, 0, 0, 0)
+        };
+
+        await LoadChartAsync(SelectedCandleType);
     }
-    public void ChangeCandleTypeCommand_Execute(CandleTypes candleType)
-    {
-        ChangeCandleType(candleType);
-    }
-    */
 
     #endregion
+
 }
