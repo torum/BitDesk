@@ -59,8 +59,8 @@ internal partial class MainViewModel : ObservableObject
         _bitbankStreamService.DepthUpdated += OnBitbankStreamService_DepthUpdated;
 
         // For developing purposes, we can set this to true to avoid starting the ticker service and charts loading.
-        _isWebSocketOn = true;
-        _isLiveChartsOn = true;
+        _isWebSocketOn = false;
+        _isLiveChartsOn = false;
 
 #if DEBUG
         IsSaveLog = true;

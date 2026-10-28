@@ -349,11 +349,11 @@ public partial class PairViewModel : ObservableObject
 
             if (_isSelectedActive && _isPaneOpen)
             {
-                _bitbankStreamService.JoinDepthRoomAsync(_p);
+                _ = RunSafeAsync(() => _bitbankStreamService.JoinDepthRoomAsync(_p), nameof(_bitbankStreamService.JoinDepthRoomAsync));
             }
             else
             {
-                _bitbankStreamService.LeaveDepthRoomAsync(_p);
+                _ = RunSafeAsync(() => _bitbankStreamService.LeaveDepthRoomAsync(_p), nameof(_bitbankStreamService.LeaveDepthRoomAsync));
             }
         }
     }
@@ -2242,75 +2242,78 @@ public partial class PairViewModel : ObservableObject
     // From Streaming Ticker Data
     private void UpdateCandleUsingTickerData(DateTime tickTime, BitbankTickerData data)
     {
-        if (Series[1].Values is not ObservableCollection<FinancialPoint> candles) { return; }
-
-        var candleStart = GetCandleStartDate(tickTime, SelectedCandleType);
-
-        // Search from newest to oldest; the active candle should be near the end.
-        for (var i = candles.Count - 1; i >= 0; i--)
+        Dispatcher.UIThread.Post(async () =>
         {
-            var candle = candles[i];
+            if (Series[1].Values is not ObservableCollection<FinancialPoint> candles) { return; }
 
-            if (candle.Date != candleStart)
+            var candleStart = GetCandleStartDate(tickTime, SelectedCandleType);
+
+            // Search from newest to oldest; the active candle should be near the end.
+            for (var i = candles.Count - 1; i >= 0; i--)
             {
-                //Debug.WriteLine($"UpdateCurrentCandle() skipping candle for {PairCode} at {candle.Date:yyyy-MM-dd HH:mm:ss} because it does not match the current candle start time {candleStart:yyyy-MM-dd HH:mm:ss}");
-                continue;
-            }
+                var candle = candles[i];
 
-            //Debug.WriteLine($"UpdateCurrentCandle() found existing candle for {PairCode} at {candleStart:yyyy-MM-dd HH:mm:ss} with price {lastPrice:N0}");
+                if (candle.Date != candleStart)
+                {
+                    //Debug.WriteLine($"UpdateCurrentCandle() skipping candle for {PairCode} at {candle.Date:yyyy-MM-dd HH:mm:ss} because it does not match the current candle start time {candleStart:yyyy-MM-dd HH:mm:ss}");
+                    continue;
+                }
 
-            var price = (double)data.Last;
-            var high = Math.Max(candle.High, price);
-            var low = Math.Min(candle.Low, price);
-            var open = candle.Open;
+                //Debug.WriteLine($"UpdateCurrentCandle() found existing candle for {PairCode} at {candleStart:yyyy-MM-dd HH:mm:ss} with price {lastPrice:N0}");
 
-            // Update the chart only if it has changed for performance reasons like high CPU usage.
-            if ((candle.Close == price) && (candle.High == high) && (candle.Low == low) && (candle.Open == open))
-            {
-                //Debug.WriteLine($"UpdateCurrentCandle() skipping candle update for {PairCode} at {candleStart:yyyy-MM-dd HH:mm:ss} because the close price is already {data.Last:N0}");
+                var price = (double)data.Last;
+                var high = Math.Max(candle.High, price);
+                var low = Math.Min(candle.Low, price);
+                var open = candle.Open;
+
+                // Update the chart only if it has changed for performance reasons like high CPU usage.
+                if ((candle.Close == price) && (candle.High == high) && (candle.Low == low) && (candle.Open == open))
+                {
+                    //Debug.WriteLine($"UpdateCurrentCandle() skipping candle update for {PairCode} at {candleStart:yyyy-MM-dd HH:mm:ss} because the close price is already {data.Last:N0}");
+                    return;
+                }
+
+                Debug.WriteLine($"UpdateCurrentCandle() updating candle for {PairCode} at {candleStart:yyyy-MM-dd HH:mm:ss} with price {data.Last:N0}");
+                //candles[i] = new FinancialPoint(candleStart, high, open, price, low);
+                candle.Close = price;
+                candle.High = high;
+                candle.Low = low;
+                candle.Open = open;
+                //candle.Open = open;//candle.Open == 0 ? price : candle.Open;
+
                 return;
             }
 
-            Debug.WriteLine($"UpdateCurrentCandle() updating candle for {PairCode} at {candleStart:yyyy-MM-dd HH:mm:ss} with price {data.Last:N0}");
-            //candles[i] = new FinancialPoint(candleStart, high, open, price, low);
-            candle.Close = price;
-            candle.High = high;
-            candle.Low = low;
-            candle.Open = open;
-            //candle.Open = open;//candle.Open == 0 ? price : candle.Open;
+            Debug.WriteLine($"If we reach here, no existing candle matched; creating a new one. {PairCode} at {candleStart:yyyy-MM-dd HH:mm:ss} with price {data.Last:N0}");
 
-            return;
-        }
+            //DateTime timestamp = DateTimeOffset.FromUnixTimeMilliseconds(data.Timestamp).LocalDateTime;
 
-        Debug.WriteLine($"If we reach here, no existing candle matched; creating a new one. {PairCode} at {candleStart:yyyy-MM-dd HH:mm:ss} with price {data.Last:N0}");
-
-        //DateTime timestamp = DateTimeOffset.FromUnixTimeMilliseconds(data.Timestamp).LocalDateTime;
-
-        if (Series[0].Values is ObservableCollection<DateTimePoint> volumes)
-        {
-            if (volumes[volumes.Count - 1].DateTime != candleStart)
+            if (Series[0].Values is ObservableCollection<DateTimePoint> volumes)
             {
-                // TODO: we need to load chart independently after all.
-                // data.Vol is 24-hour rolling volume. So, we can't use it here.
-                //volumes.Add(new DateTimePoint(candleStart, (double)data.Vol));
-                // For now, just add a placeholder value of 0 for the volume.
-                volumes.Add(new DateTimePoint(candleStart, 0));
+                if (volumes[volumes.Count - 1].DateTime != candleStart)
+                {
+                    // TODO: we need to load chart independently after all.
+                    // data.Vol is 24-hour rolling volume. So, we can't use it here.
+                    //volumes.Add(new DateTimePoint(candleStart, (double)data.Vol));
+                    // For now, just add a placeholder value of 0 for the volume.
+                    volumes.Add(new DateTimePoint(candleStart, 0));
+                }
             }
-        }
 
-        if (Series[1].Values is ObservableCollection<FinancialPoint>)
-        {
-            if (candles[candles.Count - 1].Date != candleStart)
+            if (Series[1].Values is ObservableCollection<FinancialPoint>)
             {
-                candles.Add(new FinancialPoint(candleStart, (double)data.Last, (double)data.Last, (double)data.Last, (double)data.Last));
-                Debug.WriteLine($"UpdateCandleUsingTickerData Added Candlestick for {PairCode}: {candleStart:yyyy-MM-dd HH:mm:ss} Open: {(double)data.Last}, High: {(double)data.Last}, Low: {(double)data.Last}, Close: {(double)data.Last}, Volume: {0}");
+                if (candles[candles.Count - 1].Date != candleStart)
+                {
+                    candles.Add(new FinancialPoint(candleStart, (double)data.Last, (double)data.Last, (double)data.Last, (double)data.Last));
+                    Debug.WriteLine($"UpdateCandleUsingTickerData Added Candlestick for {PairCode}: {candleStart:yyyy-MM-dd HH:mm:ss} Open: {(double)data.Last}, High: {(double)data.Last}, Low: {(double)data.Last}, Close: {(double)data.Last}, Volume: {0}");
+                }
+                else
+                {
+                    // Do not update candle. The chart update is more accurate.
+                    Debug.WriteLine("UpdateCandleUsingTickerData Duplicated candle found. Ignoring.");
+                }
             }
-            else
-            {
-                // Do not update candle. The chart update is more accurate.
-                Debug.WriteLine("UpdateCandleUsingTickerData Duplicated candle found. Ignoring.");
-            }
-        }
+        });
     }
 
     private static DateTime GetCandleStartDate(DateTime time, CandleTypes candleType)
@@ -2593,6 +2596,27 @@ public partial class PairViewModel : ObservableObject
     #region == Transaction ==
 
     #endregion
+
+    private static async Task RunSafeAsync(Func<Task> work, string name, bool continueOnCapturedContext = false)
+    {
+        try
+        {
+            if (continueOnCapturedContext)
+            {
+                await work().ConfigureAwait(false);
+            }
+            else
+            {
+                await work();// no ConfigureAwait(false): continuations stay on the UI thread
+            }
+        }
+        //catch (OperationCanceledException) when (_cts.IsCancellationRequested) { }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Exception @{name}: {ex.Message}{Environment.NewLine}StackTrace: {ex.StackTrace}");
+
+        }
+    }
 
     #endregion
 

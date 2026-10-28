@@ -71,96 +71,104 @@ internal class BitbankStreamService : IBitbankStreamService
 
         _client.On("message", response =>
         {
-            var element = response.GetValue<System.Text.Json.JsonElement?>(0);
-            if (!element.HasValue) return Task.CompletedTask;
-
-            // Prints the raw JSON string for debugging purposes
-            //string rawJsonString = element.Value.GetRawText();
-            //Debug.WriteLine($"[RAW STREAM DATA]: {rawJsonString}");
-
-            /*
-            var data = root.Message.Data;
-            string pair = (root.RoomName ?? "unknown").Replace("ticker_", "").ToUpper();
-            DateTime timeStamp = DateTimeOffset.FromUnixTimeMilliseconds(data.Timestamp).LocalDateTime;
-
-            // Calculate a quick math metric (e.g., daily percentage change)
-            decimal priceChange = data.Last - data.Open;
-            decimal percentChange = data.Open != 0 ? (priceChange / data.Open) * 100 : 0;
-
-            // Print out your typed metrics using standard number formatting
-            Debug.WriteLine($"=== {pair} NUMERIC DATA [{timeStamp:yyyy-MM-dd HH:mm:ss}] ===");
-            Debug.WriteLine($"  Last Price : {data.Last:N0} JPY ({percentChange:+0.00;-0.00;0.00}%)");
-            Debug.WriteLine($"  Bid (Buy)  : {data.Buy:N0}   | Ask (Sell) : {data.Sell:N0}");
-            Debug.WriteLine($"  24h High   : {data.High:N0}  | 24h Low    : {data.Low:N0}");
-            Debug.WriteLine($"  24h Volume : {data.Vol:N4}");
-            Debug.WriteLine(new string('=', 45));
-            */
-
-            if (!element.HasValue || element.Value.ValueKind != JsonValueKind.Object)
+            try
             {
-                Debug.WriteLine("--> Received message that is not a JSON object. Ignoring.");
-                return Task.CompletedTask;
-            }
+                var element = response.GetValue<System.Text.Json.JsonElement?>(0);
+                if (!element.HasValue) return Task.CompletedTask;
 
-            // Access the "room_name" property directly from the root object
-            if (!element.Value.TryGetProperty("room_name", out JsonElement roomProperty) || roomProperty.ValueKind != JsonValueKind.String)
-            {
-                Debug.WriteLine("--> Received message without a valid 'room_name'. Ignoring.");
-                return Task.CompletedTask;
-            }
+                // Prints the raw JSON string for debugging purposes
+                //string rawJsonString = element.Value.GetRawText();
+                //Debug.WriteLine($"[RAW STREAM DATA]: {rawJsonString}");
 
-            string roomName = roomProperty.GetString() ?? string.Empty;
+                /*
+                var data = root.Message.Data;
+                string pair = (root.RoomName ?? "unknown").Replace("ticker_", "").ToUpper();
+                DateTime timeStamp = DateTimeOffset.FromUnixTimeMilliseconds(data.Timestamp).LocalDateTime;
 
-            if (roomName.StartsWith("ticker_"))
-            {
-                var root = response.GetValue<BitbankTickerRoot>(0);
+                // Calculate a quick math metric (e.g., daily percentage change)
+                decimal priceChange = data.Last - data.Open;
+                decimal percentChange = data.Open != 0 ? (priceChange / data.Open) * 100 : 0;
 
-                if (root?.Message?.Data != null)
+                // Print out your typed metrics using standard number formatting
+                Debug.WriteLine($"=== {pair} NUMERIC DATA [{timeStamp:yyyy-MM-dd HH:mm:ss}] ===");
+                Debug.WriteLine($"  Last Price : {data.Last:N0} JPY ({percentChange:+0.00;-0.00;0.00}%)");
+                Debug.WriteLine($"  Bid (Buy)  : {data.Buy:N0}   | Ask (Sell) : {data.Sell:N0}");
+                Debug.WriteLine($"  24h High   : {data.High:N0}  | 24h Low    : {data.Low:N0}");
+                Debug.WriteLine($"  24h Volume : {data.Vol:N4}");
+                Debug.WriteLine(new string('=', 45));
+                */
+
+                if (!element.HasValue || element.Value.ValueKind != JsonValueKind.Object)
                 {
-                    ProcessTickerData(root);
+                    Debug.WriteLine("--> Received message that is not a JSON object. Ignoring.");
+                    return Task.CompletedTask;
                 }
-            }
-            else if (roomName.StartsWith("depth_whole_"))
-            {
-                var root = response.GetValue<BitbankDepthRoot>(0);
 
-                if (root?.Message?.Data != null)
+                // Access the "room_name" property directly from the root object
+                if (!element.Value.TryGetProperty("room_name", out JsonElement roomProperty) || roomProperty.ValueKind != JsonValueKind.String)
                 {
-                    ProcessDepthData(root);
+                    Debug.WriteLine("--> Received message without a valid 'room_name'. Ignoring.");
+                    return Task.CompletedTask;
                 }
-            }
-            else
-            {
-                Debug.WriteLine($"--> Received data for an unhandled room: {roomName}");
-                return Task.CompletedTask;
-            }
 
-            /*
-            var element = response.GetValue<System.Text.Json.JsonElement?>(0);
-            if (!element.HasValue) return Task.CompletedTask;
+                string roomName = roomProperty.GetString() ?? string.Empty;
 
-            // Prints the raw JSON string for debugging purposes
-            //string rawJsonString = element.Value.GetRawText();
-            //Debug.WriteLine($"[RAW STREAM DATA]: {rawJsonString}");
-
-            var root = response.GetValue<BitbankTickerRoot>(0);
-
-            // Ensure data nodes exist before reading values
-            if (root?.Message?.Data != null)
-            {
-                string pair = (root.RoomName ?? "unknown").Replace("ticker_", "");
-
-                if (Enum.TryParse(pair, true, out PairCodes pairCode))
+                if (roomName.StartsWith("ticker_"))
                 {
-                    var data = root.Message.Data with { TickerPair = pairCode };
-                    OnTickerUpdated(data);
+                    var root = response.GetValue<BitbankTickerRoot>(0);
+
+                    if (root?.Message?.Data != null)
+                    {
+                        ProcessTickerData(root);
+                    }
+                }
+                else if (roomName.StartsWith("depth_whole_"))
+                {
+                    var root = response.GetValue<BitbankDepthRoot>(0);
+
+                    if (root?.Message?.Data != null)
+                    {
+                        ProcessDepthData(root);
+                    }
                 }
                 else
                 {
-                    Debug.WriteLine($"--> Unknown pair code received: {pair}");
+                    Debug.WriteLine($"--> Received data for an unhandled room: {roomName}");
+                    return Task.CompletedTask;
                 }
+
+                /*
+                var element = response.GetValue<System.Text.Json.JsonElement?>(0);
+                if (!element.HasValue) return Task.CompletedTask;
+
+                // Prints the raw JSON string for debugging purposes
+                //string rawJsonString = element.Value.GetRawText();
+                //Debug.WriteLine($"[RAW STREAM DATA]: {rawJsonString}");
+
+                var root = response.GetValue<BitbankTickerRoot>(0);
+
+                // Ensure data nodes exist before reading values
+                if (root?.Message?.Data != null)
+                {
+                    string pair = (root.RoomName ?? "unknown").Replace("ticker_", "");
+
+                    if (Enum.TryParse(pair, true, out PairCodes pairCode))
+                    {
+                        var data = root.Message.Data with { TickerPair = pairCode };
+                        OnTickerUpdated(data);
+                    }
+                    else
+                    {
+                        Debug.WriteLine($"--> Unknown pair code received: {pair}");
+                    }
+                }
+                */
             }
-            */
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"--> Exception while processing message: {ex}");
+            }
+
             return Task.CompletedTask;
         });
 
@@ -171,7 +179,7 @@ internal class BitbankStreamService : IBitbankStreamService
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Failed to connect initially @BitbankStreamService: {ex}");
+            Debug.WriteLine($"--> Failed to connect initially @BitbankStreamService: {ex}");
 
         }
     }
@@ -179,18 +187,25 @@ internal class BitbankStreamService : IBitbankStreamService
     private async void OnClientConnected(object? sender, EventArgs e)
     {
         if (_client == null) return;
+
         _isConnected = true;
 
         Debug.WriteLine("--> Successfully connected to Bitbank Stream! Subscribing now...");
 
-        //var rooms = new[] { "ticker_btc_jpy", "ticker_eth_jpy", "ticker_xrp_jpy" };
-
-        if (_tickerRooms.Length == 0) return;
-
-        foreach (var room in _tickerRooms)
+        try
         {
-            var roomArray = new[] { room };
-            await _client.EmitAsync("join-room", roomArray);
+            if (_tickerRooms.Length == 0) return;
+
+            foreach (var room in _tickerRooms)
+            {
+                var roomArray = new[] { room };
+                await _client.EmitAsync("join-room", roomArray);
+                await Task.Delay(100);
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"--> Failed to join rooms @BitbankStreamService: {ex}");
         }
     }
 
@@ -415,12 +430,21 @@ internal class BitbankStreamService : IBitbankStreamService
                     Debug.WriteLine("--> Disconnecting from Bitbank Stream...");
                     await _client.DisconnectAsync(); // 1. Signal graceful disconnect to server
                 }
+
+                _client.Dispose();
             }
             catch (System.Net.WebSockets.WebSocketException)
             {
                 /* Swallow any concurrent connection drops */
             }
-            _client.Dispose();
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"--> Exception during disconnect: {ex}");
+            }
+            finally
+            {
+                _isConnected = false;
+            }
         }
     }
 
