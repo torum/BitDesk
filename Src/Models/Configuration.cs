@@ -31,6 +31,7 @@ public class Configuration
     public bool IsOnBtcJpy { get; set; } = true;
     public bool IsOnXrpJpy { get; set; } = false;
     public bool IsOnEthJpy { get; set; } = false;
+    public bool IsOnXlmJpy { get; set; } = false;
 
     public string AssetsApiKey { get; set; } = string.Empty;
     public string AssetsSecret { get; set; } = string.Empty;

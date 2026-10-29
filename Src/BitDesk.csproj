@@ -42,6 +42,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Views\ChartPages\XlmJpyPage.axaml.cs">
+      <DependentUpon>XlmJpyPage.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\GridViewPage.axaml.cs">
       <DependentUpon>GridViewPage.axaml</DependentUpon>
     </Compile>

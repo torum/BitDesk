@@ -288,8 +288,22 @@ internal sealed class ConfigurationService : IConfigurationService
                         }
                     }
                 }
-
-
+                
+                attrs = opts.Attribute("IsOnXlmJpy");
+                if (attrs is not null)
+                {
+                    if (!string.IsNullOrEmpty(attrs.Value))
+                    {
+                        if (attrs.Value == "True")
+                        {
+                            config.IsOnXlmJpy = true;
+                        }
+                        else
+                        {
+                            config.IsOnXlmJpy = false;
+                        }
+                    }
+                }
             }
 
             #endregion
@@ -516,6 +530,62 @@ internal sealed class ConfigurationService : IConfigurationService
                         }
                     }
 
+
+
+                    attrv = hoge.Attribute("AutoTradeApiKey");
+                    if (attrv != null)
+                    {
+                        if (!string.IsNullOrEmpty(attrv.Value))
+                        {
+                            pair.AutoTradeApiKey = attrv.Value;
+                        }
+                    }
+
+                    attrv = hoge.Attribute("AutoTradeSecret");
+                    if (attrv != null)
+                    {
+                        if (!string.IsNullOrEmpty(attrv.Value))
+                        {
+                            pair.AutoTradeSecret = attrv.Value;
+                        }
+                    }
+
+                    attrv = hoge.Attribute("AutoTradeTama");
+                    if (attrv != null)
+                    {
+                        if (!string.IsNullOrEmpty(attrv.Value))
+                        {
+                            pair.AutoTradeTama = Decimal.Parse(attrv.Value);
+                        }
+                    }
+
+                    attrv = hoge.Attribute("AutoTradeDefaultHaba");
+                    if (attrv != null)
+                    {
+                        if (!string.IsNullOrEmpty(attrv.Value))
+                        {
+                            pair.AutoTradeDefaultHaba = Decimal.Parse(attrv.Value);
+                        }
+                    }
+
+                    attrv = hoge.Attribute("AutoTradeDefaultRikakuHaba");
+                    if (attrv != null)
+                    {
+                        if (!string.IsNullOrEmpty(attrv.Value))
+                        {
+                            pair.AutoTradeDefaultRikakuHaba = Decimal.Parse(attrv.Value);
+                        }
+                    }
+
+                    attrv = hoge.Attribute("AutoTradeSlots");
+                    if (attrv != null)
+                    {
+                        if (!string.IsNullOrEmpty(attrv.Value))
+                        {
+                            pair.AutoTradeSlots = Decimal.Parse(attrv.Value);
+                        }
+                    }
+
                 }
 
             }
@@ -558,6 +628,32 @@ internal sealed class ConfigurationService : IConfigurationService
             xAttrs = doc.CreateAttribute("IsChartTooltipVisible");
             xAttrs.Value = "";// TODO:
             xPair.SetAttributeNode(xAttrs);
+
+
+            xAttrs = doc.CreateAttribute("AutoTradeApiKey");
+            xAttrs.Value = hoge.AutoTradeApiKey;
+            xPair.SetAttributeNode(xAttrs);
+
+            xAttrs = doc.CreateAttribute("AutoTradeSecret");
+            xAttrs.Value = hoge.AutoTradeSecret;
+            xPair.SetAttributeNode(xAttrs);
+
+            xAttrs = doc.CreateAttribute("AutoTradeTama");
+            xAttrs.Value = hoge.AutoTradeTama.ToString();
+            xPair.SetAttributeNode(xAttrs);
+
+            xAttrs = doc.CreateAttribute("AutoTradeDefaultHaba");
+            xAttrs.Value = hoge.AutoTradeDefaultHaba.ToString();
+            xPair.SetAttributeNode(xAttrs);
+
+            xAttrs = doc.CreateAttribute("AutoTradeDefaultRikakuHaba");
+            xAttrs.Value = hoge.AutoTradeDefaultRikakuHaba.ToString();
+            xPair.SetAttributeNode(xAttrs);
+
+            xAttrs = doc.CreateAttribute("AutoTradeSlots");
+            xAttrs.Value = hoge.AutoTradeSlots.ToString();
+            xPair.SetAttributeNode(xAttrs);
+
 
             xPairs.AppendChild(xPair);
 
@@ -706,6 +802,10 @@ internal sealed class ConfigurationService : IConfigurationService
 
         attrs = doc.CreateAttribute("IsOnEthJpy");
         attrs.Value = config.IsOnEthJpy ? "True" : "False";
+        opts.SetAttributeNode(attrs);
+
+        attrs = doc.CreateAttribute("IsOnXlmJpy");
+        attrs.Value = config.IsOnXlmJpy ? "True" : "False";
         opts.SetAttributeNode(attrs);
 
         /// 

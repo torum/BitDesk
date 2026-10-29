@@ -1850,6 +1850,186 @@ public partial class PairViewModel : ObservableObject, IDisposable
 
     #endregion
 
+    #region == AutoTrade ==
+
+    private ObservableCollection<AutoTrade> _autoTradeOrders = [];
+    public ObservableCollection<AutoTrade> AutoTradeOrders
+    {
+        get
+        {
+            return _autoTradeOrders;
+        }
+        set
+        {
+            if (_autoTradeOrders == value)
+                return;
+
+            _autoTradeOrders = value;
+            OnPropertyChanged(nameof(AutoTradeOrders));
+        }
+    }
+
+    private AutoTrade? _selectedAutoTradeOrder;
+    public AutoTrade? SelectedAutoTradeOrder
+    {
+        get
+        {
+            return _selectedAutoTradeOrder;
+        }
+        set
+        {
+            if (_selectedAutoTradeOrder == value)
+                return;
+
+            _selectedAutoTradeOrder = value;
+            OnPropertyChanged(nameof(SelectedAutoTradeOrder));
+        }
+    }
+
+    // 取引単価
+    private decimal _autoTradeTama = 0.001M;
+    public decimal AutoTradeTama
+    {
+        get
+        {
+            return _autoTradeTama;
+        }
+        set
+        {
+            if (_autoTradeTama == value)
+                return;
+
+            _autoTradeTama = value;
+            OnPropertyChanged(nameof(AutoTradeTama));
+        }
+    }
+
+    // 初期価格幅
+    private decimal _autoTradeDefaultHaba = 500M;
+    public decimal AutoTradeDefaultHaba
+    {
+        get
+        {
+            return _autoTradeDefaultHaba;
+        }
+        set
+        {
+            if (_autoTradeDefaultHaba == value)
+                return;
+
+            _autoTradeDefaultHaba = value;
+            OnPropertyChanged(nameof(AutoTradeDefaultHaba));
+        }
+    }
+
+    // 利確価格幅
+    private decimal _autoTradeDefaultRikakuHaba = 500M;
+    public decimal AutoTradeDefaultRikakuHaba
+    {
+        get
+        {
+            return _autoTradeDefaultRikakuHaba;
+        }
+        set
+        {
+            if (_autoTradeDefaultRikakuHaba == value)
+                return;
+
+            _autoTradeDefaultRikakuHaba = value;
+            OnPropertyChanged(nameof(AutoTradeDefaultRikakuHaba));
+        }
+    }
+
+    // ロット追加起点
+    private decimal _autoTradeAddFrom;
+    public decimal AutoTradeAddFrom
+    {
+        get
+        {
+            return _autoTradeAddFrom;
+        }
+        set
+        {
+            if (_autoTradeAddFrom == value)
+                return;
+
+            _autoTradeAddFrom = value;
+            OnPropertyChanged(nameof(AutoTradeAddFrom));
+        }
+    }
+
+    // ロット数
+    private decimal _autoTradeSlots = 15;
+    public decimal AutoTradeSlots
+    {
+        get
+        {
+            return _autoTradeSlots;
+        }
+        set
+        {
+            if (_autoTradeSlots == value)
+                return;
+
+            _autoTradeSlots = value;
+            OnPropertyChanged(nameof(AutoTradeSlots));
+        }
+    }
+
+    private bool _isAutoTradeStart;
+    public bool IsAutoTradeStart
+    {
+        get
+        {
+            return _isAutoTradeStart;
+        }
+        set
+        {
+            if (_isAutoTradeStart == value)
+                return;
+
+            _isAutoTradeStart = value;
+            OnPropertyChanged(nameof(IsAutoTradeStart));
+        }
+    }
+
+    private decimal _autoTradeMagicNumberForPostOnly = 0.001M;
+    public decimal AutoTradeMagicNumberForPostOnly
+    {
+        get
+        {
+            return _autoTradeMagicNumberForPostOnly;
+        }
+        set
+        {
+            if (_autoTradeMagicNumberForPostOnly == value)
+                return;
+
+            _autoTradeMagicNumberForPostOnly = value;
+            OnPropertyChanged(nameof(AutoTradeMagicNumberForPostOnly));
+        }
+    }
+
+    private decimal _autoTradeProfit;
+    public decimal AutoTradeProfit
+    {
+        get
+        {
+            return _autoTradeProfit;
+        }
+        set
+        {
+            if (_autoTradeProfit == value)
+                return;
+
+            _autoTradeProfit = value;
+            OnPropertyChanged(nameof(AutoTradeProfit));
+        }
+    }
+
+
+    #endregion
+
     #region == API keys and secrets == 
 
     // TradeHistory 
@@ -1907,6 +2087,73 @@ public partial class PairViewModel : ObservableObject, IDisposable
             }
 
             _ordersSecret = value.Trim();
+        }
+    }
+
+    private string _autoTradeApiKey = string.Empty;
+    public string AutoTradeApiKey
+    {
+        get => _autoTradeApiKey;
+        set
+        {
+            if (_autoTradeApiKey == value.Trim())
+            {
+                return;
+            }
+
+            _autoTradeApiKey = value.Trim();
+            OnPropertyChanged(nameof(AutoTradeApiKey));
+
+            if (!string.IsNullOrEmpty(_autoTradeApiKey) && !string.IsNullOrEmpty(_autoTradeSecret))
+            {
+                AutoTradeApiKeyIsSet = true;
+            }
+            else
+            {
+                AutoTradeApiKeyIsSet = false;
+            }
+        }
+    }
+
+    // TODO: encrypt
+    private string _autoTradeSecret = string.Empty;
+    public string AutoTradeSecret
+    {
+        get => _autoTradeSecret;
+        set
+        {
+            if (_autoTradeSecret == value.Trim())
+            {
+                return;
+            }
+
+            _autoTradeSecret = value.Trim();
+            OnPropertyChanged(nameof(AutoTradeSecret));
+
+            if (!string.IsNullOrEmpty(_autoTradeApiKey) && !string.IsNullOrEmpty(_autoTradeSecret))
+            {
+                AutoTradeApiKeyIsSet = true;
+            }
+            else
+            {
+                AutoTradeApiKeyIsSet = false;
+            }
+        }
+    }
+
+    private bool _orderApiKeyIsSet;
+    public bool AutoTradeApiKeyIsSet
+    {
+        get => _orderApiKeyIsSet;
+        set
+        {
+            if (_orderApiKeyIsSet == value)
+            {
+                return;
+            }
+
+            _orderApiKeyIsSet = value;
+            OnPropertyChanged(nameof(AutoTradeApiKeyIsSet));
         }
     }
 

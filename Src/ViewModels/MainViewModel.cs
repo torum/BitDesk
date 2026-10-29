@@ -1,6 +1,7 @@
 ﻿using Avalonia.Threading;
 using BitDesk.Models;
 using BitDesk.Services.Contracts;
+using BitDesk.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using FluentAvalonia.UI.Controls;
 using System;
@@ -54,6 +55,7 @@ internal partial class MainViewModel : ObservableObject, IDisposable
         IsOnBtcJpy = config.IsOnBtcJpy;
         IsOnEthJpy = config.IsOnEthJpy;
         IsOnXrpJpy = config.IsOnXrpJpy;
+        IsOnXlmJpy = config.IsOnXlmJpy;
 
         AssetsApiKey = config.AssetsApiKey;
         AssetsSecret = config.AssetsSecret;
@@ -67,11 +69,6 @@ internal partial class MainViewModel : ObservableObject, IDisposable
         // Load the pairs from the configuration service into the Pairs collection
         _configurationService.GetPairs(Pairs);
 
-        IsEnabledChanged += OnIsEnabledChanged;
-
-        _bitbankStreamService.TickerUpdated += OnBitbankStreamService_TickerUpdated;
-        _bitbankStreamService.DepthUpdated += OnBitbankStreamService_DepthUpdated;
-        _bitbankStreamService.ErrorOccured += OnErrorOccured;
         foreach (var pair in Pairs)
         {
             pair.ErrorOccured += OnErrorOccured;
@@ -82,10 +79,16 @@ internal partial class MainViewModel : ObservableObject, IDisposable
             pair.OrdersSecret = OrdersSecret;
         }
 
+        IsEnabledChanged += OnIsEnabledChanged;
+
+        _bitbankStreamService.TickerUpdated += OnBitbankStreamService_TickerUpdated;
+        _bitbankStreamService.DepthUpdated += OnBitbankStreamService_DepthUpdated;
+        _bitbankStreamService.ErrorOccured += OnErrorOccured;
+
         // For developing purposes, we can set this to true to avoid starting the ticker service and charts loading.
-        _isWebSocketOn = true;
+        _isWebSocketOn = false;
         _isLiveChartsOn = false;
-        _isAssetsOn = true;
+        _isAssetsOn = false;
 
 #if DEBUG
         IsSaveLog = true;
@@ -142,11 +145,11 @@ internal partial class MainViewModel : ObservableObject, IDisposable
         new PairViewModel(PairCodes.btc_jpy, 24, "{0:#,0}", "C", 100M, 1000M),
         new PairViewModel(PairCodes.xrp_jpy, 24, "{0:#,0.000}", "C3", 0.1M, 0.01M),
         new PairViewModel(PairCodes.eth_jpy, 24, "{0:#,0}", "C", 100M, 1000M),
+        new PairViewModel(PairCodes.xlm_jpy, 24, "{0:#,0.000}", "C3", 0.1M, 0.01M),
         /*
         new PairViewModel(PairCodes.ltc_jpy, 24, "{0:#,0.0}", "C1", 100M, 1000M),
         new PairViewModel(PairCodes.mona_jpy, 24, "{0:#,0.000}", "C3", 0.1M, 1M),
         new PairViewModel(PairCodes.bcc_jpy, 24, "{0:#,0}", "C", 10M, 100M),
-        new PairViewModel(PairCodes.xlm_jpy, 24, "{0:#,0.000}", "C3", 0.1M, 0.01M),
         new PairViewModel(PairCodes.qtum_jpy, 24, "{0:#,0.000}", "C3", 0.1M, 0.01M),
         new PairViewModel(PairCodes.bat_jpy, 24, "{0:#,0.000}", "C3", 0.1M, 0.01M),
         new PairViewModel(PairCodes.omg_jpy, 24, "{0:#,0.000}", "C3", 0.1M, 0.01M),
@@ -1285,7 +1288,7 @@ internal partial class MainViewModel : ObservableObject, IDisposable
         }
     }
 
-    private string _ltpLtcJpy = "";
+    private string _ltpLtcJpy = "...";
     public string LtpLtcJpy
     {
         get => _ltpLtcJpy;
@@ -1301,7 +1304,7 @@ internal partial class MainViewModel : ObservableObject, IDisposable
         }
     }
 
-    private string _ltpMonaJpy = "";
+    private string _ltpMonaJpy = "...";
     public string LtpMonaJpy
     {
         get => _ltpMonaJpy;
@@ -1317,7 +1320,7 @@ internal partial class MainViewModel : ObservableObject, IDisposable
         }
     }
 
-    private string _ltpBccJpy = "";
+    private string _ltpBccJpy = "...";
     public string LtpBccJpy
     {
         get => _ltpBccJpy;
@@ -1333,7 +1336,7 @@ internal partial class MainViewModel : ObservableObject, IDisposable
         }
     }
 
-    private string _ltpXlmJpy = "";
+    private string _ltpXlmJpy = "...";
     public string LtpXlmJpy
     {
         get => _ltpXlmJpy;
@@ -1349,7 +1352,7 @@ internal partial class MainViewModel : ObservableObject, IDisposable
         }
     }
 
-    private string _ltpQtumJpy = "";
+    private string _ltpQtumJpy = "...";
     public string LtpQtumJpy
     {
         get => _ltpQtumJpy;
@@ -1365,7 +1368,7 @@ internal partial class MainViewModel : ObservableObject, IDisposable
         }
     }
 
-    private string _ltpBatJpy = "";
+    private string _ltpBatJpy = "...";
     public string LtpBatJpy
     {
         get => _ltpBatJpy;
@@ -1381,7 +1384,7 @@ internal partial class MainViewModel : ObservableObject, IDisposable
         }
     }
 
-    private string _ltpOmgJpy = "";
+    private string _ltpOmgJpy = "...";
     public string LtpOmgJpy
     {
         get => _ltpOmgJpy;
@@ -1397,7 +1400,7 @@ internal partial class MainViewModel : ObservableObject, IDisposable
         }
     }
 
-    private string _ltpXymJpy = "";
+    private string _ltpXymJpy = "...";
     public string LtpXymJpy
     {
         get => _ltpXymJpy;
@@ -1413,7 +1416,7 @@ internal partial class MainViewModel : ObservableObject, IDisposable
         }
     }
 
-    private string _ltpLinkJpy = "";
+    private string _ltpLinkJpy = "...";
     public string LtpLinkJpy
     {
         get => _ltpLinkJpy;
@@ -1429,7 +1432,7 @@ internal partial class MainViewModel : ObservableObject, IDisposable
         }
     }
 
-    private string _ltpMkrJpy = "";
+    private string _ltpMkrJpy = "...";
     public string LtpMkrJpy
     {
         get => _ltpMkrJpy;
@@ -1445,7 +1448,7 @@ internal partial class MainViewModel : ObservableObject, IDisposable
         }
     }
 
-    private string _ltpBobaJpy = "";
+    private string _ltpBobaJpy = "...";
     public string LtpBobaJpy
     {
         get => _ltpBobaJpy;
@@ -1461,7 +1464,7 @@ internal partial class MainViewModel : ObservableObject, IDisposable
         }
     }
 
-    private string _ltpEnjJpy = "";
+    private string _ltpEnjJpy = "...";
     public string LtpEnjJpy
     {
         get => _ltpEnjJpy;
@@ -1477,7 +1480,7 @@ internal partial class MainViewModel : ObservableObject, IDisposable
         }
     }
 
-    private string _ltpMaticJpy = "";
+    private string _ltpMaticJpy = "...";
     public string LtpMaticJpy
     {
         get => _ltpMaticJpy;
@@ -1493,7 +1496,7 @@ internal partial class MainViewModel : ObservableObject, IDisposable
         }
     }
 
-    private string _ltpDotJpy = "";
+    private string _ltpDotJpy = "...";
     public string LtpDotJpy
     {
         get => _ltpDotJpy;
@@ -1509,7 +1512,7 @@ internal partial class MainViewModel : ObservableObject, IDisposable
         }
     }
 
-    private string _ltpDogeJpy = "";
+    private string _ltpDogeJpy = "...";
     public string LtpDogeJpy
     {
         get => _ltpDogeJpy;
@@ -1525,7 +1528,7 @@ internal partial class MainViewModel : ObservableObject, IDisposable
         }
     }
 
-    private string _ltpAstrJpy = "";
+    private string _ltpAstrJpy = "...";
     public string LtpAstrJpy
     {
         get => _ltpAstrJpy;
@@ -1541,7 +1544,7 @@ internal partial class MainViewModel : ObservableObject, IDisposable
         }
     }
 
-    private string _ltpAdaJpy = "";
+    private string _ltpAdaJpy = "...";
     public string LtpAdaJpy
     {
         get => _ltpAdaJpy;
@@ -1557,7 +1560,7 @@ internal partial class MainViewModel : ObservableObject, IDisposable
         }
     }
 
-    private string _ltpAvaxJpy = "";
+    private string _ltpAvaxJpy = "...";
     public string LtpAvaxJpy
     {
         get => _ltpAvaxJpy;
@@ -1573,7 +1576,7 @@ internal partial class MainViewModel : ObservableObject, IDisposable
         }
     }
 
-    private string _ltpAxsJpy = "";
+    private string _ltpAxsJpy = "...";
     public string LtpAxsJpy
     {
         get => _ltpAxsJpy;
@@ -1589,7 +1592,7 @@ internal partial class MainViewModel : ObservableObject, IDisposable
         }
     }
 
-    private string _ltpFlrJpy = "";
+    private string _ltpFlrJpy = "...";
     public string LtpFlrJpy
     {
         get => _ltpFlrJpy;
@@ -1605,7 +1608,7 @@ internal partial class MainViewModel : ObservableObject, IDisposable
         }
     }
 
-    private string _ltpSandJpy = "";
+    private string _ltpSandJpy = "...";
     public string LtpSandJpy
     {
         get => _ltpSandJpy;
@@ -2046,6 +2049,7 @@ internal partial class MainViewModel : ObservableObject, IDisposable
         config.IsOnBtcJpy = IsOnBtcJpy;
         config.IsOnEthJpy = IsOnEthJpy;
         config.IsOnXrpJpy = IsOnXrpJpy;
+        config.IsOnXlmJpy = IsOnXlmJpy;
 
         config.AssetsApiKey = AssetsApiKey;
         config.AssetsSecret = AssetsSecret;

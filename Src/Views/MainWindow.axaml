@@ -98,6 +98,21 @@
 							</Grid>
 						</ui:FANavigationViewItem.Content>
 					</ui:FANavigationViewItem>
+					<ui:FANavigationViewItem Tag="xlm_jpy" Padding="3" IsVisible="{Binding IsOnXlmJpy, Mode=OneWay}">
+						<ui:FANavigationViewItem.IconSource>
+							<ui:FAPathIconSource Data="{StaticResource XlmIconData}" />
+						</ui:FANavigationViewItem.IconSource>
+						<ui:FANavigationViewItem.Content>
+							<Grid>
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="*"/>
+									<ColumnDefinition Width="86"/>
+								</Grid.ColumnDefinitions>
+								<TextBlock Grid.Column="0" Text="{Binding LtpXlmJpy, Mode=OneWay}" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0" behaviors:TextBlockExtensions.FlashColor="#666666"/>
+								<TextBlock Grid.Column="1" Text="{Binding LtpXlmJpyPercentChange, Mode=OneWay}" FontWeight="Normal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0"/>
+							</Grid>
+						</ui:FANavigationViewItem.Content>
+					</ui:FANavigationViewItem>
 				</ui:FANavigationView.MenuItems>
 
 				<ui:FANavigationView.FooterMenuItems>

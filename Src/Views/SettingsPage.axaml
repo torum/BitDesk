@@ -34,6 +34,13 @@
                             </Viewbox>
                             <ToggleSwitch Margin="24,0,0,0" IsChecked="{Binding IsOnEthJpy, Mode=TwoWay}"/>
                         </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="12,12,0,0">
+                            <Viewbox Width="16">
+                                <PathIcon Data="{StaticResource XlmIconData}"/>
+                            </Viewbox>
+                            <ToggleSwitch Margin="24,0,0,0" IsChecked="{Binding IsOnXlmJpy, Mode=TwoWay}"/>
+                        </StackPanel>
                     </StackPanel>
                 </ScrollViewer>
 
@@ -109,6 +116,41 @@
                             <TextBlock Text="APIシークレット："></TextBlock>
                             <TextBox Text="{Binding MakeOrderSecret, Mode=TwoWay}"></TextBox>
 
+                        </StackPanel>
+
+                        <StackPanel>
+			                <ItemsControl ItemsSource="{Binding Pairs}" BorderThickness="0" Margin="0,3,0,4">
+				                <ItemsControl.ItemTemplate>
+					                <DataTemplate x:DataType="vm:PairViewModel">
+						                <Grid>
+							                <Grid.ColumnDefinitions>
+								                <ColumnDefinition Width="Auto"></ColumnDefinition>
+								                <ColumnDefinition Width="*"></ColumnDefinition>
+							                </Grid.ColumnDefinitions>
+							
+							                <StackPanel Grid.Column="1">
+
+								                <StackPanel Orientation="Horizontal" Spacing="4" Margin="0,24,0,0">
+									                <Label Content="{Binding CurrencyUnitString}"></Label>
+									                <Label Content="取引用："></Label>
+									                <Label Content="権限"></Label>
+									                <TextBlock VerticalAlignment="Center">
+										                <Run Foreground="Orange" FontWeight="Bold">[参照] [取引]</Run>
+									                </TextBlock>
+								                </StackPanel>
+
+								                <Label Grid.Row="1" Grid.Column="0" Content="APIキー："></Label>
+								                <TextBox Text="{Binding AutoTradeApiKey, Mode=TwoWay}"></TextBox>
+								                <Label Grid.Row="2" Grid.Column="0" Content="APIシークレット："></Label>
+								                <TextBox Text="{Binding AutoTradeSecret, Mode=TwoWay}"></TextBox>
+								
+							                </StackPanel>
+
+						                </Grid>
+					                </DataTemplate>
+				                </ItemsControl.ItemTemplate>
+
+			                </ItemsControl>
                         </StackPanel>
                             
                     </StackPanel>

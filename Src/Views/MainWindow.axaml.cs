@@ -26,6 +26,7 @@ public partial class MainWindow : Window
         { "BitDesk.Views.ChartPages.BtcJpyPage", typeof(Views.ChartPages.BtcJpyPage) },
         { "BitDesk.Views.ChartPages.XrpJpyPage", typeof(Views.ChartPages.XrpJpyPage) },
         { "BitDesk.Views.ChartPages.EthJpyPage", typeof(Views.ChartPages.EthJpyPage) },
+        { "BitDesk.Views.ChartPages.XlmJpyPage", typeof(Views.ChartPages.XlmJpyPage) },
         { "BitDesk.Views.GridViewPage", typeof(Views.GridViewPage) },
         { "BitDesk.Views.SettingsPage", typeof(Views.SettingsPage) },
     };
@@ -35,13 +36,13 @@ public partial class MainWindow : Window
         (PairCodes.btc_jpy.ToString(), typeof(BtcJpyPage)),
         (PairCodes.xrp_jpy.ToString(), typeof(XrpJpyPage)),
         (PairCodes.eth_jpy.ToString(), typeof(EthJpyPage)),
+        (PairCodes.xlm_jpy.ToString(), typeof(XlmJpyPage)),
         ("gridview", typeof(GridViewPage)),
         ("settings", typeof(SettingsPage)),
         /*
         (PairCodes.ltc_jpy.ToString(), typeof(LtcJpyPage)),
         (PairCodes.mona_jpy.ToString(), typeof(MonaJpyPage)),
         (PairCodes.bcc_jpy.ToString(), typeof(BccJpyPage)),
-        (PairCodes.xlm_jpy.ToString(), typeof(XlmJpyPage)),
         (PairCodes.qtum_jpy.ToString(), typeof(QtumJpyPage)),
         (PairCodes.bat_jpy.ToString(), typeof(BatJpyPage)),
         (PairCodes.omg_jpy.ToString(), typeof(OmgJpyPage)),
@@ -138,6 +139,11 @@ public partial class MainWindow : Window
         this.PositionChanged += this.MainWindow_PositionChanged;
         //this.ActualThemeVariantChanged += OnActualThemeVariantChanged;
         //this.PropertyChanged += this.OnWindow_PropertyChanged;
+
+        await Task.Yield();
+
+        var window = new LogOnWindow();
+        await window.ShowDialog(this);
 
         await Task.Yield();
 
