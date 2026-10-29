@@ -23,6 +23,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Services\BitbankRestService.cs" />
+    <None Include="Services\Contracts\IBitbankRestService.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Avalonia" Version="12.1.4" />
     <PackageReference Include="Avalonia.Desktop" Version="12.1.4" />
     <PackageReference Include="Avalonia.Fonts.Inter" Version="12.1.4" />
@@ -33,6 +38,7 @@
 	  <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.14" />
 	  <PackageReference Include="SocketIOClient" Version="4.0.5" />
 	  <PackageReference Include="Xaml.Behaviors.Avalonia" Version="12.0.7" />
+	  <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="10.0.14" />
   </ItemGroup>
 
   <ItemGroup>

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net.Http;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace BitDesk.Services;
 
-internal class BitbankHttpService : IBitbankHttpService
+internal class BitbankRestService : IBitbankRestService
 {
     private readonly HttpClient? _publicClient;
     private readonly HttpClient? _privateClient;
@@ -26,7 +27,7 @@ internal class BitbankHttpService : IBitbankHttpService
     public event EventHandler<ErrorInfo>? ErrorOccured;
     public event EventHandler<ApiClientError>? ApiErrorOccured;
 
-    public BitbankHttpService(IHttpClientFactory httpClientFactory)
+    public BitbankRestService(IHttpClientFactory httpClientFactory)
     {
         _httpClientFactory = httpClientFactory;
         _publicClient = _httpClientFactory.CreateClient("BitDesk");
@@ -267,12 +268,273 @@ internal class BitbankHttpService : IBitbankHttpService
         });
     }
 
+    // Public API トランザクション(歩み値)取得メソッド
+    public async Task<TransactionsResult?> GetTransactionsAsync(string pair)
+    {
+        if (_publicClient is null)
+        {
+            return null;
+        }
+
+        if (_publicClient.BaseAddress is null)
+        {
+            return null;
+        }
+
+        Uri _endpoint = new((_publicClient.BaseAddress).ToString() + pair + "/transactions");
+
+        //System.Diagnostics.Debug.WriteLine("GettingDepth..." + _endpoint.ToString());
+
+        var request = new HttpRequestMessage
+        {
+            Method = HttpMethod.Get,
+            RequestUri = _endpoint,
+        };
+
+        try
+        {
+            var response = await _publicClient.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                //System.Diagnostics.Debug.WriteLine("GetTicker: " + s);
+
+                //var deserialized = JsonConvert.DeserializeObject<JsonTransactions>(json);
+                var deserialized = JsonSerializer.Deserialize(json, TransactionsJsonSerializerContext.Default.JsonTransactions);
+
+                if (deserialized?.Success > 0)
+                {
+                    if (deserialized.Data?.Transactions is not null)
+                    {
+                        TransactionsResult trs = new();
+
+                        foreach (var tr in deserialized.Data.Transactions)
+                        {
+                            Transaction dd = new()
+                            {
+                                TransactionId = tr.TransactionId
+                            };
+                            if (tr.Side is not null)
+                            {
+                                dd.Side = tr.Side;
+                            }
+                            if (!string.IsNullOrEmpty(tr.Price))
+                            {
+                                dd.Price = decimal.Parse(tr.Price);
+                            }
+
+                            if (!string.IsNullOrEmpty(tr.Amount))
+                            {
+                                dd.Amount = decimal.Parse(tr.Amount);
+                            }
+
+                            dd.ExecutedAt = (new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).AddMilliseconds(tr.ExecutedAt).ToLocalTime();
+
+                            trs.Trans.Add(dd);
+
+                            //Debug.WriteLine(tr.ExecutedAt);
+                        }
+
+                        trs.ErrorCode = 0;
+                        trs.IsSuccess = true;
+
+                        return trs;
+                    }
+                    else
+                    {
+                        Debug.WriteLine("GetTransactions: API error: deserialized.Data?.Transactions is null.");
+
+                        // TODO
+                        return null;
+                    }
+                }
+                else
+                {
+                    //var jsonResult = JsonConvert.DeserializeObject<JsonErrorObject>(json);
+                    var jsonResult = JsonSerializer.Deserialize(json, ErrorJsonSerializerContext.Default.JsonErrorObject);
+
+                    if (jsonResult?.Data is not null)
+                    {
+                        Debug.WriteLine("GetTransactions: API error code - " + jsonResult.Data.Code.ToString());
+                    }
+                    else
+                    {
+                        Debug.WriteLine("GetTransactions: API error. No error code given.");
+                    }
+
+                    // TODO
+                    return null;
+                }
+            }
+            else
+            {
+                Debug.WriteLine("GetTransactions: HTTP Error " + response.StatusCode.ToString());
+
+                //TODO
+                return null;
+            }
+        }
+        catch (HttpRequestException ex)
+        {
+            if (ex.InnerException is not null)
+            {
+                Debug.WriteLine("GetTransactions: HttpRequestException - " + ex.Message + " + InnerException: " + ex.InnerException.Message);
+            }
+            else
+            {
+                Debug.WriteLine("GetTransactions: HttpRequestException - " + ex.Message);
+            }
+
+            //TODO
+            return null;
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine("GetTransactions: Exception - " + ex.Message);
+            return null;
+        }
+    }
+
+    // Public API 板情報取得メソッド
+    public async Task<DepthResult?> GetDepthAsync(string pair)
+    {
+        if (_publicClient is null)
+        {
+            return null;
+        }
+
+        if (_publicClient.BaseAddress is null)
+        {
+            return null;
+        }
+
+        Uri _endpoint = new(_publicClient.BaseAddress.ToString() + pair + "/depth");
+
+        //System.Diagnostics.Debug.WriteLine("GettingDepth..." + _endpoint.ToString());
+
+        var request = new HttpRequestMessage
+        {
+            Method = HttpMethod.Get,
+            RequestUri = _endpoint,
+        };
+
+        try
+        {
+            var response = await _publicClient.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                //System.Diagnostics.Debug.WriteLine("GetTicker: " + s);
+
+                //var deserialized = JsonConvert.DeserializeObject<JsonDepthObject>(json);
+                var deserialized = JsonSerializer.Deserialize(json, DepthJsonSerializerContext.Default.JsonDepthObject);
+
+                if (deserialized == null)
+                {
+                    return null;
+                }
+
+                if (deserialized.Success > 0)
+                {
+                    if (deserialized.Data is not null)
+                    {
+                        DepthResult dpr = new();
+
+                        if (deserialized.Data.Bids is not null)
+                        {
+                            foreach (var dp in deserialized.Data.Bids)
+                            {
+                                if (dp.Count > 1)
+                                {
+                                    Depth dd = new()
+                                    {
+                                        DepthPrice = decimal.Parse(dp[0]),
+                                        DepthBid = decimal.Parse(dp[1]),
+                                        DepthAsk = 0
+                                    };
+                                    dpr.DepthBidList.Add(dd);
+                                }
+                            }
+                        }
+
+                        if (deserialized.Data.Asks is not null)
+                        {
+                            foreach (var dp in deserialized.Data.Asks)
+                            {
+                                if (dp.Count > 1)
+                                {
+                                    Depth dd = new()
+                                    {
+                                        DepthPrice = decimal.Parse(dp[0]),
+                                        DepthBid = 0,
+                                        DepthAsk = decimal.Parse(dp[1])
+                                    };
+                                    dpr.DepthAskList.Add(dd);
+                                }
+                            }
+                        }
+
+                        dpr.ErrorCode = 0;
+                        dpr.IsSuccess = true;
+
+                        return dpr;
+                    }
+                    else
+                    {
+                        Debug.WriteLine("GetDepth: API error. Data is null.");
+                        return null;
+                    }
+                }
+                else
+                {
+                    //var jsonResult = JsonConvert.DeserializeObject<JsonErrorObject>(json);
+                    var jsonResult = JsonSerializer.Deserialize(json, ErrorJsonSerializerContext.Default.JsonErrorObject);
+
+                    if (jsonResult?.Data is not null)
+                    {
+                        Debug.WriteLine("GetDepth: API error code - " + jsonResult.Data.Code.ToString());
+                    }
+                    else
+                    {
+                        Debug.WriteLine("GetDepth: API error. (No error code given.)");
+                    }
+                    return null;
+                }
+            }
+            else
+            {
+                Debug.WriteLine("GetDepth: HTTP Error " + response.StatusCode.ToString());
+                return null;
+            }
+        }
+        catch (HttpRequestException ex)
+        {
+            if (ex.InnerException is not null)
+            {
+                Debug.WriteLine("GetDepth: HttpRequestException - " + ex.Message + " + InnerException: " + ex.InnerException.Message);
+            }
+            else
+            {
+                Debug.WriteLine("GetDepth: HttpRequestException - " + ex.Message);
+            }
+
+            return null;
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine("GetDepth: Exception - " + ex.Message);
+            return null;
+        }
+    }
+
     // 資産残高取得メソッド
-    public async Task<List<Asset>?> GetAssetList(string apiKey, string apiSecret)
+    public async Task<List<Asset>?> GetAssetListAsync(string apiKey, string apiSecret)
     {
         var path = new Uri("/user/assets", UriKind.Relative);
 
-        var resbo = await PrivateSend(path, apiKey, apiSecret, HttpMethod.Get);
+        var resbo = await PrivateSendAsync(path, apiKey, apiSecret, HttpMethod.Get);
         if (resbo == null)
         {
             System.Diagnostics.Debug.WriteLine("■■■■■ GetAssetList: Send returned NULL.");
@@ -349,7 +611,7 @@ internal class BitbankHttpService : IBitbankHttpService
     }
 
     // 注文発注メソッド
-    public async Task<OrderResult> MakeOrder(string apiKey, string apiSecret, string pair, decimal amount, decimal price, string side, string type, bool postOnly)
+    public async Task<OrderResult> MakeOrderAsync(string apiKey, string apiSecret, string pair, decimal amount, decimal price, string side, string type, bool postOnly)
     {
         var ord = new OrderResult();
 
@@ -364,7 +626,7 @@ internal class BitbankHttpService : IBitbankHttpService
 
         try
         {
-            var resbo = await PrivateSend(path, apiKey, apiSecret, HttpMethod.Post, body);
+            var resbo = await PrivateSendAsync(path, apiKey, apiSecret, HttpMethod.Post, body);
             if (resbo == null)
             {
                 // This should not happen.
@@ -528,7 +790,7 @@ internal class BitbankHttpService : IBitbankHttpService
     }
 
     // 注文情報をIDから取得メソッド
-    public async Task<OrderResult?> GetOrderByID(string apiKey, string apiSecret, string pair, ulong orderID)
+    public async Task<OrderResult?> GetOrderByIdAsync(string apiKey, string apiSecret, string pair, ulong orderID)
     {
         var path = new Uri("/user/spot/order", UriKind.Relative);
 
@@ -537,7 +799,7 @@ internal class BitbankHttpService : IBitbankHttpService
                 { "order_id", orderID.ToString() },
             };
 
-        var resbo = await PrivateSend(path, apiKey, apiSecret, HttpMethod.Get, "", param);
+        var resbo = await PrivateSendAsync(path, apiKey, apiSecret, HttpMethod.Get, "", param);
         if (resbo == null)
         {
             Debug.WriteLine("■■■■■ GetOrderByID: Send returned NULL.");
@@ -647,7 +909,7 @@ internal class BitbankHttpService : IBitbankHttpService
     }
 
     // 注文情報を複数のIDから取得メソッド
-    public async Task<OrderListResult?> GetOrderListByIDs(string apiKey, string apiSecret, string pair, List<ulong> orderIDs)
+    public async Task<OrderListResult?> GetOrderListByIdsAsync(string apiKey, string apiSecret, string pair, List<ulong> orderIDs)
     {
         var path = new Uri("/user/spot/orders_info", UriKind.Relative);
 
@@ -655,7 +917,7 @@ internal class BitbankHttpService : IBitbankHttpService
         //var body = JsonConvert.SerializeObject(idParam);
         var body = System.Text.Json.JsonSerializer.Serialize(idParam, OrderJsonSerializerContext.Default.PairOrderIdList);
 
-        var resbo = await PrivateSend(path, apiKey, apiSecret, HttpMethod.Post, body);
+        var resbo = await PrivateSendAsync(path, apiKey, apiSecret, HttpMethod.Post, body);
         if (resbo == null)
         {
             Debug.WriteLine("■■■■■ GetOrderListByIDs: Send returned NULL.");
@@ -801,7 +1063,7 @@ internal class BitbankHttpService : IBitbankHttpService
     }
 
     // 注文キャンセルメソッド
-    public async Task<OrderResult> CancelOrder(string apiKey, string apiSecret, string pair, ulong orderID)
+    public async Task<OrderResult> CancelOrderAsync(string apiKey, string apiSecret, string pair, ulong orderID)
     {
         var ord = new OrderResult();
 
@@ -813,7 +1075,7 @@ internal class BitbankHttpService : IBitbankHttpService
         var body = System.Text.Json.JsonSerializer.Serialize(cancelOrderParam, OrderJsonSerializerContext.Default.PairOrderIdList);
 
         //string json = await Send(path, apiKey, apiSecret, HttpMethod.Post, body);
-        var resbo = await PrivateSend(path, apiKey, apiSecret, HttpMethod.Post, body);
+        var resbo = await PrivateSendAsync(path, apiKey, apiSecret, HttpMethod.Post, body);
         if (resbo == null)
         {
             Debug.WriteLine("■■■■■ CancelOrder: Send returned NULL.");
@@ -948,7 +1210,7 @@ internal class BitbankHttpService : IBitbankHttpService
     }
 
     // 文キャンセル（複数）メソッド
-    public async Task<OrderListResult?> CancelOrders(string apiKey, string apiSecret, string pair, List<ulong> orderIDs)
+    public async Task<OrderListResult?> CancelOrdersAsync(string apiKey, string apiSecret, string pair, List<ulong> orderIDs)
     {
         var path = new Uri("/user/spot/cancel_orders", UriKind.Relative);
 
@@ -957,7 +1219,7 @@ internal class BitbankHttpService : IBitbankHttpService
         var body = System.Text.Json.JsonSerializer.Serialize(idParam, OrderJsonSerializerContext.Default.PairOrderIdList);
 
         //string json = await Send(path, apiKey, apiSecret, HttpMethod.Post, body);
-        var resbo = await PrivateSend(path, apiKey, apiSecret, HttpMethod.Post, body);
+        var resbo = await PrivateSendAsync(path, apiKey, apiSecret, HttpMethod.Post, body);
         if (resbo == null)
         {
             System.Diagnostics.Debug.WriteLine("■■■■■ CancelOrders: Send returned NULL.");
@@ -1101,7 +1363,7 @@ internal class BitbankHttpService : IBitbankHttpService
     }
 
     // 注文リスト取得メソッド
-    public async Task<OrderListResult?> GetOrderList(string apiKey, string apiSecret, string pair)
+    public async Task<OrderListResult?> GetOrderListAsync(string apiKey, string apiSecret, string pair)
     {
         var path = new Uri("/user/spot/active_orders", UriKind.Relative);
 
@@ -1115,7 +1377,7 @@ internal class BitbankHttpService : IBitbankHttpService
             };
 
         //string json = await Send(path, apiKey, apiSecret, HttpMethod.Get,"", param);
-        var resbo = await PrivateSend(path, apiKey, apiSecret, HttpMethod.Get, "", param);
+        var resbo = await PrivateSendAsync(path, apiKey, apiSecret, HttpMethod.Get, "", param);
         if (resbo == null)
         {
             System.Diagnostics.Debug.WriteLine("■■■■■ GetOrderList: Send returned NULL.");
@@ -1237,7 +1499,7 @@ internal class BitbankHttpService : IBitbankHttpService
     }
 
     // 取引履歴取得メソッド
-    public async Task<TradeHistory?> GetTradeHistory(string apiKey, string apiSecret, string pair)
+    public async Task<TradeHistory?> GetTradeHistoryAsync(string apiKey, string apiSecret, string pair)
     {
 
         var path = new Uri("/user/spot/trade_history", UriKind.Relative);
@@ -1252,7 +1514,7 @@ internal class BitbankHttpService : IBitbankHttpService
             };
 
         //string json = await Send(path, apiKey, apiSecret, HttpMethod.Get, "", param);
-        var resbo = await PrivateSend(path, apiKey, apiSecret, HttpMethod.Get, "", param);
+        var resbo = await PrivateSendAsync(path, apiKey, apiSecret, HttpMethod.Get, "", param);
         if (resbo == null)
         {
             System.Diagnostics.Debug.WriteLine("■■■■■ GetTradeHistory: Send returned NULL.");
@@ -1344,7 +1606,7 @@ internal class BitbankHttpService : IBitbankHttpService
     }
 
     // HTTPリクエスト送信メソッド
-    internal async Task<ResponseBodyWrapper> PrivateSend(Uri path, string apiKey, string secret, HttpMethod method, string body = "", Dictionary<string, string>? queries = null)
+    internal async Task<ResponseBodyWrapper> PrivateSendAsync(Uri path, string apiKey, string secret, HttpMethod method, string body = "", Dictionary<string, string>? queries = null)
     {
         var resbowrap = new ResponseBodyWrapper();
         if (_privateClient is null)

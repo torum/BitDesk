@@ -294,6 +294,107 @@ internal sealed class ConfigurationService : IConfigurationService
 
             #endregion
 
+            #region == API Keys and Secrets ==
+
+            var keys = _xDoc.Root.Element("APIKeys");
+            if (keys != null)
+            {
+                var key = keys.Element("Assets");
+
+                if (key != null)
+                {
+                    var xvalue = key.Attribute("Key");
+                    if (xvalue != null)
+                    {
+                        if (!string.IsNullOrEmpty(xvalue.Value))
+                        {
+                            config.AssetsApiKey = Helper.EncryptDecrypt.Decrypt(xvalue.Value);
+
+                        }
+                    }
+
+                    xvalue = key.Attribute("Secret");
+                    if (xvalue != null)
+                    {
+                        if (!string.IsNullOrEmpty(xvalue.Value))
+                        {
+                            config.AssetsSecret = Helper.EncryptDecrypt.Decrypt(xvalue.Value);
+                        }
+                    }
+                }
+
+                key = keys.Element("Orders");
+
+                if (key != null)
+                {
+                    var xvalue = key.Attribute("Key");
+                    if (xvalue != null)
+                    {
+                        if (!string.IsNullOrEmpty(xvalue.Value))
+                        {
+                            config.OrdersApiKey = Helper.EncryptDecrypt.Decrypt(xvalue.Value);
+                        }
+                    }
+
+                    xvalue = key.Attribute("Secret");
+                    if (xvalue != null)
+                    {
+                        if (!string.IsNullOrEmpty(xvalue.Value))
+                        {
+                            config.OrdersSecret = Helper.EncryptDecrypt.Decrypt(xvalue.Value);
+                        }
+                    }
+                }
+
+                key = keys.Element("TradeHistory");
+
+                if (key != null)
+                {
+                    var xvalue = key.Attribute("Key");
+                    if (xvalue != null)
+                    {
+                        if (!string.IsNullOrEmpty(xvalue.Value))
+                        {
+                            config.TradeHistoryApiKey = Helper.EncryptDecrypt.Decrypt(xvalue.Value);
+                        }
+                    }
+
+                    xvalue = key.Attribute("Secret");
+                    if (xvalue != null)
+                    {
+                        if (!string.IsNullOrEmpty(xvalue.Value))
+                        {
+                            config.TradeHistorySecret = Helper.EncryptDecrypt.Decrypt(xvalue.Value);
+                        }
+                    }
+                }
+
+                key = keys.Element("MakeOrder");
+
+                if (key != null)
+                {
+                    var xvalue = key.Attribute("Key");
+                    if (xvalue != null)
+                    {
+                        if (!string.IsNullOrEmpty(xvalue.Value))
+                        {
+                            config.MakeOrderApiKey = Helper.EncryptDecrypt.Decrypt(xvalue.Value);
+                        }
+                    }
+
+                    xvalue = key.Attribute("Secret");
+                    if (xvalue != null)
+                    {
+                        if (!string.IsNullOrEmpty(xvalue.Value))
+                        {
+                            config.MakeOrderSecret = Helper.EncryptDecrypt.Decrypt(xvalue.Value);
+                        }
+                    }
+                }
+            }
+
+            #endregion
+
             // Save lator to be retrieved by GetPairs() method.
             _xPairs = _xDoc.Root.Element("Pairs");
 
@@ -609,6 +710,64 @@ internal sealed class ConfigurationService : IConfigurationService
 
         /// 
         root.AppendChild(opts);
+
+        #endregion
+
+        #region == API Keys and Secrets ==
+
+        // API Keys
+        var xAPIKeys = doc.CreateElement(string.Empty, "APIKeys", string.Empty);
+
+        var xAsset = doc.CreateElement(string.Empty, "Assets", string.Empty);
+
+        attrs = doc.CreateAttribute("Key");
+        attrs.Value = Helper.EncryptDecrypt.Encrypt(config.AssetsApiKey);
+        xAsset.SetAttributeNode(attrs);
+
+        attrs = doc.CreateAttribute("Secret");
+        attrs.Value = Helper.EncryptDecrypt.Encrypt(config.AssetsSecret);
+        xAsset.SetAttributeNode(attrs);
+
+        xAPIKeys.AppendChild(xAsset);
+
+        var xOrder = doc.CreateElement(string.Empty, "Orders", string.Empty);
+
+        attrs = doc.CreateAttribute("Key");
+        attrs.Value = Helper.EncryptDecrypt.Encrypt(config.OrdersApiKey);
+        xOrder.SetAttributeNode(attrs);
+
+        attrs = doc.CreateAttribute("Secret");
+        attrs.Value = Helper.EncryptDecrypt.Encrypt(config.OrdersSecret);
+        xOrder.SetAttributeNode(attrs);
+
+        xAPIKeys.AppendChild(xOrder);
+
+        var xTradeHistory = doc.CreateElement(string.Empty, "TradeHistory", string.Empty);
+
+        attrs = doc.CreateAttribute("Key");
+        attrs.Value = Helper.EncryptDecrypt.Encrypt(config.TradeHistoryApiKey);
+        xTradeHistory.SetAttributeNode(attrs);
+
+        attrs = doc.CreateAttribute("Secret");
+        attrs.Value = Helper.EncryptDecrypt.Encrypt(config.TradeHistorySecret);
+        xTradeHistory.SetAttributeNode(attrs);
+
+        xAPIKeys.AppendChild(xTradeHistory);
+
+        var xMakeOrder = doc.CreateElement(string.Empty, "MakeOrder", string.Empty);
+
+        attrs = doc.CreateAttribute("Key");
+        attrs.Value = Helper.EncryptDecrypt.Encrypt(config.MakeOrderApiKey);
+        xMakeOrder.SetAttributeNode(attrs);
+
+        attrs = doc.CreateAttribute("Secret");
+        attrs.Value = Helper.EncryptDecrypt.Encrypt(config.MakeOrderSecret);
+        xMakeOrder.SetAttributeNode(attrs);
+
+        xAPIKeys.AppendChild(xMakeOrder);
+
+
+        root.AppendChild(xAPIKeys);
 
         #endregion
 

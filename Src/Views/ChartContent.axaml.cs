@@ -81,4 +81,9 @@ public partial class ChartContent : UserControl
     {
         SetDepthListboxScrollPosition();
     }
+
+    private void SplitViewToggleButton_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        ChartSplitView.IsPaneOpen = !ChartSplitView.IsPaneOpen;
+    }
 }

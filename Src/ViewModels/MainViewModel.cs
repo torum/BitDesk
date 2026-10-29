@@ -23,8 +23,10 @@ internal partial class MainViewModel : ObservableObject, IDisposable
 {
     private readonly bool _isWebSocketOn = true;
     private readonly bool _isLiveChartsOn = true;
+    private readonly bool _isAssetsOn = true;
 
     private readonly IBitbankStreamService _bitbankStreamService;
+    private readonly IBitbankRestService _bitbankRestService;
     private readonly IConfigurationService _configurationService;
 
     public event EventHandler<IsEnabledState>? IsEnabledChanged;
@@ -36,12 +38,14 @@ internal partial class MainViewModel : ObservableObject, IDisposable
         // Sutisfiy the non-null for design-time purposes.
         _bitbankStreamService = App.GetService<IBitbankStreamService>();
         _configurationService = App.GetService<IConfigurationService>();
+        _bitbankRestService = App.GetService<IBitbankRestService>();
     }
 
-    public MainViewModel(IBitbankStreamService bitbankStreamService, IConfigurationService configurationService)
+    public MainViewModel(IBitbankStreamService bitbankStreamService, IConfigurationService configurationService, IBitbankRestService bitbankRestService)
     {
         _bitbankStreamService = bitbankStreamService;
         _configurationService = configurationService;
+        _bitbankRestService = bitbankRestService;
 
         var config = _configurationService.CurrentConfiguration;
         IsSaveLog = config.IsSaveLog;
@@ -50,7 +54,15 @@ internal partial class MainViewModel : ObservableObject, IDisposable
         IsOnBtcJpy = config.IsOnBtcJpy;
         IsOnEthJpy = config.IsOnEthJpy;
         IsOnXrpJpy = config.IsOnXrpJpy;
-        //OnPropertyChanged(nameof(EnabledPairs));
+
+        AssetsApiKey = config.AssetsApiKey;
+        AssetsSecret = config.AssetsSecret;
+        OrdersApiKey = config.OrdersApiKey;
+        OrdersSecret = config.OrdersSecret;
+        TradeHistoryApiKey = config.TradeHistoryApiKey;
+        TradeHistorySecret = config.TradeHistorySecret;
+        MakeOrderApiKey = config.MakeOrderApiKey;
+        MakeOrderSecret = config.MakeOrderSecret;
 
         // Load the pairs from the configuration service into the Pairs collection
         _configurationService.GetPairs(Pairs);
@@ -63,11 +75,17 @@ internal partial class MainViewModel : ObservableObject, IDisposable
         foreach (var pair in Pairs)
         {
             pair.ErrorOccured += OnErrorOccured;
+
+            pair.TradeHistoryApiKey = TradeHistoryApiKey;
+            pair.TradeHistorySecret = TradeHistorySecret;
+            pair.OrdersApiKey = OrdersApiKey;
+            pair.OrdersSecret = OrdersSecret;
         }
 
         // For developing purposes, we can set this to true to avoid starting the ticker service and charts loading.
         _isWebSocketOn = true;
-        _isLiveChartsOn = true;
+        _isLiveChartsOn = false;
+        _isAssetsOn = true;
 
 #if DEBUG
         IsSaveLog = true;
@@ -1690,7 +1708,7 @@ internal partial class MainViewModel : ObservableObject, IDisposable
 
     #endregion
 
-    #region == API keys ==
+    #region == API keys and secrets ==
 
     // Assets
 
@@ -1957,6 +1975,9 @@ internal partial class MainViewModel : ObservableObject, IDisposable
 
             if (_isWebSocketOn)
                 await _bitbankStreamService.StartAsync();
+
+            if (_isAssetsOn)
+                await GetAssetsAsync();
         }
         catch (Exception ex)
         {
@@ -2026,6 +2047,15 @@ internal partial class MainViewModel : ObservableObject, IDisposable
         config.IsOnEthJpy = IsOnEthJpy;
         config.IsOnXrpJpy = IsOnXrpJpy;
 
+        config.AssetsApiKey = AssetsApiKey;
+        config.AssetsSecret = AssetsSecret;
+        config.OrdersApiKey = OrdersApiKey;
+        config.OrdersSecret = OrdersSecret;
+        config.TradeHistoryApiKey = TradeHistoryApiKey;
+        config.TradeHistorySecret = TradeHistorySecret;
+        config.MakeOrderApiKey = MakeOrderApiKey;
+        config.MakeOrderSecret = MakeOrderSecret;
+
     }
 
     public void Dispose()
@@ -2056,7 +2086,7 @@ internal partial class MainViewModel : ObservableObject, IDisposable
 
     #endregion
 
-    #region == private methods ==
+    #region == Private Event Handlers ==
 
     private async void OnIsEnabledChanged(object? sender, IsEnabledState e)
     {
@@ -2252,6 +2282,138 @@ internal partial class MainViewModel : ObservableObject, IDisposable
         });
     }
 
+
+    #endregion
+
+    #region == Private methods ==
+
+    private async Task GetAssetsAsync()
+    {
+        if (AssetsApiKeyIsSet == false)
+        {
+            // TODO: show message?
+            System.Diagnostics.Debug.WriteLine("■■■■■ GetAssets: (AssetsApiKeyIsSet == false)");
+            return;
+        }
+
+        try
+        {
+            // TODO: Use AssetsResult
+            var asts = await _bitbankRestService.GetAssetListAsync(AssetsApiKey, AssetsSecret);
+
+            if (asts != null)
+            {
+                try
+                {
+                    var newAssets = new ObservableCollection<Models.Asset>();
+
+                    foreach (var ast in asts)
+                    {
+                        if (ast.Name == "jpy")
+                        {
+                            foreach (var ps in EnabledPairs)
+                            {
+                                ps.AssetJPYName = ast.Name.ToUpper();
+                                ps.AssetJPYAmount = ast.Amount;
+                                ps.AssetJPYFreeAmount = ast.FreeAmount;
+                            }
+                        }
+                        else
+                        {
+                            if (ast.Amount > 0)
+                            {
+                                ast.Name = ast.Name.ToUpper();
+                                newAssets.Add(ast);
+                            }
+
+                            var pr = EnabledPairs.FirstOrDefault(x => x.CurrencyUnitString.Equals(ast.Name, StringComparison.OrdinalIgnoreCase));
+                            if (pr is not null)
+                            {
+                                pr.AssetCurrentName = ast.Name.ToUpper();
+                                pr.AssetCurrentAmount = ast.Amount;
+                                pr.AssetCurrentFreeAmount = ast.FreeAmount;
+                            }
+                        }
+                    }
+
+                    //Assets = newAssets;
+                    foreach (var ors in newAssets)
+                    {
+                        var found = Assets.FirstOrDefault(x => x.Name == ors.Name);
+                        if (found != null)
+                        {
+                            found = ors;
+                        }
+                        else
+                        {
+                            Assets.Add(ors);
+                        }
+                    }
+                    var lst = new List<Asset>();
+                    foreach (var ors in Assets)
+                    {
+                        var found = newAssets.FirstOrDefault(x => x.Name == ors.Name);
+                        if (found == null)
+                        {
+                            lst.Add(ors);
+                        }
+                    }
+
+                    foreach (var ff in lst)
+                    {
+                        var found = Assets.FirstOrDefault(x => x.Name == ff.Name);
+                        if (found != null)
+                        {
+                            Assets.Remove(ff);
+                        }
+                    }
+
+                    //await Task.Delay(1000);
+                    return;
+                }
+                catch (Exception ex)
+                {
+                    //System.Diagnostics.Debug.WriteLine("■■■■■ GetAssets: Exception - " + ex.Message);
+                    if (ex.InnerException != null)
+                    {
+                        System.Diagnostics.Debug.WriteLine("■■■■■ GetAssets InnerException1: " + ex.InnerException.Message);
+                    }
+                    else
+                    {
+                        System.Diagnostics.Debug.WriteLine("■■■■■ GetAssets Exception1: " + ex.Message);
+                    }
+
+                    //await Task.Delay(1000);
+                    return;
+                }
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine("■■■■■ GetAssets: 取得失敗");
+
+                //APIResultAssets = "<<取得失敗>>";
+
+                await Task.Delay(1000);
+                return;
+            }
+
+        }
+        catch (Exception e)
+        {
+            if (e.InnerException != null)
+            {
+                System.Diagnostics.Debug.WriteLine("■■■■■ GetAssets InnerException2: " + e.InnerException.Message);
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine("■■■■■ GetAssets Exception2: " + e.Message);
+            }
+
+            await Task.Delay(1000);
+            return;
+        }
+
+    }
 
     #endregion
 

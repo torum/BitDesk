@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -31,7 +32,7 @@ public partial class PairViewModel : ObservableObject, IDisposable
     private bool _isChartRefreshRunning;
     private readonly DispatcherTimer _dispatcherTimerChart = new();
 
-    private readonly IBitbankHttpService _bitbankHttpService;
+    private readonly IBitbankRestService _bitbankRestService;
     private readonly IBitbankStreamService _bitbankStreamService;
 
     public event EventHandler<bool>? DepthScrollCenter;
@@ -39,7 +40,7 @@ public partial class PairViewModel : ObservableObject, IDisposable
 
     public PairViewModel(PairCodes p, double fontSize, string ltpFormstString, string currencyFormstString, decimal grouping100, decimal grouping1000)
     {
-        _bitbankHttpService = App.GetService<IBitbankHttpService>();
+        _bitbankRestService = App.GetService<IBitbankRestService>();
         _bitbankStreamService = App.GetService<IBitbankStreamService>();
 
         _p = p;
@@ -57,8 +58,8 @@ public partial class PairViewModel : ObservableObject, IDisposable
         _dispatcherTimerChart.Interval = chartUpdateInterval;  // Temp testing. new(0, 5, 0);
         _dispatcherTimerChart.Start(); // Testing without updating the chart.. using ticker as we go.
 
-        _bitbankHttpService.ErrorOccured += OnErrorOccured;
-        _bitbankHttpService.ApiErrorOccured += OnApiErrorOccured;
+        _bitbankRestService.ErrorOccured += OnErrorOccured;
+        _bitbankRestService.ApiErrorOccured += OnApiErrorOccured;
     }
 
     #region == Properties ==
@@ -1048,179 +1049,6 @@ public partial class PairViewModel : ObservableObject, IDisposable
 
     #endregion
 
-    #region == Depth and Transaction ==
-
-    private ObservableCollection<Models.Transaction> _transactions = [];
-    public ObservableCollection<Models.Transaction> Transactions
-    {
-        get => _transactions;
-        set
-        {
-            if (_transactions == value)
-            {
-                return;
-            }
-
-            _transactions = value;
-            OnPropertyChanged(nameof(Transactions));
-        }
-    }
-
-    private ObservableCollection<Depth> _depth = [];
-    public ObservableCollection<Depth> Depth
-    {
-        get => _depth;
-        set
-        {
-            if (_depth == value)
-            {
-                return;
-            }
-
-            _depth = value;
-            OnPropertyChanged(nameof(Depth));
-        }
-    }
-
-    private bool _isDeepthGroupingChanged;
-    public bool IsDepthGroupingChanged
-    {
-        get => _isDeepthGroupingChanged;
-        set
-        {
-            if (_isDeepthGroupingChanged == value)
-            {
-                return;
-            }
-
-            _isDeepthGroupingChanged = value;
-
-            OnPropertyChanged(nameof(IsDepthGroupingChanged));
-        }
-    }
-
-    private decimal _depthGrouping = 0;
-    public decimal DepthGrouping
-    {
-        get => _depthGrouping;
-        set
-        {
-            if (_depthGrouping == value)
-            {
-                return;
-            }
-
-            _depthGrouping = value;
-
-            if (DepthGrouping100 == _depthGrouping)
-            {
-                IsDepthGrouping100 = true;
-                IsDepthGrouping1000 = false;
-                IsDepthGroupingOff = false;
-            }
-            if (DepthGrouping1000 == _depthGrouping)
-            {
-                IsDepthGrouping100 = false;
-                IsDepthGrouping1000 = true;
-                IsDepthGroupingOff = false;
-            }
-
-            if (0 == _depthGrouping)
-            {
-                IsDepthGrouping100 = false;
-                IsDepthGrouping1000 = false;
-                IsDepthGroupingOff = true;
-            }
-
-            OnPropertyChanged(nameof(DepthGrouping));
-
-        }
-    }
-
-    private bool _isDepthGroupingOff = true;
-    public bool IsDepthGroupingOff
-    {
-        get => _isDepthGroupingOff;
-        set
-        {
-            if (_isDepthGroupingOff == value)
-            {
-                return;
-            }
-
-            _isDepthGroupingOff = value;
-            OnPropertyChanged(nameof(IsDepthGroupingOff));
-        }
-    }
-
-    private decimal _depthGrouping100 = 100;
-    public decimal DepthGrouping100
-    {
-        get => _depthGrouping100;
-        set
-        {
-            if (_depthGrouping100 == value)
-            {
-                return;
-            }
-
-            _depthGrouping100 = value;
-            OnPropertyChanged(nameof(DepthGrouping100));
-
-        }
-    }
-
-    private bool _isDepthGrouping100;
-    public bool IsDepthGrouping100
-    {
-        get => _isDepthGrouping100;
-        set
-        {
-            if (_isDepthGrouping100 == value)
-            {
-                return;
-            }
-
-            _isDepthGrouping100 = value;
-            OnPropertyChanged(nameof(IsDepthGrouping100));
-        }
-    }
-
-    private decimal _depthGrouping1000 = 1000;
-    public decimal DepthGrouping1000
-    {
-        get => _depthGrouping1000;
-        set
-        {
-            if (_depthGrouping1000 == value)
-            {
-                return;
-            }
-
-            _depthGrouping1000 = value;
-            OnPropertyChanged(nameof(DepthGrouping1000));
-
-        }
-    }
-
-    private bool _isDepthGrouping1000;
-    public bool IsDepthGrouping1000
-    {
-        get => _isDepthGrouping1000;
-        set
-        {
-            if (_isDepthGrouping1000 == value)
-            {
-                return;
-            }
-
-            _isDepthGrouping1000 = value;
-            OnPropertyChanged(nameof(IsDepthGrouping1000));
-        }
-    }
-
-    #endregion
-
     #region == Charts ==
 
     private IChartElement[] _sections =
@@ -1472,6 +1300,619 @@ public partial class PairViewModel : ObservableObject, IDisposable
 
     #endregion
 
+    #region == Depth ==
+
+    private ObservableCollection<Depth> _depth = [];
+    public ObservableCollection<Depth> Depth
+    {
+        get => _depth;
+        set
+        {
+            if (_depth == value)
+            {
+                return;
+            }
+
+            _depth = value;
+            OnPropertyChanged(nameof(Depth));
+        }
+    }
+
+    private bool _isDeepthGroupingChanged;
+    public bool IsDepthGroupingChanged
+    {
+        get => _isDeepthGroupingChanged;
+        set
+        {
+            if (_isDeepthGroupingChanged == value)
+            {
+                return;
+            }
+
+            _isDeepthGroupingChanged = value;
+
+            OnPropertyChanged(nameof(IsDepthGroupingChanged));
+        }
+    }
+
+    private decimal _depthGrouping = 0;
+    public decimal DepthGrouping
+    {
+        get => _depthGrouping;
+        set
+        {
+            if (_depthGrouping == value)
+            {
+                return;
+            }
+
+            _depthGrouping = value;
+
+            if (DepthGrouping100 == _depthGrouping)
+            {
+                IsDepthGrouping100 = true;
+                IsDepthGrouping1000 = false;
+                IsDepthGroupingOff = false;
+            }
+            if (DepthGrouping1000 == _depthGrouping)
+            {
+                IsDepthGrouping100 = false;
+                IsDepthGrouping1000 = true;
+                IsDepthGroupingOff = false;
+            }
+
+            if (0 == _depthGrouping)
+            {
+                IsDepthGrouping100 = false;
+                IsDepthGrouping1000 = false;
+                IsDepthGroupingOff = true;
+            }
+
+            OnPropertyChanged(nameof(DepthGrouping));
+
+        }
+    }
+
+    private bool _isDepthGroupingOff = true;
+    public bool IsDepthGroupingOff
+    {
+        get => _isDepthGroupingOff;
+        set
+        {
+            if (_isDepthGroupingOff == value)
+            {
+                return;
+            }
+
+            _isDepthGroupingOff = value;
+            OnPropertyChanged(nameof(IsDepthGroupingOff));
+        }
+    }
+
+    private decimal _depthGrouping100 = 100;
+    public decimal DepthGrouping100
+    {
+        get => _depthGrouping100;
+        set
+        {
+            if (_depthGrouping100 == value)
+            {
+                return;
+            }
+
+            _depthGrouping100 = value;
+            OnPropertyChanged(nameof(DepthGrouping100));
+
+        }
+    }
+
+    private bool _isDepthGrouping100;
+    public bool IsDepthGrouping100
+    {
+        get => _isDepthGrouping100;
+        set
+        {
+            if (_isDepthGrouping100 == value)
+            {
+                return;
+            }
+
+            _isDepthGrouping100 = value;
+            OnPropertyChanged(nameof(IsDepthGrouping100));
+        }
+    }
+
+    private decimal _depthGrouping1000 = 1000;
+    public decimal DepthGrouping1000
+    {
+        get => _depthGrouping1000;
+        set
+        {
+            if (_depthGrouping1000 == value)
+            {
+                return;
+            }
+
+            _depthGrouping1000 = value;
+            OnPropertyChanged(nameof(DepthGrouping1000));
+
+        }
+    }
+
+    private bool _isDepthGrouping1000;
+    public bool IsDepthGrouping1000
+    {
+        get => _isDepthGrouping1000;
+        set
+        {
+            if (_isDepthGrouping1000 == value)
+            {
+                return;
+            }
+
+            _isDepthGrouping1000 = value;
+            OnPropertyChanged(nameof(IsDepthGrouping1000));
+        }
+    }
+
+    #endregion
+
+    #region == Assets ==
+
+    // 現在の資産名
+    private string _assetCurrentName = string.Empty;
+    public string AssetCurrentName
+    {
+        get => _assetCurrentName;
+        set
+        {
+            if (_assetCurrentName == value)
+            {
+                return;
+            }
+
+            _assetCurrentName = value;
+            OnPropertyChanged(nameof(AssetCurrentName));
+        }
+    }
+
+    // 現在の通貨の資産
+    private decimal _assetCurrentAmount;
+    public decimal AssetCurrentAmount
+    {
+        get =>
+            //return Math.Floor((_assetBTCAmount * 10000M)) / 10000M;
+            _assetCurrentAmount;
+        set
+        {
+            if (_assetCurrentAmount == value)
+            {
+                return;
+            }
+
+            _assetCurrentAmount = value;
+            OnPropertyChanged(nameof(AssetCurrentAmount));
+            OnPropertyChanged(nameof(AssetCurrentAmountText));
+            OnPropertyChanged(nameof(AssetCurrentEstimateAmount));
+            OnPropertyChanged(nameof(AssetCurrentEstimateAmountText));
+        }
+    }
+
+    public string AssetCurrentAmountText => AssetCurrentAmount.ToString();
+
+    // 現在の通貨の利用可能資産額
+    private decimal _assetCurrentFreeAmount;
+    public decimal AssetCurrentFreeAmount
+    {
+        get =>
+            // 売買出来ない桁は、切り捨てで。
+            //return _assetBTCFreeAmount;
+            Math.Floor((_assetCurrentFreeAmount * 10000M)) / 10000M;
+        set
+        {
+            if (_assetCurrentFreeAmount == value)
+            {
+                return;
+            }
+
+            _assetCurrentFreeAmount = value;
+            OnPropertyChanged(nameof(AssetCurrentFreeAmount));
+            OnPropertyChanged(nameof(AssetCurrentFreeAmountText));
+        }
+    }
+
+    public string AssetCurrentFreeAmountText => AssetCurrentFreeAmount.ToString();
+
+    // 現在の通貨の時価評価額 (ティックから更新される)
+    private decimal _assetCurrentEstimateAmount;
+    public decimal AssetCurrentEstimateAmount
+    {
+        get
+        {
+            _assetCurrentEstimateAmount = _assetCurrentAmount * _ltp;
+            return Math.Floor((_assetCurrentEstimateAmount * 10000M)) / 10000M;
+        }
+        set
+        {
+            if (_assetCurrentEstimateAmount == value)
+            {
+                return;
+            }
+
+            _assetCurrentEstimateAmount = value;
+            OnPropertyChanged(nameof(AssetCurrentEstimateAmount));
+            OnPropertyChanged(nameof(AssetCurrentEstimateAmountText));
+        }
+    }
+
+    public string AssetCurrentEstimateAmountText => AssetCurrentEstimateAmount.ToString("C0") + "";
+
+    // 円資産名
+    private string _assetJPYName = string.Empty;
+    public string AssetJPYName
+    {
+        get => _assetJPYName;
+        set
+        {
+            if (_assetJPYName == value)
+            {
+                return;
+            }
+
+            _assetJPYName = value;
+            OnPropertyChanged(nameof(AssetJPYName));
+        }
+    }
+
+    // 円総資産額
+    private decimal _assetJPYAmount;
+    public decimal AssetJPYAmount
+    {
+        get => _assetJPYAmount;
+        set
+        {
+            if (_assetJPYAmount == value)
+            {
+                return;
+            }
+
+            _assetJPYAmount = value;
+            OnPropertyChanged(nameof(AssetJPYAmount));
+            //OnPropertyChanged(nameof(AssetAllEstimateAmountString));
+            OnPropertyChanged(nameof(AssetJPYAmountText));
+        }
+    }
+
+    public string AssetJPYAmountText => _assetJPYAmount.ToString("C4");
+
+    // 円利用可能資産額
+    private decimal _assetJPYFreeAmount;
+    public decimal AssetJPYFreeAmount
+    {
+        get =>
+            // 利用可能額は小数点以下を切り捨て（読みやすいように）
+            //return _assetJPYFreeAmount;
+            Math.Floor(_assetJPYFreeAmount);
+        set
+        {
+            if (_assetJPYFreeAmount == value)
+            {
+                return;
+            }
+
+            _assetJPYFreeAmount = value;
+            OnPropertyChanged(nameof(AssetJPYFreeAmount));
+            OnPropertyChanged(nameof(AssetJPYFreeAmountText));
+        }
+    }
+
+    public string AssetJPYFreeAmountText => AssetJPYFreeAmount.ToString("C0");
+
+
+
+    #endregion
+
+    #region == Orders, TradeHistory ==
+
+    private ObservableCollection<Order> _orders = [];
+    public ObservableCollection<Order> Orders
+    {
+        get => _orders;
+        set
+        {
+            if (_orders == value)
+            {
+                return;
+            }
+
+            _orders = value;
+            OnPropertyChanged(nameof(Orders));
+        }
+    }
+
+    private ObservableCollection<Trade> _tradeHistories = [];
+    public ObservableCollection<Trade> TradeHistories
+    {
+        get => _tradeHistories;
+        set
+        {
+            if (_tradeHistories == value)
+            {
+                return;
+            }
+
+            _tradeHistories = value;
+            OnPropertyChanged(nameof(TradeHistories));
+        }
+    }
+
+    #endregion
+
+    #region == Transactions ==
+
+    private ObservableCollection<Transaction> _transactions = [];
+    public ObservableCollection<Transaction> Transactions
+    {
+        get => _transactions;
+        set
+        {
+            if (_transactions == value)
+            {
+                return;
+            }
+
+            _transactions = value;
+            OnPropertyChanged(nameof(Transactions));
+        }
+    }
+
+    #endregion
+
+    #region == Order ==
+
+    private OrderSides _orderSide = OrderSides.buy;
+    public OrderSides OrderSide
+    {
+        get => _orderSide;
+        set
+        {
+            if (_orderSide == value)
+            {
+                return;
+            }
+
+            _orderSide = value;
+            OnPropertyChanged(nameof(OrderSide));
+        }
+    }
+
+    private int _orderSideSelectedIndex; // 0=Buy, 1=Sell
+    public int OrderSideSelectedIndex
+    {
+        get => _orderSideSelectedIndex;
+        set
+        {
+            if (_orderSideSelectedIndex == value)
+            {
+                return;
+            }
+
+            _orderSideSelectedIndex = value;
+            OnPropertyChanged(nameof(OrderSideSelectedIndex));
+
+            if (_orderSideSelectedIndex == 0)
+            {
+                OrderSide = OrderSides.buy;
+            }
+            else
+            {
+                OrderSide = OrderSides.sell;
+            }
+        }
+    }
+
+    public ObservableCollection<OrderTypeSelectionForComboBox> OrderTypesForComboBox =
+    [
+        new OrderTypeSelectionForComboBox(OrderTypes.limit, "指値"),
+        new OrderTypeSelectionForComboBox(OrderTypes.market, "成行")
+    ];
+
+    private OrderTypeSelectionForComboBox? _selectedOrderTypeSelectionForComboBox;
+    public OrderTypeSelectionForComboBox? SelectedOrderTypeForComboBox
+    {
+        get => _selectedOrderTypeSelectionForComboBox;
+        set
+        {
+            if (_selectedOrderTypeSelectionForComboBox == value)
+            {
+                return;
+            }
+
+            _selectedOrderTypeSelectionForComboBox = value;
+            OnPropertyChanged(nameof(SelectedOrderTypeForComboBox));
+
+            if (_selectedOrderTypeSelectionForComboBox?.Key == OrderTypes.limit)
+            {
+                IsOrderPriceVisible = true;
+            }
+            else if (_selectedOrderTypeSelectionForComboBox?.Key == OrderTypes.market)
+            {
+                IsOrderPriceVisible = false;
+            }
+        }
+    }
+
+    private decimal _orderAmount;// = 0.001M; // 通貨別デフォ指定 TODO
+    public string OrderAmount
+    {
+        get => _orderAmount.ToString();
+        set
+        {
+            decimal decimalValue;
+            if (decimal.TryParse(value, out decimalValue))
+            {
+                if (_orderAmount == decimalValue)
+                {
+                    return;
+                }
+                _orderAmount = decimalValue;
+                OnPropertyChanged(nameof(OrderAmount));
+                OnPropertyChanged(nameof(OrderEstimatePrice));
+            }
+        }
+    }
+
+    private decimal _orderPrice; // 通貨別デフォ指定 TODO
+    public string OrderPrice
+    {
+        get => _orderPrice.ToString();
+        set
+        {
+            decimal decimalValue;
+            if (decimal.TryParse(value, out decimalValue))
+            {
+                if (_orderPrice == decimalValue)
+                {
+                    return;
+                }
+                _orderPrice = decimalValue;
+                OnPropertyChanged(nameof(OrderPrice));
+                OnPropertyChanged(nameof(OrderEstimatePrice));
+            }
+        }
+    }
+
+    private bool _isOrderPriceVisible = true;
+    public bool IsOrderPriceVisible
+    {
+        get => _isOrderPriceVisible;
+        set
+        {
+            if (_isOrderPriceVisible == value)
+            {
+                return;
+            }
+
+            _isOrderPriceVisible = value;
+            OnPropertyChanged(nameof(IsOrderPriceVisible));
+        }
+    }
+
+    public string OrderEstimatePrice
+    {
+        get
+        {
+            decimal decimalValue;
+            // TODO:
+            if (_selectedOrderTypeSelectionForComboBox?.Key == OrderTypes.market)
+            {
+                decimalValue = _orderAmount * Bid;//_bid;
+            }
+            else
+            {
+                decimalValue = _orderAmount * _orderPrice;
+            }
+            return decimalValue.ToString();
+        }
+    }
+
+    private bool _isOrderPostOnly = true;
+    public bool IsOrderPostOnly
+    {
+        get => _isOrderPostOnly;
+        set
+        {
+            if (_isOrderPostOnly == value)
+            {
+                return;
+            }
+
+            _isOrderPostOnly = value;
+            OnPropertyChanged(nameof(IsOrderPostOnly));
+        }
+    }
+
+    private string _makeOrderResultText = string.Empty;
+    public string MakeOrderRresultText
+    {
+        get => _makeOrderResultText;
+        set
+        {
+            if (_makeOrderResultText == value)
+            {
+                return;
+            }
+
+            _makeOrderResultText = value;
+            OnPropertyChanged(nameof(MakeOrderRresultText));
+        }
+    }
+
+    #endregion
+
+    #region == API keys and secrets == 
+
+    // TradeHistory 
+
+    private string _tradeHistoryApiKey = string.Empty;
+    public string TradeHistoryApiKey
+    {
+        set
+        {
+            if (_tradeHistoryApiKey == value.Trim())
+            {
+                return;
+            }
+
+            _tradeHistoryApiKey = value.Trim();
+        }
+    }
+
+    private string _tradeHistorySecret = string.Empty;
+    public string TradeHistorySecret
+    {
+        set
+        {
+            if (_tradeHistorySecret == value.Trim())
+            {
+                return;
+            }
+
+            _tradeHistorySecret = value.Trim();
+        }
+    }
+
+    private string _ordersApiKey = string.Empty;
+    public string OrdersApiKey
+    {
+        set
+        {
+            if (_ordersApiKey == value.Trim())
+            {
+                return;
+            }
+
+            _ordersApiKey = value.Trim();
+        }
+    }
+
+    private string _ordersSecret = string.Empty;
+    public string OrdersSecret
+    {
+        set
+        {
+            if (_ordersSecret == value.Trim())
+            {
+                return;
+            }
+
+            _ordersSecret = value.Trim();
+        }
+    }
+
+
+    #endregion
+
     #endregion
 
     #region == Public Methods ==
@@ -1684,11 +2125,32 @@ public partial class PairViewModel : ObservableObject, IDisposable
         _dispatcherTimerChart.Stop();
         _dispatcherTimerChart.Tick -= OnTimerChart;
 
-        _bitbankHttpService.ErrorOccured -= OnErrorOccured;
+        _bitbankRestService.ErrorOccured -= OnErrorOccured;
+        _bitbankRestService.ApiErrorOccured -= OnApiErrorOccured;
 
         // TODO: Dispose other resources if necessary
 
         GC.SuppressFinalize(this);
+    }
+
+    #endregion
+
+    #region == Private Event Handlers ==
+
+    private void OnErrorOccured(object? sender, ErrorInfo errorInfo)
+    {
+        this.ErrorOccured?.Invoke(this, errorInfo);
+    }
+
+    private void OnApiErrorOccured(object? sender, ApiClientError ApiErrorInfo)
+    {
+        var ErrorInfo = new ErrorInfo(ErrType.ApiError)
+        {
+            ErrorMessage = $"{ApiErrorInfo.ErrText} ({ApiErrorInfo.ErrType}) @{ApiErrorInfo.ErrPlace}",
+            ErrorSeverity = FAInfoBarSeverity.Warning
+        };
+
+        this.ErrorOccured?.Invoke(this, ErrorInfo);
     }
 
     #endregion
@@ -2092,7 +2554,7 @@ public partial class PairViewModel : ObservableObject, IDisposable
         }
 
         //
-        var csr = await _bitbankHttpService.GetCandlestick(pair.ToString(), ctString, dtString);
+        var csr = await _bitbankRestService.GetCandlestick(pair.ToString(), ctString, dtString);
 
         if (!IsEnabled)
         {
@@ -2157,7 +2619,7 @@ public partial class PairViewModel : ObservableObject, IDisposable
         {
             // Replace this with a request for only the latest API period.
             // GetCandlesticksAsync currently downloads multiple days/years.
-            var refreshed = await _bitbankHttpService.GetLatestCandlesticksAsync(PairCode, SelectedCandleType);
+            var refreshed = await _bitbankRestService.GetLatestCandlesticksAsync(PairCode, SelectedCandleType);
 
             if (refreshed is null ||
                 Series[1].Values is not ObservableCollection<FinancialPoint> prices ||
@@ -2612,6 +3074,390 @@ public partial class PairViewModel : ObservableObject, IDisposable
 
     #region == Transaction ==
 
+    private async Task GetTransactions()
+    {
+        if (!IsEnabled || !IsPaneOpen || !IsSelectedActive)
+        {
+            return;
+        }
+
+        var pair = PairCode;
+
+        var trs = await _bitbankRestService.GetTransactionsAsync(pair.ToString());
+
+        if (trs != null)
+        {
+            if (_transactions == null)
+            {
+                return;
+            }
+
+            if (_transactions.Count == 0)
+            {
+                // 60 で初期化
+                for (var i = 0; i < 60; i++)
+                {
+                    Transaction dd = new(_ltpFormstString);
+
+                    _transactions.Add(dd);
+                }
+            }
+
+            if (trs.Trans != null)
+            {
+                var v = 0;
+                foreach (var tr in trs.Trans)
+                {
+                    _transactions[v].Amount = tr.Amount;
+                    _transactions[v].ExecutedAt = tr.ExecutedAt;
+                    _transactions[v].Price = tr.Price;
+                    _transactions[v].Side = tr.Side;
+                    _transactions[v].TransactionId = tr.TransactionId;
+
+                    v++;
+
+                    if (v >= 60)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            return;
+        }
+        else
+        {
+            Debug.WriteLine("■■■■■ GetTransactions returned null");
+
+            return;
+        }
+    }
+
+    #endregion
+
+    #region == Trade History ==
+
+    private async Task GetTradeHistoryAsync(string tradeHistoryApiKey, string tradeHistorySecret)
+    {
+        if (!IsEnabled)
+        {
+            return;
+        }
+
+        if (!IsSelectedActive)
+        {
+            return;
+        }
+
+        if (string.IsNullOrEmpty(tradeHistoryApiKey) || string.IsNullOrEmpty(tradeHistorySecret))
+        {
+            System.Diagnostics.Debug.WriteLine("■■■■■ GetOrders: (TradeHistoryApiKeyIsSet == false)");
+            return;
+        }
+
+        try
+        {
+            var trd = await _bitbankRestService.GetTradeHistoryAsync(tradeHistoryApiKey, tradeHistorySecret, PairCode.ToString());
+
+            if (trd != null)
+            {
+                // 逆順にする
+                trd.TradeList.Reverse();
+
+                foreach (var tr in trd.TradeList)
+                {
+                    var found = TradeHistories.FirstOrDefault(x => x.TradeID == tr.TradeID);
+                    if (found == null)
+                    {
+                        found = new Trade
+                        {
+                            TradeID = tr.TradeID,
+                            OrderID = tr.OrderID,
+                            Pair = PairCode.ToString(),
+                            Price = tr.Price,
+                            ExecutedAt = tr.ExecutedAt,
+                            Amount = tr.Amount,
+                            Side = tr.Side,
+                            Type = tr.Type,
+                            //FeeAmountBase = tr.FeeAmountBase,
+                            FeeOccurredAmountQuote = tr.FeeOccurredAmountQuote,
+                            FeeAmountQuote = tr.FeeAmountQuote,
+                            MakerTaker = tr.MakerTaker,
+                        };
+
+                        TradeHistories.Insert(0, found);
+                    }
+
+                }
+
+                return;
+            }
+            else
+            {
+                // TODO:
+                /*
+                _tradeHistories = -1;
+                NotifyPropertyChanged(nameof(TradeHistoryTitle));
+
+                APIResultTradeHistory = "<<取得失敗>>";
+                */
+
+                System.Diagnostics.Debug.WriteLine("■■■■■ GetTradeHistory is null.");
+
+                return;
+            }
+
+        }
+        catch (Exception e)
+        {
+            System.Diagnostics.Debug.WriteLine("■■■■■ GetTradeHistory Exception: " + e);
+
+            return;
+        }
+    }
+
+    #endregion
+
+    #region == Orders ==
+
+    private async Task GetOrdersAsync(string ordersApiKey, string ordersSecret)
+    {
+        if (!IsEnabled)
+        {
+            return;
+        }
+
+        if (!IsSelectedActive)
+        {
+            return;
+        }
+
+        if (string.IsNullOrEmpty(ordersApiKey) || string.IsNullOrEmpty(ordersSecret))
+        {
+            System.Diagnostics.Debug.WriteLine("■■■■■ GetOrders: (OrdersApiKeyIsSet == false)");
+            return;
+        }
+
+        var ords = await _bitbankRestService.GetOrderListAsync(ordersApiKey, ordersSecret, PairCode.ToString());
+        if (ords == null)
+        {
+            return;
+        }
+        if (ords.IsSuccess == false)
+        {
+            return;
+        }
+
+        try
+        {
+            // 逆順にする
+            ords.OrderList.Reverse();
+
+            foreach (var ord in ords.OrderList)
+            {
+                var found = Orders.FirstOrDefault(x => x.OrderID == ord.OrderID);
+
+                if (found != null)
+                {
+                    found.AveragePrice = ord.AveragePrice;
+                    found.OrderedAt = ord.OrderedAt;
+                    found.Pair = ord.Pair;
+                    found.Price = ord.Price;
+                    found.RemainingAmount = ord.RemainingAmount;
+                    found.ExecutedAmount = ord.ExecutedAmount;
+                    found.Side = ord.Side;
+                    found.StartAmount = ord.StartAmount;
+                    found.Type = ord.Type;
+                    found.Status = ord.Status;
+
+                    // 現在値のセット
+                    // 投資金額
+                    if (found.Type == "limit")
+                    {
+                        found.ActualPrice = (ord.Price * ord.StartAmount);
+                        // 一部約定の時は考えない？
+                    }
+                    else
+                    {
+                        found.ActualPrice = (ord.AveragePrice * ord.StartAmount);
+                    }
+
+                    // 現在値との差額
+                    if ((found.Status == "UNFILLED") || (found.Status == "PARTIALLY_FILLED"))
+                    {
+                        found.Shushi = (ord.Price - _ltp);
+                    }
+                    else
+                    {
+                        // 約定済みなので
+                        found.Shushi = 0;
+                    }
+                }
+                else
+                {
+                    // 現在値のセット
+                    // 投資金額
+                    if (ord.Type == "limit")
+                    {
+                        ord.ActualPrice = (ord.Price * ord.StartAmount);
+                    }
+                    else
+                    {
+                        ord.ActualPrice = (ord.AveragePrice * ord.StartAmount);
+                    }
+
+                    // 現在値との差額
+                    if ((ord.Status == "UNFILLED") || (ord.Status == "PARTIALLY_FILLED"))
+                    {
+                        //ord.Shushi = ((_ltp - ord.Price));
+                        ord.Shushi = (ord.Price - _ltp);
+
+                        // リスト追加
+                        Orders.Insert(0, ord);
+                    }
+                    else
+                    {
+                        // 約定済みなので
+                        //ord.Shushi = 0;
+
+                        // 追加しない。
+                    }
+
+                }
+            }
+
+            // 返ってきた注文リストに存在しない注文リスト
+            var lst = new List<ulong>();
+
+            // 返ってきた注文リストに存在しない注文を抽出
+            foreach (var ors in Orders)
+            {
+                var found = ords.OrderList.FirstOrDefault(x => x.OrderID == ors.OrderID);
+                if (found == null)
+                {
+                    if (string.IsNullOrEmpty(ors.Status) || (ors.Status == "UNFILLED") || (ors.Status == "PARTIALLY_FILLED"))
+                    {
+                        //if ( (ors.Status != "FULLY_FILLED") || (ors.Status != "CANCELED_UNFILLED") || (ors.Status != "CANCELED_PARTIALLY_FILLED")) { 
+                        lst.Add(ors.OrderID);
+                    }
+                }
+
+            }
+
+            // 注文リスト更新
+            if (lst.Count > 0)
+            {
+                // リストのリスト（小分けにして分割取得用）
+                var ListOfList = new List<List<ulong>>();
+
+                // GetOrderListByIDs 40015 数が多いとエラーになるので、小分けにして。
+                var temp = new List<ulong>();
+                var c = 0;
+
+                for (var i = 0; i < lst.Count; i++)
+                {
+
+                    temp.Add(lst[c]);
+
+                    if (temp.Count == 5)
+                    {
+                        ListOfList.Add(temp);
+
+                        temp = [];
+                    }
+
+                    if (c == lst.Count - 1)
+                    {
+                        if (temp.Count > 0)
+                        {
+                            ListOfList.Add(temp);
+                        }
+
+                        break;
+                    }
+
+                    c += 1;
+                }
+
+                foreach (var list in ListOfList)
+                {
+                    // 最新の注文情報をゲット
+                    Orders? oup = await _bitbankRestService.GetOrderListByIdsAsync(ordersApiKey, ordersSecret, PairCode.ToString(), list);
+                    if (oup != null)
+                    {
+                        // 注文をアップデート
+                        foreach (var ord in oup.OrderList)
+                        {
+                            try
+                            {
+                                var found = Orders.FirstOrDefault(x => x.OrderID == ord.OrderID);
+                                if (found != null)
+                                {
+                                    var i = Orders.IndexOf(found);
+                                    if (i > -1)
+                                    {
+                                        Orders[i].Status = ord.Status;
+                                        Orders[i].AveragePrice = ord.AveragePrice;
+                                        Orders[i].OrderedAt = ord.OrderedAt;
+                                        Orders[i].Type = ord.Type;
+                                        Orders[i].StartAmount = ord.StartAmount;
+                                        Orders[i].RemainingAmount = ord.RemainingAmount;
+                                        Orders[i].ExecutedAmount = ord.ExecutedAmount;
+                                        Orders[i].Price = ord.Price;
+                                        Orders[i].AveragePrice = ord.AveragePrice;
+
+
+                                        // 現在値のセット
+                                        // 投資金額
+                                        if (Orders[i].Type == "limit")
+                                        {
+                                            Orders[i].ActualPrice = (ord.Price * ord.StartAmount);
+                                        }
+                                        else
+                                        {
+                                            Orders[i].ActualPrice = (ord.AveragePrice * ord.StartAmount);
+                                        }
+
+                                        // 現在値との差額
+                                        if ((Orders[i].Status == "UNFILLED") || (Orders[i].Status == "PARTIALLY_FILLED"))
+                                        {
+                                            Orders[i].Shushi = ((_ltp - ord.Price));
+                                        }
+                                        else
+                                        {
+                                            // 約定済みなので
+                                            //orders[i].Shushi = 0;
+
+                                            // 約定済みは単に削除
+                                            Orders.Remove(Orders[i]);
+
+                                        }
+
+                                    }
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                Debug.WriteLine("■■■■■ Order oup: Exception - " + ex.Message);
+
+                            }
+
+                            await Task.Delay(400);
+                        }
+                    }
+                }
+            }
+
+        }
+        catch (Exception e)
+        {
+            Debug.WriteLine("■■■■■ GetOrders Exception: " + e);
+
+            return;
+        }
+
+    }
+
     #endregion
 
     private async Task RunSafeAsync(Func<Task> work, string name, bool continueOnCapturedContext = false)
@@ -2639,22 +3485,6 @@ public partial class PairViewModel : ObservableObject, IDisposable
             };
             this.ErrorOccured?.Invoke(this, errorInfo);
         }
-    }
-
-    private void OnErrorOccured(object? sender, ErrorInfo errorInfo)
-    {
-        this.ErrorOccured?.Invoke(this, errorInfo);
-    }
-
-    private void OnApiErrorOccured(object? sender, ApiClientError ApiErrorInfo)
-    {
-        var ErrorInfo = new ErrorInfo(ErrType.ApiError)
-        {
-            ErrorMessage = $"{ApiErrorInfo.ErrText} ({ApiErrorInfo.ErrType}) @{ApiErrorInfo.ErrPlace}",
-            ErrorSeverity = FAInfoBarSeverity.Warning
-        };
-
-        this.ErrorOccured?.Invoke(this, ErrorInfo);
     }
 
     #endregion
@@ -2690,6 +3520,24 @@ public partial class PairViewModel : ObservableObject, IDisposable
         };
 
         await LoadChartAsync(SelectedCandleType);
+    }
+
+    [RelayCommand]
+    private async Task UpdateTransactions()
+    {
+        await GetTransactions();
+    }
+
+    [RelayCommand]
+    private async Task UpdateTradeHistory()
+    {
+        await GetTradeHistoryAsync(_tradeHistoryApiKey, _tradeHistorySecret);
+    }
+
+    [RelayCommand]
+    private async Task UpdateOrders()
+    {
+        await GetOrdersAsync(_ordersApiKey, _ordersSecret);
     }
 
     #endregion

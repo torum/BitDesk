@@ -32,4 +32,13 @@ public class Configuration
     public bool IsOnXrpJpy { get; set; } = false;
     public bool IsOnEthJpy { get; set; } = false;
 
+    public string AssetsApiKey { get; set; } = string.Empty;
+    public string AssetsSecret { get; set; } = string.Empty;
+    public string OrdersApiKey { get; set; } = string.Empty;
+    public string OrdersSecret { get; set; } = string.Empty;
+    public string TradeHistoryApiKey { get; set; } = string.Empty;
+    public string TradeHistorySecret { get; set; } = string.Empty;
+    public string MakeOrderApiKey { get; set; } = string.Empty;
+    public string MakeOrderSecret { get; set; } = string.Empty;
+
 }

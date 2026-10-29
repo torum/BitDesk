@@ -7,12 +7,13 @@
              xmlns:ia="using:Xaml.Behaviors.Interactions.Animated"
              xmlns:vm="using:BitDesk.ViewModels"
              xmlns:mod="using:BitDesk.Models"
+             xmlns:transactions="using:System.Transactions"
              xmlns:behaviors="using:BitDesk.Behaviors"
              x:DataType="vm:PairViewModel"
              x:Class="BitDesk.Views.ChartContent">
     <Grid RowDefinitions="7*,3*">
 
-        <SplitView x:Name="SplitViewControl" Grid.Row="0" Margin="0,0,0,0" CornerRadius="0,0,0,0" BorderThickness="0,0,0,0" PaneBackground="Transparent" IsPaneOpen="{Binding Path=IsPaneOpen, Mode=TwoWay}" PanePlacement="Right" OpenPaneLength="560" CompactPaneLength="0" DisplayMode="CompactInline">
+        <SplitView x:Name="ChartSplitView" Grid.Row="0" Margin="0,0,0,0" CornerRadius="0,0,0,0" BorderThickness="0,0,0,0" PaneBackground="Transparent" IsPaneOpen="{Binding Path=IsPaneOpen, Mode=TwoWay}" PanePlacement="Right" OpenPaneLength="560" CompactPaneLength="0" DisplayMode="CompactInline">
             
             <SplitView.Pane>
                 <Grid>
@@ -23,8 +24,9 @@
                     
                     <ScrollViewer x:Name="DepthScrollViewer" Grid.Row="0" Grid.Column="0" Margin="0,48,0,0" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" SizeChanged="DepthScrollViewer_SizeChanged">
                             <Interaction.Behaviors>
-                            <ia:VerticalScrollViewerAnimatedBehavior/>
+                                <ia:VerticalScrollViewerAnimatedBehavior/>
                             </Interaction.Behaviors>
+                        
                         <ItemsControl x:Name="DepthListBox" ItemsSource="{Binding Path=Depth, Mode=OneWay}" Opacity="0.8" Background="Transparent" Margin="0,0,0,6" Padding="0,12,0,12" HorizontalAlignment="Stretch" DoubleTapped="DepthListBox_DoubleTapped">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate x:DataType="mod:Depth">
@@ -61,6 +63,7 @@
 
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
+
                     </ScrollViewer>
                     
                     <Border Grid.Row="0" Grid.Column="1" Margin="4,40,4,0" CornerRadius="6" HorizontalAlignment="Stretch">
@@ -73,33 +76,46 @@
                                 <TextBlock Text="Week view content goes here..." Margin="0,20" HorizontalAlignment="Center"/>
                             </TabItem>
                             <TabItem Header="T&amp;S">
-                                <TextBlock Text="Month view content goes here..." Margin="0,20" HorizontalAlignment="Center"/>
+                                
+                                <Grid RowDefinitions="Auto,*">
+
+                                    <Button Grid.Row="0" Content="Refresh" Command="{Binding UpdateTransactionsCommand, Mode=OneWay}" Margin="4" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+
+                                    <ScrollViewer Grid.Row="1">
+                                        <ItemsControl Grid.Row="1" x:Name="TransactionsListBox" ItemsSource="{Binding Path=Transactions, Mode=OneWay}" Opacity="0.8" Background="Transparent" Margin="0,0,0,6" Padding="0,12,0,12" HorizontalAlignment="Stretch" DoubleTapped="DepthListBox_DoubleTapped">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate x:DataType="mod:Transaction">
+
+                                                    <Grid Margin="0" HorizontalAlignment="Stretch">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="80" />
+                                                            <ColumnDefinition Width="90" />
+                                                            <ColumnDefinition Width="80" />
+                                                        </Grid.ColumnDefinitions>
+
+                                                        <TextBlock Grid.Column="0" x:Name="DepthAskBest" Text="{Binding Path=ExecutedAtFormatted, Mode=OneWay}" FontWeight="Normal" FontSize="12" Margin="2" Padding="0" HorizontalAlignment="Right"
+                                                                   behaviors:TextBlockExtensions.FlashColor="#666666"/>
+                                        
+                                                        <TextBlock Grid.Column="1" x:Name="DepthPrice" Text="{Binding Path=PriceFormatted, Mode=OneWay}" FontWeight="Normal" FontSize="12" Margin="6,2,6,4" Padding="3,0,3,0" HorizontalAlignment="Right"
+                                                                   behaviors:TextBlockExtensions.FlashColor="#666666">
+                                                        </TextBlock>
+                                        
+                                                        <TextBlock Grid.Column="2" x:Name="DepthBidBest" Text="{Binding Path=Amount, Mode=OneWay}" FontWeight="Normal" FontSize="12" Margin="2" Padding="0" HorizontalAlignment="Right"
+                                                            behaviors:TextBlockExtensions.FlashColor="#666666"/>
+
+                                                    </Grid>
+
+                                                </DataTemplate>
+
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </ScrollViewer>
+
+                                </Grid>
+
                             </TabItem>
                         </TabControl>
-                        <!--
-                        <ListBox SelectedIndex="0" CornerRadius="6" Padding="0" Background="Transparent">
-                            <ListBox.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <UniformGrid Rows="1"/>
-                                </ItemsPanelTemplate>
-                            </ListBox.ItemsPanel>
-                            <ListBox.Styles>
-                                <Style Selector="ListBoxItem">
-                                    <Setter Property="Theme" Value="{StaticResource BottomIndicatorListBoxItemTheme}" />
-                                </Style>
-                                <Style Selector="ListBoxItem">
-                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
-                                    <Setter Property="VerticalContentAlignment" Value="Center"/>
-                                    <Setter Property="CornerRadius" Value="6"/>
-                                </Style>
-                            </ListBox.Styles>
-                            
-                            <ListBoxItem>Buy</ListBoxItem>
-                            <ListBoxItem>Sell</ListBoxItem>
-                            <ListBoxItem>T&amp;S</ListBoxItem>
-                        </ListBox>
 
-                        -->
                     </Border>
 
                 </Grid>
@@ -145,6 +161,42 @@
                             <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Path=Low24String, Mode=OneWay}" FontSize="12" Opacity="0.7" Margin="6,0,0,0"></TextBlock>
                         </Grid>
 
+                        <Grid Margin="8,2,6,4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="BID: " FontSize="12" Opacity="0.7"/>
+                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Bid, Mode=OneWay}" FontSize="12" Opacity="0.7"/>
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="ASK: " FontSize="12" Opacity="0.7"/>
+                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Ask, Mode=OneWay}" FontSize="12" Opacity="0.7"/>
+                        </Grid>
+
+                        <StackPanel Margin="8,2,6,4">
+                            <TextBlock FontSize="12" Opacity="0.7">
+						        <Run Text="JPY"/>
+						        <Run Text="{Binding AssetJPYFreeAmountText, Mode=OneWay}"/>
+						        <Run Text="/"/>
+						        <Run Text="{Binding AssetJPYAmountText, Mode=OneWay}"/>
+                            </TextBlock>
+                            <TextBlock FontSize="12" Opacity="0.7">
+						        <Run Text="{Binding AssetCurrentName, Mode=OneWay}"/>
+
+						        <Run Text="{Binding AssetCurrentFreeAmountText, Mode=OneWay}"/>
+						        <Run Text="/"/>
+						        <Run Text="{Binding AssetCurrentAmountText, Mode=OneWay}"/>
+
+						        <Run Text=" ("/>
+						        <Run Text="{Binding AssetCurrentEstimateAmountText, Mode=OneWay}"/>
+                                <Run Text=") "/>
+                            </TextBlock>
+                        </StackPanel>
+
                         <StackPanel Margin="4,2,4,2">
 
                             <StackPanel Orientation="Horizontal" Margin="0,6,0,6">
@@ -168,9 +220,23 @@
 						                </MenuFlyout>
 					                </SplitButton.Flyout>
                                 </SplitButton>
-                                <ToggleButton IsChecked="{Binding IsPaneOpen, Mode=TwoWay}" Height="32" Margin="6,0,0,0">
-                                    <PathIcon Width="16" Height="16" Data="M14 5.5C14 4.11929 12.8807 3 11.5 3H4.5C3.11929 3 2 4.11929 2 5.5V10.5C2 11.8807 3.11929 13 4.5 13H11.5C12.8807 13 14 11.8807 14 10.5V5.5ZM9 4V12H4.5C3.67157 12 3 11.3284 3 10.5V5.5C3 4.67157 3.67157 4 4.5 4H9ZM10 4H11.5C12.3284 4 13 4.67157 13 5.5V10.5C13 11.3284 12.3284 12 11.5 12H10V4Z"></PathIcon>
-                                </ToggleButton>
+
+                                <Button Margin="6,0,0,0" Height="32" Click="SplitViewToggleButton_Click">
+					                <Viewbox Width="18" Height="18" HorizontalAlignment="Center" VerticalAlignment="Center">
+						                <PathIcon Background="Transparent" Width="NaN" Height="NaN"
+							                Data="M9.17903 10.5L8.18051 11.3737C7.9727 11.5555 7.95164 11.8714 8.13348 12.0792C8.31532 12.2871 8.6312 12.3081 8.83902 12.1263L10.839 10.3763C10.9475 10.2813 11.0098 10.1442 11.0098 9.99999C11.0098 9.85581 10.9475 9.71865 10.839 9.62371L8.83902 7.87371C8.6312 7.69186 8.31532 7.71292 8.13348 7.92074C7.95164 8.12856 7.9727 8.44444 8.18051 8.62628L9.17905 9.5L5.5 9.5C5.22386 9.5 5 9.72386 5 10C5 10.2761 5.22386 10.5 5.5 10.5L9.17903 10.5ZM16 16C17.1046 16 18 15.1046 18 14V6C18 4.89543 17.1046 4 16 4H4C2.89543 4 2 4.89543 2 6V14C2 15.1046 2.89543 16 4 16L16 16ZM17 14C17 14.5523 16.5523 15 16 15H13L13 5L16 5C16.5523 5 17 5.44772 17 6L17 14ZM12 5L12 15L4 15C3.44772 15 3 14.5523 3 14L3 6C3 5.44771 3.44772 5 4 5L12 5Z">
+							                <Interaction.Behaviors>
+								                <DataTriggerBehavior Binding="{Binding IsPaneOpen, ElementName=ChartSplitView}" ComparisonCondition="Equal" Value="True">
+									                <ChangePropertyAction PropertyName="Data" Value="M9.17903 10.5L8.18051 11.3737C7.9727 11.5555 7.95164 11.8714 8.13348 12.0792C8.31532 12.2871 8.6312 12.3081 8.83902 12.1263L10.839 10.3763C10.9475 10.2813 11.0098 10.1442 11.0098 9.99999C11.0098 9.85581 10.9475 9.71865 10.839 9.62371L8.83902 7.87371C8.6312 7.69186 8.31532 7.71292 8.13348 7.92074C7.95164 8.12856 7.9727 8.44444 8.18051 8.62628L9.17905 9.5L5.5 9.5C5.22386 9.5 5 9.72386 5 10C5 10.2761 5.22386 10.5 5.5 10.5L9.17903 10.5ZM16 16C17.1046 16 18 15.1046 18 14V6C18 4.89543 17.1046 4 16 4H4C2.89543 4 2 4.89543 2 6V14C2 15.1046 2.89543 16 4 16L16 16ZM17 14C17 14.5523 16.5523 15 16 15H13L13 5L16 5C16.5523 5 17 5.44772 17 6L17 14ZM12 5L12 15L4 15C3.44772 15 3 14.5523 3 14L3 6C3 5.44771 3.44772 5 4 5L12 5Z" />
+								                </DataTriggerBehavior>
+								                <DataTriggerBehavior Binding="{Binding IsPaneOpen, ElementName=ChartSplitView}" ComparisonCondition="Equal" Value="False">
+									                <ChangePropertyAction PropertyName="Data" Value="M6.82097 10.5L7.81949 11.3737C8.0273 11.5556 8.04836 11.8714 7.86652 12.0793C7.68468 12.2871 7.3688 12.3081 7.16098 12.1263L5.16098 10.3763C5.05247 10.2814 4.99023 10.1442 4.99023 10C4.99023 9.85583 5.05247 9.71866 5.16098 9.62372L7.16098 7.87372C7.3688 7.69188 7.68468 7.71294 7.86652 7.92075C8.04836 8.12857 8.0273 8.44445 7.81949 8.62629L6.82095 9.50001L10.5 9.50001C10.7761 9.50001 11 9.72387 11 10C11 10.2762 10.7761 10.5 10.5 10.5L6.82097 10.5ZM18 14C18 15.1046 17.1046 16 16 16L4 16C2.89543 16 2 15.1046 2 14V6C2 4.89543 2.89543 4 4 4H16C17.1046 4 18 4.89543 18 6V14ZM16 15C16.5523 15 17 14.5523 17 14L17 6C17 5.44772 16.5523 5 16 5L13 5L13 15H16ZM12 15L12 5L4 5C3.44772 5 3 5.44771 3 6L3 14C3 14.5523 3.44772 15 4 15L12 15Z" />
+								                </DataTriggerBehavior>
+							                </Interaction.Behaviors>
+						                </PathIcon>
+					                </Viewbox>
+				                </Button>
+
                             </StackPanel>
 
                         </StackPanel>
@@ -178,35 +244,25 @@
                     </StackPanel>
                 </Border>
 
-
             </Grid>
 
         </SplitView>
         
         <Grid Grid.Row="1" Margin="0,0,0,0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
 
-			<Border Grid.Row="0" Margin="8,0,0,0">
-                <TabControl Theme="{DynamicResource MyCustomSegmentedTheme}" HorizontalAlignment="Stretch">
-                    <TabItem Header="Orders">
-                        <TextBlock Text="Day view content goes here..." Margin="0,20" HorizontalAlignment="Center"/>
-                    </TabItem>
-                    <TabItem Header="Pending">
-                        <TextBlock Text="Week view content goes here..." Margin="0,20" HorizontalAlignment="Center"/>
-                    </TabItem>
-                    <TabItem Header="History">
-                        <TextBlock Text="Month view content goes here..." Margin="0,20" HorizontalAlignment="Center"/>
-                    </TabItem>
-                </TabControl>
-			</Border>
+            <TabControl Margin="8,0,0,0" Theme="{DynamicResource MyCustomSegmentedTheme}" HorizontalAlignment="Stretch">
+                <TabItem Header="Orders">
+                    <Button Grid.Row="0" Content="Refresh" Command="{Binding UpdateOrdersCommand, Mode=OneWay}" Margin="4" VerticalAlignment="Top" HorizontalAlignment="Right"/>
 
-            <StackPanel x:Name="BottomListViewStackPanel" Orientation="Horizontal" Grid.Row="1">
-
-
-            </StackPanel>
+                </TabItem>
+                <TabItem Header="Pending">
+                    <TextBlock Text="Week view content goes here..." Margin="0,20" HorizontalAlignment="Center"/>
+                </TabItem>
+                <TabItem Header="History">
+                    <Button Grid.Row="0" Content="Refresh" Command="{Binding UpdateTradeHistoryCommand, Mode=OneWay}" Margin="4" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+                    
+                </TabItem>
+            </TabControl>
 
         </Grid>
     </Grid>
