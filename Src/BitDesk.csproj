@@ -8,6 +8,10 @@
 	  <RootNamespace>BitDesk</RootNamespace>
 	  <AssemblyName>BitDesk</AssemblyName>
 	  <ApplicationIcon>Assets\BitDesk.ico</ApplicationIcon>
+
+	  <VersionPrefix>2.0.0.0</VersionPrefix>
+	  <FileVersion>2.0.0.0</FileVersion>
+	  
   </PropertyGroup>
 
   <ItemGroup>

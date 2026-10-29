@@ -7,28 +7,198 @@
              xmlns:vm="using:BitDesk.ViewModels"
              x:DataType="vm:MainViewModel">
     <Grid x:Name="ContentArea" Margin="{DynamicResource PageContentTitleBarSpacingThickness}">
-        <StackPanel Margin="24">
-            <StackPanel Orientation="Horizontal" Margin="24,12,0,0">
-                <Viewbox Width="16">
-                    <PathIcon Data="{StaticResource BtcIconData}"/>
-                </Viewbox>
-                <ToggleSwitch Margin="24,0,0,0" IsChecked="{Binding IsOnBtcJpy, Mode=TwoWay}"/>
-            </StackPanel>
 
-            <StackPanel Orientation="Horizontal" Margin="24,12,0,0">
-                <Viewbox Width="16">
-                    <PathIcon Data="{StaticResource XrpIconData}"/>
-                </Viewbox>
-                <ToggleSwitch Margin="24,0,0,0" IsChecked="{Binding IsOnXrpJpy, Mode=TwoWay}"/>
-            </StackPanel>
+        <TabControl TabStripPlacement="Top" Margin="12,24,0,0">
 
-            <StackPanel Orientation="Horizontal" Margin="24,12,0,0">
-                <Viewbox Width="16">
-                    <PathIcon Data="{StaticResource EthIconData}"/>
-                </Viewbox>
-                <ToggleSwitch Margin="24,0,0,0" IsChecked="{Binding IsOnEthJpy, Mode=TwoWay}"/>
-            </StackPanel>
-        </StackPanel>
+            <TabItem Header="Pairs">
 
+                <ScrollViewer>
+                    <StackPanel Margin="24,24,0,48">
+                        <StackPanel Orientation="Horizontal" Margin="12,12,0,0">
+                            <Viewbox Width="16">
+                                <PathIcon Data="{StaticResource BtcIconData}"/>
+                            </Viewbox>
+                            <ToggleSwitch Margin="24,0,0,0" IsChecked="{Binding IsOnBtcJpy, Mode=TwoWay}"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="12,12,0,0">
+                            <Viewbox Width="16">
+                                <PathIcon Data="{StaticResource XrpIconData}"/>
+                            </Viewbox>
+                            <ToggleSwitch Margin="24,0,0,0" IsChecked="{Binding IsOnXrpJpy, Mode=TwoWay}"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="12,12,0,0">
+                            <Viewbox Width="16">
+                                <PathIcon Data="{StaticResource EthIconData}"/>
+                            </Viewbox>
+                            <ToggleSwitch Margin="24,0,0,0" IsChecked="{Binding IsOnEthJpy, Mode=TwoWay}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
+
+            </TabItem>
+
+            <TabItem Header="API Keys">
+                
+                <ScrollViewer>
+                    <StackPanel HorizontalAlignment="Left" Margin="24,24,0,48">
+
+                        <TextBlock>APIキーの設定・変更</TextBlock>
+
+                        <TextBlock Padding="0,12,24,0" TextWrapping="Wrap">
+                            このアプリケーションは、Bitbank.cc が公開しているAPIを利用して注文や資産・注文一覧・取引履歴等の情報取得をしています。これらの機能を利用するには、Bitbankでアカウントを作成し、それぞれの機能ごとにAPIキーを発行して、ここで設定をしてください。
+                        </TextBlock>
+
+                        <StackPanel Margin="12,12,0,0" HorizontalAlignment="Left">
+                            <TextBlock Margin="0,10,0,0" VerticalAlignment="Center">
+                                Bitbank ログイン:
+                            </TextBlock>
+                                <HyperlinkButton NavigateUri="https://bitbank.cc/">https://bitbank.cc/</HyperlinkButton>
+                            <TextBlock Margin="0,10,0,0">
+                                Bitbank API発行ページ:
+                            </TextBlock>
+                                <HyperlinkButton NavigateUri="https://bitbank.cc/app/account/api">https://bitbank.cc/app/account/api</HyperlinkButton>
+                            <TextBlock Margin="0,10,0,0">
+                                Bitbank FAQページ:
+                            </TextBlock>
+                                <HyperlinkButton NavigateUri="https://bitbankcc.zendesk.com/hc/ja/articles/360005745194-API%E3%82%AD%E3%83%BC%E3%82%92%E7%99%BA%E8%A1%8C%E3%81%97%E3%81%9F%E3%81%84">FAQ：APIキーを発行したい</HyperlinkButton>
+
+                        </StackPanel>
+
+                        <StackPanel Margin="0,20,24,24" Spacing="8">
+
+                            <!-- Api Keys -->
+                            <StackPanel Orientation="Horizontal" Spacing="4" Margin="0,24,0,0">
+                                <TextBlock Text="保有資産情報の取得用：" FontWeight="SemiBold"></TextBlock>
+                                <TextBlock Text="権限"></TextBlock>
+                                <TextBlock VerticalAlignment="Center"><Run Foreground="Orange" FontWeight="Bold">[参照]</Run></TextBlock>
+                            </StackPanel>
+                            <TextBlock Text="APIキー："></TextBlock>
+                            <TextBox Text="{Binding AssetsApiKey, Mode=TwoWay}"></TextBox>
+                            <TextBlock Text="APIシークレット："></TextBlock>
+                            <TextBox Text="{Binding AssetsSecret, Mode=TwoWay}"></TextBox>
+
+                            <StackPanel Orientation="Horizontal" Spacing="4" Margin="0,24,0,0">
+                                <TextBlock Text="注文情報の取得用：" FontWeight="SemiBold"></TextBlock>
+                                <TextBlock Text="権限"></TextBlock>
+                                <TextBlock VerticalAlignment="Center"><Run Foreground="Orange" FontWeight="Bold">[参照]</Run></TextBlock>
+                            </StackPanel>
+                            <TextBlock Text="APIキー："></TextBlock>
+                            <TextBox Text="{Binding OrdersApiKey, Mode=TwoWay}"></TextBox>
+                            <TextBlock Text="APIシークレット："></TextBlock>
+                            <TextBox Text="{Binding OrdersSecret, Mode=TwoWay}"></TextBox>
+
+                            <StackPanel Orientation="Horizontal" Spacing="4" Margin="0,24,0,0">
+                                <TextBlock Text="約定履歴の取得用：" FontWeight="SemiBold"></TextBlock>
+                                <TextBlock Text="権限"></TextBlock>
+                                <TextBlock VerticalAlignment="Center"><Run Foreground="Orange" FontWeight="Bold">[参照]</Run></TextBlock>
+                            </StackPanel>
+                            <TextBlock Text="APIキー："></TextBlock>
+                            <TextBox Text="{Binding TradeHistoryApiKey, Mode=TwoWay}"></TextBox>
+                            <TextBlock Text="APIシークレット："></TextBlock>
+                            <TextBox Text="{Binding TradeHistorySecret, Mode=TwoWay}"></TextBox>
+
+                            <StackPanel Orientation="Horizontal" Spacing="4" Margin="0,24,0,0">
+                                <TextBlock Text="注文用：" FontWeight="SemiBold"></TextBlock>
+                                <TextBlock Text="権限"></TextBlock>
+                                <TextBlock VerticalAlignment="Center"><Run Foreground="Orange" FontWeight="Bold">[参照][取引]</Run></TextBlock>
+                            </StackPanel>
+                            <TextBlock Text="APIキー："></TextBlock>
+                            <TextBox Text="{Binding MakeOrderApiKey, Mode=TwoWay}"></TextBox>
+                            <TextBlock Text="APIシークレット："></TextBlock>
+                            <TextBox Text="{Binding MakeOrderSecret, Mode=TwoWay}"></TextBox>
+
+                        </StackPanel>
+                            
+                    </StackPanel>
+                </ScrollViewer>
+
+            </TabItem>
+
+            <TabItem Header="About">
+                
+                <ScrollViewer>
+                    <StackPanel HorizontalAlignment="Left" Margin="24,24,0,48">
+
+                        <TextBlock >About <Run Text="BitDesk"/></TextBlock>
+
+                        <TextBlock Margin="0,10,0,0" HorizontalAlignment="Left">Version: <Run Text="{Binding VersionText, Mode=OneTime}" FontWeight="Bold" /></TextBlock>
+
+                        <StackPanel MaxWidth="650" Margin="0,10,0,0" HorizontalAlignment="Left">
+                            <TextBlock Margin="0,10,0,0">
+                                Source code:
+                            </TextBlock>
+                            <HyperlinkButton NavigateUri="https://github.com/torum/BitDesk">https://github.com/torum/BitDesk</HyperlinkButton>
+
+                            <TextBlock Margin="0,10,0,0">
+                                Website:
+                            </TextBlock>
+                            <HyperlinkButton NavigateUri="https://torum.github.io/BitDesk/">https://torum.github.io/BitDesk/</HyperlinkButton>
+                        </StackPanel>
+
+                        <TextBlock Text="Privacy Policy" Margin="0,24,0,0" HorizontalAlignment="Left" />
+                        <TextBlock Text="This application does not collect nor send any information." MaxWidth="650" Margin="0,10,0,0" HorizontalAlignment="Left" TextWrapping="Wrap">
+
+                        </TextBlock>
+
+                        <TextBlock Margin="0,24,0,0" Text="License" HorizontalAlignment="Left" />
+
+                        <StackPanel MaxWidth="650" Margin="0,10,0,0" HorizontalAlignment="Left">
+                            <TextBlock>The MIT License</TextBlock>
+                            <TextBlock>Copyright (c) 2020 torum</TextBlock>
+
+                            <TextBlock Margin="0,10,0,0">Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+                            </TextBlock>
+                            <TextBlock Margin="0,10,0,0">The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+                            </TextBlock>
+                            <TextBlock Margin="0,10,0,0">THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+                            </TextBlock>
+                        </StackPanel>
+
+                        <TextBlock Text="Third Party Components" Margin="0,24,0,0" HorizontalAlignment="Left" />
+
+                        <StackPanel MaxWidth="650" Margin="0,10,0,0" HorizontalAlignment="Left">
+                            <TextBlock FontWeight="Bold" FontSize="16" Margin="0,6,6,6">LiveCharts2</TextBlock>
+                            <TextBlock>
+                                <HyperlinkButton NavigateUri="https://github.com/beto-rodriguez/LiveCharts2">https://github.com/beto-rodriguez/LiveCharts2</HyperlinkButton>
+                            </TextBlock>
+                            <TextBlock Margin="0,10,0,0">The MIT License</TextBlock>
+                            <TextBlock>Copyright (c) 2021 Alberto Rodriguez Orozco</TextBlock>
+
+                            <TextBlock Margin="0,10,0,0">Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+                            </TextBlock>
+                            <TextBlock Margin="0,10,0,0">The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+                            </TextBlock>
+                            <TextBlock Margin="0,10,0,0">THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+                            </TextBlock>
+                        </StackPanel>
+
+                        <StackPanel MaxWidth="650" Margin="0,10,0,0" HorizontalAlignment="Left">
+                            <TextBlock FontWeight="Bold" FontSize="16" Margin="0,6,6,6">Socket.IO-client for .NET</TextBlock>
+                            <TextBlock>
+                                <HyperlinkButton NavigateUri="https://github.com/doghappy/socket.io-client-csharp">https://github.com/doghappy/socket.io-client-csharp</HyperlinkButton>
+                            </TextBlock>
+                            <TextBlock Margin="0,10,0,0">The MIT License</TextBlock>
+                            <TextBlock>Copyright (c) 2019 HeroWong</TextBlock>
+
+                            <TextBlock Margin="0,10,0,0">Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+                            </TextBlock>
+                            <TextBlock Margin="0,10,0,0">The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+                            </TextBlock>
+                            <TextBlock Margin="0,10,0,0">THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+                            </TextBlock>
+                        </StackPanel>
+
+                        <StackPanel Margin="0,0,0,48"></StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
+
+            </TabItem>
+
+        </TabControl>
     </Grid>
 </UserControl>

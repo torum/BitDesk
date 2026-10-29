@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace BitDesk.ViewModels;
@@ -65,8 +66,8 @@ internal partial class MainViewModel : ObservableObject, IDisposable
         }
 
         // For developing purposes, we can set this to true to avoid starting the ticker service and charts loading.
-        _isWebSocketOn = true;
-        _isLiveChartsOn = true;
+        _isWebSocketOn = false;
+        _isLiveChartsOn = false;
 
 #if DEBUG
         IsSaveLog = true;
@@ -75,7 +76,23 @@ internal partial class MainViewModel : ObservableObject, IDisposable
 
     #region == Properties ==
 
+    // TODO:
     public bool IsSaveLog { get; }
+
+    public string VersionText
+    {
+        get
+        {
+            return field ?? GetVersionText();
+        }
+    }
+
+    private static string GetVersionText()
+    {
+        var version = Assembly.GetExecutingAssembly().GetName().Version!;
+
+        return $"{version.Major}.{version.Minor}.{version.Build}.{version.Revision}";
+    }
 
     #region == View related ==
 
@@ -1648,6 +1665,281 @@ internal partial class MainViewModel : ObservableObject, IDisposable
 
             field = value;
             OnPropertyChanged();
+        }
+    }
+
+    #endregion
+
+    #region == Assets ==
+
+    private ObservableCollection<Models.Asset> _assets = [];
+    public ObservableCollection<Models.Asset> Assets
+    {
+        get => _assets;
+        set
+        {
+            if (_assets == value)
+            {
+                return;
+            }
+
+            _assets = value;
+            OnPropertyChanged(nameof(Assets));
+        }
+    }
+
+    #endregion
+
+    #region == API keys ==
+
+    // Assets
+
+    private string _assetsApiKey = string.Empty;
+    public string AssetsApiKey
+    {
+        get => _assetsApiKey;
+        set
+        {
+            if (_assetsApiKey == value.Trim())
+            {
+                return;
+            }
+
+            _assetsApiKey = value.Trim();
+            OnPropertyChanged(nameof(AssetsApiKey));
+
+            if (!string.IsNullOrEmpty(_assetsApiKey) && !string.IsNullOrEmpty(_assetsSecret))
+            {
+                AssetsApiKeyIsSet = true;
+            }
+        }
+    }
+
+    // TODO: encrypt
+    private string _assetsSecret = string.Empty;
+    public string AssetsSecret
+    {
+        get => _assetsSecret;
+        set
+        {
+            if (_assetsSecret == value.Trim())
+            {
+                return;
+            }
+
+            _assetsSecret = value.Trim();
+            OnPropertyChanged(nameof(AssetsSecret));
+
+            if (!string.IsNullOrEmpty(_assetsApiKey) && !string.IsNullOrEmpty(_assetsSecret))
+            {
+                AssetsApiKeyIsSet = true;
+            }
+        }
+    }
+
+    private bool _assetsApiKeyIsSet;
+    public bool AssetsApiKeyIsSet
+    {
+        get => _assetsApiKeyIsSet;
+        set
+        {
+            if (_assetsApiKeyIsSet == value)
+            {
+                return;
+            }
+
+            _assetsApiKeyIsSet = value;
+            OnPropertyChanged(nameof(AssetsApiKeyIsSet));
+
+            //this.NotifyPropertyChanged("ShowAsset");
+            //this.NotifyPropertyChanged("ShowAssetApiSet");
+        }
+    }
+
+    // Orders
+
+    private string _ordersApiKey = string.Empty;
+    public string OrdersApiKey
+    {
+        get => _ordersApiKey;
+        set
+        {
+            if (_ordersApiKey == value.Trim())
+            {
+                return;
+            }
+
+            _ordersApiKey = value.Trim();
+            OnPropertyChanged(nameof(OrdersApiKey));
+
+            if (!string.IsNullOrEmpty(_ordersApiKey) && !string.IsNullOrEmpty(_ordersSecret))
+            {
+                AssetsApiKeyIsSet = true;
+            }
+        }
+    }
+
+    // TODO: encrypt
+    private string _ordersSecret = string.Empty;
+    public string OrdersSecret
+    {
+        get => _ordersSecret;
+        set
+        {
+            if (_ordersSecret == value.Trim())
+            {
+                return;
+            }
+
+            _ordersSecret = value.Trim();
+            OnPropertyChanged(nameof(OrdersSecret));
+
+            if (!string.IsNullOrEmpty(_ordersApiKey) && !string.IsNullOrEmpty(_ordersSecret))
+            {
+                OrdersApiKeyIsSet = true;
+            }
+        }
+    }
+
+    private bool _ordersApiKeyIsSet;
+    public bool OrdersApiKeyIsSet
+    {
+        get => _ordersApiKeyIsSet;
+        set
+        {
+            if (_ordersApiKeyIsSet == value)
+            {
+                return;
+            }
+
+            _ordersApiKeyIsSet = value;
+            OnPropertyChanged(nameof(OrdersApiKeyIsSet));
+        }
+    }
+
+    // TradeHistory 
+
+    private string _tradeHistoryApiKey = string.Empty;
+    public string TradeHistoryApiKey
+    {
+        get => _tradeHistoryApiKey;
+        set
+        {
+            if (_tradeHistoryApiKey == value.Trim())
+            {
+                return;
+            }
+
+            _tradeHistoryApiKey = value.Trim();
+            OnPropertyChanged(nameof(TradeHistoryApiKey));
+
+            if (!string.IsNullOrEmpty(_tradeHistoryApiKey) && !string.IsNullOrEmpty(_tradeHistorySecret))
+            {
+                TradeHistoryApiKeyIsSet = true;
+            }
+        }
+    }
+
+    // TODO: encrypt
+    private string _tradeHistorySecret = string.Empty;
+    public string TradeHistorySecret
+    {
+        get => _tradeHistorySecret;
+        set
+        {
+            if (_tradeHistorySecret == value.Trim())
+            {
+                return;
+            }
+
+            _tradeHistorySecret = value.Trim();
+            OnPropertyChanged(nameof(TradeHistorySecret));
+
+            if (!string.IsNullOrEmpty(_tradeHistoryApiKey) && !string.IsNullOrEmpty(_tradeHistorySecret))
+            {
+                TradeHistoryApiKeyIsSet = true;
+            }
+        }
+    }
+
+    private bool _tradeHistoryApiKeyIsSet;
+    public bool TradeHistoryApiKeyIsSet
+    {
+        get => _tradeHistoryApiKeyIsSet;
+        set
+        {
+            if (_tradeHistoryApiKeyIsSet == value)
+            {
+                return;
+            }
+
+            _tradeHistoryApiKeyIsSet = value;
+            OnPropertyChanged(nameof(TradeHistoryApiKeyIsSet));
+        }
+    }
+
+
+    // Make order
+
+    private string _makeOrderApiKey = string.Empty;
+    public string MakeOrderApiKey
+    {
+        get => _makeOrderApiKey;
+        set
+        {
+            if (_makeOrderApiKey == value.Trim())
+            {
+                return;
+            }
+
+            _makeOrderApiKey = value.Trim();
+            OnPropertyChanged(nameof(MakeOrderApiKey));
+
+            if (!string.IsNullOrEmpty(_makeOrderApiKey) && !string.IsNullOrEmpty(_makeOrderSecret))
+            {
+                MakeOrderApiKeyIsSet = true;
+            }
+        }
+    }
+
+    // TODO: encrypt
+    private string _makeOrderSecret = string.Empty;
+    public string MakeOrderSecret
+    {
+        get => _makeOrderSecret;
+        set
+        {
+            if (_makeOrderSecret == value.Trim())
+            {
+                return;
+            }
+
+            _makeOrderSecret = value.Trim();
+            OnPropertyChanged(nameof(MakeOrderSecret));
+
+            if (!string.IsNullOrEmpty(_makeOrderApiKey) && !string.IsNullOrEmpty(_makeOrderSecret))
+            {
+                MakeOrderApiKeyIsSet = true;
+            }
+        }
+    }
+
+    private bool _makeOrderApiKeyIsSet;
+    public bool MakeOrderApiKeyIsSet
+    {
+        get => _makeOrderApiKeyIsSet;
+        set
+        {
+            if (_makeOrderApiKeyIsSet == value)
+            {
+                return;
+            }
+
+            _makeOrderApiKeyIsSet = value;
+            OnPropertyChanged(nameof(MakeOrderApiKeyIsSet));
+
+            //this.NotifyPropertyChanged("ShowAsset");
+            //this.NotifyPropertyChanged("ShowAssetApiSet");
         }
     }
 

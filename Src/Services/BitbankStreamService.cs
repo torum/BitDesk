@@ -81,7 +81,7 @@ internal class BitbankStreamService : IBitbankStreamService
             var errorInfo = new ErrorInfo(ErrType.ConnectionError)
             {
                 ErrorMessage = e,
-                ErrorSeverity = FAInfoBarSeverity.Informational
+                ErrorSeverity = FAInfoBarSeverity.Warning
             };
 
             ErrorOccured?.Invoke(this, errorInfo);
@@ -211,10 +211,10 @@ internal class BitbankStreamService : IBitbankStreamService
             return Task.CompletedTask;
         });
 
-        //await _client.ConnectAsync();
         try
         {
             await _client.ConnectAsync();
+
         }
         catch (SocketIOClient.Exceptions.ConnectionException ex)
         {

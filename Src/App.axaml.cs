@@ -5,21 +5,22 @@ using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.Threading;
+using BitDesk.Services;
+using BitDesk.Services.Contracts;
 using BitDesk.ViewModels;
 using BitDesk.Views;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using BitDesk.Services.Contracts;
-using BitDesk.Services;
-using System.Net.Http.Headers;
-using System.Net.Http;
 
 namespace BitDesk;
 
@@ -145,6 +146,22 @@ public partial class App : Application
 
     private static void OnDomainUnhandledException(object sender, UnhandledExceptionEventArgs e)
     {
+        if (e.ExceptionObject is not Exception exception)
+        {
+            var raw = e.ExceptionObject?.ToString() ?? "Unknown exception object";
+            Debug.WriteLine($"CurrentDomain_UnhandledException: {raw}");
+            AppendErrorLog("CurrentDomain_UnhandledException", raw);
+            SaveErrorLog();
+            return;
+        }
+
+        if (exception is TaskCanceledException)
+        {
+            // can ignore.
+            Debug.WriteLine($"CurrentDomain_UnhandledException (TaskCanceledException): {exception.Message}");
+            return;
+        }
+
         AppendErrorLog("AppDomain.UnhandledException", e.ExceptionObject?.ToString() ?? "(null)");
         SaveErrorLog(); // Last chance: the process terminates after this.
     }
@@ -153,6 +170,19 @@ public partial class App : Application
     {
         if (e.Exception.InnerExceptions.All(ex => ex is OperationCanceledException))
         {
+            e.SetObserved();
+            return;
+        }
+
+        var inner = e.Exception.Flatten().InnerException;
+        // Check if the exception originates from a network drop or SocketIO background task
+        if (inner is System.Net.Http.HttpRequestException ||
+            inner is System.Net.Sockets.SocketException ||
+            inner is System.Net.WebSockets.WebSocketException ||
+            e.Exception.StackTrace?.Contains("SocketIOClient") == true)
+        {
+            System.Diagnostics.Debug.WriteLine($"[Suppressed Network Background Exception]: {inner?.Message}");
+
             e.SetObserved();
             return;
         }
