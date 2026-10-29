@@ -10,22 +10,18 @@
              xmlns:behaviors="using:BitDesk.Behaviors"
              x:DataType="vm:PairViewModel"
              x:Class="BitDesk.Views.ChartContent">
-    <Grid>
+    <Grid RowDefinitions="7*,3*">
 
-        <SplitView x:Name="SplitViewControl" Margin="0,0,0,0" CornerRadius="0,0,0,0" BorderThickness="0,0,0,0" PaneBackground="Transparent" IsPaneOpen="{Binding Path=IsPaneOpen, Mode=TwoWay}" PanePlacement="Right" OpenPaneLength="560" CompactPaneLength="0" DisplayMode="CompactInline">
+        <SplitView x:Name="SplitViewControl" Grid.Row="0" Margin="0,0,0,0" CornerRadius="0,0,0,0" BorderThickness="0,0,0,0" PaneBackground="Transparent" IsPaneOpen="{Binding Path=IsPaneOpen, Mode=TwoWay}" PanePlacement="Right" OpenPaneLength="560" CompactPaneLength="0" DisplayMode="CompactInline">
             
             <SplitView.Pane>
                 <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="280"/>
                         <ColumnDefinition Width="280"/>
                     </Grid.ColumnDefinitions>
                     
-                    <ScrollViewer x:Name="DepthScrollViewer" Grid.Row="1" Grid.Column="0" Margin="0,4,0,0" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" SizeChanged="DepthScrollViewer_SizeChanged">
+                    <ScrollViewer x:Name="DepthScrollViewer" Grid.Row="0" Grid.Column="0" Margin="0,48,0,0" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" SizeChanged="DepthScrollViewer_SizeChanged">
                             <Interaction.Behaviors>
                             <ia:VerticalScrollViewerAnimatedBehavior/>
                             </Interaction.Behaviors>
@@ -67,13 +63,21 @@
                         </ItemsControl>
                     </ScrollViewer>
                     
-                    <Border Grid.Row="0" Grid.Column="1" Margin="4,44,4,0" CornerRadius="6">
+                    <Border Grid.Row="0" Grid.Column="1" Margin="4,40,4,0" CornerRadius="6" HorizontalAlignment="Stretch">
+
+                        <TabControl Theme="{DynamicResource MyCustomSegmentedTheme}" HorizontalAlignment="Stretch">
+                            <TabItem Header="Buy">
+                                <TextBlock Text="Day view content goes here..." Margin="0,20" HorizontalAlignment="Center"/>
+                            </TabItem>
+                            <TabItem Header="Sell">
+                                <TextBlock Text="Week view content goes here..." Margin="0,20" HorizontalAlignment="Center"/>
+                            </TabItem>
+                            <TabItem Header="T&amp;S">
+                                <TextBlock Text="Month view content goes here..." Margin="0,20" HorizontalAlignment="Center"/>
+                            </TabItem>
+                        </TabControl>
+                        <!--
                         <ListBox SelectedIndex="0" CornerRadius="6" Padding="0" Background="Transparent">
-                            <ListBox.Resources>
-							<!-- Edit: move selection indicator to bottom. -->
-							<!-- Edit: padding changed. -->
-							
-                            </ListBox.Resources>
                             <ListBox.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <UniformGrid Rows="1"/>
@@ -94,18 +98,15 @@
                             <ListBoxItem>Sell</ListBoxItem>
                             <ListBoxItem>T&amp;S</ListBoxItem>
                         </ListBox>
+
+                        -->
                     </Border>
 
                 </Grid>
             </SplitView.Pane>
 
             <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="3*"/>
-                    <RowDefinition Height="1*"/>
-                </Grid.RowDefinitions>
-                
-                <lvc:CartesianChart x:Name="LiveChart" Grid.Row="0" Margin="0,32,0,0" Background="Transparent"
+                <lvc:CartesianChart x:Name="LiveChart" Margin="0,32,0,0" Background="Transparent"
                                     XAxes="{Binding XAxes, Mode=OneWay}"
                                     YAxes="{Binding YAxes, Mode=OneWay}"
                                     Series="{Binding Series, Mode=OneWay}"
@@ -177,46 +178,36 @@
                     </StackPanel>
                 </Border>
 
-                <Grid Grid.Row="1" Margin="0,0,0,0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-
-					<Border Grid.Row="0" Margin="8,0,0,0">
-					    <ListBox SelectedIndex="0" CornerRadius="6" Padding="0" Background="Transparent" HorizontalAlignment="Left">
-                            <ListBox.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <UniformGrid Rows="1"/>
-                                </ItemsPanelTemplate>
-                            </ListBox.ItemsPanel>
-                            <ListBox.Styles>
-                                <Style Selector="ListBoxItem">
-                                    <Setter Property="Theme" Value="{StaticResource BottomIndicatorListBoxItemTheme}" />
-                                </Style>
-                                <Style Selector="ListBoxItem">
-                                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
-                                    <Setter Property="VerticalContentAlignment" Value="Center"/>
-                                    <Setter Property="CornerRadius" Value="6"/>
-                                </Style>
-                            </ListBox.Styles>
-
-                            <ListBoxItem>Orders</ListBoxItem>
-                            <ListBoxItem>Pending</ListBoxItem>
-                            <ListBoxItem>History</ListBoxItem>
-                        </ListBox>
-						</Border>
-
-                    <StackPanel x:Name="BottomListViewStackPanel" Orientation="Horizontal" Grid.Row="1">
-
-
-                    </StackPanel>
-
-                </Grid>
 
             </Grid>
 
         </SplitView>
+        
+        <Grid Grid.Row="1" Margin="0,0,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
+			<Border Grid.Row="0" Margin="8,0,0,0">
+                <TabControl Theme="{DynamicResource MyCustomSegmentedTheme}" HorizontalAlignment="Stretch">
+                    <TabItem Header="Orders">
+                        <TextBlock Text="Day view content goes here..." Margin="0,20" HorizontalAlignment="Center"/>
+                    </TabItem>
+                    <TabItem Header="Pending">
+                        <TextBlock Text="Week view content goes here..." Margin="0,20" HorizontalAlignment="Center"/>
+                    </TabItem>
+                    <TabItem Header="History">
+                        <TextBlock Text="Month view content goes here..." Margin="0,20" HorizontalAlignment="Center"/>
+                    </TabItem>
+                </TabControl>
+			</Border>
+
+            <StackPanel x:Name="BottomListViewStackPanel" Orientation="Horizontal" Grid.Row="1">
+
+
+            </StackPanel>
+
+        </Grid>
     </Grid>
 </UserControl>

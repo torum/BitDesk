@@ -66,8 +66,8 @@ internal partial class MainViewModel : ObservableObject, IDisposable
         }
 
         // For developing purposes, we can set this to true to avoid starting the ticker service and charts loading.
-        _isWebSocketOn = false;
-        _isLiveChartsOn = false;
+        _isWebSocketOn = true;
+        _isLiveChartsOn = true;
 
 #if DEBUG
         IsSaveLog = true;
