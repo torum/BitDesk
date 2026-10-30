@@ -53,9 +53,6 @@ internal partial class MainViewModel : ObservableObject, IDisposable
         IsOnXrpJpy = config.IsOnXrpJpy;
         IsOnXlmJpy = config.IsOnXlmJpy;
 
-        // Load the pairs from the configuration service into the Pairs collection
-        _configurationService.GetPairs(Pairs);
-
         IsEnabledChanged += OnIsEnabledChanged;
 
         _bitbankStreamService.TickerUpdated += OnBitbankStreamService_TickerUpdated;
@@ -1965,6 +1962,9 @@ internal partial class MainViewModel : ObservableObject, IDisposable
             MakeOrderApiKey = Helper.EncryptDecrypt.Decrypt(config.MakeOrderApiKey, _userKey, config.User.UserSalt);
             MakeOrderSecret = Helper.EncryptDecrypt.Decrypt(config.MakeOrderSecret, _userKey, config.User.UserSalt);
 
+            // Load the pairs from the configuration service into the Pairs collection
+            _configurationService.GetPairs(Pairs, _userKey, config.User.UserSalt);
+
             foreach (var pair in Pairs)
             {
                 pair.ErrorOccured += OnErrorOccured;
@@ -2063,7 +2063,7 @@ internal partial class MainViewModel : ObservableObject, IDisposable
         config.MakeOrderApiKey = Helper.EncryptDecrypt.Encrypt(MakeOrderApiKey, _userKey, config.User.UserSalt);
         config.MakeOrderSecret = Helper.EncryptDecrypt.Encrypt(MakeOrderSecret, _userKey, config.User.UserSalt);
 
-        _configurationService.SetUserKey(_userKey);
+        _configurationService.SetUserKey(_userKey, config.User.UserSalt);
     }
 
     public void Dispose()

@@ -37,6 +37,9 @@ internal sealed class ConfigurationService : IConfigurationService
     private XDocument? _xDoc;
     private XElement? _xPairs;
 
+    private string _userKey = string.Empty;
+    private string _userSalt = string.Empty;
+
     public ConfigurationService()
     {
         _isConfigLoaded = false;
@@ -452,7 +455,7 @@ internal sealed class ConfigurationService : IConfigurationService
         return CurrentConfiguration;
     }
 
-    public void GetPairs(ObservableCollection<PairViewModel> pairs)
+    public void GetPairs(ObservableCollection<PairViewModel> pairs, string userKey, string userSalt)
     {
         // Each Pairs
         if (_xPairs == null)
@@ -564,7 +567,7 @@ internal sealed class ConfigurationService : IConfigurationService
                     {
                         if (!string.IsNullOrEmpty(attrv.Value))
                         {
-                            pair.AutoTradeApiKey = attrv.Value;
+                            pair.AutoTradeApiKey = Helper.EncryptDecrypt.Decrypt(attrv.Value, userKey, userSalt);
                         }
                     }
 
@@ -573,7 +576,7 @@ internal sealed class ConfigurationService : IConfigurationService
                     {
                         if (!string.IsNullOrEmpty(attrv.Value))
                         {
-                            pair.AutoTradeSecret = attrv.Value;
+                            pair.AutoTradeSecret = Helper.EncryptDecrypt.Decrypt(attrv.Value, userKey, userSalt);
                         }
                     }
 
@@ -628,7 +631,21 @@ internal sealed class ConfigurationService : IConfigurationService
         }
     }
 
-    private static XmlElement SetPairs(ObservableCollection<PairViewModel> pairs, XmlDocument doc)
+    public void SetUserKey(string userKey, string userSalt)
+    {
+        if (string.IsNullOrEmpty(userKey))
+        {
+            throw new ArgumentException("User key cannot be null or empty.", nameof(userKey));
+        }
+        if (string.IsNullOrEmpty(userSalt))
+        {
+            throw new ArgumentException("User salt cannot be null or empty.", nameof(userSalt));
+        }
+        _userKey = userKey;
+        _userSalt = userSalt;
+    }
+
+    private static XmlElement SetPairs(ObservableCollection<PairViewModel> pairs, XmlDocument doc, string userKey, string userSalt)
     {
         // Each pairs
         var xPairs = doc.CreateElement(string.Empty, "Pairs", string.Empty);
@@ -658,11 +675,11 @@ internal sealed class ConfigurationService : IConfigurationService
 
 
             xAttrs = doc.CreateAttribute("AutoTradeApiKey");
-            xAttrs.Value = hoge.AutoTradeApiKey;
+            xAttrs.Value = Helper.EncryptDecrypt.Encrypt(hoge.AutoTradeApiKey, userKey, userSalt);
             xPair.SetAttributeNode(xAttrs);
 
             xAttrs = doc.CreateAttribute("AutoTradeSecret");
-            xAttrs.Value = hoge.AutoTradeSecret;
+            xAttrs.Value = Helper.EncryptDecrypt.Encrypt(hoge.AutoTradeSecret, userKey, userSalt);
             xPair.SetAttributeNode(xAttrs);
 
             xAttrs = doc.CreateAttribute("AutoTradeTama");
@@ -923,7 +940,7 @@ internal sealed class ConfigurationService : IConfigurationService
         #endregion
 
         // Each pairs
-        var xPairs = SetPairs(pairs, doc);
+        var xPairs = SetPairs(pairs, doc, _userKey, _userSalt);
         root.AppendChild(xPairs);
 
         try

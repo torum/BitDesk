@@ -11,5 +11,7 @@ internal interface IConfigurationService
     Task<Models.Configuration> LoadConfigurationAsync();
     Task SaveConfigurationAsync(ObservableCollection<PairViewModel> pairs);
     Models.Configuration CurrentConfiguration { get; }
-    void GetPairs(ObservableCollection<PairViewModel> pairs);
+    void GetPairs(ObservableCollection<PairViewModel> pairs, string userKey, string userSalt);
+
+    void SetUserKey(string userKey, string userSalt);
 }
