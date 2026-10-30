@@ -130,7 +130,7 @@
 			</ControlTheme>
 
 			<!-- Bottom Indicator ListBoxItem Theme -->
-			<ControlTheme TargetType="ListBoxItem" x:Key="BottomIndicatorListBoxItemTheme" >
+			<ControlTheme TargetType="ListBoxItem" x:Key="BottomIndicatorListBoxItemTheme">
 								<Setter Property="FontFamily" Value="{DynamicResource ContentControlThemeFontFamily}" />
 								<Setter Property="FontSize" Value="{DynamicResource ControlContentThemeFontSize}" />
 								<Setter Property="Background" Value="{DynamicResource ListViewItemBackground}" />

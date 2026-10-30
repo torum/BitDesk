@@ -137,15 +137,13 @@ public partial class MainWindow : Window
         this.Activated += MainWindow_Activated;
         this.SizeChanged += this.MainWindow_SizeChanged;
         this.PositionChanged += this.MainWindow_PositionChanged;
-        //this.ActualThemeVariantChanged += OnActualThemeVariantChanged;
-        //this.PropertyChanged += this.OnWindow_PropertyChanged;
 
         await Task.Yield();
 
-        var window = new LogOnWindow();
-        await window.ShowDialog(this);
+        //var window = new LogOnWindow();
+        //await window.ShowDialog(this);
 
-        await Task.Yield();
+        //await Task.Yield();
 
         await _mainViewModel.InitializeAndStartAsync();
 

@@ -15,6 +15,9 @@ public partial class BtcJpyPage : UserControl
     {
         var mainViewModel = App.GetService<MainViewModel>();
         var pairViewModel = mainViewModel.Pairs.FirstOrDefault(p => p.PairCode == Models.PairCodes.btc_jpy);
+
+        InitializeComponent();
+
         if (pairViewModel != null)
         {
             this.DataContext = pairViewModel;
@@ -24,16 +27,8 @@ public partial class BtcJpyPage : UserControl
             Debug.WriteLine("BtcJpyPage: PairViewModel for btc_jpy not found.");
         }
 
-        InitializeComponent();
-
-        this.Loaded += BtcJpyPage_Loaded;
         AddHandler(FAFrame.NavigatedToEvent, OnNavigatedTo);
         AddHandler(FAFrame.NavigatedFromEvent, OnNavigatedFrom);
-    }
-
-    private void BtcJpyPage_Loaded(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-    {
-        //Debug.WriteLine("BtcJpyPage loaded. DataContext: " + (this.DataContext?.ToString() ?? "null"));
     }
 
     private void OnNavigatedTo(object? sender, FANavigationEventArgs e)

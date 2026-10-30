@@ -11,7 +11,7 @@
              xmlns:behaviors="using:BitDesk.Behaviors"
              x:DataType="vm:PairViewModel"
              x:Class="BitDesk.Views.ChartContent">
-    <Grid RowDefinitions="7*,3*">
+    <Grid RowDefinitions="7*,Auto,3*">
 
         <SplitView x:Name="ChartSplitView" Grid.Row="0" Margin="0,0,0,0" CornerRadius="0,0,0,0" BorderThickness="0,0,0,0" PaneBackground="Transparent" IsPaneOpen="{Binding Path=IsPaneOpen, Mode=TwoWay}" PanePlacement="Right" OpenPaneLength="560" CompactPaneLength="0" DisplayMode="CompactInline">
             
@@ -23,9 +23,9 @@
                     </Grid.ColumnDefinitions>
                     
                     <ScrollViewer x:Name="DepthScrollViewer" Grid.Row="0" Grid.Column="0" Margin="0,48,0,0" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" SizeChanged="DepthScrollViewer_SizeChanged">
-                            <Interaction.Behaviors>
-                                <ia:VerticalScrollViewerAnimatedBehavior/>
-                            </Interaction.Behaviors>
+                        <Interaction.Behaviors>
+                            <ia:VerticalScrollViewerAnimatedBehavior/>
+                        </Interaction.Behaviors>
                         
                         <ItemsControl x:Name="DepthListBox" ItemsSource="{Binding Path=Depth, Mode=OneWay}" Opacity="0.8" Background="Transparent" Margin="0,0,0,6" Padding="0,12,0,12" HorizontalAlignment="Stretch" DoubleTapped="DepthListBox_DoubleTapped">
                             <ItemsControl.ItemTemplate>
@@ -70,10 +70,104 @@
 
                         <TabControl Theme="{DynamicResource MyCustomSegmentedTheme}" HorizontalAlignment="Stretch">
                             <TabItem Header="Buy">
-                                <TextBlock Text="Day view content goes here..." Margin="0,20" HorizontalAlignment="Center"/>
+
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="68"/>
+                                    </Grid.RowDefinitions>
+
+                                    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                                        <StackPanel Margin="12,4,12,24" Spacing="12">
+
+                                            <TextBlock Text="注文タイプ"></TextBlock>
+                                            <ComboBox ItemsSource="{Binding OrderTypesForComboBox, Mode=OneWay}" SelectedIndex="0" SelectedItem="{Binding SelectedOrderTypeForComboBox, Mode=TwoWay}" Width="180">
+                                                <ComboBox.ItemTemplate>
+                                                    <DataTemplate x:DataType="mod:OrderTypeSelectionForComboBox">
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <TextBlock Text="{Binding Label}" Margin="0,0,5,0"/>
+                                                        </StackPanel>
+                                                    </DataTemplate>
+                                                </ComboBox.ItemTemplate>
+                                            </ComboBox>
+
+                                            <TextBlock Text="指値価格" IsVisible="{Binding IsOrderPriceVisible, Mode=OneWay}"></TextBlock>
+                                            <TextBox Text="{Binding OrderPrice, Mode=TwoWay}" IsVisible="{Binding IsOrderPriceVisible, Mode=OneWay}"></TextBox>
+                
+                                            <!-- In case of Buy, AssetJPYFreeAmountText -->
+                                                    <StackPanel Orientation="Horizontal" Opacity="0.5">
+                                                        <TextBlock Text="利用可能: "/>
+                                                        <TextBlock Text="{Binding AssetJPYFreeAmountText, Mode=OneWay}"/>
+                                                    </StackPanel>
+
+                                            <TextBlock Text="注文数量"></TextBlock>
+                                            <TextBox Text="{Binding OrderAmount, Mode=TwoWay}"></TextBox>
+
+                                            <TextBlock Text="注文金額"></TextBlock>
+                                            <TextBox Text="{Binding OrderEstimatePrice, Mode=OneWay}"></TextBox>
+
+                                            <CheckBox IsChecked="{Binding IsOrderPostOnly, Mode=TwoWay}" Content="Post Only"></CheckBox>
+
+                                        </StackPanel>
+                                    </ScrollViewer>
+
+                                    <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,12,12,0" HorizontalAlignment="Right">
+                                        <TextBlock Text="{Binding MakeOrderRresultText, Mode=TwoWay}" Margin="12,0,12,0" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                                        <Button Content="Order" Command="{Binding MakeOrderCommand}" HorizontalAlignment="Right"></Button>
+                                    </StackPanel>
+
+                                </Grid>
+
                             </TabItem>
                             <TabItem Header="Sell">
-                                <TextBlock Text="Week view content goes here..." Margin="0,20" HorizontalAlignment="Center"/>
+
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="68"/>
+                                    </Grid.RowDefinitions>
+                                    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+
+                                        <StackPanel Margin="12,4,12,24" Spacing="12">
+                                            
+                                            <TextBlock Text="注文タイプ"></TextBlock>
+                                            <ComboBox ItemsSource="{Binding OrderTypesForComboBox, Mode=OneWay}" SelectedIndex="0" SelectedItem="{Binding SelectedOrderTypeForComboBox, Mode=TwoWay}" Width="180">
+                                                <ComboBox.ItemTemplate>
+                                                    <DataTemplate x:DataType="mod:OrderTypeSelectionForComboBox">
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <TextBlock Text="{Binding Label}" Margin="0,0,5,0"/>
+                                                        </StackPanel>
+                                                    </DataTemplate>
+                                                </ComboBox.ItemTemplate>
+                                            </ComboBox>
+
+                                            <TextBlock Text="指値価格" IsVisible="{Binding IsOrderPriceVisible, Mode=OneWay}"></TextBlock>
+                                            <TextBox Text="{Binding OrderPrice, Mode=TwoWay}" IsVisible="{Binding IsOrderPriceVisible, Mode=OneWay}"></TextBox>
+
+                                            <!-- In case of Sell, AssetCurrentFreeAmountText -->
+                                                    <StackPanel Orientation="Horizontal" Opacity="0.5">
+                                                        <TextBlock Text="利用可能: "/>
+                                                        <TextBlock Text="{Binding AssetCurrentFreeAmountText, Mode=OneWay}"/>
+                                                    </StackPanel>
+
+                                            <TextBlock Text="注文数量"></TextBlock>
+                                            <TextBox Text="{Binding OrderAmount, Mode=TwoWay}"></TextBox>
+
+                                            <TextBlock Text="注文金額"></TextBlock>
+                                            <TextBox Text="{Binding OrderEstimatePrice, Mode=OneWay}"></TextBox>
+
+                                            <CheckBox IsChecked="{Binding IsOrderPostOnly, Mode=TwoWay}" Content="Post Only"></CheckBox>
+
+                                        </StackPanel>
+                                        
+                                    </ScrollViewer>
+                                    <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,12,12,0" HorizontalAlignment="Right">
+                                        <TextBlock Text="{Binding MakeOrderRresultText, Mode=TwoWay}" Margin="12,0,12,0" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                                        <Button Content="Order" Command="{Binding MakeOrderCommand}" HorizontalAlignment="Right"></Button>
+                                    </StackPanel>
+
+                                </Grid>
+
                             </TabItem>
                             <TabItem Header="T&amp;S">
                                 
@@ -248,22 +342,103 @@
 
         </SplitView>
         
-        <Grid Grid.Row="1" Margin="0,0,0,0">
+        <GridSplitter Grid.Row="1" Height="3" Background="Transparent" ResizeDirection="Rows"/>
+
+        <Grid Grid.Row="2" Margin="0,0,0,0">
 
             <TabControl Margin="8,0,0,0" Theme="{DynamicResource MyCustomSegmentedTheme}" HorizontalAlignment="Stretch">
                 <TabItem Header="Orders">
-                    <Button Grid.Row="0" Content="Refresh" Command="{Binding UpdateOrdersCommand, Mode=OneWay}" Margin="4" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+                    <Grid RowDefinitions="Auto,*">
+                        <Button Grid.Row="0" Content="Refresh" Command="{Binding UpdateOrdersCommand, Mode=OneWay}" Margin="4" VerticalAlignment="Top" HorizontalAlignment="Right"/>
 
+                        <ListBox Grid.Row="1" ItemsSource="{Binding Orders, Mode=OneWay}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="mod:Order">
+
+                                    <Grid Margin="0" HorizontalAlignment="Stretch">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="60" />
+                                            <ColumnDefinition Width="80" />
+                                            <ColumnDefinition Width="60" />
+                                            <ColumnDefinition Width="100" />
+                                            <ColumnDefinition Width="90" />
+                                            <ColumnDefinition Width="90" />
+                                            <ColumnDefinition Width="80" />
+                                            <ColumnDefinition Width="80" />
+                                            <ColumnDefinition Width="120" />
+                                            <ColumnDefinition Width="140" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBlock Grid.Column="0" Tag="{Binding Side, Mode=OneWay}" Text="{Binding SideText, Mode=OneWay}" behaviors:TextBlockExtensions.FlashColor="#666666" />
+                                        <TextBlock Grid.Column="1" Text="{Binding StartAmount, Mode=OneWay}" behaviors:TextBlockExtensions.FlashColor="#666666" />
+                                        <TextBlock Grid.Column="2" Text="{Binding TypeText, Mode=OneWay}" behaviors:TextBlockExtensions.FlashColor="#666666"/>
+                                        <TextBlock Grid.Column="3" Text="{Binding Price, Mode=OneWay}" behaviors:TextBlockExtensions.FlashColor="#666666"/>
+                                        <TextBlock Grid.Column="4" Text="{Binding Shushi, Mode=OneWay}" behaviors:TextBlockExtensions.FlashColor="#666666"/>
+                                        <TextBlock Grid.Column="5" Text="{Binding AveragePrice, Mode=OneWay}" behaviors:TextBlockExtensions.FlashColor="#666666"/>
+                                        <TextBlock Grid.Column="6" Text="{Binding RemainingAmount, Mode=OneWay}" behaviors:TextBlockExtensions.FlashColor="#666666"/>
+                                        <TextBlock Grid.Column="7" Text="{Binding ActualPrice, Mode=OneWay}" behaviors:TextBlockExtensions.FlashColor="#666666"/>
+                                        <TextBlock Grid.Column="8" Text="{Binding StatusText, Mode=OneWay}" behaviors:TextBlockExtensions.FlashColor="#666666"/>
+                                        <TextBlock Grid.Column="9" Text="{Binding OrderID, Mode=OneWay}" behaviors:TextBlockExtensions.FlashColor="#666666"/>
+                                        <TextBlock Grid.Column="10" Text="{Binding OrderdAtText, Mode=OneWay}" behaviors:TextBlockExtensions.FlashColor="#666666"/>
+
+                                    </Grid>
+
+                                </DataTemplate>
+
+                            </ItemsControl.ItemTemplate>
+                        </ListBox>
+
+                    </Grid>
                 </TabItem>
                 <TabItem Header="Pending">
                     <TextBlock Text="Week view content goes here..." Margin="0,20" HorizontalAlignment="Center"/>
                 </TabItem>
                 <TabItem Header="History">
-                    <Button Grid.Row="0" Content="Refresh" Command="{Binding UpdateTradeHistoryCommand, Mode=OneWay}" Margin="4" VerticalAlignment="Top" HorizontalAlignment="Right"/>
-                    
+                    <Grid RowDefinitions="Auto,*">
+                        <Button Grid.Row="0" Content="Refresh" Command="{Binding UpdateTradeHistoryCommand, Mode=OneWay}" Margin="4" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+                        <ListBox Grid.Row="1" ItemsSource="{Binding TradeHistories, Mode=OneWay}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="mod:Trade">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="80" />
+                                            <ColumnDefinition Width="80" />
+                                            <ColumnDefinition Width="80" />
+                                            <ColumnDefinition Width="80" />
+                                            <ColumnDefinition Width="80" />
+                                            <ColumnDefinition Width="80" />
+                                            <ColumnDefinition Width="80" />
+                                            <ColumnDefinition Width="80" />
+                                            <ColumnDefinition Width="100" />
+                                            <ColumnDefinition Width="100" />
+                                            <ColumnDefinition Width="140" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBlock Grid.Column="0" Text="{Binding Pair, Mode=OneWay}" />
+                                        <TextBlock Grid.Column="1" Tag="{Binding Side, Mode=OneWay}" Text="{Binding SideText, Mode=OneWay}" />
+                                        <TextBlock Grid.Column="2" Text="{Binding Amount, Mode=OneWay}" />
+                                        <TextBlock Grid.Column="3" Text="{Binding TypeText, Mode=OneWay}" />
+                                        <TextBlock Grid.Column="4" Text="{Binding Price, Mode=OneWay}" />
+                                        <TextBlock Grid.Column="5" Text="{Binding FeeAmountQuote, Mode=OneWay}" />
+                                        <TextBlock Grid.Column="6" Text="{Binding FeeOccurredAmountQuote, Mode=OneWay}" />
+                                        <TextBlock Grid.Column="7" Text="{Binding MakerTaker, Mode=OneWay}" />
+                                        <TextBlock Grid.Column="8" Text="{Binding OrderID, Mode=OneWay}" />
+                                        <TextBlock Grid.Column="9" Text="{Binding TradeID, Mode=OneWay}" />
+                                        <TextBlock Grid.Column="10" Text="{Binding ExecutedAtText, Mode=OneWay}" />
+
+                                    </Grid>
+
+                                </DataTemplate>
+
+                            </ItemsControl.ItemTemplate>
+                        </ListBox>
+                    </Grid>
                 </TabItem>
             </TabControl>
 
         </Grid>
+
     </Grid>
 </UserControl>

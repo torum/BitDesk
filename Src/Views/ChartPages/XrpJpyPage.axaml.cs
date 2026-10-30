@@ -13,6 +13,9 @@ public partial class XrpJpyPage : UserControl
     {
         var mainViewModel = App.GetService<MainViewModel>();
         var pairViewModel = mainViewModel.Pairs.FirstOrDefault(p => p.PairCode == Models.PairCodes.xrp_jpy);
+
+        InitializeComponent();
+
         if (pairViewModel != null)
         {
             this.DataContext = pairViewModel;
@@ -22,16 +25,8 @@ public partial class XrpJpyPage : UserControl
             Debug.WriteLine("XrpJpyPage: PairViewModel for xrp_jpy not found.");
         }
 
-        InitializeComponent();
-
-        this.Loaded += XrpJpyPage_Loaded;
         AddHandler(FAFrame.NavigatedToEvent, OnNavigatedTo);
         AddHandler(FAFrame.NavigatedFromEvent, OnNavigatedFrom);
-    }
-
-    private void XrpJpyPage_Loaded(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-    {
-        //Debug.WriteLine("XrpJpyPage loaded. DataContext: " + (this.DataContext?.ToString() ?? "null"));
     }
 
     private void OnNavigatedTo(object? sender, FANavigationEventArgs e)

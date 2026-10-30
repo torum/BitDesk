@@ -60,6 +60,8 @@ public partial class PairViewModel : ObservableObject, IDisposable
 
         _bitbankRestService.ErrorOccured += OnErrorOccured;
         _bitbankRestService.ApiErrorOccured += OnApiErrorOccured;
+
+        SelectedOrderTypeForComboBox = OrderTypesForComboBox.FirstOrDefault();
     }
 
     #region == Properties ==
@@ -1686,7 +1688,7 @@ public partial class PairViewModel : ObservableObject, IDisposable
         }
     }
 
-    private int _orderSideSelectedIndex; // 0=Buy, 1=Sell
+    private int _orderSideSelectedIndex = 0; // 0=Buy, 1=Sell
     public int OrderSideSelectedIndex
     {
         get => _orderSideSelectedIndex;
@@ -1711,31 +1713,30 @@ public partial class PairViewModel : ObservableObject, IDisposable
         }
     }
 
-    public ObservableCollection<OrderTypeSelectionForComboBox> OrderTypesForComboBox =
+    public ObservableCollection<OrderTypeSelectionForComboBox> OrderTypesForComboBox { get; } =
     [
         new OrderTypeSelectionForComboBox(OrderTypes.limit, "指値"),
         new OrderTypeSelectionForComboBox(OrderTypes.market, "成行")
     ];
 
-    private OrderTypeSelectionForComboBox? _selectedOrderTypeSelectionForComboBox;
     public OrderTypeSelectionForComboBox? SelectedOrderTypeForComboBox
     {
-        get => _selectedOrderTypeSelectionForComboBox;
+        get;
         set
         {
-            if (_selectedOrderTypeSelectionForComboBox == value)
+            if (field == value)
             {
                 return;
             }
 
-            _selectedOrderTypeSelectionForComboBox = value;
+            field = value;
             OnPropertyChanged(nameof(SelectedOrderTypeForComboBox));
 
-            if (_selectedOrderTypeSelectionForComboBox?.Key == OrderTypes.limit)
+            if (SelectedOrderTypeForComboBox?.Key == OrderTypes.limit)
             {
                 IsOrderPriceVisible = true;
             }
-            else if (_selectedOrderTypeSelectionForComboBox?.Key == OrderTypes.market)
+            else if (SelectedOrderTypeForComboBox?.Key == OrderTypes.market)
             {
                 IsOrderPriceVisible = false;
             }
@@ -1804,7 +1805,7 @@ public partial class PairViewModel : ObservableObject, IDisposable
         {
             decimal decimalValue;
             // TODO:
-            if (_selectedOrderTypeSelectionForComboBox?.Key == OrderTypes.market)
+            if (SelectedOrderTypeForComboBox?.Key == OrderTypes.market)
             {
                 decimalValue = _orderAmount * Bid;//_bid;
             }
@@ -2087,6 +2088,36 @@ public partial class PairViewModel : ObservableObject, IDisposable
             }
 
             _ordersSecret = value.Trim();
+        }
+    }
+
+    private string _makeOrderApiKey = string.Empty;
+    public string MakeOrderApiKey
+    {
+        set
+        {
+            if (_makeOrderApiKey == value.Trim())
+            {
+                return;
+            }
+
+            _makeOrderApiKey = value.Trim();
+
+        }
+    }
+
+    private string _makeOrderSecret = string.Empty;
+    public string MakeOrderSecret
+    {
+        set
+        {
+            if (_makeOrderSecret == value.Trim())
+            {
+                return;
+            }
+
+            _makeOrderSecret = value.Trim();
+
         }
     }
 
@@ -3707,6 +3738,8 @@ public partial class PairViewModel : ObservableObject, IDisposable
 
     #endregion
 
+    #region == Other or Utils ==
+
     private async Task RunSafeAsync(Func<Task> work, string name, bool continueOnCapturedContext = false)
     {
         try
@@ -3733,6 +3766,8 @@ public partial class PairViewModel : ObservableObject, IDisposable
             this.ErrorOccured?.Invoke(this, errorInfo);
         }
     }
+
+    #endregion
 
     #endregion
 
@@ -3786,6 +3821,136 @@ public partial class PairViewModel : ObservableObject, IDisposable
     {
         await GetOrdersAsync(_ordersApiKey, _ordersSecret);
     }
+
+    // TODO: add can execute to check if API key and secret are set.
+    [RelayCommand]
+    private async Task MakeOrder()
+    {
+        MakeOrderRresultText = string.Empty;
+
+        if (!IsSelectedActive || !IsEnabled)
+        {
+            return;
+        }
+
+        if (string.IsNullOrEmpty(_makeOrderApiKey) || string.IsNullOrEmpty(_makeOrderSecret))
+        {
+            System.Diagnostics.Debug.WriteLine("■■■■■ GetOrders: (MakeOrderApiKeyIsSet == false)");
+            // TODO:  show msg;
+            MakeOrderRresultText = "(MakeOrderApiKeyIsSet == false)";
+            return;
+        }
+
+        var orderSide = OrderSide;
+        var orderType = SelectedOrderTypeForComboBox?.Key ?? OrderTypes.limit;
+        var amount = _orderAmount;
+        var price = _orderPrice;
+        var isPostOnly = IsOrderPostOnly;
+
+        if (orderType == OrderTypes.limit)
+        {
+            if (amount <= 0)
+            {
+                // TODO:  show msg;
+                MakeOrderRresultText = "(amount <= 0)";
+                return;
+            }
+        }
+        if (price <= 0)
+        {
+            // TODO:  show msg;
+            MakeOrderRresultText = "(price <= 0)";
+            return;
+        }
+
+        var ord = await _bitbankRestService.MakeOrderAsync(_makeOrderApiKey, _makeOrderSecret, PairCode.ToString(), amount, price, orderSide.ToString(), orderType.ToString(), isPostOnly);
+        if (ord == null)
+        {
+            // TODO:  show msg;
+            MakeOrderRresultText = "Fail:(ord == null)";
+            return;
+        }
+        if (ord.IsSuccess == false)
+        {
+            // TODO:  show msg;
+            MakeOrderRresultText = "Fail:ord.IsSuccess == false";
+            return;
+        }
+
+        MakeOrderRresultText = "Success";
+    }
+
+    // TODO: add can execute to check if API key and secret are set.
+    [RelayCommand]
+    public async Task CancelOrder(IList<object> selectedOrders)
+    {
+        MakeOrderRresultText = string.Empty;
+
+        if (!IsSelectedActive || !IsEnabled)
+        {
+            return;
+        }
+
+        if (string.IsNullOrEmpty(_makeOrderApiKey) || string.IsNullOrEmpty(_makeOrderSecret))
+        {
+            System.Diagnostics.Debug.WriteLine("■■■■■ GetOrders: (MakeOrderApiKeyIsSet == false)");
+            // TODO:  show msg;
+            MakeOrderRresultText = "(MakeOrderApiKeyIsSet == false)";
+            return;
+        }
+
+        // TODO: Check if selectedOrders IList<object> is acceptable for Avalonia and contains Order objects.
+
+        if (selectedOrders is null)
+        {
+            return;
+        }
+
+        if (selectedOrders.Count == 0)
+        {
+            return;
+        }
+
+        var orderIDs = new List<ulong>();
+
+        foreach (var o in selectedOrders)
+        {
+            if (o is Order ord)
+            {
+                Debug.WriteLine("CancelOrder: " + ord.OrderID);
+                orderIDs.Add(ord.OrderID);
+            }
+        }
+
+        //CancelOrders
+        var resOrd = await _bitbankRestService.CancelOrdersAsync(_makeOrderApiKey, _makeOrderSecret, PairCode.ToString(), orderIDs);
+
+        // Update indivistual order status.
+        if (resOrd is null)
+        {
+            // show err or rewrite api 
+            return;
+        }
+
+        if (!resOrd.IsSuccess)
+        {
+            // show err 
+            return;
+        }
+
+        foreach (var order in resOrd.OrderList)
+        {
+            var pos = Orders.FirstOrDefault(x => x.OrderID == order.OrderID);
+            if (pos is null)
+            {
+                continue;
+            }
+
+            pos.Status = order.Status;
+
+        }
+    }
+
 
     #endregion
 

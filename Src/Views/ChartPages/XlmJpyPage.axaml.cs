@@ -13,6 +13,9 @@ public partial class XlmJpyPage : UserControl
     {
         var mainViewModel = App.GetService<MainViewModel>();
         var pairViewModel = mainViewModel.Pairs.FirstOrDefault(p => p.PairCode == Models.PairCodes.xlm_jpy);
+
+        InitializeComponent();
+
         if (pairViewModel != null)
         {
             this.DataContext = pairViewModel;
@@ -22,16 +25,8 @@ public partial class XlmJpyPage : UserControl
             Debug.WriteLine("XlmJpyPage: PairViewModel for xlm_jpy not found.");
         }
 
-        InitializeComponent();
-
-        this.Loaded += XlmJpyPage_Loaded;
         AddHandler(FAFrame.NavigatedToEvent, OnNavigatedTo);
         AddHandler(FAFrame.NavigatedFromEvent, OnNavigatedFrom);
-    }
-
-    private void XlmJpyPage_Loaded(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-    {
-        //Debug.WriteLine("XlmJpyPage loaded. DataContext: " + (this.DataContext?.ToString() ?? "null"));
     }
 
     private void OnNavigatedTo(object? sender, FANavigationEventArgs e)

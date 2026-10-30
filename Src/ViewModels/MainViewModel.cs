@@ -1,7 +1,6 @@
 ﻿using Avalonia.Threading;
 using BitDesk.Models;
 using BitDesk.Services.Contracts;
-using BitDesk.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using FluentAvalonia.UI.Controls;
 using System;
@@ -13,12 +12,6 @@ using System.Reflection;
 using System.Threading.Tasks;
 
 namespace BitDesk.ViewModels;
-
-internal record IsEnabledState
-{
-    public bool IsEnabled { get; set; }
-    public PairCodes PairCode { get; set; }
-}
 
 internal partial class MainViewModel : ObservableObject, IDisposable
 {
@@ -77,6 +70,8 @@ internal partial class MainViewModel : ObservableObject, IDisposable
             pair.TradeHistorySecret = TradeHistorySecret;
             pair.OrdersApiKey = OrdersApiKey;
             pair.OrdersSecret = OrdersSecret;
+            pair.MakeOrderApiKey = MakeOrderApiKey;
+            pair.MakeOrderSecret = MakeOrderSecret;
         }
 
         IsEnabledChanged += OnIsEnabledChanged;
@@ -86,9 +81,9 @@ internal partial class MainViewModel : ObservableObject, IDisposable
         _bitbankStreamService.ErrorOccured += OnErrorOccured;
 
         // For developing purposes, we can set this to true to avoid starting the ticker service and charts loading.
-        _isWebSocketOn = false;
-        _isLiveChartsOn = false;
-        _isAssetsOn = false;
+        _isWebSocketOn = true;
+        _isLiveChartsOn = true;
+        _isAssetsOn = true;
 
 #if DEBUG
         IsSaveLog = true;

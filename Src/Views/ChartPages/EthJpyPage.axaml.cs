@@ -13,6 +13,9 @@ public partial class EthJpyPage : UserControl
     {
         var mainViewModel = App.GetService<MainViewModel>();
         var pairViewModel = mainViewModel.Pairs.FirstOrDefault(p => p.PairCode == Models.PairCodes.eth_jpy);
+
+        InitializeComponent();
+
         if (pairViewModel != null)
         {
             this.DataContext = pairViewModel;
@@ -22,16 +25,8 @@ public partial class EthJpyPage : UserControl
             Debug.WriteLine("EthJpyPage: PairViewModel for eth_jpy not found.");
         }
 
-        InitializeComponent();
-
-        this.Loaded += EthJpyPage_Loaded;
         AddHandler(FAFrame.NavigatedToEvent, OnNavigatedTo);
         AddHandler(FAFrame.NavigatedFromEvent, OnNavigatedFrom);
-    }
-
-    private void EthJpyPage_Loaded(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-    {
-        //Debug.WriteLine("EthJpyPage loaded. DataContext: " + (this.DataContext?.ToString() ?? "null"));
     }
 
     private void OnNavigatedTo(object? sender, FANavigationEventArgs e)
