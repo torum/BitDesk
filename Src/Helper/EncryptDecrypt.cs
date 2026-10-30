@@ -10,18 +10,20 @@ namespace BitDesk.Helper;
 
 internal static class EncryptDecrypt
 {
-    internal static string Decrypt(string s)
+    internal static string Decrypt(string secret, string key, string salt)
     {
-        if (string.IsNullOrEmpty(s)) { return ""; }
-
-        byte[] entropy = [0x72, 0xa2, 0x12, 0x04];
+        if (string.IsNullOrEmpty(secret)) { return ""; }
+        if (string.IsNullOrEmpty(key)) { return ""; }
 
         // Uses System.Security.Cryptography.ProtectedData
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
+            //byte[] entropy = [0x72, 0xa2, 0x12, 0x04];
+            byte[] entropy = Encoding.UTF8.GetBytes(key);
+
             try
             {
-                byte[] encryptedData = System.Convert.FromBase64String(s);
+                byte[] encryptedData = System.Convert.FromBase64String(secret);
                 byte[] userData = System.Security.Cryptography.ProtectedData.Unprotect(encryptedData, entropy, DataProtectionScope.CurrentUser);
 
                 return System.Text.Encoding.UTF8.GetString(userData);
@@ -37,9 +39,11 @@ internal static class EncryptDecrypt
         {
             try
             {
-                string encryptionKey = "withas";
-                s = s.Replace(" ", "+");
-                byte[] sBytes = Convert.FromBase64String(s);
+                byte[] encryptionKey = Encoding.UTF8.GetBytes(key);
+                byte[] entropy = Encoding.UTF8.GetBytes(salt);
+
+                secret = secret.Replace(" ", "+");
+                byte[] sBytes = Convert.FromBase64String(secret);
                 using (System.Security.Cryptography.Aes encryptor = System.Security.Cryptography.Aes.Create())
                 {
                     // Obsolete and deprecated in .NET 10.
@@ -47,8 +51,8 @@ internal static class EncryptDecrypt
                     //encryptor.Key = pdb.GetBytes(32);
                     //encryptor.IV = pdb.GetBytes(16);
                     // New since .NET 10.
-                    encryptor.Key = Rfc2898DeriveBytes.Pbkdf2(encryptionKey, entropy, 10000, HashAlgorithmName.SHA1, 32);
-                    encryptor.IV = Rfc2898DeriveBytes.Pbkdf2(encryptionKey, entropy, 10000, HashAlgorithmName.SHA1, 16);
+                    encryptor.Key = Rfc2898DeriveBytes.Pbkdf2(key, entropy, 10000, HashAlgorithmName.SHA1, 32);
+                    encryptor.IV = Rfc2898DeriveBytes.Pbkdf2(key, entropy, 10000, HashAlgorithmName.SHA1, 16);
 
                     using MemoryStream ms = new();
                     using (CryptoStream cs = new(ms, encryptor.CreateDecryptor(), CryptoStreamMode.Write))
@@ -56,10 +60,8 @@ internal static class EncryptDecrypt
                         cs.Write(sBytes, 0, sBytes.Length);
                         cs.Close();
                     }
-                    s = Encoding.Unicode.GetString(ms.ToArray());
+                    return Encoding.Unicode.GetString(ms.ToArray());
                 }
-
-                return s;
             }
             catch
             {
@@ -69,18 +71,21 @@ internal static class EncryptDecrypt
         }
     }
 
-    internal static string Encrypt(string s)
+    internal static string Encrypt(string secret, string key, string salt)
     {
-        if (string.IsNullOrEmpty(s)) { return ""; }
+        if (string.IsNullOrEmpty(secret)) { return ""; }
+        if (string.IsNullOrEmpty(key)) { return ""; }
 
-        byte[] entropy = [0x72, 0xa2, 0x12, 0x04];
 
         // Uses System.Security.Cryptography.ProtectedData
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
+            //byte[] entropy = [0x72, 0xa2, 0x12, 0x04];
+            byte[] entropy = Encoding.UTF8.GetBytes(key);
+
             try
             {
-                byte[] userData = System.Text.Encoding.UTF8.GetBytes(s);
+                byte[] userData = System.Text.Encoding.UTF8.GetBytes(secret);
                 byte[] encryptedData = System.Security.Cryptography.ProtectedData.Protect(userData, entropy, System.Security.Cryptography.DataProtectionScope.CurrentUser);
 
                 return System.Convert.ToBase64String(encryptedData);
@@ -88,7 +93,7 @@ internal static class EncryptDecrypt
             catch
             {
                 Debug.WriteLine("Encrypt fail.");
-                return s;
+                return "";
             }
         }
         //else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
@@ -96,8 +101,10 @@ internal static class EncryptDecrypt
         {
             try
             {
-                string encryptionKey = "withas";
-                byte[] sBytes = Encoding.Unicode.GetBytes(s);
+                byte[] encryptionKey = Encoding.UTF8.GetBytes(key);
+                byte[] entropy = Encoding.UTF8.GetBytes(salt);
+
+                byte[] sBytes = Encoding.Unicode.GetBytes(secret);
                 using (System.Security.Cryptography.Aes encryptor = System.Security.Cryptography.Aes.Create())
                 {
                     // Obsolete and deprecated in .NET 10.
@@ -105,8 +112,8 @@ internal static class EncryptDecrypt
                     //encryptor.Key = pdb.GetBytes(32);
                     //encryptor.IV = pdb.GetBytes(16);
                     // New since .NET 10.
-                    encryptor.Key = Rfc2898DeriveBytes.Pbkdf2(encryptionKey, entropy, 10000, HashAlgorithmName.SHA1, 32);
-                    encryptor.IV = Rfc2898DeriveBytes.Pbkdf2(encryptionKey, entropy, 10000, HashAlgorithmName.SHA1, 16);
+                    encryptor.Key = Rfc2898DeriveBytes.Pbkdf2(key, entropy, 10000, HashAlgorithmName.SHA1, 32);
+                    encryptor.IV = Rfc2898DeriveBytes.Pbkdf2(key, entropy, 10000, HashAlgorithmName.SHA1, 16);
 
                     using MemoryStream ms = new();
                     using (CryptoStream cs = new(ms, encryptor.CreateEncryptor(), CryptoStreamMode.Write))
@@ -114,14 +121,13 @@ internal static class EncryptDecrypt
                         cs.Write(sBytes, 0, sBytes.Length);
                         cs.Close();
                     }
-                    s = Convert.ToBase64String(ms.ToArray());
+                    return Convert.ToBase64String(ms.ToArray());
                 }
-                return s;
             }
             catch
             {
                 Debug.WriteLine($"Encrypt fail.");
-                return s;
+                return "";
             }
         }
     }

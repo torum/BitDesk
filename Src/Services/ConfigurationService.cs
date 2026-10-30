@@ -308,6 +308,26 @@ internal sealed class ConfigurationService : IConfigurationService
 
             #endregion
 
+            #region == User Settings ==
+
+            var user = _xDoc.Root.Element("User");
+            if (user is not null)
+            {
+                var hoge = user.Attribute("UserHashedKey");
+                if (hoge is not null)
+                {
+                    config.User.UserHashedKey = hoge.Value;
+                }
+
+                hoge = user.Attribute("UserSalt");
+                if (hoge is not null)
+                {
+                    config.User.UserSalt = hoge.Value;
+                }
+            }
+
+            #endregion
+
             #region == API Keys and Secrets ==
 
             var keys = _xDoc.Root.Element("APIKeys");
@@ -322,8 +342,8 @@ internal sealed class ConfigurationService : IConfigurationService
                     {
                         if (!string.IsNullOrEmpty(xvalue.Value))
                         {
-                            config.AssetsApiKey = Helper.EncryptDecrypt.Decrypt(xvalue.Value);
-
+                            //config.AssetsApiKey = Helper.EncryptDecrypt.Decrypt(xvalue.Value);
+                            config.AssetsApiKey = xvalue.Value;
                         }
                     }
 
@@ -332,7 +352,8 @@ internal sealed class ConfigurationService : IConfigurationService
                     {
                         if (!string.IsNullOrEmpty(xvalue.Value))
                         {
-                            config.AssetsSecret = Helper.EncryptDecrypt.Decrypt(xvalue.Value);
+                            //config.AssetsSecret = Helper.EncryptDecrypt.Decrypt(xvalue.Value);
+                            config.AssetsSecret = xvalue.Value;
                         }
                     }
                 }
@@ -346,7 +367,8 @@ internal sealed class ConfigurationService : IConfigurationService
                     {
                         if (!string.IsNullOrEmpty(xvalue.Value))
                         {
-                            config.OrdersApiKey = Helper.EncryptDecrypt.Decrypt(xvalue.Value);
+                            //config.OrdersApiKey = Helper.EncryptDecrypt.Decrypt(xvalue.Value);
+                            config.OrdersApiKey = xvalue.Value;
                         }
                     }
 
@@ -355,7 +377,8 @@ internal sealed class ConfigurationService : IConfigurationService
                     {
                         if (!string.IsNullOrEmpty(xvalue.Value))
                         {
-                            config.OrdersSecret = Helper.EncryptDecrypt.Decrypt(xvalue.Value);
+                            //config.OrdersSecret = Helper.EncryptDecrypt.Decrypt(xvalue.Value);
+                            config.OrdersSecret = xvalue.Value;
                         }
                     }
                 }
@@ -369,7 +392,8 @@ internal sealed class ConfigurationService : IConfigurationService
                     {
                         if (!string.IsNullOrEmpty(xvalue.Value))
                         {
-                            config.TradeHistoryApiKey = Helper.EncryptDecrypt.Decrypt(xvalue.Value);
+                            //config.TradeHistoryApiKey = Helper.EncryptDecrypt.Decrypt(xvalue.Value);
+                            config.TradeHistoryApiKey = xvalue.Value;
                         }
                     }
 
@@ -378,7 +402,8 @@ internal sealed class ConfigurationService : IConfigurationService
                     {
                         if (!string.IsNullOrEmpty(xvalue.Value))
                         {
-                            config.TradeHistorySecret = Helper.EncryptDecrypt.Decrypt(xvalue.Value);
+                            //config.TradeHistorySecret = Helper.EncryptDecrypt.Decrypt(xvalue.Value);
+                            config.TradeHistorySecret = xvalue.Value;
                         }
                     }
                 }
@@ -392,7 +417,8 @@ internal sealed class ConfigurationService : IConfigurationService
                     {
                         if (!string.IsNullOrEmpty(xvalue.Value))
                         {
-                            config.MakeOrderApiKey = Helper.EncryptDecrypt.Decrypt(xvalue.Value);
+                            //config.MakeOrderApiKey = Helper.EncryptDecrypt.Decrypt(xvalue.Value);
+                            config.MakeOrderApiKey = xvalue.Value;
                         }
                     }
 
@@ -401,7 +427,8 @@ internal sealed class ConfigurationService : IConfigurationService
                     {
                         if (!string.IsNullOrEmpty(xvalue.Value))
                         {
-                            config.MakeOrderSecret = Helper.EncryptDecrypt.Decrypt(xvalue.Value);
+                            //config.MakeOrderSecret = Helper.EncryptDecrypt.Decrypt(xvalue.Value);
+                            config.MakeOrderSecret = xvalue.Value;
                         }
                     }
                 }
@@ -813,6 +840,22 @@ internal sealed class ConfigurationService : IConfigurationService
 
         #endregion
 
+        #region == User Settings ==
+
+        XmlElement user = doc.CreateElement(string.Empty, "User", string.Empty);
+
+        attrs = doc.CreateAttribute("UserHashedKey");
+        attrs.Value = config.User.UserHashedKey;
+        user.SetAttributeNode(attrs);
+
+        attrs = doc.CreateAttribute("UserSalt");
+        attrs.Value = config.User.UserSalt;
+        user.SetAttributeNode(attrs);
+
+        root.AppendChild(user);
+
+        #endregion
+
         #region == API Keys and Secrets ==
 
         // API Keys
@@ -821,11 +864,13 @@ internal sealed class ConfigurationService : IConfigurationService
         var xAsset = doc.CreateElement(string.Empty, "Assets", string.Empty);
 
         attrs = doc.CreateAttribute("Key");
-        attrs.Value = Helper.EncryptDecrypt.Encrypt(config.AssetsApiKey);
+        //attrs.Value = Helper.EncryptDecrypt.Encrypt(config.AssetsApiKey);
+        attrs.Value = config.AssetsApiKey;
         xAsset.SetAttributeNode(attrs);
 
         attrs = doc.CreateAttribute("Secret");
-        attrs.Value = Helper.EncryptDecrypt.Encrypt(config.AssetsSecret);
+        //attrs.Value = Helper.EncryptDecrypt.Encrypt(config.AssetsSecret);
+        attrs.Value = config.AssetsSecret;
         xAsset.SetAttributeNode(attrs);
 
         xAPIKeys.AppendChild(xAsset);
@@ -833,11 +878,13 @@ internal sealed class ConfigurationService : IConfigurationService
         var xOrder = doc.CreateElement(string.Empty, "Orders", string.Empty);
 
         attrs = doc.CreateAttribute("Key");
-        attrs.Value = Helper.EncryptDecrypt.Encrypt(config.OrdersApiKey);
+        //attrs.Value = Helper.EncryptDecrypt.Encrypt(config.OrdersApiKey);
+        attrs.Value = config.OrdersApiKey;
         xOrder.SetAttributeNode(attrs);
 
         attrs = doc.CreateAttribute("Secret");
-        attrs.Value = Helper.EncryptDecrypt.Encrypt(config.OrdersSecret);
+        //attrs.Value = Helper.EncryptDecrypt.Encrypt(config.OrdersSecret);
+        attrs.Value = config.OrdersSecret;
         xOrder.SetAttributeNode(attrs);
 
         xAPIKeys.AppendChild(xOrder);
@@ -845,11 +892,13 @@ internal sealed class ConfigurationService : IConfigurationService
         var xTradeHistory = doc.CreateElement(string.Empty, "TradeHistory", string.Empty);
 
         attrs = doc.CreateAttribute("Key");
-        attrs.Value = Helper.EncryptDecrypt.Encrypt(config.TradeHistoryApiKey);
+        //attrs.Value = Helper.EncryptDecrypt.Encrypt(config.TradeHistoryApiKey);
+        attrs.Value = config.TradeHistoryApiKey;
         xTradeHistory.SetAttributeNode(attrs);
 
         attrs = doc.CreateAttribute("Secret");
-        attrs.Value = Helper.EncryptDecrypt.Encrypt(config.TradeHistorySecret);
+        //attrs.Value = Helper.EncryptDecrypt.Encrypt(config.TradeHistorySecret);
+        attrs.Value = config.TradeHistorySecret;
         xTradeHistory.SetAttributeNode(attrs);
 
         xAPIKeys.AppendChild(xTradeHistory);
@@ -857,11 +906,13 @@ internal sealed class ConfigurationService : IConfigurationService
         var xMakeOrder = doc.CreateElement(string.Empty, "MakeOrder", string.Empty);
 
         attrs = doc.CreateAttribute("Key");
-        attrs.Value = Helper.EncryptDecrypt.Encrypt(config.MakeOrderApiKey);
+        //attrs.Value = Helper.EncryptDecrypt.Encrypt(config.MakeOrderApiKey);
+        attrs.Value = config.MakeOrderApiKey;
         xMakeOrder.SetAttributeNode(attrs);
 
         attrs = doc.CreateAttribute("Secret");
-        attrs.Value = Helper.EncryptDecrypt.Encrypt(config.MakeOrderSecret);
+        //attrs.Value = Helper.EncryptDecrypt.Encrypt(config.MakeOrderSecret);
+        attrs.Value = config.MakeOrderSecret;
         xMakeOrder.SetAttributeNode(attrs);
 
         xAPIKeys.AppendChild(xMakeOrder);

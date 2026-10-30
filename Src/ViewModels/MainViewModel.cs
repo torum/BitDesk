@@ -19,6 +19,9 @@ internal partial class MainViewModel : ObservableObject, IDisposable
     private readonly bool _isLiveChartsOn = true;
     private readonly bool _isAssetsOn = true;
 
+    private string _userKey = string.Empty;
+    private string _userSalt = string.Empty;
+
     private readonly IBitbankStreamService _bitbankStreamService;
     private readonly IBitbankRestService _bitbankRestService;
     private readonly IConfigurationService _configurationService;
@@ -50,29 +53,8 @@ internal partial class MainViewModel : ObservableObject, IDisposable
         IsOnXrpJpy = config.IsOnXrpJpy;
         IsOnXlmJpy = config.IsOnXlmJpy;
 
-        AssetsApiKey = config.AssetsApiKey;
-        AssetsSecret = config.AssetsSecret;
-        OrdersApiKey = config.OrdersApiKey;
-        OrdersSecret = config.OrdersSecret;
-        TradeHistoryApiKey = config.TradeHistoryApiKey;
-        TradeHistorySecret = config.TradeHistorySecret;
-        MakeOrderApiKey = config.MakeOrderApiKey;
-        MakeOrderSecret = config.MakeOrderSecret;
-
         // Load the pairs from the configuration service into the Pairs collection
         _configurationService.GetPairs(Pairs);
-
-        foreach (var pair in Pairs)
-        {
-            pair.ErrorOccured += OnErrorOccured;
-
-            pair.TradeHistoryApiKey = TradeHistoryApiKey;
-            pair.TradeHistorySecret = TradeHistorySecret;
-            pair.OrdersApiKey = OrdersApiKey;
-            pair.OrdersSecret = OrdersSecret;
-            pair.MakeOrderApiKey = MakeOrderApiKey;
-            pair.MakeOrderSecret = MakeOrderSecret;
-        }
 
         IsEnabledChanged += OnIsEnabledChanged;
 
@@ -85,6 +67,7 @@ internal partial class MainViewModel : ObservableObject, IDisposable
         _isLiveChartsOn = true;
         _isAssetsOn = true;
 
+        // TODO:
 #if DEBUG
         IsSaveLog = true;
 #endif
@@ -1965,10 +1948,35 @@ internal partial class MainViewModel : ObservableObject, IDisposable
 
     #region == Public Methods ==
 
-    public async Task InitializeAndStartAsync()
+    public async Task InitializeAndStartAsync(string userKey)
     {
+        _userKey = userKey;
+
         try
         {
+            var config = _configurationService.CurrentConfiguration;
+
+            AssetsApiKey = Helper.EncryptDecrypt.Decrypt(config.AssetsApiKey, _userKey, config.User.UserSalt);
+            AssetsSecret = Helper.EncryptDecrypt.Decrypt(config.AssetsSecret, _userKey, config.User.UserSalt);
+            OrdersApiKey = Helper.EncryptDecrypt.Decrypt(config.OrdersApiKey, _userKey, config.User.UserSalt);
+            OrdersSecret = Helper.EncryptDecrypt.Decrypt(config.OrdersSecret, _userKey, config.User.UserSalt);
+            TradeHistoryApiKey = Helper.EncryptDecrypt.Decrypt(config.TradeHistoryApiKey, _userKey, config.User.UserSalt);
+            TradeHistorySecret = Helper.EncryptDecrypt.Decrypt(config.TradeHistorySecret, _userKey, config.User.UserSalt);
+            MakeOrderApiKey = Helper.EncryptDecrypt.Decrypt(config.MakeOrderApiKey, _userKey, config.User.UserSalt);
+            MakeOrderSecret = Helper.EncryptDecrypt.Decrypt(config.MakeOrderSecret, _userKey, config.User.UserSalt);
+
+            foreach (var pair in Pairs)
+            {
+                pair.ErrorOccured += OnErrorOccured;
+
+                pair.TradeHistoryApiKey = TradeHistoryApiKey;
+                pair.TradeHistorySecret = TradeHistorySecret;
+                pair.OrdersApiKey = OrdersApiKey;
+                pair.OrdersSecret = OrdersSecret;
+                pair.MakeOrderApiKey = MakeOrderApiKey;
+                pair.MakeOrderSecret = MakeOrderSecret;
+            }
+
             _bitbankStreamService.Initialize(Pairs.Where(x => x.IsEnabled).Select(x => x.PairCode).ToList());
 
             if (_isWebSocketOn)
@@ -2046,15 +2054,16 @@ internal partial class MainViewModel : ObservableObject, IDisposable
         config.IsOnXrpJpy = IsOnXrpJpy;
         config.IsOnXlmJpy = IsOnXlmJpy;
 
-        config.AssetsApiKey = AssetsApiKey;
-        config.AssetsSecret = AssetsSecret;
-        config.OrdersApiKey = OrdersApiKey;
-        config.OrdersSecret = OrdersSecret;
-        config.TradeHistoryApiKey = TradeHistoryApiKey;
-        config.TradeHistorySecret = TradeHistorySecret;
-        config.MakeOrderApiKey = MakeOrderApiKey;
-        config.MakeOrderSecret = MakeOrderSecret;
+        config.AssetsApiKey = Helper.EncryptDecrypt.Encrypt(AssetsApiKey, _userKey, config.User.UserSalt);
+        config.AssetsSecret = Helper.EncryptDecrypt.Encrypt(AssetsSecret, _userKey, config.User.UserSalt);
+        config.OrdersApiKey = Helper.EncryptDecrypt.Encrypt(OrdersApiKey, _userKey, config.User.UserSalt);
+        config.OrdersSecret = Helper.EncryptDecrypt.Encrypt(OrdersSecret, _userKey, config.User.UserSalt);
+        config.TradeHistoryApiKey = Helper.EncryptDecrypt.Encrypt(TradeHistoryApiKey, _userKey, config.User.UserSalt);
+        config.TradeHistorySecret = Helper.EncryptDecrypt.Encrypt(TradeHistorySecret, _userKey, config.User.UserSalt);
+        config.MakeOrderApiKey = Helper.EncryptDecrypt.Encrypt(MakeOrderApiKey, _userKey, config.User.UserSalt);
+        config.MakeOrderSecret = Helper.EncryptDecrypt.Encrypt(MakeOrderSecret, _userKey, config.User.UserSalt);
 
+        _configurationService.SetUserKey(_userKey);
     }
 
     public void Dispose()

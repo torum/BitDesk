@@ -265,10 +265,10 @@
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
                             
-                            <TextBlock Grid.Row="0" Grid.Column="0" Text="BID: " FontSize="12" Opacity="0.7"/>
-                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Bid, Mode=OneWay}" FontSize="12" Opacity="0.7"/>
-                            <TextBlock Grid.Row="1" Grid.Column="0" Text="ASK: " FontSize="12" Opacity="0.7"/>
-                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Ask, Mode=OneWay}" FontSize="12" Opacity="0.7"/>
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="ASK: " FontSize="12" Opacity="0.7"/>
+                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Ask, Mode=OneWay}" FontSize="12" Opacity="0.7"/>
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="BID: " FontSize="12" Opacity="0.7"/>
+                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Bid, Mode=OneWay}" FontSize="12" Opacity="0.7"/>
                         </Grid>
 
                         <StackPanel Margin="8,2,6,4">
@@ -390,9 +390,6 @@
                         </ListBox>
 
                     </Grid>
-                </TabItem>
-                <TabItem Header="Pending">
-                    <TextBlock Text="Week view content goes here..." Margin="0,20" HorizontalAlignment="Center"/>
                 </TabItem>
                 <TabItem Header="History">
                     <Grid RowDefinitions="Auto,*">

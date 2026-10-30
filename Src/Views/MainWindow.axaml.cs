@@ -65,12 +65,13 @@ public partial class MainWindow : Window
 
     private int _winRestoreWidth = 1024;
     private int _winRestoreHeight = 768;
-    private int _winRestoreTop = 100;
-    private int _winRestoreLeft = 100;
+    private int _winRestoreTop = 0;
+    private int _winRestoreLeft = 0;
 
     private readonly IBitbankStreamService _bitbankStreamService;
     private readonly IConfigurationService _configurationService;
     private readonly INavigationService _navigationService;
+    private readonly IDialogService _dialogService;
     private bool _shutdownStarted;
     private bool _allowClose;
 
@@ -82,6 +83,7 @@ public partial class MainWindow : Window
         _bitbankStreamService = App.GetService<IBitbankStreamService>();
         _configurationService = App.GetService<IConfigurationService>();
         _navigationService = App.GetService<INavigationService>();
+        _dialogService = App.GetService<IDialogService>();
 
         InitializeComponent();
 
@@ -140,12 +142,40 @@ public partial class MainWindow : Window
 
         await Task.Yield();
 
-        //var window = new LogOnWindow();
-        //await window.ShowDialog(this);
+        var config = _configurationService.CurrentConfiguration;
+        var userKey = string.Empty;
+        var logOnResult = false;
+        if (string.IsNullOrEmpty(config.User.UserHashedKey))
+        {
+            while (string.IsNullOrEmpty(userKey))
+            {
+                userKey = await _dialogService.ShowSetUpDialog();
+            }
 
-        //await Task.Yield();
+            (string savedHash, string savedSalt) = Helper.Password.HashPassword(userKey);
+            config.User.UserHashedKey = savedHash;
+            config.User.UserSalt = savedSalt;
 
-        await _mainViewModel.InitializeAndStartAsync();
+            logOnResult = true;
+        }
+        else
+        {
+            while (logOnResult == false)
+            {
+                userKey = await _dialogService.ShowLogOnDialog();
+
+                if (string.IsNullOrEmpty(userKey))
+                {
+                    continue;
+                }
+
+                logOnResult = Helper.Password.VerifyPassword(userKey, config.User.UserHashedKey, config.User.UserSalt);
+            }
+        }
+
+        await Task.Yield();
+
+        await _mainViewModel.InitializeAndStartAsync(userKey);
 
         bool IsOnlySettingsPage = false;
 

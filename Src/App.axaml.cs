@@ -48,6 +48,7 @@ public partial class App : Application
         services.AddSingleton<IBitbankStreamService, BitbankStreamService>();
         services.AddSingleton<IConfigurationService, ConfigurationService>();
         services.AddSingleton<INavigationService, NavigationService>();
+        services.AddSingleton<IDialogService, DialogService>();
 
         services.AddHttpClient("BitDesk", client =>
         {
