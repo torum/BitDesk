@@ -90,13 +90,23 @@ internal sealed class Program
         }
     }
 
-    // Avalonia configuration, don't remove; also used by visual designer.
+    // Suppress the experimental warning required for ForceDrawnDecorations
+#pragma warning disable AVALONIA_WAYLAND_FORCE_CSD
     public static AppBuilder BuildAvaloniaApp()
         => AppBuilder.Configure<App>()
             .UsePlatformDetect()
+            .UseWaylandWithFallback()
+            .With(new WaylandPlatformOptions()
+            {
+                AppId = "BitDesk",  // Matches .desktop launcher file
+                UseDmabufSwapchain = null,     // Enables high-performance rendering
+                UseGLibMainLoop = false,         // Integrates with Linux desktop loops
+                ForceDrawnDecorations = true    // Enables custom window decorations especially for KDE environments where they prefer server-side decorations.
+            })
             .WithInterFont()
             .LogToTrace();
-    
+#pragma warning restore AVALONIA_WAYLAND_FORCE_CSD
+
     private static void OnProcessExit(object? sender, EventArgs e)
     {
         if (!RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || !File.Exists(GetPipePath()))
