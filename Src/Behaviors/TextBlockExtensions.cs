@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Animation;
+using Avalonia.Animation.Easings;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Styling;
@@ -11,158 +12,123 @@ namespace BitDesk.Behaviors;
 
 public static class TextBlockExtensions
 {
-    // 1. Register the attached property as an IBrush
-    public static readonly AttachedProperty<IBrush?> FlashColorProperty =
-        AvaloniaProperty.RegisterAttached<string, TextBlock, IBrush?>("FlashColor", null);
+    public static readonly AttachedProperty<bool> BlinkOnChangeProperty = AvaloniaProperty.RegisterAttached<TextBlock, bool>("BlinkOnChange", typeof(TextBlockExtensions), false);
 
-    // 2. Update Get/Set accessors to use IBrush
-    public static IBrush? GetFlashColor(TextBlock element)
-        => element.GetValue(FlashColorProperty);
+    public static bool GetBlinkOnChange(TextBlock element) => element.GetValue(BlinkOnChangeProperty);
+    public static void SetBlinkOnChange(TextBlock element, bool value) => element.SetValue(BlinkOnChangeProperty, value);
 
-    public static void SetFlashColor(TextBlock element, IBrush? value)
-        => element.SetValue(FlashColorProperty, value);
-
-    // 3. Keep the static class handler
     static TextBlockExtensions()
     {
-        TextBlock.TextProperty.Changed.AddClassHandler<TextBlock>((sender, e) =>
-            OnTextChanged(sender, e));
+        BlinkOnChangeProperty.Changed.AddClassHandler<TextBlock>((textBlock, args) => OnBlinkOnChangePropertyValueChanged(textBlock, args));
+    }
+
+    private static void OnBlinkOnChangePropertyValueChanged(TextBlock textBlock, AvaloniaPropertyChangedEventArgs args)
+    {
+        if (args.NewValue is bool isEnabled)
+        {
+            if (isEnabled)
+            {
+                // Subscribe strictly to this single TextBlock instance's Text changes
+                // Using Avalonia's built-in .PropertyChanged event instead of IObservable
+                textBlock.PropertyChanged += OnTextBlockPropertyChanged;
+            }
+            else
+            {
+                // Clean up event handler if it gets disabled or the element is discarded
+                textBlock.PropertyChanged -= OnTextBlockPropertyChanged;
+            }
+        }
+    }
+
+    private static void OnTextBlockPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs args)
+    {
+        // 3. Ensure we only care about the Text property changing on this specific instance
+        if (sender is TextBlock textBlock && args.Property == TextBlock.TextProperty)
+        {
+            // Prevent animation running during initial setup/loading if desired
+            if (args.OldValue == null && args.NewValue as string == string.Empty) return;
+
+            TriggerBlinkAnimation(textBlock);
+        }
+    }
+
+    private static void TriggerBlinkAnimation(TextBlock textBlock)
+    {
+        // Define a quick fade-out and fade-in animation
+        var animation = new Animation
+        {
+            Duration = TimeSpan.FromMilliseconds(400),
+            Easing = new LinearEasing(),
+            Children =
+                {
+                    new KeyFrame
+                    {
+                        Cue = new Cue(0.0),
+                        Setters = { new Setter(Visual.OpacityProperty, 1.0) }
+                    },
+                    new KeyFrame
+                    {
+                        Cue = new Cue(0.5), // Drops to 20% opacity halfway through
+                        Setters = { new Setter(Visual.OpacityProperty, 0.2) }
+                    },
+                    new KeyFrame
+                    {
+                        Cue = new Cue(1.0),
+                        Setters = { new Setter(Visual.OpacityProperty, 1.0) }
+                    }
+                }
+        };
+
+        // Run the animation seamlessly on the TextBlock
+        animation.RunAsync(textBlock);
+    }
+
+
+    /*
+    public static readonly AttachedProperty<IBrush?> FlashColorProperty = AvaloniaProperty.RegisterAttached<string, TextBlock, IBrush?>("FlashColor", null);
+
+    public static IBrush? GetFlashColor(TextBlock element) => element.GetValue(FlashColorProperty);
+
+    public static void SetFlashColor(TextBlock element, IBrush? value) => element.SetValue(FlashColorProperty, value);
+
+    static TextBlockExtensions()
+    {
+        TextBlock.TextProperty.Changed.AddClassHandler<TextBlock>((sender, e) =>  OnTextChanged(sender, e));
     }
 
     private static void OnTextChanged(TextBlock textBlock, AvaloniaPropertyChangedEventArgs e)
     {
         var originalBrush = textBlock.Foreground;
         var flashBrush = GetFlashColor(textBlock);
+        //var originalBrush = GetFlashColor(textBlock);
+        //var flashBrush = new SolidColorBrush(Color.FromRgb(0x66, 0x66, 0x66));//Color.Parse("#666666")
+
         if (flashBrush == null) return;
 
-        // 1. Initialize the transition exactly once per TextBlock
         if (textBlock.Transitions == null || textBlock.Transitions.Count == 0)
         {
             textBlock.Transitions = new Transitions
-        {
-            new BrushTransition
             {
-                Property = TextBlock.ForegroundProperty,
-                Duration = TimeSpan.FromMilliseconds(400)
-            }
-        };
+                new BrushTransition
+                {
+                    Property = TextBlock.ForegroundProperty,
+                    Duration = TimeSpan.FromMilliseconds(400)
+                }
+            };
         }
 
         var activeTransitions = textBlock.Transitions;
 
-        // 2. Detach transitions to snap instantly to the flash color
         textBlock.Transitions = null;
         textBlock.Foreground = flashBrush;
 
-        // 3. Re-attach transitions to animate going forward
         textBlock.Transitions = activeTransitions;
 
         if (originalBrush != null)
         {
             textBlock.Foreground = originalBrush;
         }
-        /*
-        // 4. Determine the exact ThemeVariant (e.g., ThemeVariant.Dark) active on this element
-        var currentTheme = textBlock.ActualThemeVariant ?? ThemeVariant.Default;
 
-        // 5. Look up the resource passing the explicit theme context
-        if (textBlock.TryFindResource("TextFillColorPrimary", currentTheme, out var defaultResource) &&
-            defaultResource is Color defaultColor)
-        {
-            // This will successfully generate the white/near-white brush for Dark theme!
-            textBlock.Foreground = new SolidColorBrush(defaultColor);
-        }
-        else
-        {
-            // Fail-safe fallbacks if the resource lookup completely goes sideways
-            textBlock.Foreground = currentTheme == ThemeVariant.Dark ? Brushes.White : Brushes.Black;
-        }
-        */
-
-        /*
-        var flashBrush = GetFlashColor(textBlock);
-
-        if (flashBrush != null)
-        {
-            var originalBrush = textBlock.Foreground;
-
-            var animation = new Animation
-            {
-                Duration = TimeSpan.FromMilliseconds(400),
-                FillMode = FillMode.Forward,
-                PlaybackDirection = PlaybackDirection.Normal,
-                Children =
-                {
-                    new KeyFrame
-                    {
-                        Cue = new Cue(0.0),
-                        Setters = { new Setter(TextBlock.ForegroundProperty, flashBrush) }
-                    },
-                    new KeyFrame
-                    {
-                        Cue = new Cue(1.0),
-                        Setters = { new Setter(TextBlock.ForegroundProperty, originalBrush) } // Revert to original
-                    }
-                }
-            };
-
-            animation.RunAsync(textBlock);
-        }
-        */
-    }
-
-
-    /*
-    public static readonly AttachedProperty<bool> FlashOnUpdateProperty =
-        AvaloniaProperty.RegisterAttached<TextBlock, bool>("FlashOnUpdate", typeof(TextBlockExtensions), false);
-
-    public static bool GetFlashOnUpdate(TextBlock element)
-        => element.GetValue(FlashOnUpdateProperty);
-
-    public static void SetFlashOnUpdate(TextBlock element, bool value)
-        => element.SetValue(FlashOnUpdateProperty, value); // Pass both the property and the value
-
-    static TextBlockExtensions()
-    {
-        TextBlock.TextProperty.Changed.AddClassHandler<TextBlock>((sender, e) =>
-            OnTextChanged(sender, e));
-    }
-
-    private static void OnTextChanged(TextBlock textBlock, AvaloniaPropertyChangedEventArgs e)
-    {
-        // Check if our attached property "FlashOnUpdate" is set to true on this TextBlock
-        if (GetFlashOnUpdate(textBlock))
-        {
-            TriggerFlashAnimation(textBlock);
-        }
-    }
-
-    private static void TriggerFlashAnimation(TextBlock textBlock)
-    {
-        var originalForeground = textBlock.Foreground;
-
-        var animation = new Animation
-        {
-            Duration = TimeSpan.FromMilliseconds(400),
-            FillMode = FillMode.Forward,
-            PlaybackDirection = PlaybackDirection.Normal,
-            Children =
-                {
-                    new KeyFrame
-                    {
-                        Cue = new Cue(0.0),
-                        Setters = { new Setter(TextBlock.ForegroundProperty, Brushes.Gainsboro) }
-                    },
-                    new KeyFrame
-                    {
-                        Cue = new Cue(1.0),
-                        Setters = { new Setter(TextBlock.ForegroundProperty, originalForeground) } // Revert to original
-                    }
-                }
-        };
-
-        // Run the animation on the TextBlock
-        animation.RunAsync(textBlock);
     }
     */
 }

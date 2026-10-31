@@ -116,31 +116,31 @@ internal class MainViewModel : ObservableObject, IDisposable
     #region == Pairs ==
 
     public ObservableCollection<PairViewModel> Pairs { get; } = [
-        new PairViewModel(PairCodes.btc_jpy, 24, "{0:#,0}", "C", 100M, 1000M),
-        new PairViewModel(PairCodes.xrp_jpy, 24, "{0:#,0.000}", "C3", 0.1M, 0.01M),
-        new PairViewModel(PairCodes.eth_jpy, 24, "{0:#,0}", "C", 100M, 1000M),
-        new PairViewModel(PairCodes.xlm_jpy, 24, "{0:#,0.000}", "C3", 0.1M, 0.01M),
+        new PairViewModel(PairCodes.btc_jpy, "{0:#,0}", "C", 100M, 1000M),
+        new PairViewModel(PairCodes.xrp_jpy, "{0:#,0.000}", "C3", 0.1M, 0.01M),
+        new PairViewModel(PairCodes.eth_jpy, "{0:#,0}", "C", 100M, 1000M),
+        new PairViewModel(PairCodes.xlm_jpy, "{0:#,0.000}", "C3", 0.1M, 0.01M),
         /*
-        new PairViewModel(PairCodes.ltc_jpy, 24, "{0:#,0.0}", "C1", 100M, 1000M),
-        new PairViewModel(PairCodes.mona_jpy, 24, "{0:#,0.000}", "C3", 0.1M, 1M),
-        new PairViewModel(PairCodes.bcc_jpy, 24, "{0:#,0}", "C", 10M, 100M),
-        new PairViewModel(PairCodes.qtum_jpy, 24, "{0:#,0.000}", "C3", 0.1M, 0.01M),
-        new PairViewModel(PairCodes.bat_jpy, 24, "{0:#,0.000}", "C3", 0.1M, 0.01M),
-        new PairViewModel(PairCodes.omg_jpy, 24, "{0:#,0.000}", "C3", 0.1M, 0.01M),
-        new PairViewModel(PairCodes.xym_jpy, 24, "{0:#,0.000}", "C3", 0.1M, 0.01M),
-        new PairViewModel(PairCodes.link_jpy, 24, "{0:#,0.000}", "C3", 0.1M, 0.01M),
-        new PairViewModel(PairCodes.mkr_jpy, 24, "{0:#,0}", "C", 100M, 1000M),// to sky_jpy SKY/JPY
-        new PairViewModel(PairCodes.boba_jpy, 24, "{0:#,0.000}", "C3", 0.1M, 0.01M),
-        new PairViewModel(PairCodes.enj_jpy, 24, "{0:#,0.000}", "C3", 0.1M, 0.01M),// no longer supported
-        new PairViewModel(PairCodes.matic_jpy, 24, "{0:#,0.000}", "C3", 0.1M, 0.01M), // to pol_jpy POL/JPY
-        new PairViewModel(PairCodes.dot_jpy, 24, "{0:#,0.000}", "C3", 0.1M, 0.01M),
-        new PairViewModel(PairCodes.doge_jpy, 24, "{0:#,0.000}", "C3", 0.1M, 0.01M),
-        new PairViewModel(PairCodes.astr_jpy, 24, "{0:#,0.000}", "C3", 0.1M, 0.01M),
-        new PairViewModel(PairCodes.ada_jpy, 24, "{0:#,0.000}", "C3", 0.1M, 0.01M),
-        new PairViewModel(PairCodes.avax_jpy, 24, "{0:#,0.000}", "C3", 100M, 1000M),
-        new PairViewModel(PairCodes.axs_jpy, 24, "{0:#,0.000}", "C3", 100M, 1000M),
-        new PairViewModel(PairCodes.flr_jpy, 24, "{0:#,0.000}", "C3", 0.1M, 0.01M),
-        new PairViewModel(PairCodes.sand_jpy, 24, "{0:#,0.000}", "C3", 0.1M, 0.01M),
+        new PairViewModel(PairCodes.ltc_jpy, "{0:#,0.0}", "C1", 100M, 1000M),
+        new PairViewModel(PairCodes.mona_jpy, "{0:#,0.000}", "C3", 0.1M, 1M),
+        new PairViewModel(PairCodes.bcc_jpy, "{0:#,0}", "C", 10M, 100M),
+        new PairViewModel(PairCodes.qtum_jpy, "{0:#,0.000}", "C3", 0.1M, 0.01M),
+        new PairViewModel(PairCodes.bat_jpy, "{0:#,0.000}", "C3", 0.1M, 0.01M),
+        new PairViewModel(PairCodes.omg_jpy, "{0:#,0.000}", "C3", 0.1M, 0.01M),
+        new PairViewModel(PairCodes.xym_jpy, "{0:#,0.000}", "C3", 0.1M, 0.01M),
+        new PairViewModel(PairCodes.link_jpy, "{0:#,0.000}", "C3", 0.1M, 0.01M),
+        new PairViewModel(PairCodes.mkr_jpy, "{0:#,0}", "C", 100M, 1000M),// to sky_jpy SKY/JPY
+        new PairViewModel(PairCodes.boba_jpy, "{0:#,0.000}", "C3", 0.1M, 0.01M),
+        new PairViewModel(PairCodes.enj_jpy, "{0:#,0.000}", "C3", 0.1M, 0.01M),// no longer supported
+        new PairViewModel(PairCodes.matic_jpy, "{0:#,0.000}", "C3", 0.1M, 0.01M), // to pol_jpy POL/JPY
+        new PairViewModel(PairCodes.dot_jpy, "{0:#,0.000}", "C3", 0.1M, 0.01M),
+        new PairViewModel(PairCodes.doge_jpy, "{0:#,0.000}", "C3", 0.1M, 0.01M),
+        new PairViewModel(PairCodes.astr_jpy, "{0:#,0.000}", "C3", 0.1M, 0.01M),
+        new PairViewModel(PairCodes.ada_jpy, "{0:#,0.000}", "C3", 0.1M, 0.01M),
+        new PairViewModel(PairCodes.avax_jpy, "{0:#,0.000}", "C3", 100M, 1000M),
+        new PairViewModel(PairCodes.axs_jpy, "{0:#,0.000}", "C3", 100M, 1000M),
+        new PairViewModel(PairCodes.flr_jpy, "{0:#,0.000}", "C3", 0.1M, 0.01M),
+        new PairViewModel(PairCodes.sand_jpy, "{0:#,0.000}", "C3", 0.1M, 0.01M),
         */
     ];
 

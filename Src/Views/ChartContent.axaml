@@ -38,10 +38,10 @@
                                         </Grid.ColumnDefinitions>
 
                                         <TextBlock Grid.Column="0" x:Name="DepthAskBest" Text="{Binding Path=DepthAskFormatted, Mode=OneWay}" Foreground="{StaticResource PriceUpColorBrush}" FontWeight="Normal" FontSize="12" Margin="2" Padding="0" HorizontalAlignment="Right"
-                                                   behaviors:TextBlockExtensions.FlashColor="#666666"/>
+                                                   behaviors:TextBlockExtensions.BlinkOnChange="True"/>
                                         
                                         <TextBlock Grid.Column="1" x:Name="DepthPrice" Text="{Binding Path=DepthPriceFormatted, Mode=OneWay}" FontWeight="Normal" FontSize="12" Margin="6,2,6,4" Padding="3,0,3,0" HorizontalAlignment="Right"
-                                                   behaviors:TextBlockExtensions.FlashColor="#666666">
+                                                   behaviors:TextBlockExtensions.BlinkOnChange="True">
                                             <Interaction.Behaviors>
 											    <DataTriggerBehavior Binding="{Binding IsLTP}" ComparisonCondition="Equal" Value="True">
 												    <ChangePropertyAction PropertyName="FontWeight" Value="Bold" />
@@ -54,7 +54,7 @@
                                         </TextBlock>
                                         
                                         <TextBlock Grid.Column="2" x:Name="DepthBidBest" Text="{Binding Path=DepthBidFormatted, Mode=OneWay}" Foreground="{StaticResource PriceDownColorBrush}" FontWeight="Normal" FontSize="12" Margin="2" Padding="0" HorizontalAlignment="Right"
-                                            behaviors:TextBlockExtensions.FlashColor="#666666"/>
+                                            behaviors:TextBlockExtensions.BlinkOnChange="True"/>
 
                                     </Grid>
 
@@ -193,14 +193,14 @@
                                                         </Grid.ColumnDefinitions>
 
                                                         <TextBlock Grid.Column="0" x:Name="DepthAskBest" Text="{Binding Path=ExecutedAtFormatted, Mode=OneWay}" FontWeight="Normal" FontSize="12" Margin="2" Padding="0" HorizontalAlignment="Right"
-                                                                   behaviors:TextBlockExtensions.FlashColor="#666666"/>
+                                                                   behaviors:TextBlockExtensions.BlinkOnChange="True"/>
                                         
                                                         <TextBlock Grid.Column="1" x:Name="DepthPrice" Text="{Binding Path=PriceFormatted, Mode=OneWay}" FontWeight="Normal" FontSize="12" Margin="6,2,6,4" Padding="3,0,3,0" HorizontalAlignment="Right"
-                                                                   behaviors:TextBlockExtensions.FlashColor="#666666">
+                                                                   behaviors:TextBlockExtensions.BlinkOnChange="True">
                                                         </TextBlock>
                                         
                                                         <TextBlock Grid.Column="2" x:Name="DepthBidBest" Text="{Binding Path=Amount, Mode=OneWay}" FontWeight="Normal" FontSize="12" Margin="2" Padding="0" HorizontalAlignment="Right"
-                                                            behaviors:TextBlockExtensions.FlashColor="#666666"/>
+                                                            behaviors:TextBlockExtensions.BlinkOnChange="True"/>
 
                                                     </Grid>
 
@@ -241,7 +241,7 @@
                     <StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="4,2,4,2">
                             <TextBlock Text="{Binding PairString}" FontWeight="SemiBold" Margin="4" />
-                            <TextBlock Text="{Binding LtpString}" FontWeight="Bold" Margin="4" Foreground="{DynamicResource TextFillColorPrimary}" behaviors:TextBlockExtensions.FlashColor="#666666"/>
+                            <TextBlock Text="{Binding LtpString}" FontWeight="Bold" Margin="4" Foreground="{DynamicResource TextFillColorPrimary}" behaviors:TextBlockExtensions.BlinkOnChange="True"/>
                             <TextBlock Text="{Binding PercentChange}" FontWeight="Normal" Margin="4" />
                         </StackPanel>
 
@@ -383,17 +383,17 @@
                                             <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
 
-                                        <TextBlock Grid.Column="0" Tag="{Binding Side, Mode=OneWay}" Text="{Binding SideText, Mode=OneWay}" behaviors:TextBlockExtensions.FlashColor="#666666" />
-                                        <TextBlock Grid.Column="1" Text="{Binding StartAmount, Mode=OneWay}" behaviors:TextBlockExtensions.FlashColor="#666666" />
-                                        <TextBlock Grid.Column="2" Text="{Binding TypeText, Mode=OneWay}" behaviors:TextBlockExtensions.FlashColor="#666666"/>
-                                        <TextBlock Grid.Column="3" Text="{Binding Price, Mode=OneWay}" behaviors:TextBlockExtensions.FlashColor="#666666"/>
-                                        <TextBlock Grid.Column="4" Text="{Binding Shushi, Mode=OneWay}" behaviors:TextBlockExtensions.FlashColor="#666666"/>
-                                        <TextBlock Grid.Column="5" Text="{Binding AveragePrice, Mode=OneWay}" behaviors:TextBlockExtensions.FlashColor="#666666"/>
-                                        <TextBlock Grid.Column="6" Text="{Binding RemainingAmount, Mode=OneWay}" behaviors:TextBlockExtensions.FlashColor="#666666"/>
-                                        <TextBlock Grid.Column="7" Text="{Binding ActualPrice, Mode=OneWay}" behaviors:TextBlockExtensions.FlashColor="#666666"/>
-                                        <TextBlock Grid.Column="8" Text="{Binding StatusText, Mode=OneWay}" behaviors:TextBlockExtensions.FlashColor="#666666"/>
-                                        <TextBlock Grid.Column="9" Text="{Binding OrderID, Mode=OneWay}" behaviors:TextBlockExtensions.FlashColor="#666666"/>
-                                        <TextBlock Grid.Column="10" Text="{Binding OrderdAtText, Mode=OneWay}" behaviors:TextBlockExtensions.FlashColor="#666666"/>
+                                        <TextBlock Grid.Column="0" Tag="{Binding Side, Mode=OneWay}" Text="{Binding SideText, Mode=OneWay}" behaviors:TextBlockExtensions.BlinkOnChange="True" />
+                                        <TextBlock Grid.Column="1" Text="{Binding StartAmount, Mode=OneWay}" behaviors:TextBlockExtensions.BlinkOnChange="True" />
+                                        <TextBlock Grid.Column="2" Text="{Binding TypeText, Mode=OneWay}" behaviors:TextBlockExtensions.BlinkOnChange="True"/>
+                                        <TextBlock Grid.Column="3" Text="{Binding Price, Mode=OneWay}" behaviors:TextBlockExtensions.BlinkOnChange="True"/>
+                                        <TextBlock Grid.Column="4" Text="{Binding Shushi, Mode=OneWay}" behaviors:TextBlockExtensions.BlinkOnChange="True"/>
+                                        <TextBlock Grid.Column="5" Text="{Binding AveragePrice, Mode=OneWay}" behaviors:TextBlockExtensions.BlinkOnChange="True"/>
+                                        <TextBlock Grid.Column="6" Text="{Binding RemainingAmount, Mode=OneWay}" behaviors:TextBlockExtensions.BlinkOnChange="True"/>
+                                        <TextBlock Grid.Column="7" Text="{Binding ActualPrice, Mode=OneWay}" behaviors:TextBlockExtensions.BlinkOnChange="True"/>
+                                        <TextBlock Grid.Column="8" Text="{Binding StatusText, Mode=OneWay}" behaviors:TextBlockExtensions.BlinkOnChange="True"/>
+                                        <TextBlock Grid.Column="9" Text="{Binding OrderID, Mode=OneWay}" behaviors:TextBlockExtensions.BlinkOnChange="True"/>
+                                        <TextBlock Grid.Column="10" Text="{Binding OrderdAtText, Mode=OneWay}" behaviors:TextBlockExtensions.BlinkOnChange="True"/>
 
                                     </Grid>
 

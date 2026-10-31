@@ -28,6 +28,7 @@ namespace BitDesk.ViewModels;
 public partial class PairViewModel : ObservableObject, IDisposable
 {
     //private DateTime lastChartLoadedDateTime = DateTime.MinValue;
+    private readonly string _currencyFormstString = "C";
     private bool _isChartLoading;
     private readonly List<DateTime> _chartTimes = new();
     private bool _isChartRefreshRunning;
@@ -41,13 +42,12 @@ public partial class PairViewModel : ObservableObject, IDisposable
     public event EventHandler<bool>? DepthScrollCenter;
     public event EventHandler<ErrorInfo>? ErrorOccured;
 
-    public PairViewModel(PairCodes p, double fontSize, string ltpFormstString, string currencyFormstString, decimal grouping100, decimal grouping1000)
+    public PairViewModel(PairCodes p, string ltpFormstString, string currencyFormstString, decimal grouping100, decimal grouping1000)
     {
         _bitbankRestService = App.GetService<IBitbankRestService>();
         _bitbankStreamService = App.GetService<IBitbankStreamService>();
 
         _p = p;
-        _ltpFontSize = fontSize;
         _ltpFormstString = ltpFormstString;
         _currencyFormstString = currencyFormstString;
 
@@ -225,8 +225,6 @@ public partial class PairViewModel : ObservableObject, IDisposable
         }
     }
 
-    private readonly string _currencyFormstString = "C";
-
     public string PercentChange
     {
         get;
@@ -258,9 +256,6 @@ public partial class PairViewModel : ObservableObject, IDisposable
             OnPropertyChanged(nameof(LtpUpFlag));
         }
     }
-
-    private readonly double _ltpFontSize = 28;
-    public double LtpFontSize => _ltpFontSize;
 
     private decimal _bid;
     public decimal Bid
