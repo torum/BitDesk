@@ -3430,6 +3430,15 @@ public partial class PairViewModel : ObservableObject, IDisposable
         if (string.IsNullOrEmpty(tradeHistoryApiKey) || string.IsNullOrEmpty(tradeHistorySecret))
         {
             System.Diagnostics.Debug.WriteLine("■■■■■ GetOrders: (TradeHistoryApiKeyIsSet == false)");
+
+            var err = new ErrorInfo(ErrType.Other)
+            {
+                ErrorSeverity = FAInfoBarSeverity.Informational,
+                ErrorMessage = "約定履歴の取得には、APIキーとシークレットが必要です。設定のページでAPIキーとシークレットを設定してください。",
+            };
+
+            OnErrorOccured(this, err);
+
             return;
         }
 
@@ -3513,6 +3522,15 @@ public partial class PairViewModel : ObservableObject, IDisposable
         if (string.IsNullOrEmpty(ordersApiKey) || string.IsNullOrEmpty(ordersSecret))
         {
             System.Diagnostics.Debug.WriteLine("■■■■■ GetOrders: (OrdersApiKeyIsSet == false)");
+
+            var err = new ErrorInfo(ErrType.Other)
+            {
+                ErrorSeverity = FAInfoBarSeverity.Informational,
+                ErrorMessage = "注文情報の取得には、APIキーとシークレットが必要です。設定のページでAPIキーとシークレットを設定してください。",
+            };
+
+            OnErrorOccured(this, err);
+
             return;
         }
 
@@ -3838,6 +3856,15 @@ public partial class PairViewModel : ObservableObject, IDisposable
             System.Diagnostics.Debug.WriteLine("■■■■■ GetOrders: (MakeOrderApiKeyIsSet == false)");
             // TODO:  show msg;
             MakeOrderRresultText = "(MakeOrderApiKeyIsSet == false)";
+
+            var err = new ErrorInfo(ErrType.Other)
+            {
+                ErrorSeverity = FAInfoBarSeverity.Informational,
+                ErrorMessage = "注文するには、APIキーとシークレットが必要です。設定のページでAPIキーとシークレットを設定してください。",
+            };
+
+            OnErrorOccured(this, err);
+
             return;
         }
 
@@ -3896,6 +3923,15 @@ public partial class PairViewModel : ObservableObject, IDisposable
             System.Diagnostics.Debug.WriteLine("■■■■■ GetOrders: (MakeOrderApiKeyIsSet == false)");
             // TODO:  show msg;
             MakeOrderRresultText = "(MakeOrderApiKeyIsSet == false)";
+
+            var err = new ErrorInfo(ErrType.Other)
+            {
+                ErrorSeverity = FAInfoBarSeverity.Informational,
+                ErrorMessage = "注文キャンセルするには、APIキーとシークレットが必要です。設定のページでAPIキーとシークレットを設定してください。",
+            };
+
+            OnErrorOccured(this, err);
+
             return;
         }
 

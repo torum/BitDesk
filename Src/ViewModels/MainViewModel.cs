@@ -2301,6 +2301,15 @@ internal partial class MainViewModel : ObservableObject, IDisposable
         {
             // TODO: show message?
             System.Diagnostics.Debug.WriteLine("■■■■■ GetAssets: (AssetsApiKeyIsSet == false)");
+
+            var err = new ErrorInfo(ErrType.Other)
+            {
+                ErrorSeverity = FAInfoBarSeverity.Informational,
+                ErrorMessage = "資産情報の取得には、APIキーとシークレットが必要です。設定のページでAPIキーとシークレットを設定してください。",
+            };
+
+            OnErrorOccured(this, err);
+
             return;
         }
 

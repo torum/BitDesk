@@ -63,7 +63,8 @@
 									<ColumnDefinition Width="*"/>
 									<ColumnDefinition Width="86"/>
 								</Grid.ColumnDefinitions>
-								<TextBlock Grid.Column="0" Text="{Binding LtpBtcJpy, Mode=OneWay}" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0" behaviors:TextBlockExtensions.FlashColor="#666666"/>
+								<TextBlock Grid.Column="0" Text="{Binding LtpBtcJpy, Mode=OneWay}" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0"
+										    Foreground="{DynamicResource TextFillColorPrimary}" behaviors:TextBlockExtensions.FlashColor="#666666"/>
 								<TextBlock Grid.Column="1" Text="{Binding LtpBtcJpyPercentChange, Mode=OneWay}" FontWeight="Normal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0"/>
 							</Grid>
 						</ui:FANavigationViewItem.Content>
@@ -78,7 +79,8 @@
 									<ColumnDefinition Width="*"/>
 									<ColumnDefinition Width="86"/>
 								</Grid.ColumnDefinitions>
-								<TextBlock Grid.Column="0" Text="{Binding LtpXrpJpy, Mode=OneWay}" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0" behaviors:TextBlockExtensions.FlashColor="#666666"/>
+								<TextBlock Grid.Column="0" Text="{Binding LtpXrpJpy, Mode=OneWay}" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0" 
+										    Foreground="{DynamicResource TextFillColorPrimary}" behaviors:TextBlockExtensions.FlashColor="#666666"/>
 								<TextBlock Grid.Column="1" Text="{Binding LtpXrpJpyPercentChange, Mode=OneWay}" FontWeight="Normal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0"/>
 							</Grid>
 						</ui:FANavigationViewItem.Content>
@@ -93,7 +95,8 @@
 									<ColumnDefinition Width="*"/>
 									<ColumnDefinition Width="86"/>
 								</Grid.ColumnDefinitions>
-								<TextBlock Grid.Column="0" Text="{Binding LtpEthJpy, Mode=OneWay}" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0" behaviors:TextBlockExtensions.FlashColor="#666666"/>
+								<TextBlock Grid.Column="0" Text="{Binding LtpEthJpy, Mode=OneWay}" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0"
+										    Foreground="{DynamicResource TextFillColorPrimary}" behaviors:TextBlockExtensions.FlashColor="#666666"/>
 								<TextBlock Grid.Column="1" Text="{Binding LtpEthJpyPercentChange, Mode=OneWay}" FontWeight="Normal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0"/>
 							</Grid>
 						</ui:FANavigationViewItem.Content>
@@ -108,7 +111,8 @@
 									<ColumnDefinition Width="*"/>
 									<ColumnDefinition Width="86"/>
 								</Grid.ColumnDefinitions>
-								<TextBlock Grid.Column="0" Text="{Binding LtpXlmJpy, Mode=OneWay}" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0" behaviors:TextBlockExtensions.FlashColor="#666666"/>
+								<TextBlock Grid.Column="0" Text="{Binding LtpXlmJpy, Mode=OneWay}" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0" 
+										    Foreground="{DynamicResource TextFillColorPrimary}" behaviors:TextBlockExtensions.FlashColor="#666666"/>
 								<TextBlock Grid.Column="1" Text="{Binding LtpXlmJpyPercentChange, Mode=OneWay}" FontWeight="Normal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0"/>
 							</Grid>
 						</ui:FANavigationViewItem.Content>
