@@ -21,6 +21,8 @@
     </Design.DataContext>
 
 	<Grid x:Name="MainGrid" RowDefinitions="*,Auto">
+		<Border x:Name="BackgroundLayerBorder" Grid.Row="0" Grid.RowSpan="2" IsVisible="{OnPlatform Default=False, Windows=False, Linux=True, x:TypeArguments=x:Boolean}"></Border>
+
 		<Grid x:Name="ContentGrid" Grid.Row="0" Margin="0">
 
 			<!-- NavigationView -->
