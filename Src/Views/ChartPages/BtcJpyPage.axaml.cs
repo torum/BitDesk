@@ -1,7 +1,5 @@
 using Avalonia.Controls;
 using BitDesk.ViewModels;
-using FluentAvalonia;
-using FluentAvalonia.Core;
 using FluentAvalonia.UI.Controls;
 using FluentAvalonia.UI.Navigation;
 using System.Diagnostics;

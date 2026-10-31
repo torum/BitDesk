@@ -3,11 +3,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-			 xmlns:vm="clr-namespace:BitDesk.ViewModels"
              x:Class="BitDesk.Views.LogOnDialog">
 	<Grid>
 		<StackPanel Margin="10" Width="250">
-			<TextBox Name="UserKeyTextBox" Margin="10" HorizontalAlignment="Stretch" VerticalAlignment="Top" PlaceholderText="Enter your key" AttachedToVisualTree="InputField_OnAttachedToVisualTree" />
+			<TextBox Name="UserKeyTextBox" PasswordChar="*" Margin="10" HorizontalAlignment="Stretch" VerticalAlignment="Top" PlaceholderText="Enter your key" AttachedToVisualTree="InputField_OnAttachedToVisualTree" />
 		</StackPanel>
 	</Grid>
 </UserControl>

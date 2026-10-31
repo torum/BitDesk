@@ -75,6 +75,8 @@ public partial class MainWindow : Window
     private bool _shutdownStarted;
     private bool _allowClose;
 
+    private bool _isUserKeySet = false;
+
     // Parameterless constructor for XAML Previewer
     public MainWindow()
     {
@@ -173,6 +175,9 @@ public partial class MainWindow : Window
             }
         }
 
+        // Lator, we can use this flag to determine if we should save configuration or not. If the user has not logged in, we should not save configuration.
+        _isUserKeySet = logOnResult;
+
         await Task.Yield();
 
         await _mainViewModel.InitializeAndStartAsync(userKey);
@@ -265,22 +270,27 @@ public partial class MainWindow : Window
         // Window Position must be saved before the window is closed, otherwise the position will be lost.
         #region == Save Configuration ==
 
-        _mainViewModel.UpdateCurrentSettings();
+        if (_isUserKeySet)
+        {
+            // The user has logged in, so we can save the configuration. If the user has not logged in, we should not save the configuration.
 
-        var config = _configurationService.CurrentConfiguration;
-        config.MainWindow.Width = this.Width;
-        config.MainWindow.Height = this.Height;
-        config.MainWindow.Left = this.Position.X;
-        config.MainWindow.Top = this.Position.Y;
-        config.MainWindow.WindowState = this.WindowState;
-        config.MainWindow.RestoreWidth = _winRestoreWidth;
-        config.MainWindow.RestoreHeight = _winRestoreHeight;
-        config.MainWindow.RestoreLeft = _winRestoreLeft;
-        config.MainWindow.RestoreTop = _winRestoreTop;
+            _mainViewModel.UpdateCurrentSettings();
 
-        config.IsNavigationViewMenuOpen = this.NavigateViewControl.IsPaneOpen;
+            var config = _configurationService.CurrentConfiguration;
+            config.MainWindow.Width = this.Width;
+            config.MainWindow.Height = this.Height;
+            config.MainWindow.Left = this.Position.X;
+            config.MainWindow.Top = this.Position.Y;
+            config.MainWindow.WindowState = this.WindowState;
+            config.MainWindow.RestoreWidth = _winRestoreWidth;
+            config.MainWindow.RestoreHeight = _winRestoreHeight;
+            config.MainWindow.RestoreLeft = _winRestoreLeft;
+            config.MainWindow.RestoreTop = _winRestoreTop;
 
-        await _configurationService.SaveConfigurationAsync(_mainViewModel.Pairs);
+            config.IsNavigationViewMenuOpen = this.NavigateViewControl.IsPaneOpen;
+
+            await _configurationService.SaveConfigurationAsync(_mainViewModel.Pairs);
+        }
 
         #endregion
 

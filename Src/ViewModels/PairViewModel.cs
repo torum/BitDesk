@@ -20,6 +20,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace BitDesk.ViewModels;
@@ -28,10 +29,12 @@ public partial class PairViewModel : ObservableObject, IDisposable
 {
     //private DateTime lastChartLoadedDateTime = DateTime.MinValue;
     private bool _isChartLoading;
-    private readonly List<DateTime> _chartTimes = [];
+    private readonly List<DateTime> _chartTimes = new();
     private bool _isChartRefreshRunning;
     private readonly DispatcherTimer _dispatcherTimerChart = new();
 
+    private readonly DispatcherTimer _dispatcherTimerAutoTrade = new();
+    private bool _isAutoTradeFileFullyLoaded;
     private readonly IBitbankRestService _bitbankRestService;
     private readonly IBitbankStreamService _bitbankStreamService;
 
@@ -57,6 +60,9 @@ public partial class PairViewModel : ObservableObject, IDisposable
         _dispatcherTimerChart.Tick += OnTimerChart;
         _dispatcherTimerChart.Interval = chartUpdateInterval;  // Temp testing. new(0, 5, 0);
         _dispatcherTimerChart.Start(); // Testing without updating the chart.. using ticker as we go.
+
+        _dispatcherTimerAutoTrade.Tick += OnTimerAutoTrade;
+        _dispatcherTimerAutoTrade.Interval = new TimeSpan(0, 0, 15);
 
         _bitbankRestService.ErrorOccured += OnErrorOccured;
         _bitbankRestService.ApiErrorOccured += OnApiErrorOccured;
@@ -2403,6 +2409,9 @@ public partial class PairViewModel : ObservableObject, IDisposable
         _dispatcherTimerChart.Stop();
         _dispatcherTimerChart.Tick -= OnTimerChart;
 
+        _dispatcherTimerAutoTrade.Stop();
+        _dispatcherTimerAutoTrade.Tick -= OnTimerAutoTrade;
+
         _bitbankRestService.ErrorOccured -= OnErrorOccured;
         _bitbankRestService.ApiErrorOccured -= OnApiErrorOccured;
 
@@ -3787,6 +3796,715 @@ public partial class PairViewModel : ObservableObject, IDisposable
 
     #endregion
 
+    #region  == AutoTrade ==
+
+    private void OnTimerAutoTrade(object? source, object e)
+    {
+        if (AutoTradeApiKeyIsSet == false) return;
+        if (IsEnabled == false) return;
+
+        UpdateAutoTrade();
+    }
+
+    // 注文情報を最新に更新
+    private async Task UpdateOrdersAsync()
+    {
+        // 最新情報に更新
+
+        // 未約定注文の情報更新用リスト
+        List<ulong> needUpdateIdsList = [];
+
+        // 未約定注文のリストを作るループ。
+        foreach (var pos in AutoTradeOrders)
+        {
+            if ((pos.BuyHasError == true) || (pos.SellHasError == true))
+            {
+                continue;
+            }
+
+            if ((pos.BuyOrderId != 0) && ((pos.BuyStatus == "UNFILLED") || pos.BuyStatus == "PARTIALLY_FILLED"))
+            {
+                needUpdateIdsList.Add(pos.BuyOrderId);
+            }
+
+            if ((pos.SellOrderId != 0) && ((pos.SellStatus == "UNFILLED") || pos.SellStatus == "PARTIALLY_FILLED"))
+            {
+                needUpdateIdsList.Add(pos.SellOrderId);
+            }
+
+        }
+
+        //Debug.WriteLine(needUpdateIdsList.Count.ToString() + " orders need to be updated. @GetOrderListByIDs");
+
+        // 未約定注文の最新状態をアップデートする処理
+        if (needUpdateIdsList.Count > 0)
+        {
+            // リストのリスト（小分けにして分割取得用）
+            List<List<ulong>> ListOfList = [];
+
+            // GetOrderListByIDs 40015 数が多いとエラーになるので、小分けにして。
+            List<ulong> temp = [];
+            int c = 0;
+
+            for (int i = 0; i < needUpdateIdsList.Count; i++)
+            {
+                temp.Add(needUpdateIdsList[c]);
+
+                if (temp.Count == 5)
+                {
+                    ListOfList.Add(temp);
+
+                    temp = [];
+                }
+
+                if (c == needUpdateIdsList.Count - 1)
+                {
+                    if (temp.Count > 0)
+                    {
+                        ListOfList.Add(temp);
+                    }
+
+                    break;
+                }
+
+                c += 1;
+            }
+
+            foreach (var list in ListOfList)
+            {
+                // 最新の注文情報をゲット
+                OrderListResult? ords = await _bitbankRestService.GetOrderListByIdsAsync(AutoTradeApiKey, AutoTradeSecret, _p.ToString(), list);
+
+                if (ords != null)
+                {
+                    if (ords.IsSuccess)
+                    {
+                        // 更新された情報でリストをアップデート
+                        foreach (var ord in ords.OrderList)
+                        {
+                            try
+                            {
+                                // 買い注文
+                                var found = AutoTradeOrders.FirstOrDefault(x => x.BuyOrderId == ord.OrderID);
+                                if (found != null)
+                                {
+                                    found.BuyStatus = ord.Status;
+
+                                    if (ord.AveragePrice > 0)
+                                    {
+                                        found.BuyFilledPrice = ord.AveragePrice;
+                                    }
+                                }
+
+                                // 売り注文
+                                found = AutoTradeOrders.FirstOrDefault(x => x.SellOrderId == ord.OrderID);
+                                if (found != null)
+                                {
+                                    found.SellStatus = ord.Status;
+
+                                    if (ord.AveragePrice > 0)
+                                    {
+                                        found.SellFilledPrice = ord.AveragePrice;
+                                    }
+                                }
+
+                                //Debug.WriteLine("Orders updated. @GetOrderListByIDs");
+                            }
+                            catch (Exception e)
+                            {
+                                Debug.WriteLine("■■■■■ autoTrades GetOrderListByIDs Exception: " + e);
+                                //mylogs.AddMyErrorLogs("autoTrades GetOrderListByIDs Exception: " + e);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Debug.WriteLine("■■■■■ autoTrades GetOrderListByIDs ords HasError" + ords.Err.ErrorMessage);
+                        //mylogs.AddMyErrorLogs("autoTrades GetOrderListByIDs ords HasError: " + ords.Err.ErrorTitle + " - " + ords.Err.ErrorDescription + "エラーコード (" + ords.Err.ErrorCode + ")");
+                    }
+                }
+                else
+                {
+                    Debug.WriteLine("■■■■■ autoTrades GetOrderListByIDs ords == null");
+                    //mylogs.AddMyErrorLogs("autoTrades GetOrderListByIDs ords == null");
+                }
+            }
+        }
+        else
+        {
+            //Debug.WriteLine("No Orders to update. @GetOrderListByIDs");
+        }
+
+    }
+
+    // 買い注文発注
+    private async Task<OrderResult> OrderBuy(AutoTrade pos, decimal buyPrice)
+    {
+        OrderResult res = await _bitbankRestService.MakeOrderAsync(AutoTradeApiKey, AutoTradeSecret, _p.ToString(), pos.BuyAmount, buyPrice, "buy", "limit", true);
+
+        if (res.IsSuccess)
+        {
+            Dispatcher.UIThread.Post(() =>
+            {
+                pos.BuyHasError = false;
+                pos.BuyOrderId = res.OrderID;
+                pos.BuyFilledPrice = res.AveragePrice;
+                pos.BuyStatus = res.Status;
+
+                /*
+                // 約定
+                if (res.Status == "FULLY_FILLED")
+                {
+                    pos.BuyIsDone = true;
+                }
+                */
+            });
+        }
+        else
+        {
+            Dispatcher.UIThread.Post(() =>
+            {
+                pos.BuyHasError = true;
+                pos.BuyErrorInfo ??= new ErrorInfo(ErrType.ApiError);
+                pos.BuyErrorInfo.ErrorSeverity = FAInfoBarSeverity.Error;
+                pos.BuyErrorInfo.ErrorMessage = res.Err.ErrorTitle + " " + res.Err.ErrorMessage;
+                pos.BuyErrorInfo.ErrorCode = res.Err.ErrorCode;
+            });
+
+            System.Diagnostics.Debug.WriteLine("■■■■■ UpdateAutoTrade @OrderBuy MakeOrder API returned error code.");
+        }
+
+        return res;
+    }
+
+    // 売り注文発注
+    private async Task<OrderResult> OrderSell(AutoTrade pos, decimal sellPrice)
+    {
+        OrderResult res = await _bitbankRestService.MakeOrderAsync(AutoTradeApiKey, AutoTradeSecret, _p.ToString(), pos.SellAmount, sellPrice, "sell", "limit", true);
+
+        // 売り成功
+        if (res.IsSuccess)
+        {
+            Dispatcher.UIThread.Post(() =>
+            {
+                pos.SellHasError = false;
+                if (res.AveragePrice > 0)
+                {
+                    pos.SellFilledPrice = res.AveragePrice;
+                }
+                pos.SellOrderId = res.OrderID;
+                pos.SellStatus = res.Status;
+                /*
+                // 売り注文,済みの場合は、済みフラグ
+                if ((pos.SellOrderId != 0) && (pos.SellStatus == "FULLY_FILLED"))
+                {
+                    pos.SellIsDone = true;
+
+                    pos.IsDone = true;
+                }
+                */
+            });
+        }
+        else
+        {
+            Dispatcher.UIThread.Post(() =>
+            {
+                pos.SellHasError = true;
+                pos.SellErrorInfo ??= new ErrorInfo(ErrType.ApiError);
+                pos.SellErrorInfo.ErrorSeverity = FAInfoBarSeverity.Error;
+                pos.SellErrorInfo.ErrorMessage = res.Err.ErrorTitle + " " + res.Err.ErrorMessage;
+                pos.SellErrorInfo.ErrorCode = res.Err.ErrorCode;
+            });
+
+            Debug.WriteLine("UpdateAutoTrade - 売り　sell MakeOrder API failed");
+        }
+
+        return res;
+    }
+
+    // 自動取引のメイン処理
+    private async void UpdateAutoTrade()
+    {
+        //Debug.WriteLine($"{Ltp} is the number.");
+
+        if (!IsAutoTradeStart) return;
+        if (AutoTradeApiKeyIsSet == false) return;
+        if (IsEnabled == false) return;
+
+        // 最新注文情報に更新
+        await UpdateOrdersAsync();
+
+        // 売り注文とりまとめリスト
+        List<AutoTrade> checkSellingList = [];
+
+        bool isBuyFound = false;
+
+        // メインループ
+        foreach (var pos in AutoTradeOrders)
+        {
+
+            // API error 50026 指定の注文は既にキャンセル済みです。
+            if ((pos.BuyOrderId != 0) && pos.BuyHasError)
+            {
+                if (pos.BuyErrorInfo.ErrorCode == 50026)
+                {
+                    pos.BuyOrderId = 0;
+                    pos.BuyStatus = string.Empty;
+                }
+            }
+            if ((pos.SellOrderId != 0) && pos.SellHasError)
+            {
+                if (pos.SellErrorInfo.ErrorCode == 50026)
+                {
+                    pos.SellOrderId = 0;
+                    pos.SellStatus = string.Empty;
+                }
+            }
+
+
+            // Canceled because of "post_only", clear orderId and rest.
+            if ((pos.BuyOrderId != 0) && (pos.BuyStatus == "CANCELED_UNFILLED"))
+            {
+                pos.BuyOrderId = 0;
+                pos.BuyStatus = string.Empty;
+            }
+            if ((pos.SellOrderId != 0) && (pos.SellStatus == "CANCELED_UNFILLED"))
+            {
+                pos.SellOrderId = 0;
+                pos.SellStatus = string.Empty;
+            }
+
+            // Comtinue
+            if ((pos.BuyOrderId != 0) && (pos.BuyStatus == "FULLY_FILLED"))
+            {
+                if ((pos.SellOrderId != 0) && (pos.SellStatus == "FULLY_FILLED"))
+                {
+                    if ((pos.SellFilledPrice > 0) && (pos.BuyFilledPrice > 0))
+                    {
+                        AutoTradeProfit += (Decimal.Subtract(pos.SellFilledPrice, pos.BuyFilledPrice)) * pos.BuyAmount;
+                    }
+
+                    // Rest
+                    pos.BuyOrderId = 0;
+                    pos.BuyStatus = string.Empty;
+                    pos.SellOrderId = 0;
+                    pos.SellStatus = string.Empty;
+                }
+                else
+                {
+                    // Later check for selling.
+                    checkSellingList.Add(pos);
+
+                    continue;
+                }
+            }
+
+            // Cancel other buy orders.
+            if (isBuyFound)
+            {
+                if ((pos.BuyOrderId != 0) && ((pos.BuyStatus == "UNFILLED") || pos.BuyStatus == "PARTIALLY_FILLED"))
+                {
+                    Debug.WriteLine($"CancelOrder @{pos.BuyPrice}");
+
+                    OrderResult res = await _bitbankRestService.CancelOrderAsync(AutoTradeApiKey, AutoTradeSecret, _p.ToString(), pos.BuyOrderId);
+                    if (res.IsSuccess)
+                    {
+                        Dispatcher.UIThread.Post(() =>
+                        {
+                            pos.BuyHasError = false;
+                            pos.BuyOrderId = res.OrderID;
+                            pos.BuyFilledPrice = res.AveragePrice;
+                            pos.BuyStatus = res.Status;
+                        });
+                    }
+                    else
+                    {
+                        if (res.HasErrorInfo)
+                        {
+                            Dispatcher.UIThread.Post(() =>
+                            {
+                                pos.BuyHasError = true;
+                                pos.BuyErrorInfo ??= new ErrorInfo(ErrType.ApiError);
+                                pos.BuyErrorInfo.ErrorCode = res.Err.ErrorCode;
+                                pos.BuyErrorInfo.ErrorMessage = res.Err.ErrorTitle + " " + res.Err.ErrorMessage;
+                            });
+                        }
+                    }
+                }
+            }
+            else
+            {
+                // Already an order is in place.
+                if ((pos.BuyOrderId != 0) && ((pos.BuyStatus == "UNFILLED") || pos.BuyStatus == "PARTIALLY_FILLED"))
+                {
+                    isBuyFound = true;
+                }
+                else
+                {
+                    // 買い注文
+                    if (Bid > pos.BuyPrice)
+                    {
+                        Debug.WriteLine($"Bid:{Bid}, Ltp:{Ltp}, Ask:{Ask}, BuyPrice:{pos.BuyPrice}");
+
+                        Debug.WriteLine($"OrderBuy @{pos.BuyPrice}");
+
+                        // 約定価格兼注文価格
+                        pos.BuyFilledPrice = pos.BuyPrice;
+
+                        var res = await OrderBuy(pos, pos.BuyPrice);
+                        if (res.IsSuccess)
+                        {
+
+                        }
+                        else
+                        {
+                            if (res.HasErrorInfo)
+                            {
+
+                            }
+                        }
+
+                        isBuyFound = true;
+                        //break;
+                    }
+                }
+            }
+        }
+
+        // 売り注文
+        if (checkSellingList.Count > 0)
+        {
+            // from bottom.
+            checkSellingList.Reverse();
+
+            bool isSellFound = false;
+            foreach (var pos in checkSellingList)
+            {
+                // Cancel other sell orders.
+                if (isSellFound)
+                {
+                    if ((pos.SellOrderId != 0) && ((pos.SellStatus == "UNFILLED") || pos.SellStatus == "PARTIALLY_FILLED"))
+                    {
+                        Debug.WriteLine($"CancelOrder @{pos.SellFilledPrice}");
+
+                        OrderResult res = await _bitbankRestService.CancelOrderAsync(AutoTradeApiKey, AutoTradeSecret, _p.ToString(), pos.SellOrderId);
+                        if (res.IsSuccess)
+                        {
+                            Dispatcher.UIThread.Post(() =>
+                            {
+                                pos.SellHasError = false;
+                                pos.SellOrderId = res.OrderID;
+                                pos.SellFilledPrice = res.AveragePrice;
+                                pos.SellStatus = res.Status;
+                            });
+                        }
+                        else
+                        {
+                            if (res.HasErrorInfo)
+                            {
+                                pos.SellHasError = true;
+                                pos.SellErrorInfo ??= new ErrorInfo(ErrType.ApiError);
+                                pos.SellErrorInfo.ErrorCode = res.Err.ErrorCode;
+                                pos.SellErrorInfo.ErrorMessage = res.Err.ErrorTitle + " " + res.Err.ErrorMessage;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    // Break, already an order is in place.
+                    if ((pos.SellOrderId != 0) && ((pos.SellStatus == "UNFILLED") || pos.SellStatus == "PARTIALLY_FILLED"))
+                    {
+                        isSellFound = true;
+                    }
+                    else
+                    {
+                        if (Ask >= pos.SellPrice)
+                        {
+                            Debug.WriteLine($"Bid:{Bid}, Ltp:{Ltp}, Ask:{Ask}, SellPrice:{pos.SellPrice}");
+
+                            decimal newPrice = Ask;
+                            if (_autoTradeMagicNumberForPostOnly > 0)
+                            {
+                                newPrice = Ask + _autoTradeMagicNumberForPostOnly;
+                            }
+
+                            Debug.WriteLine($"OrderSell @{newPrice}");
+
+                            // 約定価格兼注文価格
+                            pos.SellFilledPrice = newPrice;
+
+                            var res = await OrderSell(pos, newPrice);
+                            if (res.IsSuccess)
+                            {
+
+                            }
+                            else
+                            {
+                                if (res.HasErrorInfo)
+                                {
+
+                                }
+                            }
+
+                            isSellFound = true;
+                            //break;
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
+    // 自動取引のデータ保存メソッド
+    public void SaveAutoTrades()
+    {
+        var appDataFolder = App.AppDataFolder;
+        var fileName = _p.ToString();
+        // 通貨毎のファイル保存。
+        var AutoTrades_FilePath = appDataFolder + System.IO.Path.DirectorySeparatorChar + fileName + "_AutoTrades.csv";
+
+        if (_isAutoTradeFileFullyLoaded)// && (p.AutoTrades.Count > 0)
+        {
+            var csv = new StringBuilder();
+            //string atBuyOrderId = "0";
+            //string atBuyStatus = "";
+            //string atBuyFilledPrice = "";
+            string atOneTimeSell = "false";
+            string atOneTimeBuy = "false";
+
+            foreach (var at in AutoTradeOrders)
+            {
+                /*
+                // 未約定の買い注文はここでリセットしてしまう
+                if (at.BuyStatus == "UNFILLED" || at.BuyStatus == "PARTIALLY_FILLED")
+                {
+                    atBuyOrderId = "0";
+                    atBuyFilledPrice = "0";
+                    atBuyStatus = "";
+                }
+                else
+                {
+                    atBuyOrderId = at.BuyOrderId.ToString();
+                    atBuyStatus = at.BuyStatus;
+                    atBuyFilledPrice = at.BuyFilledPrice.ToString();
+                }
+                */
+
+                if (at.OneTimeSell)
+                {
+                    atOneTimeSell = "true";
+                }
+
+                if (at.OneTimeBuy)
+                {
+                    atOneTimeBuy = "true";
+                }
+
+                var newLine = string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14}",
+                        at.BuyOrderId.ToString(),
+                        //atBuyOrderId,
+                        at.BuySide,
+                        at.BuyAmount.ToString(),
+                        at.BuyPrice,
+                        at.BuyFilledPrice.ToString(),
+                        //atBuyFilledPrice,
+                        at.BuyStatus,
+                        //atBuyStatus,
+                        at.SellOrderId.ToString(),
+                        at.SellSide,
+                        at.SellAmount.ToString(),
+                        at.SellPrice,
+                        at.SellFilledPrice.ToString(),
+                        at.SellStatus,
+                        at.ShushiAmount.ToString(),
+                        atOneTimeSell,
+                        atOneTimeBuy
+                        );
+                csv.AppendLine(newLine);
+
+            }
+
+            // ファイル保存
+            try
+            {
+                System.IO.File.WriteAllText(AutoTrades_FilePath, csv.ToString());
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("■■■■■ Error  自動取引データファイル保存中: " + ex + " while saving : " + AutoTrades_FilePath);
+            }
+        }
+
+        if (_isAutoTradeFileFullyLoaded && (AutoTradeOrders.Count == 0))
+        {
+            // リストが空なので、ファイルも削除。
+            if (System.IO.File.Exists(AutoTrades_FilePath))
+            {
+                System.IO.File.Delete(AutoTrades_FilePath);
+            }
+        }
+
+    }
+
+    // 自動取引のデータをロードするメソッド
+    private void LoadAutoTrades()
+    {
+        var appDataFolder = App.AppDataFolder;
+        var fileName = _p.ToString();
+        var AutoTrades_FilePath = appDataFolder + System.IO.Path.DirectorySeparatorChar + fileName + "_AutoTrades.csv";
+
+        if (!System.IO.File.Exists(AutoTrades_FilePath))
+        {
+            _isAutoTradeFileFullyLoaded = true;
+            return;
+        }
+
+        try
+        {
+            var contents = System.IO.File.ReadAllText(AutoTrades_FilePath).Split('\n');
+            var csv = from line in contents select line.Split(',').ToArray();
+
+            int i = 0;
+
+            foreach (var row in csv)
+            {
+                if (string.IsNullOrEmpty(row[0]))
+                {
+                    break;
+                }
+
+                AutoTrade asdf = new()
+                {
+                    BuyOrderId = Convert.ToUInt64(row[0]),
+                    BuySide = row[1],
+                    BuyAmount = Decimal.Parse(row[2]),
+                    BuyPrice = Decimal.Parse(row[3]),
+                    BuyFilledPrice = Decimal.Parse(row[4]),
+                    BuyStatus = row[5]
+                };
+                /*
+                if (asdf.BuyStatus == "FULLY_FILLED")
+                {
+                    asdf.BuyIsDone = true;
+                }
+                */
+                asdf.EstimateAmount = asdf.BuyAmount * asdf.BuyPrice;
+
+                asdf.SellOrderId = Convert.ToUInt64(row[6]);
+                asdf.SellSide = row[7];
+                asdf.SellAmount = Decimal.Parse(row[8]);
+                asdf.SellPrice = Decimal.Parse(row[9]);
+                asdf.SellFilledPrice = Decimal.Parse(row[10]);
+                asdf.SellStatus = row[11];
+                /*
+                if (asdf.SellStatus == "FULLY_FILLED")
+                {
+                    asdf.SellIsDone = true;
+                }
+                */
+
+                i++;
+                asdf.Index = i;
+
+                asdf.ShushiAmount = Decimal.Parse(row[12]);
+
+                asdf.OneTimeSell = false;
+                if (row.Length >= 14)
+                {
+                    if (!String.IsNullOrEmpty(row[13]))
+                    {
+                        if (String.Equals(row[13].Trim(), "true"))
+                        {
+                            asdf.OneTimeSell = true;
+                        }
+                    }
+                }
+
+                asdf.OneTimeBuy = false;
+                if (row.Length >= 15)
+                {
+                    if (!String.IsNullOrEmpty(row[14]))
+                    {
+                        if (String.Equals(row[14].Trim(), "true"))
+                        {
+                            asdf.OneTimeBuy = true;
+                        }
+                    }
+                }
+
+                AutoTradeOrders.Add(asdf);
+
+            }
+
+            _isAutoTradeFileFullyLoaded = true;
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine("■■■■■ Error  自動取引データロード中: " + ex + " while opening : " + AutoTrades_FilePath);
+        }
+    }
+
+    // 自動取引のデータを作成
+    private void PopulateAutoTrades()
+    {
+
+        if (_ltp == 0)
+            return;
+
+        if (AutoTradeSlots == 0)
+            return;
+
+        if (AutoTradeSlots <= AutoTradeOrders.Count - 1)
+            return;
+
+        if (AutoTradeDefaultHaba <= 0)
+            return;
+
+        if (AutoTradeDefaultHaba <= 0)
+            return;
+
+
+        decimal tama = AutoTradeTama;
+        var newSlots = AutoTradeSlots - AutoTradeOrders.Count;
+        decimal haba = AutoTradeDefaultHaba;
+        decimal rikaku = AutoTradeDefaultRikakuHaba;
+        decimal basePrice = AutoTradeAddFrom;
+
+        if (basePrice <= 0)
+        {
+            basePrice = _ltp;
+        }
+
+        int c = AutoTradeOrders.Count;
+
+        for (int i = 0; i < newSlots; i++)
+        {
+            c++;
+
+            AutoTrade position = new()
+            {
+                BuySide = "buy",
+                BuyAmount = tama,
+                SellSide = "sell",
+                SellAmount = tama,
+                Index = c,
+                BuyPrice = basePrice - (haba * i)
+            };
+            position.SellPrice = position.BuyPrice + rikaku;
+            position.EstimateAmount = tama * position.BuyPrice;
+            position.ShushiAmount = Decimal.Subtract(Decimal.Multiply(position.SellPrice, position.SellAmount), Decimal.Multiply(position.BuyPrice, position.BuyAmount));
+
+            Dispatcher.UIThread.Post(() =>
+            {
+                AutoTradeOrders.Add(position);
+            });
+        }
+    }
+
+    #endregion
+
     #endregion
 
     #region == Commands ==
@@ -3987,6 +4705,167 @@ public partial class PairViewModel : ObservableObject, IDisposable
         }
     }
 
+
+    #region == AutoTrade ==
+
+    [RelayCommand]
+    public void StartStopAutoTrade()
+    {
+        if (_dispatcherTimerAutoTrade.IsEnabled)
+        {
+            IsAutoTradeStart = false;
+            _dispatcherTimerAutoTrade.Stop();
+            Debug.WriteLine("AutoTrade stopped");
+        }
+        else
+        {
+            if (AutoTradeApiKeyIsSet == false) return;
+            if (IsEnabled == false) return;
+
+            IsAutoTradeStart = true;
+            UpdateAutoTrade();
+            _dispatcherTimerAutoTrade.Start();
+            Debug.WriteLine("AutoTrade started");
+            AutoTradeProfit = 0;
+        }
+    }
+
+    [RelayCommand]
+    public void StopAutoTrade()
+    {
+        if (_dispatcherTimerAutoTrade.IsEnabled)
+        {
+            IsAutoTradeStart = false;
+            _dispatcherTimerAutoTrade.Stop();
+            Debug.WriteLine("Stopped");
+        }
+    }
+
+    [RelayCommand]
+    public void AddAutoTradeOrdersBulk()
+    {
+        //if (AutoTradeApiKeyIsSet == false) return;
+        //if (Enabled == false) return;
+
+        PopulateAutoTrades();
+    }
+
+    [RelayCommand]
+    public void AutoTradeCancelSelectedOrders(object obj)
+    {
+        if (obj is null) return;
+        System.Collections.IList items = (System.Collections.IList)obj;
+
+        var collection = items.Cast<AutoTrade>();
+
+        List<AutoTrade> cancelList = new List<AutoTrade>();
+        foreach (var item in collection)
+        {
+            cancelList.Add(item);
+        }
+        // or
+        //deleteIdList.AddRange(collection.Select(item => (item as SongInfoEx).Id));
+
+        foreach (var pos in cancelList)
+        {
+            Dispatcher.UIThread.Post(async () =>
+            {
+                await AutoTradeCancelOrder(pos);
+            });
+        }
+    }
+
+    private async Task AutoTradeCancelOrder(AutoTrade pos)
+    {
+        Debug.WriteLine($"CancelOrder");
+
+        if ((pos.BuyOrderId != 0) && ((pos.BuyStatus == "UNFILLED") || pos.BuyStatus == "PARTIALLY_FILLED"))
+        {
+            OrderResult res = await _bitbankRestService.CancelOrderAsync(AutoTradeApiKey, AutoTradeSecret, _p.ToString(), pos.BuyOrderId);
+            if (res.IsSuccess)
+            {
+                Dispatcher.UIThread.Post(() =>
+                {
+                    pos.BuyHasError = false;
+                    pos.BuyOrderId = res.OrderID;
+                    pos.BuyFilledPrice = res.AveragePrice;
+                    pos.BuyStatus = res.Status;
+                });
+            }
+            else
+            {
+                if (res.HasErrorInfo)
+                {
+                    Dispatcher.UIThread.Post(() =>
+                    {
+                        pos.BuyHasError = true;
+                        pos.BuyErrorInfo ??= new ErrorInfo(ErrType.ApiError);
+                        pos.BuyErrorInfo.ErrorCode = res.Err.ErrorCode;
+                        pos.BuyErrorInfo.ErrorMessage = res.Err.ErrorTitle + " " + res.Err.ErrorMessage;
+                    });
+                }   
+            }
+        }
+
+        if ((pos.SellOrderId != 0) && ((pos.SellStatus == "UNFILLED") || pos.SellStatus == "PARTIALLY_FILLED"))
+        {
+            OrderResult res = await _bitbankRestService.CancelOrderAsync(AutoTradeApiKey, AutoTradeSecret, _p.ToString(), pos.SellOrderId);
+            if (res.IsSuccess)
+            {
+                Dispatcher.UIThread.Post(() =>
+                {
+                    pos.SellHasError = false;
+                    pos.SellOrderId = res.OrderID;
+                    pos.SellFilledPrice = res.AveragePrice;
+                    pos.SellStatus = res.Status;
+                });
+            }
+            else
+            {
+                if (res.HasErrorInfo)
+                {
+                    pos.SellHasError = true;
+                    pos.SellErrorInfo ??= new ErrorInfo(ErrType.ApiError);
+                    pos.SellErrorInfo.ErrorCode = res.Err.ErrorCode;
+                    pos.SellErrorInfo.ErrorMessage = res.Err.ErrorTitle + " " + res.Err.ErrorMessage;
+                }
+            }
+        }
+    }
+
+    [RelayCommand]
+    public void AutoTradeDeleteSelectedOrders(object obj)
+    {
+        if (obj is null) return;
+        System.Collections.IList items = (System.Collections.IList)obj;
+
+        var collection = items.Cast<AutoTrade>();
+
+        List<AutoTrade> deleteList = [];
+        foreach (var item in collection)
+        {
+            deleteList.Add(item);
+        }
+        // or
+        //deleteIdList.AddRange(collection.Select(item => (item as SongInfoEx).Id));
+
+        foreach (var pos in deleteList)
+        {
+            // if active order, skip
+            if ((pos.BuyOrderId != 0) && ((pos.BuyStatus == "UNFILLED") || pos.BuyStatus == "PARTIALLY_FILLED"))
+            {
+                continue;
+            }
+            if ((pos.SellOrderId != 0) && ((pos.SellStatus == "UNFILLED") || pos.SellStatus == "PARTIALLY_FILLED"))
+            {
+                continue;
+            }
+
+            AutoTradeOrders.Remove(pos);
+        }
+    }
+
+    #endregion
 
     #endregion
 

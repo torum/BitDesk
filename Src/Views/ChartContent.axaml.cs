@@ -86,4 +86,9 @@ public partial class ChartContent : UserControl
     {
         ChartSplitView.IsPaneOpen = !ChartSplitView.IsPaneOpen;
     }
+
+    private void AutoTradePaneOpenCloseButton_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        AutoTradeSplitView.IsPaneOpen = !AutoTradeSplitView.IsPaneOpen;
+    }
 }

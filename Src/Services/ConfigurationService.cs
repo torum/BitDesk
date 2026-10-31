@@ -633,14 +633,6 @@ internal sealed class ConfigurationService : IConfigurationService
 
     public void SetUserKey(string userKey, string userSalt)
     {
-        if (string.IsNullOrEmpty(userKey))
-        {
-            throw new ArgumentException("User key cannot be null or empty.", nameof(userKey));
-        }
-        if (string.IsNullOrEmpty(userSalt))
-        {
-            throw new ArgumentException("User salt cannot be null or empty.", nameof(userSalt));
-        }
         _userKey = userKey;
         _userSalt = userSalt;
     }
@@ -672,7 +664,6 @@ internal sealed class ConfigurationService : IConfigurationService
             xAttrs = doc.CreateAttribute("IsChartTooltipVisible");
             xAttrs.Value = "";// TODO:
             xPair.SetAttributeNode(xAttrs);
-
 
             xAttrs = doc.CreateAttribute("AutoTradeApiKey");
             xAttrs.Value = Helper.EncryptDecrypt.Encrypt(hoge.AutoTradeApiKey, userKey, userSalt);

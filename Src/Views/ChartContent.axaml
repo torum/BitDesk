@@ -173,10 +173,16 @@
                                 
                                 <Grid RowDefinitions="Auto,*">
 
-                                    <Button Grid.Row="0" Content="Refresh" Command="{Binding UpdateTransactionsCommand, Mode=OneWay}" Margin="4" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+									<Button Grid.Row="0" Width="34" Height="34" Command="{Binding UpdateTransactionsCommand, Mode=OneWay}" Margin="0,0,8,8" VerticalAlignment="Top" HorizontalAlignment="Right">
+										<Viewbox Width="18" Height="18" HorizontalAlignment="Center" VerticalAlignment="Center">
+											<PathIcon Background="Transparent" Width="NaN" Height="NaN"
+												Data="M12 4.5C7.85786 4.5 4.5 7.85786 4.5 12C4.5 16.1421 7.85786 19.5 12 19.5C16.1421 19.5 19.5 16.1421 19.5 12C19.5 11.6236 19.4723 11.2538 19.4188 10.8923C19.3515 10.4382 19.6839 10 20.1429 10C20.5138 10 20.839 10.2562 20.8953 10.6228C20.9642 11.0718 21 11.5317 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C14.3051 3 16.4077 3.86656 18 5.29168V4.25C18 3.83579 18.3358 3.5 18.75 3.5C19.1642 3.5 19.5 3.83579 19.5 4.25V7.25C19.5 7.66421 19.1642 8 18.75 8H15.75C15.3358 8 15 7.66421 15 7.25C15 6.83579 15.3358 6.5 15.75 6.5H17.0991C15.7609 5.25883 13.9691 4.5 12 4.5Z">
+											</PathIcon>
+										</Viewbox>	
+									</Button>
 
                                     <ScrollViewer Grid.Row="1">
-                                        <ItemsControl Grid.Row="1" x:Name="TransactionsListBox" ItemsSource="{Binding Path=Transactions, Mode=OneWay}" Opacity="0.8" Background="Transparent" Margin="0,0,0,6" Padding="0,12,0,12" HorizontalAlignment="Stretch" DoubleTapped="DepthListBox_DoubleTapped">
+                                        <ItemsControl Grid.Row="1" x:Name="TransactionsListBox" ItemsSource="{Binding Path=Transactions, Mode=OneWay}" Opacity="0.8" Background="Transparent" Margin="0,0,0,6" Padding="0,4,0,12" HorizontalAlignment="Stretch" DoubleTapped="DepthListBox_DoubleTapped">
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate x:DataType="mod:Transaction">
 
@@ -349,7 +355,14 @@
             <TabControl Margin="8,0,0,0" Theme="{DynamicResource MyCustomSegmentedTheme}" HorizontalAlignment="Stretch">
                 <TabItem Header="Orders">
                     <Grid RowDefinitions="Auto,*">
-                        <Button Grid.Row="0" Content="Refresh" Command="{Binding UpdateOrdersCommand, Mode=OneWay}" Margin="4" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+
+                        <Button Grid.Row="0" Width="34" Height="34" Command="{Binding UpdateOrdersCommand, Mode=OneWay}" Margin="0,0,8,8" VerticalAlignment="Top" HorizontalAlignment="Right">
+							<Viewbox Width="18" Height="18" HorizontalAlignment="Center" VerticalAlignment="Center">
+								<PathIcon Background="Transparent" Width="NaN" Height="NaN"
+									Data="M12 4.5C7.85786 4.5 4.5 7.85786 4.5 12C4.5 16.1421 7.85786 19.5 12 19.5C16.1421 19.5 19.5 16.1421 19.5 12C19.5 11.6236 19.4723 11.2538 19.4188 10.8923C19.3515 10.4382 19.6839 10 20.1429 10C20.5138 10 20.839 10.2562 20.8953 10.6228C20.9642 11.0718 21 11.5317 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C14.3051 3 16.4077 3.86656 18 5.29168V4.25C18 3.83579 18.3358 3.5 18.75 3.5C19.1642 3.5 19.5 3.83579 19.5 4.25V7.25C19.5 7.66421 19.1642 8 18.75 8H15.75C15.3358 8 15 7.66421 15 7.25C15 6.83579 15.3358 6.5 15.75 6.5H17.0991C15.7609 5.25883 13.9691 4.5 12 4.5Z">
+								</PathIcon>
+							</Viewbox>	
+						</Button>
 
                         <ListBox Grid.Row="1" ItemsSource="{Binding Orders, Mode=OneWay}">
                             <ItemsControl.ItemTemplate>
@@ -391,9 +404,364 @@
 
                     </Grid>
                 </TabItem>
+                <TabItem Header="Grid Trading">
+
+                    <Grid RowDefinitions="Auto,*">
+                        
+						<StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="12" Margin="0,0,8,8" HorizontalAlignment="Right">
+							
+							<TextBlock VerticalAlignment="Center">
+								<Run Text="Profit:"/>
+								<Run Text="{Binding AutoTradeProfit, Mode=OneWay}"/>
+							</TextBlock>
+
+							<Button Width="34" Height="34" Command="{Binding StartStopAutoTradeCommand}">
+								<Viewbox Width="18" Height="18" HorizontalAlignment="Center" VerticalAlignment="Center">
+									<PathIcon Background="Transparent" Width="NaN" Height="NaN"
+										Data="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z">
+										<Interaction.Behaviors>
+											<DataTriggerBehavior Binding="{Binding IsAutoTradeStart}" ComparisonCondition="Equal" Value="True">
+												<ChangePropertyAction PropertyName="Data" Value="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M9,9H15V15H9" />
+												<ChangePropertyAction PropertyName="Foreground" Value="Red" />
+											</DataTriggerBehavior>
+											<DataTriggerBehavior Binding="{Binding IsAutoTradeStart}" ComparisonCondition="Equal" Value="False">
+												<ChangePropertyAction PropertyName="Data" Value="M2,12A10,10 0 0,1 12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12M10,17L15,12L10,7V17Z" />
+												<ChangePropertyAction PropertyName="Foreground" Value="White" />
+											</DataTriggerBehavior>
+										</Interaction.Behaviors>
+									</PathIcon>
+								</Viewbox>
+							</Button>
+
+							<Button x:Name="AutoTradePaneOpenCloseButton" Width="34" Height="34" Click="AutoTradePaneOpenCloseButton_Click">
+								<Viewbox Width="18" Height="18" HorizontalAlignment="Center" VerticalAlignment="Center">
+									<PathIcon Background="Transparent" Width="NaN" Height="NaN"
+										Data="M9.17903 10.5L8.18051 11.3737C7.9727 11.5555 7.95164 11.8714 8.13348 12.0792C8.31532 12.2871 8.6312 12.3081 8.83902 12.1263L10.839 10.3763C10.9475 10.2813 11.0098 10.1442 11.0098 9.99999C11.0098 9.85581 10.9475 9.71865 10.839 9.62371L8.83902 7.87371C8.6312 7.69186 8.31532 7.71292 8.13348 7.92074C7.95164 8.12856 7.9727 8.44444 8.18051 8.62628L9.17905 9.5L5.5 9.5C5.22386 9.5 5 9.72386 5 10C5 10.2761 5.22386 10.5 5.5 10.5L9.17903 10.5ZM16 16C17.1046 16 18 15.1046 18 14V6C18 4.89543 17.1046 4 16 4H4C2.89543 4 2 4.89543 2 6V14C2 15.1046 2.89543 16 4 16L16 16ZM17 14C17 14.5523 16.5523 15 16 15H13L13 5L16 5C16.5523 5 17 5.44772 17 6L17 14ZM12 5L12 15L4 15C3.44772 15 3 14.5523 3 14L3 6C3 5.44771 3.44772 5 4 5L12 5Z">
+										<Interaction.Behaviors>
+											<DataTriggerBehavior Binding="{Binding IsPaneOpen, ElementName=AutoTradeSplitView}" ComparisonCondition="Equal" Value="True">
+												<ChangePropertyAction PropertyName="Data" Value="M9.17903 10.5L8.18051 11.3737C7.9727 11.5555 7.95164 11.8714 8.13348 12.0792C8.31532 12.2871 8.6312 12.3081 8.83902 12.1263L10.839 10.3763C10.9475 10.2813 11.0098 10.1442 11.0098 9.99999C11.0098 9.85581 10.9475 9.71865 10.839 9.62371L8.83902 7.87371C8.6312 7.69186 8.31532 7.71292 8.13348 7.92074C7.95164 8.12856 7.9727 8.44444 8.18051 8.62628L9.17905 9.5L5.5 9.5C5.22386 9.5 5 9.72386 5 10C5 10.2761 5.22386 10.5 5.5 10.5L9.17903 10.5ZM16 16C17.1046 16 18 15.1046 18 14V6C18 4.89543 17.1046 4 16 4H4C2.89543 4 2 4.89543 2 6V14C2 15.1046 2.89543 16 4 16L16 16ZM17 14C17 14.5523 16.5523 15 16 15H13L13 5L16 5C16.5523 5 17 5.44772 17 6L17 14ZM12 5L12 15L4 15C3.44772 15 3 14.5523 3 14L3 6C3 5.44771 3.44772 5 4 5L12 5Z" />
+											</DataTriggerBehavior>
+											<DataTriggerBehavior Binding="{Binding IsPaneOpen, ElementName=AutoTradeSplitView}" ComparisonCondition="Equal" Value="False">
+												<ChangePropertyAction PropertyName="Data" Value="M6.82097 10.5L7.81949 11.3737C8.0273 11.5556 8.04836 11.8714 7.86652 12.0793C7.68468 12.2871 7.3688 12.3081 7.16098 12.1263L5.16098 10.3763C5.05247 10.2814 4.99023 10.1442 4.99023 10C4.99023 9.85583 5.05247 9.71866 5.16098 9.62372L7.16098 7.87372C7.3688 7.69188 7.68468 7.71294 7.86652 7.92075C8.04836 8.12857 8.0273 8.44445 7.81949 8.62629L6.82095 9.50001L10.5 9.50001C10.7761 9.50001 11 9.72387 11 10C11 10.2762 10.7761 10.5 10.5 10.5L6.82097 10.5ZM18 14C18 15.1046 17.1046 16 16 16L4 16C2.89543 16 2 15.1046 2 14V6C2 4.89543 2.89543 4 4 4H16C17.1046 4 18 4.89543 18 6V14ZM16 15C16.5523 15 17 14.5523 17 14L17 6C17 5.44772 16.5523 5 16 5L13 5L13 15H16ZM12 15L12 5L4 5C3.44772 5 3 5.44771 3 6L3 14C3 14.5523 3.44772 15 4 15L12 15Z" />
+											</DataTriggerBehavior>
+										</Interaction.Behaviors>
+									</PathIcon>
+								</Viewbox>
+							</Button>
+
+						</StackPanel>
+
+						<SplitView Grid.Row="1" PanePlacement="Right" Name="AutoTradeSplitView" DisplayMode="Overlay" OpenPaneLength="300" IsPaneOpen="False">
+
+							<SplitView.Pane>
+								
+								<ScrollViewer>
+
+									<StackPanel Margin="24" Spacing="24">
+
+										<StackPanel HorizontalAlignment="Left">
+											<Label Content="ロット追加起点： " VerticalAlignment="Bottom"></Label>
+											<StackPanel Orientation="Horizontal">
+												<TextBox Text="{Binding AutoTradeAddFrom}" Width="120"></TextBox>
+												<Label Content="{Binding CurrencyUnitString}" VerticalAlignment="Bottom"></Label>
+											</StackPanel>
+										</StackPanel>
+
+										<StackPanel HorizontalAlignment="Left">
+											<Label Content="ロット数： " VerticalAlignment="Bottom"></Label>
+											<TextBox Text="{Binding AutoTradeSlots}" Width="120"></TextBox>
+										</StackPanel>
+
+										<StackPanel HorizontalAlignment="Left">
+											<Label Content="取引単価： " VerticalAlignment="Bottom"></Label>
+											<StackPanel Orientation="Horizontal">
+												<TextBox Text="{Binding AutoTradeTama}" Width="120"></TextBox>
+												<Label Content="{Binding CurrencyUnitString}" VerticalAlignment="Bottom"></Label>
+											</StackPanel>
+										</StackPanel>
+
+										<StackPanel HorizontalAlignment="Left">
+											<Label Content="取引幅： " VerticalAlignment="Bottom"></Label>
+											<StackPanel Orientation="Horizontal">
+												<TextBox Text="{Binding AutoTradeDefaultHaba}" Width="120"></TextBox>
+												<Label Content="{Binding CurrencyUnitString}" VerticalAlignment="Bottom"></Label>
+											</StackPanel>
+										</StackPanel>
+
+										<StackPanel HorizontalAlignment="Left">
+											<Label Content="利確幅： " VerticalAlignment="Bottom"></Label>
+											<StackPanel Orientation="Horizontal">
+												<TextBox Text="{Binding AutoTradeDefaultRikakuHaba}" Width="120"></TextBox>
+												<Label Content="{Binding CurrencyUnitString}" VerticalAlignment="Bottom"></Label>
+											</StackPanel>
+										</StackPanel>
+
+										<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,36,0,0">
+											<Button Width="120" Command="{Binding AddAutoTradeOrdersBulkCommand}" Content="追加"/>
+										</StackPanel>
+
+									</StackPanel>
+
+								</ScrollViewer>
+
+							</SplitView.Pane>
+							<SplitView.Content>
+
+								<Grid>
+									<Grid.RowDefinitions>
+										<RowDefinition Height="Auto"></RowDefinition>
+										<RowDefinition Height="*"></RowDefinition>
+									</Grid.RowDefinitions>
+
+									<Grid Grid.Row="0" Name="DummyHeader" Margin="2,0,2,6">
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition Width="0"></ColumnDefinition>
+											<ColumnDefinition Width="64"></ColumnDefinition>
+											<ColumnDefinition Width="38" MaxWidth="38"></ColumnDefinition>
+											<ColumnDefinition Width="1*"></ColumnDefinition>
+											<ColumnDefinition Width="1*"></ColumnDefinition>
+											<ColumnDefinition Width="1*"></ColumnDefinition>
+											<ColumnDefinition Width="1*" MinWidth="80"></ColumnDefinition>
+											<ColumnDefinition Width="50" MaxWidth="50"></ColumnDefinition>
+											<ColumnDefinition Width="1*"></ColumnDefinition>
+											<ColumnDefinition Width="38" MaxWidth="38"></ColumnDefinition>
+											<ColumnDefinition Width="1*"></ColumnDefinition>
+											<ColumnDefinition Width="1*"></ColumnDefinition>
+											<ColumnDefinition Width="1*"></ColumnDefinition>
+											<ColumnDefinition Width="1*" MinWidth="80"></ColumnDefinition>
+											<ColumnDefinition Width="50" MaxWidth="50"></ColumnDefinition>
+											<ColumnDefinition Width="1*"></ColumnDefinition>
+											<ColumnDefinition Width="1"></ColumnDefinition>
+										</Grid.ColumnDefinitions>
+
+										<StackPanel Grid.Column="1" Name="Column1" Margin="12,0,0,0">
+											<TextBlock Text="Idx" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Padding="0" Margin="0" Opacity="0.9"></TextBlock>
+										</StackPanel>
+
+										<TextBlock Grid.Column="2" Text="買" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9">
+										</TextBlock>
+
+										<TextBlock Grid.Column="3" Text="注文数" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9">
+										</TextBlock>
+
+										<TextBlock Grid.Column="4" Text="価格" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9">
+										</TextBlock>
+
+										<TextBlock Grid.Column="5" Text="約定価格" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9">
+										</TextBlock>
+
+										<TextBlock Grid.Column="6" Text="ステータス" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9">
+										</TextBlock>
+
+										<TextBlock Grid.Column="7" Text="!!!" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9">
+										</TextBlock>
+
+										<TextBlock Grid.Column="8" Text="推定価格(円)" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9">
+										</TextBlock>
+
+										<TextBlock Grid.Column="9" Text="売" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9">
+										</TextBlock>
+
+										<TextBlock Grid.Column="10" Text="注文数" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9">
+										</TextBlock>
+
+										<TextBlock Grid.Column="11" Text="価格" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9">
+										</TextBlock>
+
+										<TextBlock Grid.Column="12" Text="注文・約定価格" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9">
+										</TextBlock>
+
+										<TextBlock Grid.Column="13" Text="ステータス" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9">
+										</TextBlock>
+
+										<TextBlock Grid.Column="14" Text="!!!" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9">
+										</TextBlock>
+
+										<TextBlock Grid.Column="15" Text="想定利益(円)" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9">
+										</TextBlock>
+
+									</Grid>
+
+									<ListBox Grid.Row="1" ItemsSource="{Binding AutoTradeOrders}" SelectedItem="{Binding SelectedAutoTradeOrder}" SelectionMode="Multiple" AutoScrollToSelectedItem="False" BorderThickness="0" ScrollViewer.AllowAutoHide="True" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto" Margin="0" Padding="0">
+										<ListBox.ItemsPanel>
+											<ItemsPanelTemplate>
+												<VirtualizingStackPanel />
+											</ItemsPanelTemplate>
+										</ListBox.ItemsPanel>
+										<ListBox.ItemTemplate>
+											<DataTemplate x:DataType="mod:AutoTrade">
+												<Grid>
+													<Grid.ColumnDefinitions>
+														<ColumnDefinition Width="0"></ColumnDefinition>
+														<ColumnDefinition Width="64"></ColumnDefinition>
+														<ColumnDefinition Width="38" MaxWidth="38"></ColumnDefinition>
+														<ColumnDefinition Width="1*"></ColumnDefinition>
+														<ColumnDefinition Width="1*"></ColumnDefinition>
+														<ColumnDefinition Width="1*"></ColumnDefinition>
+														<ColumnDefinition Width="1*" MinWidth="80"></ColumnDefinition>
+														<ColumnDefinition Width="50" MaxWidth="50"></ColumnDefinition>
+														<ColumnDefinition Width="1*"></ColumnDefinition>
+														<ColumnDefinition Width="38" MaxWidth="38"></ColumnDefinition>
+														<ColumnDefinition Width="1*"></ColumnDefinition>
+														<ColumnDefinition Width="1*"></ColumnDefinition>
+														<ColumnDefinition Width="1*"></ColumnDefinition>
+														<ColumnDefinition Width="1*" MinWidth="80"></ColumnDefinition>
+														<ColumnDefinition Width="50" MaxWidth="50"></ColumnDefinition>
+														<ColumnDefinition Width="1*"></ColumnDefinition>
+														<ColumnDefinition Width="1"></ColumnDefinition>
+													</Grid.ColumnDefinitions>
+
+													<TextBlock Grid.Column="1" Text="{Binding Index, Mode=OneWay}" Width="{Binding Bounds.Size.Width, ElementName=Column1}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9">
+													</TextBlock>
+
+													<TextBlock Grid.Column="2" Text="{Binding BuySideText, Mode=OneWay}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9">
+													</TextBlock>
+
+													<TextBlock Grid.Column="3" Text="{Binding BuyAmount, Mode=OneWay, StringFormat=0.#############################}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9">
+													</TextBlock>
+
+													<TextBlock Grid.Column="4" Text="{Binding BuyPrice, Mode=OneWay, StringFormat=0.#############################}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9">
+													</TextBlock>
+
+													<TextBlock Grid.Column="5" Text="{Binding BuyFilledPrice, Mode=OneWay, StringFormat=0.#############################}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9">
+													</TextBlock>
+
+													<TextBlock Grid.Column="6" Text="{Binding BuyStatusText, Mode=OneWay}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9">
+													</TextBlock>
+
+													<!--
+													<TextBlock Grid.Column="7" Text="!!!" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9">
+														<Interaction.Behaviors>
+															<DataTriggerBehavior Binding="{Binding BuyHasError}" ComparisonCondition="Equal" Value="True">
+																<ChangePropertyAction PropertyName="IsVisible" Value="True" />
+															</DataTriggerBehavior>
+															<DataTriggerBehavior Binding="{Binding BuyHasError}" ComparisonCondition="Equal" Value="False">
+																<ChangePropertyAction PropertyName="IsVisible" Value="False" />
+															</DataTriggerBehavior>
+														</Interaction.Behaviors>
+													</TextBlock>
+													-->
+													<Button Grid.Column="7" Content="!!!" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Background="Red">
+														<Button.Flyout >
+															<Flyout>
+																<Border Background="Red" CornerRadius="4" Padding="6" Width="250" Margin="0">
+																	<TextBlock TextWrapping="Wrap">
+																		<Run Text="Error"></Run>
+																		<Run Text="{Binding Path=BuyErrorInfo.ErrorTitle}"></Run>
+																		<Run Text="{Binding Path=BuyErrorInfo.ErrorMessage}"></Run>
+																	</TextBlock>
+																</Border>
+															</Flyout>
+														</Button.Flyout>
+														<Interaction.Behaviors>
+															<DataTriggerBehavior Binding="{Binding BuyHasError}" ComparisonCondition="Equal" Value="True">
+																<ChangePropertyAction PropertyName="IsVisible" Value="True" />
+															</DataTriggerBehavior>
+															<DataTriggerBehavior Binding="{Binding BuyHasError}" ComparisonCondition="Equal" Value="False">
+																<ChangePropertyAction PropertyName="IsVisible" Value="False" />
+															</DataTriggerBehavior>
+														</Interaction.Behaviors>
+													</Button>
+
+													<TextBlock Grid.Column="8" Text="{Binding EstimateAmount, Mode=OneWay, StringFormat=0.#############################}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9">
+													</TextBlock>
+
+													<TextBlock Grid.Column="9" Text="{Binding SellSideText, Mode=OneWay}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9">
+													</TextBlock>
+
+													<TextBlock Grid.Column="10" Text="{Binding SellAmount, Mode=OneWay, StringFormat=0.#############################}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9">
+													</TextBlock>
+
+													<TextBlock Grid.Column="11" Text="{Binding SellPrice, Mode=OneWay, StringFormat=0.#############################}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9">
+													</TextBlock>
+
+													<TextBlock Grid.Column="12" Text="{Binding SellFilledPrice, Mode=OneWay, StringFormat=0.#############################}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9">
+													</TextBlock>
+
+													<TextBlock Grid.Column="13" Text="{Binding SellStatusText, Mode=OneWay}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9">
+													</TextBlock>
+
+													<!--
+													<TextBlock Grid.Column="14" Text="!!!" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9">
+														<Interaction.Behaviors>
+															<DataTriggerBehavior Binding="{Binding SellHasError}" ComparisonCondition="Equal" Value="True">
+																<ChangePropertyAction PropertyName="IsVisible" Value="True" />
+															</DataTriggerBehavior>
+															<DataTriggerBehavior Binding="{Binding SellHasError}" ComparisonCondition="Equal" Value="False">
+																<ChangePropertyAction PropertyName="IsVisible" Value="False" />
+															</DataTriggerBehavior>
+														</Interaction.Behaviors>
+													</TextBlock>
+													-->
+													<Button Grid.Column="14" Content="!!!" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Background="Red">
+														<Button.Flyout >
+															<Flyout>
+																<Border Background="Red" CornerRadius="4" Padding="6" Width="250" Margin="0">
+																	<StackPanel>
+																		<TextBlock TextWrapping="Wrap">
+																			<Run Text="Error"></Run>
+																			<Run Text="{Binding Path=SellErrorInfo.ErrorTitle}"></Run>
+																			<Run Text="{Binding Path=SellErrorInfo.ErrorMessage}"></Run>
+																		</TextBlock>
+																	</StackPanel>
+																</Border>
+															</Flyout>
+														</Button.Flyout>
+														<Interaction.Behaviors>
+															<DataTriggerBehavior Binding="{Binding SellHasError}" ComparisonCondition="Equal" Value="True">
+																<ChangePropertyAction PropertyName="IsVisible" Value="True" />
+															</DataTriggerBehavior>
+															<DataTriggerBehavior Binding="{Binding SellHasError}" ComparisonCondition="Equal" Value="False">
+																<ChangePropertyAction PropertyName="IsVisible" Value="False" />
+															</DataTriggerBehavior>
+														</Interaction.Behaviors>
+													</Button>
+
+													<TextBlock Grid.Column="15" Text="{Binding ShushiAmount, Mode=OneWay, StringFormat=0.#############################}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9">
+													</TextBlock>
+
+												</Grid>
+											</DataTemplate>
+										</ListBox.ItemTemplate>
+										<ListBox.Styles>
+											<Style Selector="ListBoxItem">
+												<Setter Property="Height" Value="36"/>
+												<Setter Property="MinHeight" Value="32"/>
+												<Setter Property="Padding" Value="0,0,0,0"/>
+												<Setter Property="VerticalAlignment" Value="Center"/>
+												<Setter Property="ContextFlyout">
+													<Setter.Value>
+														<MenuFlyout>
+															<MenuItem Header="注文キャンセル" Command="{Binding Path=$parent[ListBox].((vm:PairViewModel)DataContext).AutoTradeCancelSelectedOrdersCommand}" CommandParameter="{Binding $parent[ListBox].SelectedItems}"/>
+
+															<Separator/>
+															<MenuItem Header="削除" InputGesture="Ctrl+Delete" Command="{Binding Path=$parent[ListBox].((vm:PairViewModel)DataContext).AutoTradeDeleteSelectedOrdersCommand}" CommandParameter="{Binding $parent[ListBox].SelectedItems}"/>
+														</MenuFlyout>
+
+													</Setter.Value>
+												</Setter>
+											</Style>
+
+										</ListBox.Styles>
+									</ListBox>
+
+								</Grid>
+
+							</SplitView.Content>
+						</SplitView>
+						
+                    </Grid>
+
+                </TabItem>
                 <TabItem Header="History">
                     <Grid RowDefinitions="Auto,*">
-                        <Button Grid.Row="0" Content="Refresh" Command="{Binding UpdateTradeHistoryCommand, Mode=OneWay}" Margin="4" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+                        <Button Grid.Row="0" Width="34" Height="34" Command="{Binding UpdateTradeHistoryCommand, Mode=OneWay}" Margin="0,0,8,8" VerticalAlignment="Top" HorizontalAlignment="Right">
+							<Viewbox Width="18" Height="18" HorizontalAlignment="Center" VerticalAlignment="Center">
+								<PathIcon Background="Transparent" Width="NaN" Height="NaN"
+									Data="M12 4.5C7.85786 4.5 4.5 7.85786 4.5 12C4.5 16.1421 7.85786 19.5 12 19.5C16.1421 19.5 19.5 16.1421 19.5 12C19.5 11.6236 19.4723 11.2538 19.4188 10.8923C19.3515 10.4382 19.6839 10 20.1429 10C20.5138 10 20.839 10.2562 20.8953 10.6228C20.9642 11.0718 21 11.5317 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C14.3051 3 16.4077 3.86656 18 5.29168V4.25C18 3.83579 18.3358 3.5 18.75 3.5C19.1642 3.5 19.5 3.83579 19.5 4.25V7.25C19.5 7.66421 19.1642 8 18.75 8H15.75C15.3358 8 15 7.66421 15 7.25C15 6.83579 15.3358 6.5 15.75 6.5H17.0991C15.7609 5.25883 13.9691 4.5 12 4.5Z">
+								</PathIcon>
+							</Viewbox>	
+						</Button>
                         <ListBox Grid.Row="1" ItemsSource="{Binding TradeHistories, Mode=OneWay}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate x:DataType="mod:Trade">
