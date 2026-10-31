@@ -42,7 +42,6 @@ public static class TextBlockExtensions
 
     private static void OnTextBlockPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs args)
     {
-        // 3. Ensure we only care about the Text property changing on this specific instance
         if (sender is TextBlock textBlock && args.Property == TextBlock.TextProperty)
         {
             // Prevent animation running during initial setup/loading if desired
@@ -83,52 +82,4 @@ public static class TextBlockExtensions
         animation.RunAsync(textBlock);
     }
 
-
-    /*
-    public static readonly AttachedProperty<IBrush?> FlashColorProperty = AvaloniaProperty.RegisterAttached<string, TextBlock, IBrush?>("FlashColor", null);
-
-    public static IBrush? GetFlashColor(TextBlock element) => element.GetValue(FlashColorProperty);
-
-    public static void SetFlashColor(TextBlock element, IBrush? value) => element.SetValue(FlashColorProperty, value);
-
-    static TextBlockExtensions()
-    {
-        TextBlock.TextProperty.Changed.AddClassHandler<TextBlock>((sender, e) =>  OnTextChanged(sender, e));
-    }
-
-    private static void OnTextChanged(TextBlock textBlock, AvaloniaPropertyChangedEventArgs e)
-    {
-        var originalBrush = textBlock.Foreground;
-        var flashBrush = GetFlashColor(textBlock);
-        //var originalBrush = GetFlashColor(textBlock);
-        //var flashBrush = new SolidColorBrush(Color.FromRgb(0x66, 0x66, 0x66));//Color.Parse("#666666")
-
-        if (flashBrush == null) return;
-
-        if (textBlock.Transitions == null || textBlock.Transitions.Count == 0)
-        {
-            textBlock.Transitions = new Transitions
-            {
-                new BrushTransition
-                {
-                    Property = TextBlock.ForegroundProperty,
-                    Duration = TimeSpan.FromMilliseconds(400)
-                }
-            };
-        }
-
-        var activeTransitions = textBlock.Transitions;
-
-        textBlock.Transitions = null;
-        textBlock.Foreground = flashBrush;
-
-        textBlock.Transitions = activeTransitions;
-
-        if (originalBrush != null)
-        {
-            textBlock.Foreground = originalBrush;
-        }
-
-    }
-    */
 }

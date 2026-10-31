@@ -11,9 +11,10 @@
 
 	<!-- Added 
 	    SelectionIndicator  BorderThickness="1" BorderBrush="Transparent" -->
+
+    <!-- Added Opacity="0.7" to LayoutRoot, and set Opacity to 1 in <Style Selector="^:selected"> -->
 	
-    <ControlTheme x:Key="{x:Type uip:FANavigationViewItemPresenter}"
-                  TargetType="uip:FANavigationViewItemPresenter">
+    <ControlTheme x:Key="{x:Type uip:FANavigationViewItemPresenter}" TargetType="uip:FANavigationViewItemPresenter">
         <!--<Setter Property="Foreground" Value="{DynamicResource NavigationViewItemForeground}" />-->
         <Setter Property="Background" Value="{DynamicResource NavigationViewItemBackground}" />
         <Setter Property="BorderBrush" Value="{DynamicResource NavigationViewItemBorderBrush}" />
@@ -23,17 +24,18 @@
         <Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}" />
         <Setter Property="Template">
             <ControlTemplate>
+                <!-- Added Opacity="0.7"  -->
                 <Border Name="LayoutRoot"
                         MinHeight="{DynamicResource NavigationViewItemOnLeftMinHeight}"
                         Background="{TemplateBinding Background}"
                         CornerRadius="{TemplateBinding CornerRadius}"
                         Margin="4,2,4,2"
+                        Opacity="0.7"
                         TemplatedControl.IsTemplateFocusTarget="True">
 
                     <Panel Name="PresenterContentRootGrid">
 
-                        <Panel HorizontalAlignment="Left"
-                               VerticalAlignment="Center">
+                        <Panel HorizontalAlignment="Left" VerticalAlignment="Center">
 
                             <Border Name="SelectionIndicator" BorderThickness="1" BorderBrush="Transparent"
                                     Background="{DynamicResource NavigationViewSelectionIndicatorForeground}"
@@ -147,6 +149,8 @@
         <Style Selector="^:selected">
             <Style Selector="^ /template/ Border#LayoutRoot">
                 <Setter Property="Background" Value="{DynamicResource NavigationViewItemBackgroundSelected}" />
+                <!-- added -->
+                <Setter Property="Opacity" Value="{DynamicResource NavigationViewItemOpacitySelected}" />
             </Style>
             <Style Selector="^ /template/ ContentPresenter#Icon">
                 <Setter Property="Foreground" Value="{DynamicResource NavigationViewItemForegroundSelected}" />
