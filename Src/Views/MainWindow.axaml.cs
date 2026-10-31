@@ -135,12 +135,6 @@ public partial class MainWindow : Window
             this.WindowState = WindowState.Normal;
         }
 
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-        {
-            var isMax = this.WindowState == WindowState.Maximized;
-            UpdateWindowMargins(isMax);
-            UpdateThemeBackground(ActualThemeVariant);
-        }
     }
 
     protected async override void OnOpened(EventArgs e)
@@ -152,6 +146,13 @@ public partial class MainWindow : Window
         this.PositionChanged += this.MainWindow_PositionChanged;
         this.ActualThemeVariantChanged += OnActualThemeVariantChanged;
         this.PropertyChanged += this.OnWindow_PropertyChanged;
+
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        {
+            var isMax = this.WindowState == WindowState.Maximized;
+            UpdateWindowMargins(isMax);
+            UpdateThemeBackground(ActualThemeVariant);
+        }
 
         await Task.Yield();
 

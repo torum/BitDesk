@@ -8,6 +8,7 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="BitDesk.Views.MainWindow"
         x:DataType="vm:MainViewModel"
+		Background="Transparent"
 		MinWidth="320" 
 		MinHeight="460"
         Icon="/Assets/BitDesk.ico"
