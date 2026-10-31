@@ -300,6 +300,8 @@ public partial class MainWindow : Window
         // Wait for the ticker service to stop gracefully
         await _bitbankStreamService.StopAsync();
 
+        _mainViewModel.Dispose();
+
         // After the service has stopped, allow the window to close
         _allowClose = true;
         Close();

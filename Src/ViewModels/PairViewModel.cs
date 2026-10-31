@@ -2246,8 +2246,7 @@ public partial class PairViewModel : ObservableObject, IDisposable
 
             await LoadChartAsync(SelectedCandleType);
 
-            //Sections[0].Yi = (double)_ltp;
-            //Sections[0].Yj = (double)_ltp;
+            LoadAutoTrades();
 
             Debug.WriteLine($"InitializeAndLoadAsync() completed for {PairCode}");
         }
@@ -2415,9 +2414,14 @@ public partial class PairViewModel : ObservableObject, IDisposable
         _bitbankRestService.ErrorOccured -= OnErrorOccured;
         _bitbankRestService.ApiErrorOccured -= OnApiErrorOccured;
 
+        SaveAutoTrades();
+
         // TODO: Dispose other resources if necessary
 
+
         GC.SuppressFinalize(this);
+
+        Debug.WriteLine($"PairViewModel disposed at {DateTime.Now:yyyy-MM-dd HH:mm:ss}");
     }
 
     #endregion

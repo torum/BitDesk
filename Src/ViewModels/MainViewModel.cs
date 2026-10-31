@@ -2087,6 +2087,7 @@ internal class MainViewModel : ObservableObject, IDisposable
             Debug.WriteLine($"Error disposing PairViewModels: {ex}");
         }
 
+        GC.SuppressFinalize(this);
 
         Debug.WriteLine($"MainViewModel disposed at {DateTime.Now:yyyy-MM-dd HH:mm:ss}");
     }
