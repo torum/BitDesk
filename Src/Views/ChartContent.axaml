@@ -7,7 +7,6 @@
              xmlns:ia="using:Xaml.Behaviors.Interactions.Animated"
              xmlns:vm="using:BitDesk.ViewModels"
              xmlns:mod="using:BitDesk.Models"
-             xmlns:transactions="using:System.Transactions"
              xmlns:behaviors="using:BitDesk.Behaviors"
              x:DataType="vm:PairViewModel"
              x:Class="BitDesk.Views.ChartContent">
@@ -66,7 +65,7 @@
 
                     </ScrollViewer>
                     
-                    <Border Grid.Row="0" Grid.Column="1" Margin="4,48,4,0" CornerRadius="6" HorizontalAlignment="Stretch">
+                    <Border Grid.Row="0" Grid.Column="1" Margin="4,48,4,0" Padding="4" CornerRadius="6" HorizontalAlignment="Stretch" Background="{DynamicResource NavigationViewDefaultPaneBackground}">
 
                         <TabControl Theme="{DynamicResource MyCustomSegmentedTheme}" HorizontalAlignment="Stretch">
                             <TabItem Header="Buy">
@@ -404,7 +403,7 @@
 
                     </Grid>
                 </TabItem>
-                <TabItem Header="Grid Trading">
+                <TabItem Header="Grid">
 
                     <Grid RowDefinitions="Auto,*">
                         
