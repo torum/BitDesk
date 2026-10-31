@@ -13,14 +13,13 @@ using System.Threading.Tasks;
 
 namespace BitDesk.ViewModels;
 
-internal partial class MainViewModel : ObservableObject, IDisposable
+internal class MainViewModel : ObservableObject, IDisposable
 {
     private readonly bool _isWebSocketOn = true;
     private readonly bool _isLiveChartsOn = true;
     private readonly bool _isAssetsOn = true;
 
     private string _userKey = string.Empty;
-    private string _userSalt = string.Empty;
 
     private readonly IBitbankStreamService _bitbankStreamService;
     private readonly IBitbankRestService _bitbankRestService;
@@ -79,7 +78,7 @@ internal partial class MainViewModel : ObservableObject, IDisposable
     {
         get
         {
-            return field ?? GetVersionText();
+            return GetVersionText();
         }
     }
 
