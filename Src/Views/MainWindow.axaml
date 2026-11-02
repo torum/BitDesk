@@ -64,9 +64,9 @@
 									<ColumnDefinition Width="*"/>
 									<ColumnDefinition Width="86"/>
 								</Grid.ColumnDefinitions>
-								<TextBlock Grid.Column="0" Text="{Binding LtpBtcJpy, Mode=OneWay}" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0"
+								<TextBlock Grid.Column="0" Text="{Binding LtpBtcJpy, Mode=OneWay}" FontWeight="Bold" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0"
 										    Foreground="{DynamicResource TextFillColorPrimary}" behaviors:TextBlockExtensions.BlinkOnChange="True"/>
-								<TextBlock Grid.Column="1" Text="{Binding LtpBtcJpyPercentChange, Mode=OneWay}" FontWeight="Normal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0"/>
+								<TextBlock Grid.Column="1" Text="{Binding LtpBtcJpyPercentChange, Mode=OneWay}" FontWeight="Normal" FontSize="12" Opacity="0.8" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0"/>
 							</Grid>
 						</ui:FANavigationViewItem.Content>
 					</ui:FANavigationViewItem>
@@ -80,9 +80,9 @@
 									<ColumnDefinition Width="*"/>
 									<ColumnDefinition Width="86"/>
 								</Grid.ColumnDefinitions>
-								<TextBlock Grid.Column="0" Text="{Binding LtpXrpJpy, Mode=OneWay}" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0" 
+								<TextBlock Grid.Column="0" Text="{Binding LtpXrpJpy, Mode=OneWay}" FontWeight="Bold" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0" 
 										    Foreground="{DynamicResource TextFillColorPrimary}" behaviors:TextBlockExtensions.BlinkOnChange="True"/>
-								<TextBlock Grid.Column="1" Text="{Binding LtpXrpJpyPercentChange, Mode=OneWay}" FontWeight="Normal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0"/>
+								<TextBlock Grid.Column="1" Text="{Binding LtpXrpJpyPercentChange, Mode=OneWay}" FontWeight="Normal" FontSize="12" Opacity="0.8" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0"/>
 							</Grid>
 						</ui:FANavigationViewItem.Content>
 					</ui:FANavigationViewItem>
@@ -96,9 +96,9 @@
 									<ColumnDefinition Width="*"/>
 									<ColumnDefinition Width="86"/>
 								</Grid.ColumnDefinitions>
-								<TextBlock Grid.Column="0" Text="{Binding LtpEthJpy, Mode=OneWay}" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0"
+								<TextBlock Grid.Column="0" Text="{Binding LtpEthJpy, Mode=OneWay}" FontWeight="Bold" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0"
 										    Foreground="{DynamicResource TextFillColorPrimary}" behaviors:TextBlockExtensions.BlinkOnChange="True"/>
-								<TextBlock Grid.Column="1" Text="{Binding LtpEthJpyPercentChange, Mode=OneWay}" FontWeight="Normal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0"/>
+								<TextBlock Grid.Column="1" Text="{Binding LtpEthJpyPercentChange, Mode=OneWay}" FontWeight="Normal" FontSize="12" Opacity="0.8" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0"/>
 							</Grid>
 						</ui:FANavigationViewItem.Content>
 					</ui:FANavigationViewItem>
@@ -112,9 +112,9 @@
 									<ColumnDefinition Width="*"/>
 									<ColumnDefinition Width="86"/>
 								</Grid.ColumnDefinitions>
-								<TextBlock Grid.Column="0" Text="{Binding LtpXlmJpy, Mode=OneWay}" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0" 
+								<TextBlock Grid.Column="0" Text="{Binding LtpXlmJpy, Mode=OneWay}" FontWeight="Bold" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0" 
 										    Foreground="{DynamicResource TextFillColorPrimary}" behaviors:TextBlockExtensions.BlinkOnChange="True"/>
-								<TextBlock Grid.Column="1" Text="{Binding LtpXlmJpyPercentChange, Mode=OneWay}" FontWeight="Normal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0"/>
+								<TextBlock Grid.Column="1" Text="{Binding LtpXlmJpyPercentChange, Mode=OneWay}" FontWeight="Normal" FontSize="12" Opacity="0.8" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0"/>
 							</Grid>
 						</ui:FANavigationViewItem.Content>
 					</ui:FANavigationViewItem>
@@ -138,7 +138,7 @@
 					<Grid Grid.Row="2">
 						<!-- InfoBar -->
 						<ui:FAInfoBar Title="{Binding InfoBarTitle}" IsOpen="{Binding IsInfoBarOpen, Mode=TwoWay}" IsIconVisible="True" IsClosable="True" Severity="{Binding InfoBarSeverity}" Message="{Binding InfoBarMessage}" />
-						</Grid>
+					</Grid>
 				</Grid>
 			
 			</ui:FANavigationView>
