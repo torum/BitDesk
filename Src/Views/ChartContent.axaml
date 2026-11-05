@@ -67,7 +67,7 @@
                     
                     <Border Grid.Row="0" Grid.Column="1" Margin="4,48,4,0" Padding="4" CornerRadius="6" HorizontalAlignment="Stretch" Background="{DynamicResource NavigationViewDefaultPaneBackground}">
 
-                        <TabControl Theme="{DynamicResource MyCustomSegmentedTheme}" HorizontalAlignment="Stretch">
+                        <TabControl SelectedIndex="{Binding OrderSideSelectedIndex}" Theme="{DynamicResource MyCustomSegmentedTheme}" HorizontalAlignment="Stretch">
                             <TabItem Header="Buy">
 
                                 <Grid>
@@ -381,17 +381,17 @@
 								<ColumnDefinition Width="*" />
 							</Grid.ColumnDefinitions>
 
-							<TextBlock Grid.Column="0" Text="Side" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
-							<TextBlock Grid.Column="1" Text="StartAmount" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
-							<TextBlock Grid.Column="2" Text="TypeText" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
-							<TextBlock Grid.Column="3" Text="Price" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
-							<TextBlock Grid.Column="4" Text="Shushi" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
-							<TextBlock Grid.Column="5" Text="AveragePrice" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
-							<TextBlock Grid.Column="6" Text="RemainingAmount" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
-							<TextBlock Grid.Column="7" Text="ActualPrice" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
-							<TextBlock Grid.Column="8" Text="StatusText" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
-							<TextBlock Grid.Column="9" Text="OrderID" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
-							<TextBlock Grid.Column="10" Text="OrderdAtText" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
+							<TextBlock Grid.Column="0" Text="売/買" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
+							<TextBlock Grid.Column="1" Text="注文数" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
+							<TextBlock Grid.Column="2" Text="タイプ" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
+							<TextBlock Grid.Column="3" Text="注文価格" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
+							<TextBlock Grid.Column="4" Text="現在値差" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
+							<TextBlock Grid.Column="5" Text="平均約定" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
+							<TextBlock Grid.Column="6" Text="未約定" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
+							<TextBlock Grid.Column="7" Text="注文金額" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
+							<TextBlock Grid.Column="8" Text="ステータス" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
+							<TextBlock Grid.Column="9" Text="注文ID" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
+							<TextBlock Grid.Column="10" Text="注文日時" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
 
 						</Grid>
 
@@ -810,17 +810,17 @@
                                 <ColumnDefinition Width="*" />
 							</Grid.ColumnDefinitions>
 
-							<TextBlock Grid.Column="0" Text="Pair" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
-							<TextBlock Grid.Column="1" Text="Side" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
-							<TextBlock Grid.Column="2" Text="Amount" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
-							<TextBlock Grid.Column="3" Text="TypeText" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
-							<TextBlock Grid.Column="4" Text="Price" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
-							<TextBlock Grid.Column="5" Text="FeeAmountQuote" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
-							<TextBlock Grid.Column="6" Text="FeeOccurredAmountQuote" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
-							<TextBlock Grid.Column="7" Text="MakerTaker" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
-							<TextBlock Grid.Column="8" Text="OrderID" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
-							<TextBlock Grid.Column="9" Text="TradeID" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
-							<TextBlock Grid.Column="10" Text="ExecutedAtText" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
+							<TextBlock Grid.Column="0" Text="通貨ペア" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
+							<TextBlock Grid.Column="1" Text="売/買" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
+							<TextBlock Grid.Column="2" Text="数量" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
+							<TextBlock Grid.Column="3" Text="タイプ" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
+							<TextBlock Grid.Column="4" Text="価格" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
+							<TextBlock Grid.Column="5" Text="手数料(見積)" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
+							<TextBlock Grid.Column="6" Text="手数料(発生)" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
+							<TextBlock Grid.Column="7" Text="メイカー/テイカー" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
+							<TextBlock Grid.Column="8" Text="注文ID" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
+							<TextBlock Grid.Column="9" Text="取引ID" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
+							<TextBlock Grid.Column="10" Text="約定日時" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
 
 						</Grid>
 

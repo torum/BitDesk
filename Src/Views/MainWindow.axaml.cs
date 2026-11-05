@@ -390,7 +390,6 @@ public partial class MainWindow : Window
         }
     }
 
-
     private void OnWindow_PropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
     {
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
