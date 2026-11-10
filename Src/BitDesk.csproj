@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<OutputType>WinExe</OutputType>
-		<TargetFramework>net10.0</TargetFramework>
+		<TargetFramework>net11.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ApplicationManifest>app.manifest</ApplicationManifest>
 		<AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
@@ -28,22 +28,22 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Avalonia" Version="12.1.4" />
-		<PackageReference Include="Avalonia.Desktop" Version="12.1.4" />
-		<PackageReference Include="Avalonia.Fonts.Inter" Version="12.1.4" />
-		<PackageReference Include="Avalonia.Wayland" Version="12.1.4" />
+		<PackageReference Include="Avalonia" Version="12.1.6" />
+		<PackageReference Include="Avalonia.Desktop" Version="12.1.6" />
+		<PackageReference Include="Avalonia.Fonts.Inter" Version="12.1.6" />
+		<PackageReference Include="Avalonia.Wayland" Version="12.1.6" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
 		<PackageReference Include="Egolds.Xaml.Behaviors.Interactions.Animated" Version="11.4.0" />
 		<PackageReference Include="FluentAvaloniaUI" Version="3.1.0" />
 		<PackageReference Include="LiveChartsCore.SkiaSharpView.Avalonia" Version="2.1.0-dev-798" />
-		<PackageReference Include="Microsoft.Extensions.Http" Version="10.0.14" />
+		<PackageReference Include="Microsoft.Extensions.Http" Version="11.0.0" />
 		<PackageReference Include="SocketIOClient" Version="4.0.5" />
-		<PackageReference Include="Xaml.Behaviors.Avalonia" Version="12.0.7" />
-		<PackageReference Include="System.Security.Cryptography.ProtectedData" Version="10.0.14" />
-		<PackageReference Include="SkiaSharp" Version="4.153.1" />
-		<PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="4.153.1" />
-		<PackageReference Include="SkiaSharp.NativeAssets.macOS" Version="4.153.1" />
-		<PackageReference Include="SkiaSharp.NativeAssets.Win32" Version="4.153.1" />
+		<PackageReference Include="Xaml.Behaviors.Avalonia" Version="12.1.5" />
+		<PackageReference Include="System.Security.Cryptography.ProtectedData" Version="11.0.0" />
+		<PackageReference Include="SkiaSharp" Version="4.155.0" />
+		<PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="4.155.0" />
+		<PackageReference Include="SkiaSharp.NativeAssets.macOS" Version="4.155.0" />
+		<PackageReference Include="SkiaSharp.NativeAssets.Win32" Version="4.155.0" />
 	</ItemGroup>
 
 </Project>
