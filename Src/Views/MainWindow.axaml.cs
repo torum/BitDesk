@@ -4,6 +4,7 @@ using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Avalonia.Styling;
+using BitDesk.Localization;
 using BitDesk.Models;
 using BitDesk.Services;
 using BitDesk.Services.Contracts;
@@ -91,7 +92,7 @@ public partial class MainWindow : Window
 
         InitializeComponent();
 
-        this.Title = "BitDesk";
+        this.Title = Strings.Get("MainWindowTitle");
         Bitmap bitmap = new(AssetLoader.Open(new Uri("avares://BitDesk/Assets/BitDesk-24.png")));
         ImageAppIcon.Source = bitmap;
         this.WindowDecorations = WindowDecorations.Full;

@@ -8,6 +8,7 @@
              xmlns:vm="using:BitDesk.ViewModels"
              xmlns:mod="using:BitDesk.Models"
              xmlns:behaviors="using:BitDesk.Behaviors"
+             xmlns:loc="using:BitDesk.Localization"
              x:DataType="vm:PairViewModel"
              x:Class="BitDesk.Views.ChartContent">
     <Grid RowDefinitions="7*,Auto,3*">
@@ -68,7 +69,7 @@
                     <Border Grid.Row="0" Grid.Column="1" Margin="4,48,4,0" Padding="4" CornerRadius="6" HorizontalAlignment="Stretch" Background="{DynamicResource NavigationViewDefaultPaneBackground}">
 
                         <TabControl SelectedIndex="{Binding OrderSideSelectedIndex}" Theme="{DynamicResource MyCustomSegmentedTheme}" HorizontalAlignment="Stretch">
-                            <TabItem Header="Buy">
+                            <TabItem Header="{loc:Loc Key=Buy}">
 
                                 <Grid>
                                     <Grid.RowDefinitions>
@@ -79,7 +80,7 @@
                                     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                                         <StackPanel Margin="12,4,12,24" Spacing="12">
 
-                                            <TextBlock Text="注文タイプ"></TextBlock>
+                                            <TextBlock Text="{loc:Loc Key=OrderType}"></TextBlock>
                                             <ComboBox ItemsSource="{Binding OrderTypesForComboBox, Mode=OneWay}" SelectedIndex="0" SelectedItem="{Binding SelectedOrderTypeForComboBox, Mode=TwoWay}" Width="180">
                                                 <ComboBox.ItemTemplate>
                                                     <DataTemplate x:DataType="mod:OrderTypeSelectionForComboBox">
@@ -90,35 +91,35 @@
                                                 </ComboBox.ItemTemplate>
                                             </ComboBox>
 
-                                            <TextBlock Text="指値価格" IsVisible="{Binding IsOrderPriceVisible, Mode=OneWay}"></TextBlock>
+                                            <TextBlock Text="{loc:Loc Key=LimitPrice}" IsVisible="{Binding IsOrderPriceVisible, Mode=OneWay}"></TextBlock>
                                             <TextBox Text="{Binding OrderPrice, Mode=TwoWay}" IsVisible="{Binding IsOrderPriceVisible, Mode=OneWay}"></TextBox>
-                
-                                            <!-- In case of Buy, AssetJPYFreeAmountText -->
-                                                    <StackPanel Orientation="Horizontal" Opacity="0.5">
-                                                        <TextBlock Text="利用可能: "/>
-                                                        <TextBlock Text="{Binding AssetJPYFreeAmountText, Mode=OneWay}"/>
-                                                    </StackPanel>
 
-                                            <TextBlock Text="注文数量"></TextBlock>
+                                            <!-- In case of Buy, AssetJPYFreeAmountText -->
+                                            <StackPanel Orientation="Horizontal" Opacity="0.5">
+                                                <TextBlock Text="{loc:Loc Key=AvailableAmount}"/>
+                                                <TextBlock Text="{Binding AssetJPYFreeAmountText, Mode=OneWay}"/>
+                                            </StackPanel>
+
+                                            <TextBlock Text="{loc:Loc Key=OrderQuantity}"></TextBlock>
                                             <TextBox Text="{Binding OrderAmount, Mode=TwoWay}"></TextBox>
 
-                                            <TextBlock Text="注文金額"></TextBlock>
+                                            <TextBlock Text="{loc:Loc Key=OrderAmount}"></TextBlock>
                                             <TextBox Text="{Binding OrderEstimatePrice, Mode=OneWay}"></TextBox>
 
-                                            <CheckBox IsChecked="{Binding IsOrderPostOnly, Mode=TwoWay}" Content="Post Only"></CheckBox>
+                                            <CheckBox IsChecked="{Binding IsOrderPostOnly, Mode=TwoWay}" Content="{loc:Loc Key=PostOnly}"></CheckBox>
 
                                         </StackPanel>
                                     </ScrollViewer>
 
                                     <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,12,12,0" HorizontalAlignment="Right">
                                         <TextBlock Text="{Binding MakeOrderRresultText, Mode=TwoWay}" Margin="12,0,12,0" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-                                        <Button Content="Order" Command="{Binding MakeOrderCommand}" HorizontalAlignment="Right"></Button>
+                                        <Button Content="{loc:Loc Key=Order}" Command="{Binding MakeOrderCommand}" HorizontalAlignment="Right"></Button>
                                     </StackPanel>
 
                                 </Grid>
 
                             </TabItem>
-                            <TabItem Header="Sell">
+                            <TabItem Header="{loc:Loc Key=Sell}">
 
                                 <Grid>
                                     <Grid.RowDefinitions>
@@ -128,8 +129,8 @@
                                     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
 
                                         <StackPanel Margin="12,4,12,24" Spacing="12">
-                                            
-                                            <TextBlock Text="注文タイプ"></TextBlock>
+
+                                            <TextBlock Text="{loc:Loc Key=OrderType}"></TextBlock>
                                             <ComboBox ItemsSource="{Binding OrderTypesForComboBox, Mode=OneWay}" SelectedIndex="0" SelectedItem="{Binding SelectedOrderTypeForComboBox, Mode=TwoWay}" Width="180">
                                                 <ComboBox.ItemTemplate>
                                                     <DataTemplate x:DataType="mod:OrderTypeSelectionForComboBox">
@@ -140,36 +141,36 @@
                                                 </ComboBox.ItemTemplate>
                                             </ComboBox>
 
-                                            <TextBlock Text="指値価格" IsVisible="{Binding IsOrderPriceVisible, Mode=OneWay}"></TextBlock>
+                                            <TextBlock Text="{loc:Loc Key=LimitPrice}" IsVisible="{Binding IsOrderPriceVisible, Mode=OneWay}"></TextBlock>
                                             <TextBox Text="{Binding OrderPrice, Mode=TwoWay}" IsVisible="{Binding IsOrderPriceVisible, Mode=OneWay}"></TextBox>
 
                                             <!-- In case of Sell, AssetCurrentFreeAmountText -->
-                                                    <StackPanel Orientation="Horizontal" Opacity="0.5">
-                                                        <TextBlock Text="利用可能: "/>
-                                                        <TextBlock Text="{Binding AssetCurrentFreeAmountText, Mode=OneWay}"/>
-                                                    </StackPanel>
+                                            <StackPanel Orientation="Horizontal" Opacity="0.5">
+                                                <TextBlock Text="{loc:Loc Key=AvailableAmount}"/>
+                                                <TextBlock Text="{Binding AssetCurrentFreeAmountText, Mode=OneWay}"/>
+                                            </StackPanel>
 
-                                            <TextBlock Text="注文数量"></TextBlock>
+                                            <TextBlock Text="{loc:Loc Key=OrderQuantity}"></TextBlock>
                                             <TextBox Text="{Binding OrderAmount, Mode=TwoWay}"></TextBox>
 
-                                            <TextBlock Text="注文金額"></TextBlock>
+                                            <TextBlock Text="{loc:Loc Key=OrderAmount}"></TextBlock>
                                             <TextBox Text="{Binding OrderEstimatePrice, Mode=OneWay}"></TextBox>
 
-                                            <CheckBox IsChecked="{Binding IsOrderPostOnly, Mode=TwoWay}" Content="Post Only"></CheckBox>
+                                            <CheckBox IsChecked="{Binding IsOrderPostOnly, Mode=TwoWay}" Content="{loc:Loc Key=PostOnly}"></CheckBox>
 
                                         </StackPanel>
                                         
                                     </ScrollViewer>
                                     <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,12,12,0" HorizontalAlignment="Right">
                                         <TextBlock Text="{Binding MakeOrderRresultText, Mode=TwoWay}" Margin="12,0,12,0" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-                                        <Button Content="Order" Command="{Binding MakeOrderCommand}" HorizontalAlignment="Right"></Button>
+                                        <Button Content="{loc:Loc Key=Order}" Command="{Binding MakeOrderCommand}" HorizontalAlignment="Right"></Button>
                                     </StackPanel>
 
                                 </Grid>
 
                             </TabItem>
-                            <TabItem Header="T&amp;S">
-                                
+                            <TabItem Header="{loc:Loc Key=TradesAndSales}">
+
                                 <Grid RowDefinitions="Auto,*">
 
 									<Button Grid.Row="0" Width="34" Height="34" Command="{Binding UpdateTransactionsCommand, Mode=OneWay}" Margin="0,0,8,8" VerticalAlignment="Top" HorizontalAlignment="Right">
@@ -254,9 +255,9 @@
                                 <RowDefinition/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
-                            <TextBlock Grid.Row="0" Grid.Column="0" Text="24H High: " FontSize="12" Opacity="0.7"></TextBlock>
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="{loc:Loc Key=High24}" FontSize="12" Opacity="0.7"></TextBlock>
                             <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Path=High24String, Mode=OneWay}" FontSize="12" Opacity="0.7" Margin="6,0,0,0"></TextBlock>
-                            <TextBlock Grid.Row="1" Grid.Column="0" Text="24H Low: " FontSize="12" Opacity="0.7"></TextBlock>
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="{loc:Loc Key=Low24}" FontSize="12" Opacity="0.7"></TextBlock>
                             <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Path=Low24String, Mode=OneWay}" FontSize="12" Opacity="0.7" Margin="6,0,0,0"></TextBlock>
                         </Grid>
 
@@ -270,9 +271,9 @@
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
                             
-                            <TextBlock Grid.Row="0" Grid.Column="0" Text="ASK: " FontSize="12" Opacity="0.7"/>
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="{loc:Loc Key=Ask}" FontSize="12" Opacity="0.7"/>
                             <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Ask, Mode=OneWay}" FontSize="12" Opacity="0.7"/>
-                            <TextBlock Grid.Row="1" Grid.Column="0" Text="BID: " FontSize="12" Opacity="0.7"/>
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="{loc:Loc Key=Bid}" FontSize="12" Opacity="0.7"/>
                             <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Bid, Mode=OneWay}" FontSize="12" Opacity="0.7"/>
                         </Grid>
 
@@ -303,19 +304,19 @@
                                 <SplitButton x:Name="ChartTypeSplitButton" Grid.Column="0" Content="{Binding SelectedCandleTypeLabelString}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="4,0,0,0" Width="120" Height="24">
 					                <SplitButton.Flyout>
 						                <MenuFlyout Placement="Bottom">
-							                <MenuItem Header="1min" Command="{Binding ChangeCandleTypeFromTagCommand}" CommandParameter="{Binding $self.Tag}" Tag="OneMin"/>
-							                <MenuItem Header="5min" Command="{Binding ChangeCandleTypeFromTagCommand}" CommandParameter="{Binding $self.Tag}" Tag="FiveMin" />
-							                <MenuItem Header="15min" Command="{Binding ChangeCandleTypeFromTagCommand}" CommandParameter="{Binding $self.Tag}" Tag="FifteenMin" />
-							                <MenuItem Header="30min" Command="{Binding ChangeCandleTypeFromTagCommand}" CommandParameter="{Binding $self.Tag}" Tag="ThirtyMin" />
+											<MenuItem Header="{loc:Loc Key=Candle1Minute}" Command="{Binding ChangeCandleTypeFromTagCommand}" CommandParameter="{Binding $self.Tag}" Tag="OneMin"/>
+											<MenuItem Header="{loc:Loc Key=Candle5Minutes}" Command="{Binding ChangeCandleTypeFromTagCommand}" CommandParameter="{Binding $self.Tag}" Tag="FiveMin" />
+											<MenuItem Header="{loc:Loc Key=Candle15Minutes}" Command="{Binding ChangeCandleTypeFromTagCommand}" CommandParameter="{Binding $self.Tag}" Tag="FifteenMin" />
+											<MenuItem Header="{loc:Loc Key=Candle30Minutes}" Command="{Binding ChangeCandleTypeFromTagCommand}" CommandParameter="{Binding $self.Tag}" Tag="ThirtyMin" />
                                             <Separator/>
-							                <MenuItem Header="1hour" Command="{Binding ChangeCandleTypeFromTagCommand}" CommandParameter="{Binding $self.Tag}" Tag="OneHour" />
-							                <MenuItem Header="4hour" Command="{Binding ChangeCandleTypeFromTagCommand}" CommandParameter="{Binding $self.Tag}" Tag="FourHour" />
-							                <MenuItem Header="8hour" Command="{Binding ChangeCandleTypeFromTagCommand}" CommandParameter="{Binding $self.Tag}" Tag="EightHour" />
-							                <MenuItem Header="12hour" Command="{Binding ChangeCandleTypeFromTagCommand}" CommandParameter="{Binding $self.Tag}" Tag="TwelveHour" />
+											<MenuItem Header="{loc:Loc Key=Candle1Hour}" Command="{Binding ChangeCandleTypeFromTagCommand}" CommandParameter="{Binding $self.Tag}" Tag="OneHour" />
+											<MenuItem Header="{loc:Loc Key=Candle4Hours}" Command="{Binding ChangeCandleTypeFromTagCommand}" CommandParameter="{Binding $self.Tag}" Tag="FourHour" />
+											<MenuItem Header="{loc:Loc Key=Candle8Hours}" Command="{Binding ChangeCandleTypeFromTagCommand}" CommandParameter="{Binding $self.Tag}" Tag="EightHour" />
+											<MenuItem Header="{loc:Loc Key=Candle12Hours}" Command="{Binding ChangeCandleTypeFromTagCommand}" CommandParameter="{Binding $self.Tag}" Tag="TwelveHour" />
                                             <Separator/>
-							                <MenuItem Header="1day" Command="{Binding ChangeCandleTypeFromTagCommand}" CommandParameter="{Binding $self.Tag}" Tag="OneDay" />
-							                <MenuItem Header="1week" Command="{Binding ChangeCandleTypeFromTagCommand}" CommandParameter="{Binding $self.Tag}" Tag="OneWeek" />
-							                <MenuItem Header="1month" Command="{Binding ChangeCandleTypeFromTagCommand}" CommandParameter="{Binding $self.Tag}" Tag="OneMonth" />
+											<MenuItem Header="{loc:Loc Key=Candle1Day}" Command="{Binding ChangeCandleTypeFromTagCommand}" CommandParameter="{Binding $self.Tag}" Tag="OneDay" />
+											<MenuItem Header="{loc:Loc Key=Candle1Week}" Command="{Binding ChangeCandleTypeFromTagCommand}" CommandParameter="{Binding $self.Tag}" Tag="OneWeek" />
+											<MenuItem Header="{loc:Loc Key=Candle1Month}" Command="{Binding ChangeCandleTypeFromTagCommand}" CommandParameter="{Binding $self.Tag}" Tag="OneMonth" />
 							                <Separator/>
 						                </MenuFlyout>
 					                </SplitButton.Flyout>
@@ -353,7 +354,7 @@
         <Grid Grid.Row="2" Margin="0,0,0,0">
 
             <TabControl Margin="8,0,0,0" Theme="{DynamicResource MyCustomSegmentedTheme}" HorizontalAlignment="Stretch">
-                <TabItem Header="Orders">
+                <TabItem Header="{loc:Loc Key=Orders}">
                     <Grid RowDefinitions="Auto,Auto,*">
 						
 						<StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="12" Margin="0,0,8,8" HorizontalAlignment="Right">
@@ -381,17 +382,17 @@
 								<ColumnDefinition Width="*" />
 							</Grid.ColumnDefinitions>
 
-							<TextBlock Grid.Column="0" Text="売/買" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
-							<TextBlock Grid.Column="1" Text="注文数" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
-							<TextBlock Grid.Column="2" Text="タイプ" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
-							<TextBlock Grid.Column="3" Text="注文価格" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
-							<TextBlock Grid.Column="4" Text="現在値差" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
-							<TextBlock Grid.Column="5" Text="平均約定" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
-							<TextBlock Grid.Column="6" Text="未約定" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
-							<TextBlock Grid.Column="7" Text="注文金額" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
-							<TextBlock Grid.Column="8" Text="ステータス" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
-							<TextBlock Grid.Column="9" Text="注文ID" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
-							<TextBlock Grid.Column="10" Text="注文日時" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
+							<TextBlock Grid.Column="0" Text="{loc:Loc Key=OrderSide}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
+							<TextBlock Grid.Column="1" Text="{loc:Loc Key=OrderCount}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
+							<TextBlock Grid.Column="2" Text="{loc:Loc Key=Type}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
+							<TextBlock Grid.Column="3" Text="{loc:Loc Key=OrderPrice}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
+							<TextBlock Grid.Column="4" Text="{loc:Loc Key=PriceDifference}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
+							<TextBlock Grid.Column="5" Text="{loc:Loc Key=AverageExecutionPrice}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
+							<TextBlock Grid.Column="6" Text="{loc:Loc Key=UnfilledAmount}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
+							<TextBlock Grid.Column="7" Text="{loc:Loc Key=OrderAmount}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
+							<TextBlock Grid.Column="8" Text="{loc:Loc Key=Status}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
+							<TextBlock Grid.Column="9" Text="{loc:Loc Key=OrderId}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
+							<TextBlock Grid.Column="10" Text="{loc:Loc Key=OrderDateTime}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
 
 						</Grid>
 
@@ -435,13 +436,13 @@
 
                     </Grid>
                 </TabItem>
-                <TabItem Header="Grid">
+                <TabItem Header="{loc:Loc Key=AutoTrade}">
                     <Grid RowDefinitions="Auto,*">
                         
 						<StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="12" Margin="0,0,8,8" HorizontalAlignment="Right">
 							
 							<TextBlock VerticalAlignment="Center">
-								<Run Text="Profit:"/>
+								<Run Text="{loc:Loc Key=Profit}"/>
 								<Run Text="{Binding AutoTradeProfit, Mode=OneWay}"/>
 							</TextBlock>
 
@@ -489,7 +490,7 @@
 									<StackPanel Margin="24" Spacing="24">
 
 										<StackPanel HorizontalAlignment="Left">
-											<Label Content="ロット追加起点： " VerticalAlignment="Bottom"></Label>
+											<Label Content="{loc:Loc Key=LotAdditionTrigger}" VerticalAlignment="Bottom"></Label>
 											<StackPanel Orientation="Horizontal">
 												<TextBox Text="{Binding AutoTradeAddFrom}" Width="120"></TextBox>
 												<Label Content="{Binding CurrencyUnitString}" VerticalAlignment="Bottom"></Label>
@@ -497,12 +498,12 @@
 										</StackPanel>
 
 										<StackPanel HorizontalAlignment="Left">
-											<Label Content="ロット数： " VerticalAlignment="Bottom"></Label>
+											<Label Content="{loc:Loc Key=LotCount}" VerticalAlignment="Bottom"></Label>
 											<TextBox Text="{Binding AutoTradeSlots}" Width="120"></TextBox>
 										</StackPanel>
 
 										<StackPanel HorizontalAlignment="Left">
-											<Label Content="取引単価： " VerticalAlignment="Bottom"></Label>
+											<Label Content="{loc:Loc Key=TradeUnitPrice}" VerticalAlignment="Bottom"></Label>
 											<StackPanel Orientation="Horizontal">
 												<TextBox Text="{Binding AutoTradeTama}" Width="120"></TextBox>
 												<Label Content="{Binding CurrencyUnitString}" VerticalAlignment="Bottom"></Label>
@@ -510,7 +511,7 @@
 										</StackPanel>
 
 										<StackPanel HorizontalAlignment="Left">
-											<Label Content="取引幅： " VerticalAlignment="Bottom"></Label>
+											<Label Content="{loc:Loc Key=TradeRange}" VerticalAlignment="Bottom"></Label>
 											<StackPanel Orientation="Horizontal">
 												<TextBox Text="{Binding AutoTradeDefaultHaba}" Width="120"></TextBox>
 												<Label Content="{Binding CurrencyUnitString}" VerticalAlignment="Bottom"></Label>
@@ -518,7 +519,7 @@
 										</StackPanel>
 
 										<StackPanel HorizontalAlignment="Left">
-											<Label Content="利確幅： " VerticalAlignment="Bottom"></Label>
+											<Label Content="{loc:Loc Key=TakeProfitRange}" VerticalAlignment="Bottom"></Label>
 											<StackPanel Orientation="Horizontal">
 												<TextBox Text="{Binding AutoTradeDefaultRikakuHaba}" Width="120"></TextBox>
 												<Label Content="{Binding CurrencyUnitString}" VerticalAlignment="Bottom"></Label>
@@ -526,7 +527,7 @@
 										</StackPanel>
 
 										<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,36,0,0">
-											<Button Width="120" Command="{Binding AddAutoTradeOrdersBulkCommand}" Content="追加"/>
+											<Button Width="120" Command="{Binding AddAutoTradeOrdersBulkCommand}" Content="{loc:Loc Key=Add}"/>
 										</StackPanel>
 
 									</StackPanel>
@@ -564,49 +565,49 @@
 										</Grid.ColumnDefinitions>
 
 										<StackPanel Grid.Column="1" Name="Column1ForGridTrade" Margin="12,0,0,0">
-											<TextBlock Text="Idx" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Padding="0" Margin="0" Opacity="0.9"></TextBlock>
+											<TextBlock Text="{loc:Loc Key=Index}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Padding="0" Margin="0" Opacity="0.9"></TextBlock>
 										</StackPanel>
 
-										<TextBlock Grid.Column="2" Text="買" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9">
+						<TextBlock Grid.Column="2" Text="{loc:Loc Key=Buy}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9">
+						</TextBlock>
+
+						<TextBlock Grid.Column="3" Text="{loc:Loc Key=OrderCount}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9">
 										</TextBlock>
 
-										<TextBlock Grid.Column="3" Text="注文数" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9">
+						<TextBlock Grid.Column="4" Text="{loc:Loc Key=Price}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9">
+						</TextBlock>
+
+						<TextBlock Grid.Column="5" Text="{loc:Loc Key=ExecutionPrice}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9">
 										</TextBlock>
 
-										<TextBlock Grid.Column="4" Text="価格" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9">
-										</TextBlock>
-
-										<TextBlock Grid.Column="5" Text="約定価格" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9">
-										</TextBlock>
-
-										<TextBlock Grid.Column="6" Text="ステータス" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9">
+										<TextBlock Grid.Column="6" Text="{loc:Loc Key=Status}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9">
 										</TextBlock>
 
 										<TextBlock Grid.Column="7" Text="!!!" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9">
 										</TextBlock>
 
-										<TextBlock Grid.Column="8" Text="推定価格(円)" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9">
+						<TextBlock Grid.Column="8" Text="{loc:Loc Key=EstimatedPriceYen}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9">
+						</TextBlock>
+
+						<TextBlock Grid.Column="9" Text="{loc:Loc Key=Sell}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9">
 										</TextBlock>
 
-										<TextBlock Grid.Column="9" Text="売" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9">
+						<TextBlock Grid.Column="10" Text="{loc:Loc Key=OrderCount}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9">
+						</TextBlock>
+
+						<TextBlock Grid.Column="11" Text="{loc:Loc Key=Price}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9">
 										</TextBlock>
 
-										<TextBlock Grid.Column="10" Text="注文数" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9">
-										</TextBlock>
+						<TextBlock Grid.Column="12" Text="{loc:Loc Key=OrderAndFillPrice}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9">
+						</TextBlock>
 
-										<TextBlock Grid.Column="11" Text="価格" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9">
-										</TextBlock>
-
-										<TextBlock Grid.Column="12" Text="注文・約定価格" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9">
-										</TextBlock>
-
-										<TextBlock Grid.Column="13" Text="ステータス" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9">
+						<TextBlock Grid.Column="13" Text="{loc:Loc Key=Status}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9">
 										</TextBlock>
 
 										<TextBlock Grid.Column="14" Text="!!!" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9">
 										</TextBlock>
 
-										<TextBlock Grid.Column="15" Text="想定利益(円)" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9">
+										<TextBlock Grid.Column="15" Text="{loc:Loc Key=EstimatedProfitYen}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9">
 										</TextBlock>
 
 									</Grid>
@@ -675,8 +676,8 @@
 															<Flyout>
 																<Border Background="Red" CornerRadius="4" Padding="6" Width="250" Margin="0">
 																	<TextBlock TextWrapping="Wrap">
-																		<Run Text="Error"></Run>
-																		<Run Text="{Binding Path=BuyErrorInfo.ErrorTitle}"></Run>
+																			<Run Text="{loc:Loc Key=Error}"></Run>
+																			<Run Text="{Binding Path=BuyErrorInfo.ErrorTitle}"></Run>
 																		<Run Text="{Binding Path=BuyErrorInfo.ErrorMessage}"></Run>
 																	</TextBlock>
 																</Border>
@@ -728,7 +729,7 @@
 																<Border Background="Red" CornerRadius="4" Padding="6" Width="250" Margin="0">
 																	<StackPanel>
 																		<TextBlock TextWrapping="Wrap">
-																			<Run Text="Error"></Run>
+																			<Run Text="{loc:Loc Key=Error}"></Run>
 																			<Run Text="{Binding Path=SellErrorInfo.ErrorTitle}"></Run>
 																			<Run Text="{Binding Path=SellErrorInfo.ErrorMessage}"></Run>
 																		</TextBlock>
@@ -761,10 +762,10 @@
 												<Setter Property="ContextFlyout">
 													<Setter.Value>
 														<MenuFlyout>
-															<MenuItem Header="注文キャンセル" Command="{Binding Path=$parent[ListBox].((vm:PairViewModel)DataContext).AutoTradeCancelSelectedOrdersCommand}" CommandParameter="{Binding $parent[ListBox].SelectedItems}"/>
+															<MenuItem Header="{loc:Loc Key=CancelOrder}" Command="{Binding Path=$parent[ListBox].((vm:PairViewModel)DataContext).AutoTradeCancelSelectedOrdersCommand}" CommandParameter="{Binding $parent[ListBox].SelectedItems}"/>
 
 															<Separator/>
-															<MenuItem Header="削除" InputGesture="Ctrl+Delete" Command="{Binding Path=$parent[ListBox].((vm:PairViewModel)DataContext).AutoTradeDeleteSelectedOrdersCommand}" CommandParameter="{Binding $parent[ListBox].SelectedItems}"/>
+															<MenuItem Header="{loc:Loc Key=Delete}" InputGesture="Ctrl+Delete" Command="{Binding Path=$parent[ListBox].((vm:PairViewModel)DataContext).AutoTradeDeleteSelectedOrdersCommand}" CommandParameter="{Binding $parent[ListBox].SelectedItems}"/>
 														</MenuFlyout>
 
 													</Setter.Value>
@@ -781,7 +782,7 @@
 						
                     </Grid>
                 </TabItem>
-                <TabItem Header="History">
+                <TabItem Header="{loc:Loc Key=History}">
                     <Grid RowDefinitions="Auto,Auto,*">
 
 						<StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="12" Margin="0,0,8,8" HorizontalAlignment="Right">
@@ -810,21 +811,21 @@
                                 <ColumnDefinition Width="*" />
 							</Grid.ColumnDefinitions>
 
-							<TextBlock Grid.Column="0" Text="通貨ペア" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
-							<TextBlock Grid.Column="1" Text="売/買" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
-							<TextBlock Grid.Column="2" Text="数量" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
-							<TextBlock Grid.Column="3" Text="タイプ" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
-							<TextBlock Grid.Column="4" Text="価格" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
-							<TextBlock Grid.Column="5" Text="手数料(見積)" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
-							<TextBlock Grid.Column="6" Text="手数料(発生)" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
-							<TextBlock Grid.Column="7" Text="メイカー/テイカー" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
-							<TextBlock Grid.Column="8" Text="注文ID" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
-							<TextBlock Grid.Column="9" Text="取引ID" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
-							<TextBlock Grid.Column="10" Text="約定日時" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
+						<TextBlock Grid.Column="0" Text="{loc:Loc Key=Pair}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
+						<TextBlock Grid.Column="1" Text="{loc:Loc Key=OrderSide}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
+						<TextBlock Grid.Column="2" Text="{loc:Loc Key=Quantity}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
+						<TextBlock Grid.Column="3" Text="{loc:Loc Key=Type}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
+						<TextBlock Grid.Column="4" Text="{loc:Loc Key=Price}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
+						<TextBlock Grid.Column="5" Text="{loc:Loc Key=FeeEstimate}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
+						<TextBlock Grid.Column="6" Text="{loc:Loc Key=FeeCharged}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
+						<TextBlock Grid.Column="7" Text="{loc:Loc Key=MakerTaker}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
+						<TextBlock Grid.Column="8" Text="{loc:Loc Key=OrderId}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
+						<TextBlock Grid.Column="9" Text="{loc:Loc Key=TradeId}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
+							<TextBlock Grid.Column="10" Text="{loc:Loc Key=ExecutedAt}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="12,0,0,0" Padding="0" Opacity="0.9"/>
 
-						</Grid>
+							</Grid>
 
-                        <ListBox Grid.Row="2" ItemsSource="{Binding TradeHistories, Mode=OneWay}">
+							<ListBox Grid.Row="2" ItemsSource="{Binding TradeHistories, Mode=OneWay}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate x:DataType="mod:Trade">
                                     <Grid>

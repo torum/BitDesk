@@ -1,4 +1,5 @@
 ﻿using Avalonia.Threading;
+using BitDesk.Localization;
 using BitDesk.Models;
 using BitDesk.Services.Contracts;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -2305,7 +2306,7 @@ internal class MainViewModel : ObservableObject, IDisposable
             var err = new ErrorInfo(ErrType.Other)
             {
                 ErrorSeverity = FAInfoBarSeverity.Informational,
-                ErrorMessage = "資産情報の取得には、APIキーとシークレットが必要です。設定のページでAPIキーとシークレットを設定してください。",
+                ErrorMessage = Strings.Get("AssetsKeyRequired"),
             };
 
             OnErrorOccured(this, err);

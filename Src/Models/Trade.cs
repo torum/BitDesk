@@ -1,4 +1,4 @@
-﻿using BitDesk.Models;
+﻿using BitDesk.Localization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;
@@ -46,11 +46,11 @@ public partial class Trade : ObservableObject
         {
             if (Side == "buy")
             {
-                return "買";
+                return Strings.Get("Buy");
             }
             else if (Side == "sell")
             {
-                return "売";
+                return Strings.Get("Sell");
             }
             else
             {
@@ -82,11 +82,11 @@ public partial class Trade : ObservableObject
         {
             if (Type == "market")
             {
-                return "成行";
+                return Strings.Get("Market");
             }
             else if (Type == "limit")
             {
-                return "指値";
+                return Strings.Get("Limit");
             }
             else
             {

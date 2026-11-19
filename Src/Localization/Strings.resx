@@ -1,0 +1,717 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="MainWindowTitle" xml:space="preserve">
+    <value>BitDesk</value>
+  </data>
+  <data name="GridView" xml:space="preserve">
+    <value>Grid View</value>
+  </data>
+  <data name="Buy" xml:space="preserve">
+    <value>Buy</value>
+  </data>
+  <data name="Sell" xml:space="preserve">
+    <value>Sell</value>
+  </data>
+  <data name="OrderType" xml:space="preserve">
+    <value>Order type</value>
+  </data>
+  <data name="LimitPrice" xml:space="preserve">
+    <value>Limit price</value>
+  </data>
+  <data name="AvailableAmount" xml:space="preserve">
+    <value>Available: </value>
+  </data>
+  <data name="OrderQuantity" xml:space="preserve">
+    <value>Order quantity</value>
+  </data>
+  <data name="OrderAmount" xml:space="preserve">
+    <value>Order amount</value>
+  </data>
+  <data name="PostOnly" xml:space="preserve">
+    <value>Post Only</value>
+  </data>
+  <data name="Order" xml:space="preserve">
+    <value>Order</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="CancelOrder" xml:space="preserve">
+    <value>Cancel order</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="OrderSide" xml:space="preserve">
+    <value>Side</value>
+  </data>
+  <data name="OrderCount" xml:space="preserve">
+    <value>Order count</value>
+  </data>
+  <data name="OrderPrice" xml:space="preserve">
+    <value>Order price</value>
+  </data>
+  <data name="PriceDifference" xml:space="preserve">
+    <value>Price difference</value>
+  </data>
+  <data name="AverageExecutionPrice" xml:space="preserve">
+    <value>Average fill price</value>
+  </data>
+  <data name="UnfilledAmount" xml:space="preserve">
+    <value>Unfilled</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="OrderId" xml:space="preserve">
+    <value>Order ID</value>
+  </data>
+  <data name="OrderDateTime" xml:space="preserve">
+    <value>Order date</value>
+  </data>
+  <data name="LotAdditionTrigger" xml:space="preserve">
+    <value>Lot addition trigger: </value>
+  </data>
+  <data name="LotCount" xml:space="preserve">
+    <value>Number of lots: </value>
+  </data>
+  <data name="TradeUnitPrice" xml:space="preserve">
+    <value>Trade unit price: </value>
+  </data>
+  <data name="TradeRange" xml:space="preserve">
+    <value>Trade range: </value>
+  </data>
+  <data name="TakeProfitRange" xml:space="preserve">
+    <value>Take-profit range: </value>
+  </data>
+  <data name="EstimatedPriceYen" xml:space="preserve">
+    <value>Estimated price (JPY)</value>
+  </data>
+  <data name="SellCount" xml:space="preserve">
+    <value>Sell count</value>
+  </data>
+  <data name="Price" xml:space="preserve">
+    <value>Price</value>
+  </data>
+  <data name="OrderAndFillPrice" xml:space="preserve">
+    <value>Order / fill price</value>
+  </data>
+  <data name="EstimatedProfitYen" xml:space="preserve">
+    <value>Estimated profit (JPY)</value>
+  </data>
+  <data name="Pair" xml:space="preserve">
+    <value>Trading pair</value>
+  </data>
+  <data name="Quantity" xml:space="preserve">
+    <value>Quantity</value>
+  </data>
+  <data name="FeeEstimate" xml:space="preserve">
+    <value>Fee (estimated)</value>
+  </data>
+  <data name="FeeCharged" xml:space="preserve">
+    <value>Fee (charged)</value>
+  </data>
+  <data name="MakerTaker" xml:space="preserve">
+    <value>Maker / taker</value>
+  </data>
+  <data name="TradeId" xml:space="preserve">
+    <value>Trade ID</value>
+  </data>
+  <data name="ExecutedAt" xml:space="preserve">
+    <value>Execution date</value>
+  </data>
+  <data name="OrderInProgress" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="OrderPartiallyFilled" xml:space="preserve">
+    <value>Partially filled</value>
+  </data>
+  <data name="OrderFilled" xml:space="preserve">
+    <value>Filled</value>
+  </data>
+  <data name="OrderCanceled" xml:space="preserve">
+    <value>Canceled</value>
+  </data>
+  <data name="OrderCanceledPartiallyFilled" xml:space="preserve">
+    <value>Canceled (partially filled)</value>
+  </data>
+  <data name="Limit" xml:space="preserve">
+    <value>Limit</value>
+  </data>
+  <data name="Market" xml:space="preserve">
+    <value>Market</value>
+  </data>
+  <data name="PairSettings" xml:space="preserve">
+    <value>Pairs</value>
+  </data>
+  <data name="ApiKeys" xml:space="preserve">
+    <value>API Keys</value>
+  </data>
+  <data name="About" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="ApiKeySettingsTitle" xml:space="preserve">
+    <value>Configure or update API keys</value>
+  </data>
+  <data name="ApiKeySettingsDescription" xml:space="preserve">
+    <value>This application uses the APIs published by bitbank.cc to place orders and retrieve assets, orders, trade history, and other information. To use these features, create a bitbank account, issue an API key for each required permission, and configure the keys here.</value>
+  </data>
+  <data name="BitbankLogin" xml:space="preserve">
+    <value>bitbank sign in:</value>
+  </data>
+  <data name="BitbankApiKeyPage" xml:space="preserve">
+    <value>bitbank API key page:</value>
+  </data>
+  <data name="BitbankFaqPage" xml:space="preserve">
+    <value>bitbank FAQ:</value>
+  </data>
+  <data name="ApiKeyFaqLink" xml:space="preserve">
+    <value>FAQ: How to issue an API key</value>
+  </data>
+  <data name="AssetsKeyPurpose" xml:space="preserve">
+    <value>For retrieving asset information:</value>
+  </data>
+  <data name="OrdersKeyPurpose" xml:space="preserve">
+    <value>For retrieving order information:</value>
+  </data>
+  <data name="TradeHistoryKeyPurpose" xml:space="preserve">
+    <value>For retrieving trade history:</value>
+  </data>
+  <data name="MakeOrderKeyPurpose" xml:space="preserve">
+    <value>For placing orders:</value>
+  </data>
+  <data name="AutoTradeKeyPurpose" xml:space="preserve">
+    <value>For trading:</value>
+  </data>
+  <data name="Permission" xml:space="preserve">
+    <value>Permissions</value>
+  </data>
+  <data name="ReadPermission" xml:space="preserve">
+    <value>[Read]</value>
+  </data>
+  <data name="ReadTradePermission" xml:space="preserve">
+    <value>[Read] [Trade]</value>
+  </data>
+  <data name="ApiKeyLabel" xml:space="preserve">
+    <value>API key:</value>
+  </data>
+  <data name="ApiSecretLabel" xml:space="preserve">
+    <value>API secret:</value>
+  </data>
+  <data name="AboutBitDesk" xml:space="preserve">
+    <value>About BitDesk</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>Version:</value>
+  </data>
+  <data name="SourceCode" xml:space="preserve">
+    <value>Source code:</value>
+  </data>
+  <data name="Website" xml:space="preserve">
+    <value>Website:</value>
+  </data>
+  <data name="PrivacyPolicy" xml:space="preserve">
+    <value>Privacy Policy</value>
+  </data>
+  <data name="PrivacyDescription" xml:space="preserve">
+    <value>This application does not collect or send any information.</value>
+  </data>
+  <data name="License" xml:space="preserve">
+    <value>License</value>
+  </data>
+  <data name="ThirdPartyComponents" xml:space="preserve">
+    <value>Third-party components</value>
+  </data>
+  <data name="SetUpKeyPlaceholder" xml:space="preserve">
+    <value>Set up your key</value>
+  </data>
+  <data name="EnterKeyPlaceholder" xml:space="preserve">
+    <value>Enter your key</value>
+  </data>
+  <data name="AssetsKeyRequired" xml:space="preserve">
+    <value>An API key and secret are required to retrieve asset information. Configure them on the Settings page.</value>
+  </data>
+  <data name="TradeHistoryKeyRequired" xml:space="preserve">
+    <value>An API key and secret are required to retrieve trade history. Configure them on the Settings page.</value>
+  </data>
+  <data name="OrdersKeyRequired" xml:space="preserve">
+    <value>An API key and secret are required to retrieve order information. Configure them on the Settings page.</value>
+  </data>
+  <data name="MakeOrderKeyRequired" xml:space="preserve">
+    <value>An API key and secret are required to place orders. Configure them on the Settings page.</value>
+  </data>
+  <data name="CancelOrderKeyRequired" xml:space="preserve">
+    <value>An API key and secret are required to cancel orders. Configure them on the Settings page.</value>
+  </data>
+  <data name="OrderListHttpErrorTitle" xml:space="preserve">
+    <value>HTTP error while retrieving the order list.</value>
+  </data>
+  <data name="OrderListHttpErrorDescription" xml:space="preserve">
+    <value>HTTP error ({0}) while retrieving the order list from /user/spot/active_orders.</value>
+  </data>
+  <data name="ApiError10000" xml:space="preserve">
+    <value>URL does not exist.</value>
+  </data>
+  <data name="ApiError10001" xml:space="preserve">
+    <value>A system error occurred. Please contact support.</value>
+  </data>
+  <data name="ApiError10002" xml:space="preserve">
+    <value>Invalid JSON format. Check the request.</value>
+  </data>
+  <data name="ApiError10003" xml:space="preserve">
+    <value>A system error occurred. Please contact support.</value>
+  </data>
+  <data name="ApiError10005" xml:space="preserve">
+    <value>A timeout occurred. Please wait and try again.</value>
+  </data>
+  <data name="ApiError10007" xml:space="preserve">
+    <value>The service is temporarily unavailable for maintenance. Please wait.</value>
+  </data>
+  <data name="ApiError20001" xml:space="preserve">
+    <value>API authentication failed.</value>
+  </data>
+  <data name="ApiError20002" xml:space="preserve">
+    <value>Invalid API key.</value>
+  </data>
+  <data name="ApiError20003" xml:space="preserve">
+    <value>API key does not exist.</value>
+  </data>
+  <data name="ApiError20004" xml:space="preserve">
+    <value>API nonce is missing.</value>
+  </data>
+  <data name="ApiError20005" xml:space="preserve">
+    <value>API signature is missing.</value>
+  </data>
+  <data name="ApiError20011" xml:space="preserve">
+    <value>Two-factor authentication failed.</value>
+  </data>
+  <data name="ApiError20014" xml:space="preserve">
+    <value>SMS authentication failed.</value>
+  </data>
+  <data name="ApiError30001" xml:space="preserve">
+    <value>Specify an order quantity.</value>
+  </data>
+  <data name="ApiError30006" xml:space="preserve">
+    <value>Specify an order ID.</value>
+  </data>
+  <data name="ApiError30007" xml:space="preserve">
+    <value>Specify an order ID list.</value>
+  </data>
+  <data name="ApiError30009" xml:space="preserve">
+    <value>Specify a trading pair.</value>
+  </data>
+  <data name="ApiError30012" xml:space="preserve">
+    <value>Specify an order price.</value>
+  </data>
+  <data name="ApiError30013" xml:space="preserve">
+    <value>Specify whether to buy or sell.</value>
+  </data>
+  <data name="ApiError30015" xml:space="preserve">
+    <value>Specify an order type.</value>
+  </data>
+  <data name="ApiError30016" xml:space="preserve">
+    <value>Specify an asset name.</value>
+  </data>
+  <data name="ApiError30019" xml:space="preserve">
+    <value>Specify a UUID.</value>
+  </data>
+  <data name="ApiError30039" xml:space="preserve">
+    <value>Specify a withdrawal amount.</value>
+  </data>
+  <data name="ApiError40001" xml:space="preserve">
+    <value>Invalid order quantity.</value>
+  </data>
+  <data name="ApiError40006" xml:space="preserve">
+    <value>Invalid count value.</value>
+  </data>
+  <data name="ApiError40007" xml:space="preserve">
+    <value>Invalid end time.</value>
+  </data>
+  <data name="ApiError40008" xml:space="preserve">
+    <value>Invalid end_id value.</value>
+  </data>
+  <data name="ApiError40009" xml:space="preserve">
+    <value>Invalid from_id value.</value>
+  </data>
+  <data name="ApiError40013" xml:space="preserve">
+    <value>Invalid order ID.</value>
+  </data>
+  <data name="ApiError40014" xml:space="preserve">
+    <value>Invalid order ID list.</value>
+  </data>
+  <data name="ApiError40015" xml:space="preserve">
+    <value>Too many orders were specified.</value>
+  </data>
+  <data name="ApiError40017" xml:space="preserve">
+    <value>Invalid trading pair.</value>
+  </data>
+  <data name="ApiError40020" xml:space="preserve">
+    <value>Invalid order price.</value>
+  </data>
+  <data name="ApiError40021" xml:space="preserve">
+    <value>Invalid side.</value>
+  </data>
+  <data name="ApiError40022" xml:space="preserve">
+    <value>Invalid start time.</value>
+  </data>
+  <data name="ApiError40024" xml:space="preserve">
+    <value>Invalid order type.</value>
+  </data>
+  <data name="ApiError40025" xml:space="preserve">
+    <value>Invalid asset name.</value>
+  </data>
+  <data name="ApiError40028" xml:space="preserve">
+    <value>Invalid UUID.</value>
+  </data>
+  <data name="ApiError40048" xml:space="preserve">
+    <value>Invalid withdrawal amount.</value>
+  </data>
+  <data name="ApiError40112" xml:space="preserve">
+    <value>Invalid trigger price.</value>
+  </data>
+  <data name="ApiError40113" xml:space="preserve">
+    <value>Invalid post_only value.</value>
+  </data>
+  <data name="ApiError50003" xml:space="preserve">
+    <value>This account cannot perform the specified operation. Please contact support.</value>
+  </data>
+  <data name="ApiError50004" xml:space="preserve">
+    <value>This account is pending registration. Complete registration and try again.</value>
+  </data>
+  <data name="ApiError50005" xml:space="preserve">
+    <value>This account is locked. Please contact support.</value>
+  </data>
+  <data name="ApiError50006" xml:space="preserve">
+    <value>This account is locked. Please contact support.</value>
+  </data>
+  <data name="ApiError50008" xml:space="preserve">
+    <value>User verification is not complete.</value>
+  </data>
+  <data name="ApiError50009" xml:space="preserve">
+    <value>The specified order does not exist.</value>
+  </data>
+  <data name="ApiError50010" xml:space="preserve">
+    <value>The specified order cannot be canceled.</value>
+  </data>
+  <data name="ApiError50011" xml:space="preserve">
+    <value>API not found.</value>
+  </data>
+  <data name="ApiError50026" xml:space="preserve">
+    <value>The specified order has already been canceled.</value>
+  </data>
+  <data name="ApiError50027" xml:space="preserve">
+    <value>The specified order has already been filled.</value>
+  </data>
+  <data name="ApiError60001" xml:space="preserve">
+    <value>Insufficient balance.</value>
+  </data>
+  <data name="ApiError60002" xml:space="preserve">
+    <value>Market buy order exceeds the maximum quantity.</value>
+  </data>
+  <data name="ApiError60003" xml:space="preserve">
+    <value>Specified quantity exceeds the limit.</value>
+  </data>
+  <data name="ApiError60004" xml:space="preserve">
+    <value>Specified quantity is below the minimum threshold.</value>
+  </data>
+  <data name="ApiError60005" xml:space="preserve">
+    <value>Specified price exceeds the maximum.</value>
+  </data>
+  <data name="ApiError60006" xml:space="preserve">
+    <value>Specified price is below the minimum.</value>
+  </data>
+  <data name="ApiError60011" xml:space="preserve">
+    <value>Maximum simultaneous orders (30) exceeded.</value>
+  </data>
+  <data name="ApiError70001" xml:space="preserve">
+    <value>A system error occurred. Please contact support.</value>
+  </data>
+  <data name="ApiError70002" xml:space="preserve">
+    <value>A system error occurred. Please contact support.</value>
+  </data>
+  <data name="ApiError70003" xml:space="preserve">
+    <value>A system error occurred. Please contact support.</value>
+  </data>
+  <data name="ApiError70004" xml:space="preserve">
+    <value>Trading is currently suspended, so the order cannot be accepted.</value>
+  </data>
+  <data name="ApiError70005" xml:space="preserve">
+    <value>Buy orders are currently suspended, so the order cannot be accepted.</value>
+  </data>
+  <data name="ApiError70006" xml:space="preserve">
+    <value>Sell orders are currently suspended, so the order cannot be accepted.</value>
+  </data>
+  <data name="ApiError70009" xml:space="preserve">
+    <value>Market orders are temporarily restricted. Please use a limit order.</value>
+  </data>
+  <data name="ApiError70010" xml:space="preserve">
+    <value>The minimum order quantity has been temporarily increased due to system load.</value>
+  </data>
+  <data name="ApiError70011" xml:space="preserve">
+    <value>Requests are busy. Please wait a while and try again.</value>
+  </data>
+  <data name="ApiError70012" xml:space="preserve">
+    <value>A system error occurred. Please contact support.</value>
+  </data>
+  <data name="ApiError70013" xml:space="preserve">
+    <value>Orders and cancellations are temporarily restricted due to system load.</value>
+  </data>
+  <data name="ApiError70014" xml:space="preserve">
+    <value>Withdrawals and withdrawal cancellations are temporarily restricted due to system load.</value>
+  </data>
+  <data name="ApiError70015" xml:space="preserve">
+    <value>Lending requests and cancellations are temporarily restricted due to system load.</value>
+  </data>
+  <data name="ApiError70016" xml:space="preserve">
+    <value>Lending requests are suspended, so the request cannot be accepted.</value>
+  </data>
+  <data name="ApiError70017" xml:space="preserve">
+    <value>The specified trading pair is suspended, so the request cannot be accepted.</value>
+  </data>
+  <data name="ApiError70018" xml:space="preserve">
+    <value>Orders and cancellations for the specified trading pair are suspended.</value>
+  </data>
+  <data name="ApiError70019" xml:space="preserve">
+    <value>The order is being canceled.</value>
+  </data>
+  <data name="TradesAndSales" xml:space="preserve">
+    <value>Time &amp; Sales</value>
+  </data>
+  <data name="High24" xml:space="preserve">
+    <value>24H High: </value>
+  </data>
+  <data name="Low24" xml:space="preserve">
+    <value>24H Low: </value>
+  </data>
+  <data name="Ask" xml:space="preserve">
+    <value>ASK: </value>
+  </data>
+  <data name="Bid" xml:space="preserve">
+    <value>BID: </value>
+  </data>
+  <data name="Orders" xml:space="preserve">
+    <value>Orders</value>
+  </data>
+  <data name="AutoTrade" xml:space="preserve">
+    <value>Auto trade</value>
+  </data>
+  <data name="History" xml:space="preserve">
+    <value>History</value>
+  </data>
+  <data name="Profit" xml:space="preserve">
+    <value>Profit:</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="ExecutionPrice" xml:space="preserve">
+    <value>Execution price</value>
+  </data>
+  <data name="Index" xml:space="preserve">
+    <value>Index</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="Candle1Minute" xml:space="preserve">
+    <value>1 min</value>
+  </data>
+  <data name="Candle5Minutes" xml:space="preserve">
+    <value>5 min</value>
+  </data>
+  <data name="Candle15Minutes" xml:space="preserve">
+    <value>15 min</value>
+  </data>
+  <data name="Candle30Minutes" xml:space="preserve">
+    <value>30 min</value>
+  </data>
+  <data name="Candle1Hour" xml:space="preserve">
+    <value>1 hour</value>
+  </data>
+  <data name="Candle4Hours" xml:space="preserve">
+    <value>4 hours</value>
+  </data>
+  <data name="Candle8Hours" xml:space="preserve">
+    <value>8 hours</value>
+  </data>
+  <data name="Candle12Hours" xml:space="preserve">
+    <value>12 hours</value>
+  </data>
+  <data name="Candle1Day" xml:space="preserve">
+    <value>1 day</value>
+  </data>
+  <data name="Candle1Week" xml:space="preserve">
+    <value>1 week</value>
+  </data>
+  <data name="Candle1Month" xml:space="preserve">
+    <value>1 month</value>
+  </data>
+  <data name="SetUpDialogTitle" xml:space="preserve">
+    <value>Set up</value>
+  </data>
+  <data name="LogOnDialogTitle" xml:space="preserve">
+    <value>Sign in</value>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="OrderRequestEmpty" xml:space="preserve">
+    <value>The order request returned an empty response.</value>
+  </data>
+  <data name="OrderRequestEmptyHttp" xml:space="preserve">
+    <value>The order request returned an empty response (HTTP {0}).</value>
+  </data>
+  <data name="OrderUnexpectedError" xml:space="preserve">
+    <value>Unexpected error while submitting the order: {0}</value>
+  </data>
+  <data name="OrderListEmptyHttp" xml:space="preserve">
+    <value>The order list request returned an empty response (HTTP {0}).</value>
+  </data>
+  <data name="OrderListUnexpected" xml:space="preserve">
+    <value>Unexpected error while retrieving orders: {0}</value>
+  </data>
+  <data name="CancelOrderEmptyHttp" xml:space="preserve">
+    <value>The order cancellation request returned an empty response (HTTP {0}).</value>
+  </data>
+  <data name="CancelOrdersHttpError" xml:space="preserve">
+    <value>An HTTP error occurred while canceling orders (HTTP {0}).</value>
+  </data>
+  <data name="CancelOrdersUnexpected" xml:space="preserve">
+    <value>Unexpected error while canceling orders: {0}</value>
+  </data>
+  <data name="OrderInfoUpdateFailed" xml:space="preserve">
+    <value>Unable to update order information.</value>
+  </data>
+  <data name="OrderResultSuccess" xml:space="preserve">
+    <value>Order placed successfully.</value>
+  </data>
+  <data name="OrderResultFailed" xml:space="preserve">
+    <value>Order could not be placed.</value>
+  </data>
+  <data name="OrderAmountMustBePositive" xml:space="preserve">
+    <value>Order quantity must be greater than zero.</value>
+  </data>
+  <data name="OrderPriceMustBePositive" xml:space="preserve">
+    <value>Order price must be greater than zero.</value>
+  </data>
+  <data name="UnexpectedApiResponse" xml:space="preserve">
+    <value>Unexpected API response.</value>
+  </data>
+</root>

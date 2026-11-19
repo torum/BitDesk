@@ -1,4 +1,5 @@
 ﻿using Avalonia.Threading;
+using BitDesk.Localization;
 using BitDesk.Models;
 using BitDesk.Services;
 using BitDesk.Services.Contracts;
@@ -1253,47 +1254,47 @@ public partial class PairViewModel : ObservableObject, IDisposable
             var candleTypeText = "";
             if (ct == CandleTypes.OneMin)
             {
-                candleTypeText = "1 min";//"１分";
+                candleTypeText = Strings.Get("Candle1Minute");
             }
             else if (ct == CandleTypes.FiveMin)
             {
-                candleTypeText = "5 min";//"５分";
+                candleTypeText = Strings.Get("Candle5Minutes");
             }
             else if (ct == CandleTypes.FifteenMin)
             {
-                candleTypeText = "15 min";//"１５分";
+                candleTypeText = Strings.Get("Candle15Minutes");
             }
             else if (ct == CandleTypes.ThirtyMin)
             {
-                candleTypeText = "30 min";//"３０分";
+                candleTypeText = Strings.Get("Candle30Minutes");
             }
             else if (ct == CandleTypes.OneHour)
             {
-                candleTypeText = "1 hour";//"１時間";
+                candleTypeText = Strings.Get("Candle1Hour");
             }
             else if (ct == CandleTypes.FourHour)
             {
-                candleTypeText = "4 hours";//"４時間";
+                candleTypeText = Strings.Get("Candle4Hours");
             }
             else if (ct == CandleTypes.EightHour)
             {
-                candleTypeText = "8 hours";//"８時間";
+                candleTypeText = Strings.Get("Candle8Hours");
             }
             else if (ct == CandleTypes.TwelveHour)
             {
-                candleTypeText = "12 hours";//"１２時間";
+                candleTypeText = Strings.Get("Candle12Hours");
             }
             else if (ct == CandleTypes.OneDay)
             {
-                candleTypeText = "1 day";//"１日";
+                candleTypeText = Strings.Get("Candle1Day");
             }
             else if (ct == CandleTypes.OneWeek)
             {
-                candleTypeText = "1 week";//"１週間";
+                candleTypeText = Strings.Get("Candle1Week");
             }
             else if (ct == CandleTypes.OneMonth)
             {
-                candleTypeText = "1 month";//"１ヵ月";
+                candleTypeText = Strings.Get("Candle1Month");
             }
 
             return candleTypeText;
@@ -1716,8 +1717,8 @@ public partial class PairViewModel : ObservableObject, IDisposable
 
     public ObservableCollection<OrderTypeSelectionForComboBox> OrderTypesForComboBox { get; } =
     [
-        new OrderTypeSelectionForComboBox(OrderTypes.limit, "指値"),
-        new OrderTypeSelectionForComboBox(OrderTypes.market, "成行")
+        new OrderTypeSelectionForComboBox(OrderTypes.limit, Strings.Get("Limit")),
+        new OrderTypeSelectionForComboBox(OrderTypes.market, Strings.Get("Market"))
     ];
 
     public OrderTypeSelectionForComboBox? SelectedOrderTypeForComboBox
@@ -3442,7 +3443,7 @@ public partial class PairViewModel : ObservableObject, IDisposable
             var err = new ErrorInfo(ErrType.Other)
             {
                 ErrorSeverity = FAInfoBarSeverity.Informational,
-                ErrorMessage = "約定履歴の取得には、APIキーとシークレットが必要です。設定のページでAPIキーとシークレットを設定してください。",
+                ErrorMessage = Strings.Get("TradeHistoryKeyRequired"),
             };
 
             OnErrorOccured(this, err);
@@ -3534,7 +3535,7 @@ public partial class PairViewModel : ObservableObject, IDisposable
             var err = new ErrorInfo(ErrType.Other)
             {
                 ErrorSeverity = FAInfoBarSeverity.Informational,
-                ErrorMessage = "注文情報の取得には、APIキーとシークレットが必要です。設定のページでAPIキーとシークレットを設定してください。",
+                ErrorMessage = Strings.Get("OrdersKeyRequired"),
             };
 
             OnErrorOccured(this, err);
@@ -4572,12 +4573,12 @@ public partial class PairViewModel : ObservableObject, IDisposable
         {
             System.Diagnostics.Debug.WriteLine("■■■■■ GetOrders: (MakeOrderApiKeyIsSet == false)");
             // TODO:  show msg;
-            MakeOrderRresultText = "(MakeOrderApiKeyIsSet == false)";
+            MakeOrderRresultText = Strings.Get("MakeOrderKeyRequired");
 
             var err = new ErrorInfo(ErrType.Other)
             {
                 ErrorSeverity = FAInfoBarSeverity.Informational,
-                ErrorMessage = "注文するには、APIキーとシークレットが必要です。設定のページでAPIキーとシークレットを設定してください。",
+                ErrorMessage = Strings.Get("MakeOrderKeyRequired"),
             };
 
             OnErrorOccured(this, err);
@@ -4596,14 +4597,14 @@ public partial class PairViewModel : ObservableObject, IDisposable
             if (amount <= 0)
             {
                 // TODO:  show msg;
-                MakeOrderRresultText = "(amount <= 0)";
+                MakeOrderRresultText = Strings.Get("OrderAmountMustBePositive");
                 return;
             }
         }
         if (price <= 0)
         {
             // TODO:  show msg;
-            MakeOrderRresultText = "(price <= 0)";
+            MakeOrderRresultText = Strings.Get("OrderPriceMustBePositive");
             return;
         }
 
@@ -4611,17 +4612,17 @@ public partial class PairViewModel : ObservableObject, IDisposable
         if (ord == null)
         {
             // TODO:  show msg;
-            MakeOrderRresultText = "Fail:(ord == null)";
+            MakeOrderRresultText = Strings.Get("OrderResultFailed");
             return;
         }
         if (ord.IsSuccess == false)
         {
             // TODO:  show msg;
-            MakeOrderRresultText = "Fail:ord.IsSuccess == false";
+            MakeOrderRresultText = Strings.Get("OrderResultFailed");
             return;
         }
 
-        MakeOrderRresultText = "Success";
+        MakeOrderRresultText = Strings.Get("OrderResultSuccess");
     }
 
     // TODO: add can execute to check if API key and secret are set.
@@ -4639,12 +4640,12 @@ public partial class PairViewModel : ObservableObject, IDisposable
         {
             System.Diagnostics.Debug.WriteLine("■■■■■ GetOrders: (MakeOrderApiKeyIsSet == false)");
             // TODO:  show msg;
-            MakeOrderRresultText = "(MakeOrderApiKeyIsSet == false)";
+            MakeOrderRresultText = Strings.Get("CancelOrderKeyRequired");
 
             var err = new ErrorInfo(ErrType.Other)
             {
                 ErrorSeverity = FAInfoBarSeverity.Informational,
-                ErrorMessage = "注文キャンセルするには、APIキーとシークレットが必要です。設定のページでAPIキーとシークレットを設定してください。",
+                ErrorMessage = Strings.Get("CancelOrderKeyRequired"),
             };
 
             OnErrorOccured(this, err);

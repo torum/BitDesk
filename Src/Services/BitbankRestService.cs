@@ -1,4 +1,5 @@
-﻿using BitDesk.Models;
+﻿using BitDesk.Localization;
+using BitDesk.Models;
 using BitDesk.Services.Contracts;
 using FluentAvalonia.UI.Controls;
 using System;
@@ -689,14 +690,14 @@ internal class BitbankRestService : IBitbankRestService
 
                         ord.Err.ErrorCode = -1;
                         ord.Err.ErrorType = ErrType.ResposeParseError;
-                        ord.Err.ErrorMessage = $"Error on MakeOrder: JsonOrderObject deserialized.Data != null";
+                        ord.Err.ErrorMessage = Strings.Get("UnexpectedApiResponse");
 
                         // エラーイベント発火
                         var er = new ApiClientError
                         {
                             ErrType = "Data",
                             ErrCode = 0,
-                            ErrText = "JsonOrderObject deserialized.Data != null @MakeOrder",
+                            ErrText = Strings.Get("UnexpectedApiResponse"),
                             ErrDatetime = DateTime.Now,
                             ErrPlace = path.ToString()
                         };
@@ -756,14 +757,14 @@ internal class BitbankRestService : IBitbankRestService
 
                 ord.Err.ErrorCode = -1;
                 ord.Err.ErrorType = ErrType.ResposeParseError;
-                ord.Err.ErrorMessage = $"Error on MakeOrder: /user/spot/order への発注処理で、空のBodyTextが返りました。";
+                ord.Err.ErrorMessage = Strings.Get("OrderRequestEmpty");
 
                 // エラーイベント発火
                 var er = new ApiClientError
                 {
                     ErrType = "Data",
                     ErrCode = 0,
-                    ErrText = "発注処理で、空のBodyTextが返りました。",
+                    ErrText = Strings.Get("OrderRequestEmpty"),
                     ErrDatetime = DateTime.Now,
                     ErrPlace = path.ToString()
                 };
@@ -783,7 +784,7 @@ internal class BitbankRestService : IBitbankRestService
 
             ord.Err.ErrorType = ErrType.Unexpected;
             ord.Err.ErrorCode = -1;
-            ord.Err.ErrorMessage = $"Error on MakeOrder: /user/spot/order への発注処理で、予期しないエラーが発生しました。{e.Message}";
+            ord.Err.ErrorMessage = Strings.Format("OrderUnexpectedError", e.Message);
         }
 
         return ord;
@@ -902,7 +903,7 @@ internal class BitbankRestService : IBitbankRestService
             ord.Err.ErrorType = ErrType.ApiError;
             ord.Err.ErrorCode = -1;
             ord.Err.ErrorType = ErrType.ResposeParseError;
-            ord.Err.ErrorMessage = $"Error on GetOrderByID: /user/spot/order への注文情報取得処理で、空のBodyTextが返りました。HTTPエラー: {resbo.HTTPError.ErrCode}";
+            ord.Err.ErrorMessage = Strings.Format("OrderRequestEmptyHttp", resbo.HTTPError.ErrCode);
 
             return ord;
         }
@@ -1014,12 +1015,12 @@ internal class BitbankRestService : IBitbankRestService
                     };
                     if (ApiErrorCodesDictionary.ContainsKey(jsonResult?.Data?.Code ?? 0))
                     {
-                        er.ErrText = "「" + ApiErrorCodesDictionary[jsonResult?.Data?.Code ?? 0] + "」";
+                        er.ErrText = "\"" + ApiErrorCodesDictionary[jsonResult?.Data?.Code ?? 0] + "\"";
                     }
                     er.ErrDatetime = DateTime.Now;
                     er.ErrPlace = path.ToString();
                     er.ErrPlaceParent = "GetOrderListByIDs";
-                    er.ErrEx = "注文情報を更新出来ませんでした";
+                    er.ErrEx = Strings.Get("OrderInfoUpdateFailed");
 
                     ApiErrorOccured?.Invoke(this, er);
 
@@ -1038,7 +1039,7 @@ internal class BitbankRestService : IBitbankRestService
 
                 ords.Err.ErrorType = ErrType.ApiError;
                 ords.Err.ErrorCode = resbo.HTTPError.ErrCode;
-                ords.Err.ErrorMessage = $"Error on GetOrderListByIDs: /user/spot/orders_info への情報取得処理で、空のBodyTextが返りました。HTTPエラー: {resbo.HTTPError.ErrCode}";
+                ords.Err.ErrorMessage = Strings.Format("OrderListEmptyHttp", resbo.HTTPError.ErrCode);
 
                 return ords;
             }
@@ -1056,7 +1057,7 @@ internal class BitbankRestService : IBitbankRestService
 
             ord.Err.ErrorType = ErrType.Unexpected;
             ord.Err.ErrorCode = -1;
-            ord.Err.ErrorMessage = $"Error on GetOrderListByIDs: /user/spot/orders_info への情報取得処理で、予期しないエラーが発生しました。{e.Message}";
+            ord.Err.ErrorMessage = Strings.Format("OrderListUnexpected", e.Message);
 
             return ord;
         }
@@ -1122,14 +1123,14 @@ internal class BitbankRestService : IBitbankRestService
 
                     ord.Err.ErrorCode = -1;
                     ord.Err.ErrorType = ErrType.ResposeParseError;
-                    ord.Err.ErrorMessage = "Error on CancelOrder: JsonOrderObject deserialized.Data != null";
+                    ord.Err.ErrorMessage = Strings.Get("UnexpectedApiResponse");
 
                     // エラーイベント発火
                     var er = new ApiClientError
                     {
                         ErrType = "Data",
                         ErrCode = 0,
-                        ErrText = "JsonOrderObject deserialized.Data != null @CancelOrder",
+                        ErrText = Strings.Get("UnexpectedApiResponse"),
                         ErrDatetime = DateTime.Now,
                         ErrPlace = path.ToString()
                     };
@@ -1189,14 +1190,14 @@ internal class BitbankRestService : IBitbankRestService
 
             ord.Err.ErrorCode = resbo.HTTPError.ErrCode;
             ord.Err.ErrorType = ErrType.ResposeParseError;
-            ord.Err.ErrorMessage = $"Error on CancelOrder: /user/spot/cancel_order への注文キャンセル処理で、空のBodyTextが返りました。HTTP error code: {resbo.HTTPError.ErrCode}";
+            ord.Err.ErrorMessage = Strings.Format("CancelOrderEmptyHttp", resbo.HTTPError.ErrCode);
 
             // エラーイベント発火
             var er = new ApiClientError
             {
                 ErrType = "Data",
                 ErrCode = 0,
-                ErrText = "注文キャンセル処理で、空のBodyTextが返りました。",
+                ErrText = Strings.Get("OrderRequestEmpty"),
                 ErrDatetime = DateTime.Now,
                 ErrPlace = path.ToString()
             };
@@ -1337,7 +1338,7 @@ internal class BitbankRestService : IBitbankRestService
 
                 ords.Err.ErrorCode = resbo.HTTPError.ErrCode;
                 ords.Err.ErrorType = ErrType.ResposeParseError;
-                ords.Err.ErrorMessage = $"Error on CancelOrders: /user/spot/cancel_orders への注文キャンセル処理で、HTTPエラー。HTTP error code: {resbo.HTTPError.ErrCode}";
+                ords.Err.ErrorMessage = Strings.Format("CancelOrdersHttpError", resbo.HTTPError.ErrCode);
 
                 return ords;
             }
@@ -1356,7 +1357,7 @@ internal class BitbankRestService : IBitbankRestService
             ord.Err.ErrorCode = -1;
             ord.Err.ErrorType = ErrType.Unexpected;
             ord.Err.ErrorCode = -1;
-            ord.Err.ErrorMessage = $"Error on CancelOrders: /user/spot/cancel_orders への情報取得処理で、予期しないエラーが発生しました。{e.Message}";
+            ord.Err.ErrorMessage = Strings.Format("CancelOrdersUnexpected", e.Message);
 
             return ord;
         }
@@ -1840,87 +1841,80 @@ internal class BitbankRestService : IBitbankRestService
 
     public Dictionary<int, string> ApiErrorCodesDictionary = new()
     {
-        {10000, "URLが存在しません"},
-        {10001, "システムエラーが発生しました。サポートにお問い合わせ下さい"},
-        {10002, "不正なJSON形式です。送信内容をご確認下さい"},
-        {10003, "システムエラーが発生しました。サポートにお問い合わせ下さい"},
-        {10005, "タイムアウトエラーが発生しました。しばらく間をおいて再度実行して下さい"},
-
-        // Undocumented
-        {10007, "ただいまメンテナンスのため一時サービスを停止しております。 今しばらくお待ちください。"},
-
-        {20001, "API認証に失敗しました"},
-        {20002, "APIキーが不正です"},
-        {20003, "APIキーが存在しません"},
-        {20004, "API Nonceが存在しません"},
-        {20005, "APIシグネチャが存在しません"},
-        {20011, "２段階認証に失敗しました"},
-        {20014, "SMS認証に失敗しました"},
-        {30001, "注文数量を指定して下さい"},
-        {30006, "注文IDを指定して下さい"},
-        {30007, "注文ID配列を指定して下さい"},
-        {30009, "銘柄を指定して下さい"},
-        {30012, "注文価格を指定して下さい"},
-        {30013, "売買どちらかを指定して下さい"},
-        {30015, "注文タイプを指定して下さい"},
-        {30016, "アセット名を指定して下さい"},
-        {30019, "uuidを指定して下さい"},
-        {30039, "出金額を指定して下さい"},
-        {40001, "注文数量が不正です"},
-        {40006, "count値が不正です"},
-        {40007, "終了時期が不正です"},
-        {40008, "end_id値が不正です"},
-        {40009, "from_id値が不正です"},
-        {40013, "注文IDが不正です"},
-        {40014, "注文ID配列が不正です"},
-        {40015, "指定された注文が多すぎます"},
-        {40017, "銘柄名が不正です"},
-        {40020, "注文価格が不正です"},
-        {40021, "売買区分が不正です"},
-        {40022, "開始時期が不正です"},
-        {40024, "注文タイプが不正です"},
-        {40025, "アセット名が不正です"},
-        {40028, "uuidが不正です"},
-        {40048, "出金額が不正です"},
-        {40112, "トリガー価格が不正です"},
-        {40113, "post_only値が不正です"},
-        {50003, "現在、このアカウントはご指定の操作を実行できない状態となっております。サポートにお問い合わせ下さい"},
-        {50004, "現在、このアカウントは仮登録の状態となっております。アカウント登録完了後、再度お試し下さい"},
-        {50005, "現在、このアカウントはロックされております。サポートにお問い合わせ下さい"},
-        {50006, "現在、このアカウントはロックされております。サポートにお問い合わせ下さい"},
-        {50008, "ユーザの本人確認が完了していません"},
-        {50009, "ご指定の注文は存在しません"},
-        {50010, "ご指定の注文はキャンセルできません"},
-        {50011, "APIが見つかりません"},
-
-        {50026, "ご指定の注文は既にキャンセル済みです"},// added 2019-10-18
-        {50027, "ご指定の注文は既に約定済みです"},// added 2019-10-18
-
-        {60001, "保有数量が不足しています"},
-        {60002, "成行買い注文の数量上限を上回っています"},
-        {60003, "指定した数量が制限を超えています"},
-        {60004, "指定した数量がしきい値を下回っています"},
-        {60005, "指定した価格が上限を上回っています"},
-        {60006, "指定した価格が下限を下回っています"},
-        {60011, "同時発注制限件数(30件)を上回っています"},
-        {70001, "システムエラーが発生しました。サポートにお問い合わせ下さい"},
-        {70002, "システムエラーが発生しました。サポートにお問い合わせ下さい"},
-        {70003, "システムエラーが発生しました。サポートにお問い合わせ下さい"},
-        {70004, "現在取引停止中のため、注文を承ることができません"},
-        {70005, "現在買注文停止中のため、注文を承ることができません"},
-        {70006, "現在売注文停止中のため、注文を承ることができません"},
-        {70009, "ただいま成行注文を一時的に制限しています。指値注文をご利用ください。"},
-        {70010, "ただいまシステム負荷が高まっているため、最小注文数量を一時的に引き上げています。"},
-        {70011, "ただいまリクエストが混雑してます。しばらく時間を空けてから再度リクエストをお願いします。"},
-
-        {70012, "システムエラーが発生しました。サポートにお問い合わせ下さい。"},// added 2019-10-18
-        {70013, "ただいまシステム負荷が高まっているため、注文および注文キャンセルを一時的に制限しています。"},// added 2019-10-18
-        {70014, "ただいまシステム負荷が高まっているため、出金申請および出金申請キャンセルを一時的に制限しています。"},// added 2019-10-18
-        {70015, "ただいまシステム負荷が高まっているため、貸出申請および貸出申請キャンセルを一時的に制限しています。"},// added 2019-10-18
-        {70016, "貸出申請および貸出申請キャンセル停止中のため、リクエストを承ることができません。"},// added 2019-10-18
-        {70017, "指定された銘柄は注文停止中のため、リクエストを承ることができません。"},// added 2019-10-18
-        {70018, "指定された銘柄は注文およびキャンセル停止中のため、リクエストを承ることができません。"},// added 2019-10-18
-        {70019, "注文はキャンセル中です。"},
-
+        {10000, Strings.Get("ApiError10000")},
+        {10001, Strings.Get("ApiError10001")},
+        {10002, Strings.Get("ApiError10002")},
+        {10003, Strings.Get("ApiError10003")},
+        {10005, Strings.Get("ApiError10005")},
+        {10007, Strings.Get("ApiError10007")},
+        {20001, Strings.Get("ApiError20001")},
+        {20002, Strings.Get("ApiError20002")},
+        {20003, Strings.Get("ApiError20003")},
+        {20004, Strings.Get("ApiError20004")},
+        {20005, Strings.Get("ApiError20005")},
+        {20011, Strings.Get("ApiError20011")},
+        {20014, Strings.Get("ApiError20014")},
+        {30001, Strings.Get("ApiError30001")},
+        {30006, Strings.Get("ApiError30006")},
+        {30007, Strings.Get("ApiError30007")},
+        {30009, Strings.Get("ApiError30009")},
+        {30012, Strings.Get("ApiError30012")},
+        {30013, Strings.Get("ApiError30013")},
+        {30015, Strings.Get("ApiError30015")},
+        {30016, Strings.Get("ApiError30016")},
+        {30019, Strings.Get("ApiError30019")},
+        {30039, Strings.Get("ApiError30039")},
+        {40001, Strings.Get("ApiError40001")},
+        {40006, Strings.Get("ApiError40006")},
+        {40007, Strings.Get("ApiError40007")},
+        {40008, Strings.Get("ApiError40008")},
+        {40009, Strings.Get("ApiError40009")},
+        {40013, Strings.Get("ApiError40013")},
+        {40014, Strings.Get("ApiError40014")},
+        {40015, Strings.Get("ApiError40015")},
+        {40017, Strings.Get("ApiError40017")},
+        {40020, Strings.Get("ApiError40020")},
+        {40021, Strings.Get("ApiError40021")},
+        {40022, Strings.Get("ApiError40022")},
+        {40024, Strings.Get("ApiError40024")},
+        {40025, Strings.Get("ApiError40025")},
+        {40028, Strings.Get("ApiError40028")},
+        {40048, Strings.Get("ApiError40048")},
+        {40112, Strings.Get("ApiError40112")},
+        {40113, Strings.Get("ApiError40113")},
+        {50003, Strings.Get("ApiError50003")},
+        {50004, Strings.Get("ApiError50004")},
+        {50005, Strings.Get("ApiError50005")},
+        {50006, Strings.Get("ApiError50006")},
+        {50008, Strings.Get("ApiError50008")},
+        {50009, Strings.Get("ApiError50009")},
+        {50010, Strings.Get("ApiError50010")},
+        {50011, Strings.Get("ApiError50011")},
+        {50026, Strings.Get("ApiError50026")},
+        {50027, Strings.Get("ApiError50027")},
+        {60001, Strings.Get("ApiError60001")},
+        {60002, Strings.Get("ApiError60002")},
+        {60003, Strings.Get("ApiError60003")},
+        {60004, Strings.Get("ApiError60004")},
+        {60005, Strings.Get("ApiError60005")},
+        {60006, Strings.Get("ApiError60006")},
+        {60011, Strings.Get("ApiError60011")},
+        {70001, Strings.Get("ApiError70001")},
+        {70002, Strings.Get("ApiError70002")},
+        {70003, Strings.Get("ApiError70003")},
+        {70004, Strings.Get("ApiError70004")},
+        {70005, Strings.Get("ApiError70005")},
+        {70006, Strings.Get("ApiError70006")},
+        {70009, Strings.Get("ApiError70009")},
+        {70010, Strings.Get("ApiError70010")},
+        {70011, Strings.Get("ApiError70011")},
+        {70012, Strings.Get("ApiError70012")},
+        {70013, Strings.Get("ApiError70013")},
+        {70014, Strings.Get("ApiError70014")},
+        {70015, Strings.Get("ApiError70015")},
+        {70016, Strings.Get("ApiError70016")},
+        {70017, Strings.Get("ApiError70017")},
+        {70018, Strings.Get("ApiError70018")},
+        {70019, Strings.Get("ApiError70019")},
     };
 }

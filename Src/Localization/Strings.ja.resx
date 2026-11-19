@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="MainWindowTitle" xml:space="preserve"><value>BitDesk</value></data>
+  <data name="GridView" xml:space="preserve"><value>グリッド表示</value></data>
+  <data name="Buy" xml:space="preserve"><value>買</value></data>
+  <data name="Sell" xml:space="preserve"><value>売</value></data>
+  <data name="OrderType" xml:space="preserve"><value>注文タイプ</value></data>
+  <data name="LimitPrice" xml:space="preserve"><value>指値価格</value></data>
+  <data name="AvailableAmount" xml:space="preserve"><value>利用可能: </value></data>
+  <data name="OrderQuantity" xml:space="preserve"><value>注文数量</value></data>
+  <data name="OrderAmount" xml:space="preserve"><value>注文金額</value></data>
+  <data name="PostOnly" xml:space="preserve"><value>Post Only</value></data>
+  <data name="Order" xml:space="preserve"><value>注文</value></data>
+  <data name="Add" xml:space="preserve"><value>追加</value></data>
+  <data name="CancelOrder" xml:space="preserve"><value>注文キャンセル</value></data>
+  <data name="Delete" xml:space="preserve"><value>削除</value></data>
+  <data name="OrderSide" xml:space="preserve"><value>売/買</value></data>
+  <data name="OrderCount" xml:space="preserve"><value>注文数</value></data>
+  <data name="OrderPrice" xml:space="preserve"><value>注文価格</value></data>
+  <data name="PriceDifference" xml:space="preserve"><value>現在値差</value></data>
+  <data name="AverageExecutionPrice" xml:space="preserve"><value>平均約定</value></data>
+  <data name="UnfilledAmount" xml:space="preserve"><value>未約定</value></data>
+  <data name="Status" xml:space="preserve"><value>ステータス</value></data>
+  <data name="OrderId" xml:space="preserve"><value>注文ID</value></data>
+  <data name="OrderDateTime" xml:space="preserve"><value>注文日時</value></data>
+  <data name="LotAdditionTrigger" xml:space="preserve"><value>ロット追加起点： </value></data>
+  <data name="LotCount" xml:space="preserve"><value>ロット数： </value></data>
+  <data name="TradeUnitPrice" xml:space="preserve"><value>取引単価： </value></data>
+  <data name="TradeRange" xml:space="preserve"><value>取引幅： </value></data>
+  <data name="TakeProfitRange" xml:space="preserve"><value>利確幅： </value></data>
+  <data name="EstimatedPriceYen" xml:space="preserve"><value>推定価格(円)</value></data>
+  <data name="SellCount" xml:space="preserve"><value>注文数</value></data>
+  <data name="Price" xml:space="preserve"><value>価格</value></data>
+  <data name="OrderAndFillPrice" xml:space="preserve"><value>注文・約定価格</value></data>
+  <data name="EstimatedProfitYen" xml:space="preserve"><value>想定利益(円)</value></data>
+  <data name="Pair" xml:space="preserve"><value>通貨ペア</value></data>
+  <data name="Quantity" xml:space="preserve"><value>数量</value></data>
+  <data name="FeeEstimate" xml:space="preserve"><value>手数料(見積)</value></data>
+  <data name="FeeCharged" xml:space="preserve"><value>手数料(発生)</value></data>
+  <data name="MakerTaker" xml:space="preserve"><value>メイカー/テイカー</value></data>
+  <data name="TradeId" xml:space="preserve"><value>取引ID</value></data>
+  <data name="ExecutedAt" xml:space="preserve"><value>約定日時</value></data>
+  <data name="OrderInProgress" xml:space="preserve"><value>注文中</value></data>
+  <data name="OrderPartiallyFilled" xml:space="preserve"><value>注文中(一部約定)</value></data>
+  <data name="OrderFilled" xml:space="preserve"><value>約定済み</value></data>
+  <data name="OrderCanceled" xml:space="preserve"><value>取消済</value></data>
+  <data name="OrderCanceledPartiallyFilled" xml:space="preserve"><value>取消済(一部約定)</value></data>
+  <data name="Limit" xml:space="preserve"><value>指値</value></data>
+  <data name="Market" xml:space="preserve"><value>成行</value></data>
+  <data name="PairSettings" xml:space="preserve"><value>通貨ペア</value></data>
+  <data name="ApiKeys" xml:space="preserve"><value>APIキー</value></data>
+  <data name="About" xml:space="preserve"><value>このアプリについて</value></data>
+  <data name="ApiKeySettingsTitle" xml:space="preserve"><value>APIキーの設定・変更</value></data>
+  <data name="ApiKeySettingsDescription" xml:space="preserve"><value>このアプリケーションは、bitbank.cc が公開しているAPIを利用して注文や資産・注文一覧・取引履歴等の情報を取得します。これらの機能を利用するには、bitbankでアカウントを作成し、必要な権限ごとにAPIキーを発行して、ここで設定してください。</value></data>
+  <data name="BitbankLogin" xml:space="preserve"><value>bitbank ログイン:</value></data>
+  <data name="BitbankApiKeyPage" xml:space="preserve"><value>bitbank API発行ページ:</value></data>
+  <data name="BitbankFaqPage" xml:space="preserve"><value>bitbank FAQページ:</value></data>
+  <data name="ApiKeyFaqLink" xml:space="preserve"><value>FAQ：APIキーを発行したい</value></data>
+  <data name="AssetsKeyPurpose" xml:space="preserve"><value>保有資産情報の取得用：</value></data>
+  <data name="OrdersKeyPurpose" xml:space="preserve"><value>注文情報の取得用：</value></data>
+  <data name="TradeHistoryKeyPurpose" xml:space="preserve"><value>約定履歴の取得用：</value></data>
+  <data name="MakeOrderKeyPurpose" xml:space="preserve"><value>注文用：</value></data>
+  <data name="AutoTradeKeyPurpose" xml:space="preserve"><value>取引用：</value></data>
+  <data name="Permission" xml:space="preserve"><value>権限</value></data>
+  <data name="ReadPermission" xml:space="preserve"><value>[参照]</value></data>
+  <data name="ReadTradePermission" xml:space="preserve"><value>[参照] [取引]</value></data>
+  <data name="ApiKeyLabel" xml:space="preserve"><value>APIキー：</value></data>
+  <data name="ApiSecretLabel" xml:space="preserve"><value>APIシークレット：</value></data>
+  <data name="AboutBitDesk" xml:space="preserve"><value>BitDeskについて</value></data>
+  <data name="Version" xml:space="preserve"><value>バージョン:</value></data>
+  <data name="SourceCode" xml:space="preserve"><value>ソースコード:</value></data>
+  <data name="Website" xml:space="preserve"><value>ウェブサイト:</value></data>
+  <data name="PrivacyPolicy" xml:space="preserve"><value>プライバシーポリシー</value></data>
+  <data name="PrivacyDescription" xml:space="preserve"><value>このアプリケーションは情報を収集・送信しません。</value></data>
+  <data name="License" xml:space="preserve"><value>ライセンス</value></data>
+  <data name="ThirdPartyComponents" xml:space="preserve"><value>サードパーティコンポーネント</value></data>
+  <data name="SetUpKeyPlaceholder" xml:space="preserve"><value>キーを設定してください</value></data>
+  <data name="EnterKeyPlaceholder" xml:space="preserve"><value>キーを入力してください</value></data>
+  <data name="AssetsKeyRequired" xml:space="preserve"><value>資産情報の取得には、APIキーとシークレットが必要です。設定ページで設定してください。</value></data>
+  <data name="TradeHistoryKeyRequired" xml:space="preserve"><value>約定履歴の取得には、APIキーとシークレットが必要です。設定ページで設定してください。</value></data>
+  <data name="OrdersKeyRequired" xml:space="preserve"><value>注文情報の取得には、APIキーとシークレットが必要です。設定ページで設定してください。</value></data>
+  <data name="MakeOrderKeyRequired" xml:space="preserve"><value>注文するには、APIキーとシークレットが必要です。設定ページで設定してください。</value></data>
+  <data name="CancelOrderKeyRequired" xml:space="preserve"><value>注文キャンセルには、APIキーとシークレットが必要です。設定ページで設定してください。</value></data>
+  <data name="OrderListHttpErrorTitle" xml:space="preserve"><value>注文リスト取得でHTTPエラーが返りました。</value></data>
+  <data name="OrderListHttpErrorDescription" xml:space="preserve"><value>/user/spot/active_orders への注文リスト取得処理で、HTTPエラー（{0}）が返りました。</value></data>
+  <data name="ApiError10000" xml:space="preserve"><value>URLが存在しません</value></data>
+  <data name="ApiError10001" xml:space="preserve"><value>システムエラーが発生しました。サポートにお問い合わせ下さい</value></data>
+  <data name="ApiError10002" xml:space="preserve"><value>不正なJSON形式です。送信内容をご確認下さい</value></data>
+  <data name="ApiError10003" xml:space="preserve"><value>システムエラーが発生しました。サポートにお問い合わせ下さい</value></data>
+  <data name="ApiError10005" xml:space="preserve"><value>タイムアウトエラーが発生しました。しばらく間をおいて再度実行して下さい</value></data>
+  <data name="ApiError10007" xml:space="preserve"><value>ただいまメンテナンスのため一時サービスを停止しております。今しばらくお待ちください。</value></data>
+  <data name="ApiError20001" xml:space="preserve"><value>API認証に失敗しました</value></data>
+  <data name="ApiError20002" xml:space="preserve"><value>APIキーが不正です</value></data>
+  <data name="ApiError20003" xml:space="preserve"><value>APIキーが存在しません</value></data>
+  <data name="ApiError20004" xml:space="preserve"><value>API Nonceが存在しません</value></data>
+  <data name="ApiError20005" xml:space="preserve"><value>APIシグネチャが存在しません</value></data>
+  <data name="ApiError20011" xml:space="preserve"><value>２段階認証に失敗しました</value></data>
+  <data name="ApiError20014" xml:space="preserve"><value>SMS認証に失敗しました</value></data>
+  <data name="ApiError30001" xml:space="preserve"><value>注文数量を指定して下さい</value></data>
+  <data name="ApiError30006" xml:space="preserve"><value>注文IDを指定して下さい</value></data>
+  <data name="ApiError30007" xml:space="preserve"><value>注文ID配列を指定して下さい</value></data>
+  <data name="ApiError30009" xml:space="preserve"><value>銘柄を指定して下さい</value></data>
+  <data name="ApiError30012" xml:space="preserve"><value>注文価格を指定して下さい</value></data>
+  <data name="ApiError30013" xml:space="preserve"><value>売買どちらかを指定して下さい</value></data>
+  <data name="ApiError30015" xml:space="preserve"><value>注文タイプを指定して下さい</value></data>
+  <data name="ApiError30016" xml:space="preserve"><value>アセット名を指定して下さい</value></data>
+  <data name="ApiError30019" xml:space="preserve"><value>uuidを指定して下さい</value></data>
+  <data name="ApiError30039" xml:space="preserve"><value>出金額を指定して下さい</value></data>
+  <data name="ApiError40001" xml:space="preserve"><value>注文数量が不正です</value></data>
+  <data name="ApiError40006" xml:space="preserve"><value>count値が不正です</value></data>
+  <data name="ApiError40007" xml:space="preserve"><value>終了時期が不正です</value></data>
+  <data name="ApiError40008" xml:space="preserve"><value>end_id値が不正です</value></data>
+  <data name="ApiError40009" xml:space="preserve"><value>from_id値が不正です</value></data>
+  <data name="ApiError40013" xml:space="preserve"><value>注文IDが不正です</value></data>
+  <data name="ApiError40014" xml:space="preserve"><value>注文ID配列が不正です</value></data>
+  <data name="ApiError40015" xml:space="preserve"><value>指定された注文が多すぎます</value></data>
+  <data name="ApiError40017" xml:space="preserve"><value>銘柄名が不正です</value></data>
+  <data name="ApiError40020" xml:space="preserve"><value>注文価格が不正です</value></data>
+  <data name="ApiError40021" xml:space="preserve"><value>売買区分が不正です</value></data>
+  <data name="ApiError40022" xml:space="preserve"><value>開始時期が不正です</value></data>
+  <data name="ApiError40024" xml:space="preserve"><value>注文タイプが不正です</value></data>
+  <data name="ApiError40025" xml:space="preserve"><value>アセット名が不正です</value></data>
+  <data name="ApiError40028" xml:space="preserve"><value>uuidが不正です</value></data>
+  <data name="ApiError40048" xml:space="preserve"><value>出金額が不正です</value></data>
+  <data name="ApiError40112" xml:space="preserve"><value>トリガー価格が不正です</value></data>
+  <data name="ApiError40113" xml:space="preserve"><value>post_only値が不正です</value></data>
+  <data name="ApiError50003" xml:space="preserve"><value>現在、このアカウントはご指定の操作を実行できない状態となっております。サポートにお問い合わせ下さい</value></data>
+  <data name="ApiError50004" xml:space="preserve"><value>現在、このアカウントは仮登録の状態となっております。アカウント登録完了後、再度お試し下さい</value></data>
+  <data name="ApiError50005" xml:space="preserve"><value>現在、このアカウントはロックされております。サポートにお問い合わせ下さい</value></data>
+  <data name="ApiError50006" xml:space="preserve"><value>現在、このアカウントはロックされております。サポートにお問い合わせ下さい</value></data>
+  <data name="ApiError50008" xml:space="preserve"><value>ユーザの本人確認が完了していません</value></data>
+  <data name="ApiError50009" xml:space="preserve"><value>ご指定の注文は存在しません</value></data>
+  <data name="ApiError50010" xml:space="preserve"><value>ご指定の注文はキャンセルできません</value></data>
+  <data name="ApiError50011" xml:space="preserve"><value>APIが見つかりません</value></data>
+  <data name="ApiError50026" xml:space="preserve"><value>ご指定の注文は既にキャンセル済みです</value></data>
+  <data name="ApiError50027" xml:space="preserve"><value>ご指定の注文は既に約定済みです</value></data>
+  <data name="ApiError60001" xml:space="preserve"><value>保有数量が不足しています</value></data>
+  <data name="ApiError60002" xml:space="preserve"><value>成行買い注文の数量上限を上回っています</value></data>
+  <data name="ApiError60003" xml:space="preserve"><value>指定した数量が制限を超えています</value></data>
+  <data name="ApiError60004" xml:space="preserve"><value>指定した数量がしきい値を下回っています</value></data>
+  <data name="ApiError60005" xml:space="preserve"><value>指定した価格が上限を上回っています</value></data>
+  <data name="ApiError60006" xml:space="preserve"><value>指定した価格が下限を下回っています</value></data>
+  <data name="ApiError60011" xml:space="preserve"><value>同時発注制限件数(30件)を上回っています</value></data>
+  <data name="ApiError70001" xml:space="preserve"><value>システムエラーが発生しました。サポートにお問い合わせ下さい</value></data>
+  <data name="ApiError70002" xml:space="preserve"><value>システムエラーが発生しました。サポートにお問い合わせ下さい</value></data>
+  <data name="ApiError70003" xml:space="preserve"><value>システムエラーが発生しました。サポートにお問い合わせ下さい</value></data>
+  <data name="ApiError70004" xml:space="preserve"><value>現在取引停止中のため、注文を承ることができません</value></data>
+  <data name="ApiError70005" xml:space="preserve"><value>現在買注文停止中のため、注文を承ることができません</value></data>
+  <data name="ApiError70006" xml:space="preserve"><value>現在売注文停止中のため、注文を承ることができません</value></data>
+  <data name="ApiError70009" xml:space="preserve"><value>ただいま成行注文を一時的に制限しています。指値注文をご利用ください。</value></data>
+  <data name="ApiError70010" xml:space="preserve"><value>ただいまシステム負荷が高まっているため、最小注文数量を一時的に引き上げています。</value></data>
+  <data name="ApiError70011" xml:space="preserve"><value>ただいまリクエストが混雑しています。しばらく時間を空けてから再度リクエストしてください。</value></data>
+  <data name="ApiError70012" xml:space="preserve"><value>システムエラーが発生しました。サポートにお問い合わせ下さい。</value></data>
+  <data name="ApiError70013" xml:space="preserve"><value>ただいまシステム負荷が高まっているため、注文および注文キャンセルを一時的に制限しています。</value></data>
+  <data name="ApiError70014" xml:space="preserve"><value>ただいまシステム負荷が高まっているため、出金申請および出金申請キャンセルを一時的に制限しています。</value></data>
+  <data name="ApiError70015" xml:space="preserve"><value>ただいまシステム負荷が高まっているため、貸出申請および貸出申請キャンセルを一時的に制限しています。</value></data>
+  <data name="ApiError70016" xml:space="preserve"><value>貸出申請および貸出申請キャンセル停止中のため、リクエストを承ることができません。</value></data>
+  <data name="ApiError70017" xml:space="preserve"><value>指定された銘柄は注文停止中のため、リクエストを承ることができません。</value></data>
+  <data name="ApiError70018" xml:space="preserve"><value>指定された銘柄は注文およびキャンセル停止中のため、リクエストを承ることができません。</value></data>
+  <data name="ApiError70019" xml:space="preserve"><value>注文はキャンセル中です。</value></data>
+  <data name="TradesAndSales" xml:space="preserve"><value>歩み値</value></data>
+  <data name="High24" xml:space="preserve"><value>24時間高値: </value></data>
+  <data name="Low24" xml:space="preserve"><value>24時間安値: </value></data>
+  <data name="Ask" xml:space="preserve"><value>売気配: </value></data>
+  <data name="Bid" xml:space="preserve"><value>買気配: </value></data>
+  <data name="Orders" xml:space="preserve"><value>注文一覧</value></data>
+  <data name="AutoTrade" xml:space="preserve"><value>自動取引</value></data>
+  <data name="History" xml:space="preserve"><value>取引履歴</value></data>
+  <data name="Profit" xml:space="preserve"><value>損益:</value></data>
+  <data name="Type" xml:space="preserve"><value>タイプ</value></data>
+  <data name="ExecutionPrice" xml:space="preserve"><value>約定価格</value></data>
+  <data name="Index" xml:space="preserve"><value>番号</value></data>
+  <data name="Error" xml:space="preserve"><value>エラー</value></data>
+  <data name="Candle1Minute" xml:space="preserve"><value>1分</value></data>
+  <data name="Candle5Minutes" xml:space="preserve"><value>5分</value></data>
+  <data name="Candle15Minutes" xml:space="preserve"><value>15分</value></data>
+  <data name="Candle30Minutes" xml:space="preserve"><value>30分</value></data>
+  <data name="Candle1Hour" xml:space="preserve"><value>1時間</value></data>
+  <data name="Candle4Hours" xml:space="preserve"><value>4時間</value></data>
+  <data name="Candle8Hours" xml:space="preserve"><value>8時間</value></data>
+  <data name="Candle12Hours" xml:space="preserve"><value>12時間</value></data>
+  <data name="Candle1Day" xml:space="preserve"><value>1日</value></data>
+  <data name="Candle1Week" xml:space="preserve"><value>1週間</value></data>
+  <data name="Candle1Month" xml:space="preserve"><value>1か月</value></data>
+  <data name="SetUpDialogTitle" xml:space="preserve"><value>セットアップ</value></data>
+  <data name="LogOnDialogTitle" xml:space="preserve"><value>ログイン</value></data>
+  <data name="Ok" xml:space="preserve"><value>OK</value></data>
+  <data name="OrderRequestEmpty" xml:space="preserve"><value>注文リクエストの応答が空でした。</value></data>
+  <data name="OrderRequestEmptyHttp" xml:space="preserve"><value>注文リクエストの応答が空でした（HTTP {0}）。</value></data>
+  <data name="OrderUnexpectedError" xml:space="preserve"><value>注文処理中に予期しないエラーが発生しました: {0}</value></data>
+  <data name="OrderListEmptyHttp" xml:space="preserve"><value>注文一覧の応答が空でした（HTTP {0}）。</value></data>
+  <data name="OrderListUnexpected" xml:space="preserve"><value>注文情報の取得中に予期しないエラーが発生しました: {0}</value></data>
+  <data name="CancelOrderEmptyHttp" xml:space="preserve"><value>注文キャンセルの応答が空でした（HTTP {0}）。</value></data>
+  <data name="CancelOrdersHttpError" xml:space="preserve"><value>複数注文のキャンセル中にHTTPエラーが発生しました（HTTP {0}）。</value></data>
+  <data name="CancelOrdersUnexpected" xml:space="preserve"><value>複数注文のキャンセル中に予期しないエラーが発生しました: {0}</value></data>
+  <data name="OrderInfoUpdateFailed" xml:space="preserve"><value>注文情報を更新できませんでした。</value></data>
+  <data name="OrderResultSuccess" xml:space="preserve"><value>注文が完了しました。</value></data>
+  <data name="OrderResultFailed" xml:space="preserve"><value>注文できませんでした。</value></data>
+  <data name="OrderAmountMustBePositive" xml:space="preserve"><value>注文数量は0より大きい値を指定してください。</value></data>
+  <data name="OrderPriceMustBePositive" xml:space="preserve"><value>注文価格は0より大きい値を指定してください。</value></data>
+  <data name="UnexpectedApiResponse" xml:space="preserve"><value>予期しないAPI応答です。</value></data>
+</root>

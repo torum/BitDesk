@@ -1,4 +1,4 @@
-﻿using BitDesk.Models;
+﻿using BitDesk.Localization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;
@@ -91,11 +91,11 @@ namespace BitDesk.Models
             {
                 if (_buySide == "buy")
                 {
-                    return "買";
+                    return Strings.Get("Buy");
                 }
                 else if (_buySide == "sell")
                 {
-                    return "売";
+                    return Strings.Get("Sell");
                 }
                 else
                 {
@@ -128,11 +128,11 @@ namespace BitDesk.Models
             {
                 if (_sellSide == "buy")
                 {
-                    return "買";
+                    return Strings.Get("Buy");
                 }
                 else if (_sellSide == "sell")
                 {
-                    return "売";
+                    return Strings.Get("Sell");
                 }
                 else
                 {
@@ -330,23 +330,23 @@ namespace BitDesk.Models
             {
                 if (_buyStatus == "UNFILLED")
                 {
-                    return "注文中";
+                    return Strings.Get("OrderInProgress");
                 }
                 else if (_buyStatus == "PARTIALLY_FILLED")
                 {
-                    return "注文中(一部約定)";
+                    return Strings.Get("OrderPartiallyFilled");
                 }
                 else if (_buyStatus == "FULLY_FILLED")
                 {
-                    return "約定済み";
+                    return Strings.Get("OrderFilled");
                 }
                 else if (_buyStatus == "CANCELED_UNFILLED")
                 {
-                    return "取消済";
+                    return Strings.Get("OrderCanceled");
                 }
                 else if (_buyStatus == "CANCELED_PARTIALLY_FILLED")
                 {
-                    return "取消済(一部約定)";
+                    return Strings.Get("OrderCanceledPartiallyFilled");
                 }
                 else
                 {
@@ -362,23 +362,23 @@ namespace BitDesk.Models
             {
                 if (_sellStatus == "UNFILLED")
                 {
-                    return "注文中";
+                    return Strings.Get("OrderInProgress");
                 }
                 else if (_sellStatus == "PARTIALLY_FILLED")
                 {
-                    return "注文中(一部約定)";
+                    return Strings.Get("OrderPartiallyFilled");
                 }
                 else if (_sellStatus == "FULLY_FILLED")
                 {
-                    return "約定済み";
+                    return Strings.Get("OrderFilled");
                 }
                 else if (_sellStatus == "CANCELED_UNFILLED")
                 {
-                    return "取消済";
+                    return Strings.Get("OrderCanceled");
                 }
                 else if (_sellStatus == "CANCELED_PARTIALLY_FILLED")
                 {
-                    return "取消済(一部約定)";
+                    return Strings.Get("OrderCanceledPartiallyFilled");
                 }
                 else
                 {

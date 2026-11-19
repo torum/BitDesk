@@ -5,14 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:ui="using:FluentAvalonia.UI.Controls"
 		xmlns:behaviors="using:BitDesk.Behaviors"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        x:Class="BitDesk.Views.MainWindow"
-        x:DataType="vm:MainViewModel"
+		xmlns:loc="using:BitDesk.Localization"
+		mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+		x:Class="BitDesk.Views.MainWindow"
+		x:DataType="vm:MainViewModel"
 		Background="Transparent"
 		MinWidth="320" 
 		MinHeight="460"
-        Icon="/Assets/BitDesk.ico"
-        Title="BitDesk">
+		Icon="/Assets/BitDesk.ico"
+		Title="{loc:Loc Key=MainWindowTitle}">
 	<!-- Background="{DynamicResource SolidBackgroundFillColorBaseBrush}" -->
     <Design.DataContext>
         <!-- This only sets the DataContext for the previewer in an IDE,
@@ -47,7 +48,7 @@
 							<!-- App Icon and Title hide when x11 -->
 							<StackPanel x:Name="AppTitle" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,42,0" IsVisible="{OnPlatform Default=False, Windows=True, Linux=True, x:TypeArguments=x:Boolean}">
 								<Image x:Name="ImageAppIcon" Width="16" Height="16" Margin="0,0,6,0" Stretch="Uniform" StretchDirection="DownOnly" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-								<TextBlock Text="BitDesk" Opacity="0.9" FontWeight="SemiBold" Margin="0,0,0,1" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+								<TextBlock Text="{loc:Loc Key=MainWindowTitle}" Opacity="0.9" FontWeight="SemiBold" Margin="0,0,0,1" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
 							</StackPanel>
 						</Grid>
 					</Border>
@@ -124,9 +125,9 @@
 					<ui:FANavigationViewItem Tag="gridview" Padding="3">
 						<ui:FANavigationViewItem.IconSource>
 							<ui:FAPathIconSource Data="{StaticResource TableIconData}" />
-						</ui:FANavigationViewItem.IconSource>
-						<ui:FANavigationViewItem.Content>
-							<TextBlock Text="Grid View" VerticalAlignment="Center" Margin="0"/>
+							</ui:FANavigationViewItem.IconSource>
+							<ui:FANavigationViewItem.Content>
+								<TextBlock Text="{loc:Loc Key=GridView}" VerticalAlignment="Center" Margin="0"/>
 						</ui:FANavigationViewItem.Content>
 					</ui:FANavigationViewItem>
 				</ui:FANavigationView.FooterMenuItems>

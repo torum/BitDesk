@@ -1,4 +1,5 @@
-﻿using BitDesk.Models;
+﻿using BitDesk.Localization;
+using BitDesk.Models;
 using BitDesk.Services.Contracts;
 using System.Collections.ObjectModel;
 using System.Globalization;
@@ -17,9 +18,9 @@ internal sealed class DialogService : IDialogService
     {
         var dialog = new FluentAvalonia.UI.Controls.FAContentDialog
         {
-            Title = "Set up",
+            Title = Strings.Get("SetUpDialogTitle"),
             IsPrimaryButtonEnabled = true,
-            PrimaryButtonText = "OK",
+            PrimaryButtonText = Strings.Get("Ok"),
             DefaultButton = FluentAvalonia.UI.Controls.FAContentDialogButton.Primary,
             IsSecondaryButtonEnabled = false,
             Content = new Views.SetUpDialog()
@@ -47,9 +48,9 @@ internal sealed class DialogService : IDialogService
     {
         var dialog = new FluentAvalonia.UI.Controls.FAContentDialog
         {
-            Title = "Log on",
+            Title = Strings.Get("LogOnDialogTitle"),
             IsPrimaryButtonEnabled = true,
-            PrimaryButtonText = "OK",
+            PrimaryButtonText = Strings.Get("Ok"),
             DefaultButton = FluentAvalonia.UI.Controls.FAContentDialogButton.Primary,
             IsSecondaryButtonEnabled = false,
 

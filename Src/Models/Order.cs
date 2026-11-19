@@ -1,4 +1,4 @@
-﻿using BitDesk.Models;
+﻿using BitDesk.Localization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;
@@ -57,11 +57,11 @@ public partial class Order : ObservableObject
         {
             if (_side == "buy")
             {
-                return "買";
+                return Strings.Get("Buy");
             }
             else if (_side == "sell")
             {
-                return "売";
+                return Strings.Get("Sell");
             }
             else
             {
@@ -92,11 +92,11 @@ public partial class Order : ObservableObject
         {
             if (_type == "market")
             {
-                return "成行";
+                return Strings.Get("Market");
             }
             else if (_type == "limit")
             {
-                return "指値";
+                return Strings.Get("Limit");
             }
             else
             {
@@ -218,23 +218,23 @@ public partial class Order : ObservableObject
         {
             if (_status == "UNFILLED")
             {
-                return "注文中";
+                return Strings.Get("OrderInProgress");
             }
             else if (_status == "PARTIALLY_FILLED")
             {
-                return "注文中(一部約定)";
+                return Strings.Get("OrderPartiallyFilled");
             }
             else if (_status == "FULLY_FILLED")
             {
-                return "約定済み";
+                return Strings.Get("OrderFilled");
             }
             else if (_status == "CANCELED_UNFILLED")
             {
-                return "取消済";
+                return Strings.Get("OrderCanceled");
             }
             else if (_status == "CANCELED_PARTIALLY_FILLED")
             {
-                return "取消済(一部約定)";
+                return Strings.Get("OrderCanceledPartiallyFilled");
             }
             else
             {
